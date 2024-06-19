@@ -1,18 +1,10 @@
-import dynamic from "next/dynamic";
-import { validateRequest } from "~/lib/auth";
+import { logout } from "~/actions/actions";
 import { Button } from "./ui/button";
-import { Logout } from "~/actions/actions";
 
-export default async function LogoutButton() {
-	const { user } = await validateRequest();
-
+export default function LogoutButton() {
 	return (
-		<>
-			{user && (
-				<form action={Logout}>
-					<Button type="submit">Logout</Button>
-				</form>
-			)}
-		</>
+		<form action={logout}>
+			<Button type="submit">Logout</Button>
+		</form>
 	);
 }
