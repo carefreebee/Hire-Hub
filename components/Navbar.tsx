@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "./ui/button";
+import LogoutButton from "./LogoutButton";
 
 export default function Navbar() {
 	const pathname = usePathname();
@@ -17,12 +17,7 @@ export default function Navbar() {
 				<Link href="/dashboard/evaluator">evaluator</Link>
 				<Link href="/dashboard/request">Request</Link>
 				<Link href="/dashboard/applicatn">Applicant</Link>
-				<Button
-					variant={"ghost"}
-					className="hover:bg-trasnparent h-7 px-0 text-base font-semibold hover:text-white"
-				>
-					Logout
-				</Button>
+				<LogoutButton />
 			</ul>
 		</nav>
 	);
