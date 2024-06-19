@@ -9,7 +9,8 @@
 		"lint": "next lint",
 		"format": "prettier --write . \"!pnpm-lock.yaml\" --ignore-path .gitignore",
 		"ui": "npx shadcn-ui@latest add",
-		"studio": "drizzle-kit studio"
+		"studio": "drizzle-kit studio",
+		"db": "drizzle-kit"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.6.0",
