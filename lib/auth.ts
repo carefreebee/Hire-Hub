@@ -16,15 +16,7 @@ export const lucia = new Lucia(adapter, {
 			secure: process.env.NODE_ENV === "production",
 		},
 	},
-	getUserAttributes: (attr) => ({
-		id: attr.id,
-		name: attr.name,
-		firstName: attr.firstName,
-		lastName: attr.lastName,
-		avatarUrl: attr.avatarUrl,
-		email: attr.email,
-		// role: attr.role,
-	}),
+	getUserAttributes: (attr) => attr,
 });
 
 declare module "lucia" {
