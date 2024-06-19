@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { onSubmit } from "~/actions/actions";
 import { Button } from "~/components/ui/button";
 import {
 	Form,
@@ -42,6 +41,10 @@ export default function ApplicantForm() {
 	});
 
 	const selectedPosition = form.watch("position");
+
+	function onSubmit(data: z.infer<typeof applicantSchema>) {
+		console.log(data);
+	}
 
 	return (
 		<Form {...form}>
@@ -208,7 +211,7 @@ export default function ApplicantForm() {
 							/>
 						)}
 					</section>
-					<section className="flex-1 flex flex-col gap-5">
+					<section className="flex flex-1 flex-col gap-5">
 						<FormField
 							control={form.control}
 							name="resume"
