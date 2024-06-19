@@ -1,5 +1,6 @@
-// import { validateRequest } from "@/lib/auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { validateRequest } from "~/lib/auth";
 
 interface FeatureCardProps {
 	iconSrc: string;
@@ -13,7 +14,9 @@ interface ImageGridProps {
 }
 
 export default async function Home() {
-	// const { user } = await validateRequest();
+	const { user } = await validateRequest();
+
+	if (user) return redirect("/dashboard/applicant");
 
 	return (
 		<>

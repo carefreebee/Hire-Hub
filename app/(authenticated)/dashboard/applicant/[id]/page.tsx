@@ -1,7 +1,7 @@
 import { TypographySmall } from "~/components/ui/typography-small";
 import { DATE, DEPARTMENT, STATUS } from "~/constants/constants";
 
-export default function HrPage() {
+export default function ApplicantIdPage({ params }: { params: { id: string } }) {
 	return (
 		<>
 			{/* MAIN CONTENT BASED ON THE SUB NAVIGATION */}

@@ -2,6 +2,9 @@ import { Button } from "~/components/ui/button";
 import { TypographyMuted } from "~/components/ui/typography-muted";
 import { TypographySmall } from "~/components/ui/typography-small";
 
+// THIS COMPONENT MUST BE USED IN APPLICANT/[ID] PAGE
+// IT SHOULD SHOW WHEN THE USER.ROLE IS EVALUATOR
+
 export default function Evaluator() {
 	return (
 		<section className="my-14 h-[197px] border-2">

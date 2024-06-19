@@ -1,6 +1,6 @@
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { TypographySmall } from "../ui/typography-small";
 import { DEPARTMENT } from "~/constants/constants";
+import { TypographySmall } from "../../ui/typography-small";
 
 export default function HrPageHeader() {
 	return (

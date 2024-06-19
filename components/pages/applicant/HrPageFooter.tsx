@@ -1,6 +1,6 @@
-import { Button } from "../ui/button";
-import Profile from "../ui/profile";
-import { TypographySmall } from "../ui/typography-small";
+import { Button } from "../../ui/button";
+import Profile from "../../ui/profile";
+import { TypographySmall } from "../../ui/typography-small";
 
 export default function HrPageFooter() {
 	return (
