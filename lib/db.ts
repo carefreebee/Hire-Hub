@@ -1,9 +1,8 @@
-import { loadEnvConfig } from "@next/env";
-import { sql } from "@vercel/postgres";
-import { drizzle } from "drizzle-orm/vercel-postgres";
-import { cwd } from "process";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+
 import * as schema from "./schema";
 
-loadEnvConfig(cwd());
+const driver = postgres(process.env.DATABASE_URL!);
 
-export const db = drizzle(sql, { schema });
+export const db = drizzle(driver, { schema });
