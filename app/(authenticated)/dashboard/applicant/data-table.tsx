@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 					<p className="rounded-md bg-[#FFCB78] px-1.5 py-1">{30}</p>
 				</div>
 				<Input
-					placeholder="Filter applicant_names..."
+					placeholder="Search..."
 					value={(table.getColumn("applicant_name")?.getFilterValue() as string) ?? ""}
 					onChange={(event) => {
 						console.log(event.target.value);
@@ -101,9 +101,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</div>
-			<div className="rounded-md border">
+			<div className="rounded-lg border bg-white">
 				<Table>
-					<TableHeader>
+					<TableHeader className="mb-5">
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map((header) => {

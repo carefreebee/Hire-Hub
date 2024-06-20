@@ -1,6 +1,6 @@
-import Sidebar from "~/components/Sidebar";
 import HrPageFooter from "~/components/pages/applicant/HrPageFooter";
 import HrPageHeader from "~/components/pages/applicant/HrPageHeader";
+import Sidebar from "~/components/pages/applicant/Sidebar";
 
 export default function layout({ children }: { children: React.ReactNode }) {
 	return (

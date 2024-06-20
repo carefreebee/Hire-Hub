@@ -118,6 +118,7 @@ export const columns: ColumnDef<FakeData>[] = [
 	},
 	{
 		id: "actions",
+		accessorKey: "Action",
 		cell: ({ row }) => {
 			const payment = row.original;
 

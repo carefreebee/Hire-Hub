@@ -1,5 +1,5 @@
-import ApplicationStatus from "./sidebar/ApplicationStatus";
-import Header from "./sidebar/Header";
+import ApplicationStatus from "../../sidebar/ApplicationStatus";
+import Header from "../../sidebar/Header";
 
 export default function Sidebar() {
 	return (
