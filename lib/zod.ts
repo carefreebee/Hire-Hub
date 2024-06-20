@@ -21,3 +21,13 @@ export const applicantSchema = z.object({
 	resume: z.string().min(2, { message: "Please upload a resume" }),
 	cv_letter: z.string().min(5, { message: "Please upload a CV Lettter" }),
 });
+
+export const jobRequestSchema = z.object({
+	requested_position: z
+		.string()
+		.min(2, { message: "Requested Position must have 2 or more characters" }),
+	department: z.string().min(2, { message: "Requested Position must have 2 or more characters" }),
+	type: z.enum(["teaching_staff", "non-teaching_staff"]),
+	job_description: z.string().min(2, { message: "Please add a job description" }),
+	job_qualification: z.string().min(2, { message: "Please add a job qualification" }),
+});

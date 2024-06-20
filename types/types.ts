@@ -29,3 +29,10 @@ export type LinksProps = {
 	children: React.ReactNode;
 	label?: string;
 };
+
+export type SelectTagProps = {
+	label: string;
+	name?: string;
+	placeholder: string;
+	children: React.ReactNode;
+};

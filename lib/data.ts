@@ -143,5 +143,19 @@ export async function getData(): Promise<FakeData[]> {
 			applicant_name: "t@example.com",
 			applied_date: "9999-9999-9999",
 		},
+		{
+			id: "21",
+			department: "Department of CIT-UC",
+			status: "Teaching Demo",
+			applicant_name: "t@example.com",
+			applied_date: "9999-9999-9999",
+		},
+		{
+			id: "22",
+			department: "Department of CIT-UC",
+			status: "Teaching Demo",
+			applicant_name: "t@example.com",
+			applied_date: "9999-9999-9999",
+		},
 	];
 }
