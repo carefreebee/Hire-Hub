@@ -1,7 +1,6 @@
-import { FakeData } from "~/app/(authenticated)/dashboard/applicant/columns";
+import { FakeData } from "~/app/(authenticated)/dashboard/request/columns";
 
 export async function getData(): Promise<FakeData[]> {
-	// Fetch data from your API here.
 	return [
 		{
 			id: "1",
@@ -106,7 +105,7 @@ export async function getData(): Promise<FakeData[]> {
 			department: "Department of CIT-UC",
 			status: "Initial Interview",
 			applicant_name: "o@example.com",
-			applied_date: "24242-01-01",
+			applied_date: "09-01-01",
 		},
 		{
 			id: "16",
@@ -147,15 +146,15 @@ export async function getData(): Promise<FakeData[]> {
 			id: "21",
 			department: "Department of CIT-UC",
 			status: "Teaching Demo",
-			applicant_name: "t@example.com",
-			applied_date: "9999-9999-9999",
+			applicant_name: "tawd@example.com",
+			applied_date: "729-9999",
 		},
 		{
 			id: "22",
 			department: "Department of CIT-UC",
 			status: "Teaching Demo",
-			applicant_name: "t@example.com",
-			applied_date: "9999-9999-9999",
+			applicant_name: "tawds@example.com",
+			applied_date: "9999",
 		},
 	];
 }

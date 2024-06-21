@@ -7,11 +7,9 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import ProfileSVG from "~/components/ui/profile-svg";
 
 // columns.tsx (client component) will contain our column definitions.
 // This type is used to define the shape of our data.
@@ -39,7 +37,7 @@ export const columns: ColumnDef<FakeData>[] = [
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 				>
-					Applicant Name
+					Request ID
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
@@ -47,7 +45,6 @@ export const columns: ColumnDef<FakeData>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">
-					<ProfileSVG />
 					{row.getValue("applicant_name")}
 				</div>
 			);
@@ -61,7 +58,7 @@ export const columns: ColumnDef<FakeData>[] = [
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 				>
-					Applicant Name
+					Position
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
@@ -82,7 +79,7 @@ export const columns: ColumnDef<FakeData>[] = [
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 				>
-					Applicant Name
+					Type
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
@@ -103,7 +100,28 @@ export const columns: ColumnDef<FakeData>[] = [
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 				>
-					Applied Date
+					Department
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			return (
+				<div className="flex items-center justify-center gap-2">
+					{row.getValue("applied_date")}
+				</div>
+			);
+		},
+	},
+	{
+		accessorKey: "applied_dateawhd",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					Request Date
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);

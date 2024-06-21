@@ -7,17 +7,18 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
-	DropdownMenuLabel,
 	DropdownMenuSeparator,
-	DropdownMenuTrigger,
+	DropdownMenuTrigger
 } from "~/components/ui/dropdown-menu";
 import ProfileSVG from "~/components/ui/profile-svg";
 
 // columns.tsx (client component) will contain our column definitions.
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type FakeData = {
-	id: string;
+export type FakeApplicantData = {
+	applicant_id: string;
+	applicant_name: string;
+	position: string;
 	department: string;
 	status:
 		| "Screening"
@@ -26,11 +27,31 @@ export type FakeData = {
 		| "Psychological Exam"
 		| "Panel Interview"
 		| "Recommendation for Hiring";
-	applicant_name: string;
 	applied_date: string;
 };
 
-export const columns: ColumnDef<FakeData>[] = [
+export const columns: ColumnDef<FakeApplicantData>[] = [
+	{
+		accessorKey: "applicant_id",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					Applicant ID
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			return (
+				<div className="flex items-center justify-center gap-2">
+					{row.getValue("applicant_id")}
+				</div>
+			);
+		},
+	},
 	{
 		accessorKey: "applicant_name",
 		header: ({ column }) => {
@@ -39,7 +60,7 @@ export const columns: ColumnDef<FakeData>[] = [
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 				>
-					Applicant Name
+					Name
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
@@ -49,6 +70,27 @@ export const columns: ColumnDef<FakeData>[] = [
 				<div className="flex items-center justify-center gap-2">
 					<ProfileSVG />
 					{row.getValue("applicant_name")}
+				</div>
+			);
+		},
+	},
+	{
+		accessorKey: "position",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					Position
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			return (
+				<div className="flex items-center justify-center gap-2">
+					{row.getValue("position")}
 				</div>
 			);
 		},
@@ -82,7 +124,7 @@ export const columns: ColumnDef<FakeData>[] = [
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 				>
-					Applicant Name
+					Department
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
@@ -127,17 +169,15 @@ export const columns: ColumnDef<FakeData>[] = [
 					<DropdownMenuTrigger asChild>
 						<Button variant="ghost" className="h-8 w-8 p-0">
 							<span className="sr-only">Open menu</span>
-							<MoreHorizontal className="h-4 w-4 mx" />
+							<MoreHorizontal className="h-4 w-4" />
 						</Button>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end">
-						<DropdownMenuLabel>Actions</DropdownMenuLabel>
-						<DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
-							Copy payment ID
-						</DropdownMenuItem>
+					<DropdownMenuContent align="center" className="rounded-xl">
+						<DropdownMenuItem>View</DropdownMenuItem>
 						<DropdownMenuSeparator />
-						<DropdownMenuItem>View customer</DropdownMenuItem>
-						<DropdownMenuItem>View payment details</DropdownMenuItem>
+						<DropdownMenuItem>Edit</DropdownMenuItem>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem className="text-[#EC3838]">Delete</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			);
