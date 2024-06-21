@@ -39,14 +39,6 @@ export default function HrPageHeader() {
 						Recommendation for Hiring
 					</TabsTrigger>
 				</TabsList>
-				{/* <TabsContent value="screening">Screening POV.</TabsContent>
-			<TabsContent value="initial-interview">Inital Interview POV.</TabsContent>
-			<TabsContent value="teaching-demo">Teaching Demo POV.</TabsContent>
-			<TabsContent value="psychological-exam">Psychological Exam POV.</TabsContent>
-			<TabsContent value="panel-interview">Panel Interview POV.</TabsContent>
-			<TabsContent value="recommendation-for-hiring">
-				Recommendation for hiring POV.
-			</TabsContent> */}
 			</Tabs>
 		</header>
 	);

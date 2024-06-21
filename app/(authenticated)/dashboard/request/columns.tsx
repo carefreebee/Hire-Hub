@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -138,7 +139,7 @@ export const columns: ColumnDef<FakeData>[] = [
 		id: "actions",
 		accessorKey: "Action",
 		cell: ({ row }) => {
-			const payment = row.original;
+			const id = row.original.id;
 
 			return (
 				<DropdownMenu>
@@ -149,7 +150,9 @@ export const columns: ColumnDef<FakeData>[] = [
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="center" className="rounded-xl">
-						<DropdownMenuItem>View</DropdownMenuItem>
+						<DropdownMenuItem>
+							<Link href={`/dashboard/request/${id}`}>View</Link>
+						</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem>Edit</DropdownMenuItem>
 						<DropdownMenuSeparator />

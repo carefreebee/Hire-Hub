@@ -2,13 +2,14 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuSeparator,
-	DropdownMenuTrigger
+	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import ProfileSVG from "~/components/ui/profile-svg";
 
@@ -162,7 +163,7 @@ export const columns: ColumnDef<FakeApplicantData>[] = [
 		id: "actions",
 		accessorKey: "Action",
 		cell: ({ row }) => {
-			const payment = row.original;
+			const id = row.original.applicant_id;
 
 			return (
 				<DropdownMenu>
@@ -173,7 +174,9 @@ export const columns: ColumnDef<FakeApplicantData>[] = [
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="center" className="rounded-xl">
-						<DropdownMenuItem>View</DropdownMenuItem>
+						<DropdownMenuItem>
+							<Link href={`/dashboard/applicant/${id}`}>View</Link>
+						</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem>Edit</DropdownMenuItem>
 						<DropdownMenuSeparator />
