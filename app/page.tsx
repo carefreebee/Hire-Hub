@@ -16,7 +16,8 @@ interface ImageGridProps {
 export default async function Home() {
 	const { user } = await validateRequest();
 
-	if (user) return redirect("/dashboard/applicant");
+	if (user?.role === "user") return redirect("/user");
+	else if (user?.role === "hr_head") return redirect("/dashboard/applicant");
 
 	return (
 		<>

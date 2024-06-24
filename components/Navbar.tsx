@@ -1,3 +1,4 @@
+import { HR_HEAD } from "~/constant/constant";
 import { validateRequest } from "~/lib/auth";
 
 export default async function Navbar() {
@@ -8,7 +9,7 @@ export default async function Navbar() {
 			<div className="h-10 w-10 rounded-full bg-slate-400"></div>
 			<div>
 				<p className="text-sm font-semibold">{user?.name}</p>
-				<p className="text-sm">[role]</p>
+				<p className="text-sm">{user?.role === "hr_head" && HR_HEAD}</p>
 			</div>
 		</nav>
 	);

@@ -18,20 +18,18 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
 	const table = useDataTable({ data, columns });
 	const { pageIndex, totalFilteredRows, displayedRows } = usePagination(table);
-	const searchApplicantNameColumn = table.getColumn("applicant_name");
+	const searchApplicantNameColumn = table.getColumn("requested_department");
 
 	return (
 		<div>
 			<div className="flex items-center justify-between py-4">
-				<TableTopMostHeader title="Total Job Request" data={30} />
+				<TableTopMostHeader title="Total Job Request" data={data.length} />
 				<AddRequest />
-				{searchApplicantNameColumn && (
-					<SearchInput
-						placeholder="Search..."
-						column={searchApplicantNameColumn}
-						className="w-[299px]"
-					/>
-				)}
+				<SearchInput
+					placeholder="Search..."
+					column={searchApplicantNameColumn!}
+					className="w-[299px]"
+				/>
 			</div>
 			<div className="my-5 h-[616px] rounded-lg border bg-white">
 				<Table>

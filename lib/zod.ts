@@ -26,8 +26,25 @@ export const jobRequestSchema = z.object({
 	requested_position: z
 		.string()
 		.min(2, { message: "Requested Position must have 2 or more characters" }),
-	department: z.string().min(2, { message: "Requested Position must have 2 or more characters" }),
-	type: z.enum(["teaching_staff", "non-teaching_staff"]),
-	job_description: z.string().min(2, { message: "Please add a job description" }),
-	job_qualification: z.string().min(2, { message: "Please add a job qualification" }),
+	requested_category: z.enum(["teaching_staff", "non-teaching_staff"]),
+	requested_department: z.string().optional().nullable(),
+	requested_office: z.string().optional().nullable(),
+	requested_type: z.enum(["full_time", "part_time"]),
+	requested_description: z.string().min(2, { message: "Please add a job description" }),
+	requested_qualification: z.string().min(2, { message: "Please add a job qualification" }),
 });
+
+export type JobRequest = z.infer<typeof jobRequestSchema>;
+
+export const editJobRequestSchema = z.object({
+	requested_position: z
+		.string()
+		.min(2, { message: "Requested Position must have 2 or more characters" }),
+	requested_department: z.string().optional().nullable(),
+	requested_office: z.string().optional().nullable(),
+	requested_type: z.enum(["full_time", "part_time"]),
+	requested_description: z.string().min(2, { message: "Please add a job description" }),
+	requested_qualification: z.string().min(2, { message: "Please add a job qualification" }),
+});
+
+export type EditJobRequest = z.infer<typeof editJobRequestSchema>;

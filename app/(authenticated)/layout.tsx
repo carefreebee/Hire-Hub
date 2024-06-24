@@ -7,6 +7,8 @@ export default async function layout({ children }: { children: React.ReactNode }
 	const { user } = await validateRequest();
 
 	if (!user) return redirect("/");
+	else if (user?.role === "user") return redirect("/user");
+	else if (user?.role !== "hr_head") return redirect("/dashboard/applicant");
 
 	return (
 		<div className="flex justify-center">
