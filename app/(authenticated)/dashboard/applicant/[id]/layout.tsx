@@ -1,18 +1,26 @@
+import Previous from "~/components/pages/Previous";
 import HrPageFooter from "~/components/pages/applicant/HrPageFooter";
 import HrPageHeader from "~/components/pages/applicant/HrPageHeader";
 import Sidebar from "~/components/pages/applicant/Sidebar";
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default function layout({
+	children,
+	params,
+}: {
+	children: React.ReactNode;
+	params: { id: string };
+}) {
 	return (
-		<div>
-			<section className="mx-auto flex max-w-[1400px] gap-5 py-5">
-				<Sidebar />
+		<section className="mx-auto flex max-w-[1400px] flex-col gap-5 p-5">
+			<Previous text="View all Applicants" />
+			<div className="flex gap-5">
+				<Sidebar id={params.id} />
 				<section className="w-[960px]">
-					<HrPageHeader />
+					<HrPageHeader id={params.id} />
 					{children}
 					<HrPageFooter />
 				</section>
-			</section>
-		</div>
+			</div>
+		</section>
 	);
 }

@@ -18,6 +18,7 @@ export type FormContainerProps = {
 
 export type RadioGroupProps = {
 	label: string;
+	name: string
 	FirstRadioGroupItemValue: string;
 	FirstRadioGroupItemLabel: string;
 	SecondRadioGroupItemValue: string;
@@ -42,6 +43,7 @@ export type TextProps = {
 	text: string
 }
 
+export type SelectCommunicationMode = "email" | "phone_number";
 export type SelectCategory = "teaching_staff" | "non-teaching_staff";
 export type SelectType = "full_time" | "part_time";
 

@@ -32,7 +32,7 @@ export default function SideNav() {
 	);
 }
 
-function Links({ href, children, label }: LinksProps) {
+export function Links({ href, children, label }: LinksProps) {
 	const pathname = usePathname();
 
 	return (

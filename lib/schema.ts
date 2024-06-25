@@ -64,41 +64,57 @@ export const sessions = pgTable("sessions", {
 	}).notNull(),
 });
 
-// interface StageStatus {
-// 	status: "in-progress" | "passed" | "failed";
-// 	date: Date;
-// 	mode?: "online" | "in-person";
-// }
+interface StageStatus {
+	status: "in-progress" | "passed" | "failed" | "";
+	date?: Date;
+	mode?: "online" | "in-person";
+}
 
 export type ApplicantStages = {
-	screening: {
-		status: "in-progress" | "passed" | "failed";
-		date: Date;
-		mode?: "online" | "in-person";
-	};
+	screening: StageStatus;
+	initial_interview: StageStatus;
+	teaching_demo: StageStatus;
+	psychological_exam: StageStatus;
+	panel_interview: StageStatus;
+	recommendation_for_hiring: StageStatus;
 };
 
 export const applicant = pgTable("applicant", {
 	id: serial("id").primaryKey(),
-	first_Name: text("first_name"),
-	last_Name: text("last_name"),
+	first_name: text("first_name"),
+	last_name: text("last_name"),
 	email: text("email").unique().notNull(),
-	contactNumber: bigint("contact_number", { mode: "number" }),
+	contact_number: bigint("contact_number", { mode: "number" }),
 	resume: text("resume_url"),
-	applicationLetter: text("application_letter"),
-	communication: communicationEnums("communicationType").notNull(),
-	position: positionEnums("positionType").notNull(),
-	departmentId: integer("department_id").references(() => department.department_id),
-	officeId: integer("office_id").references(() => office.office_id),
-	departmentName: text("department_name"),
-	officeName: text("office_name"),
-	status: statusEnums("status").default("Screening"),
+	communication_type: communicationEnums("communicationType").notNull(),
+	positionType: positionEnums("positionType").notNull(),
+	position_applied: text("position_applied").notNull(),
+	department_id: integer("department_id").references(() => department.department_id),
+	office_id: integer("office_id").references(() => office.office_id),
+	selected_department: text("selected_department"),
+	selected_office: text("selected_office"),
+	status: statusEnums("statusEnums").default("Screening"),
 	stages: jsonb("stages")
 		.$type<ApplicantStages>()
 		.default({
 			screening: {
 				status: "in-progress",
 				date: new Date(),
+			},
+			initial_interview: {
+				status: "",
+			},
+			teaching_demo: {
+				status: "",
+			},
+			psychological_exam: {
+				status: "",
+			},
+			panel_interview: {
+				status: "",
+			},
+			recommendation_for_hiring: {
+				status: "",
 			},
 		}),
 });
@@ -119,32 +135,13 @@ export const jobRequest = pgTable("jobRequest", {
 
 export const department = pgTable("department", {
 	department_id: serial("department_id").primaryKey(),
-	// DEPARTMENT NAME MUST BE UNIQUE
-	department_name: text("department_name").notNull(),
+	department_name: text("department_name").notNull().unique(),
 });
 
 export const office = pgTable("office", {
 	office_id: serial("office_id").primaryKey(),
-	// OFFICE NAME MUST BE UNIQUE
-	office_name: text("office_name").notNull(),
+	office_name: text("office_name").notNull().unique(),
 });
-
-// export const sessions = pgTable("sessions", {
-// 	id: text("id").primaryKey(),
-// 	userId: text("user_id")
-// 		.notNull()
-// 		.references(() => users.id),
-// 	expiresAt: timestamp("expires_at", {
-// 		withTimezone: true,
-// 		mode: "date",
-// 	}).notNull(),
-// });
-
-// export const office = pgTable("office", {
-// 	office_id: serial("office_id").primaryKey(),
-// 	office_name: text("office_name").unique().notNull(),
-// 	office_code: text("office_code").unique().notNull(),
-// });
 
 // export const requestRelation = relations()
 
@@ -159,23 +156,9 @@ export const office = pgTable("office", {
 // 	}),
 // }));
 
-export const rating = pgTable("rating", {
-	rating_id: serial("rating_id").primaryKey(),
-	status_name: text("status_name").notNull(),
-	applicantId: integer("applicantid").references(() => applicant.id),
-	rating: integer("rating").notNull(),
-});
-
 // export const departmenttRelation = relations(department, ({ many, one }) => ({
 // 	applicant: many(applicant),
 // 	user: one(users),
-// }));
-
-// export const Rating = relations(rating, ({ one }) => ({
-// 	applicant: one(applicant, {
-// 		fields: [rating.applicantId],
-// 		references: [applicant.id],
-// 	}),
 // }));
 
 // export const officeRelation = relations(office, ({ many, one }) => ({
@@ -224,12 +207,10 @@ export type ApplicantSelect = typeof applicant.$inferSelect;
 export type ApplicantInsert = typeof applicant.$inferInsert;
 export type DepartmentSelect = typeof department.$inferSelect;
 export type DepartmentInsert = typeof department.$inferSelect;
-// export type OfficeSelect = typeof office.$inferSelect;
-// export type OfficeInsert = typeof office.$inferInsert;
+export type OfficeSelect = typeof office.$inferSelect;
+export type OfficeInsert = typeof office.$inferInsert;
 export type JobRequestSelect = typeof jobRequest.$inferSelect;
 export type JobRequestInsert = typeof jobRequest.$inferInsert;
 export type UserRole = typeof roleEnums.enumValues;
 export type communicationEnums = typeof communicationEnums.enumValues;
 export type StatusEnums = typeof statusEnums.enumValues;
-export type RatingSelect = typeof rating.$inferSelect;
-export type RatingInsert = typeof rating.$inferSelect;

@@ -17,6 +17,7 @@ export default async function Home() {
 	const { user } = await validateRequest();
 
 	if (user?.role === "user") return redirect("/user");
+	else if (user?.role === "admin") return redirect("/admin/users/manage-users");
 	else if (user?.role === "hr_head") return redirect("/dashboard/applicant");
 
 	return (

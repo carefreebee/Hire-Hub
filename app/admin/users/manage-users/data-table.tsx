@@ -1,11 +1,10 @@
 "use client";
 
 import { ColumnDef, flexRender } from "@tanstack/react-table";
-import AddRequest from "~/components/pages/authenticated/AddRequest";
 import { SearchInput } from "~/components/pages/authenticated/SearchInput";
+import { AdminSubNav } from "~/components/pages/authenticated/admin/SubNav";
 import TableHeaderComponent from "~/components/pages/authenticated/table/Header";
 import TableFooter from "~/components/pages/authenticated/table/TableFooter";
-import TableTopMostHeader from "~/components/pages/authenticated/table/TableTopMostHeader";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "~/components/ui/table";
 import useDataTable from "~/hooks/useCustom";
 import { usePagination } from "~/hooks/usePagination";
@@ -23,8 +22,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 	return (
 		<div>
 			<div className="flex items-center justify-between py-4">
-				<TableTopMostHeader title="Total Job Request" data={data.length} />
-				<AddRequest />
+				<AdminSubNav />
 				<SearchInput
 					placeholder="Search..."
 					column={searchDepartmentOrOffice!}

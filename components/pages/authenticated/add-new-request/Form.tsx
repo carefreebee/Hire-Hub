@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { Button } from "~/components/ui/button";
@@ -38,6 +39,7 @@ function SelectTag({ label, name, placeholder, children, onValueChange }: Select
 
 export default function Form() {
 	const { selectedCategory, handleChangeCategory } = useSelectedCategoryOptions();
+	const router = useRouter();
 	const formRef = useRef<HTMLFormElement>(null);
 
 	async function handleSubmit(): Promise<void> {
@@ -48,10 +50,10 @@ export default function Form() {
 			if (formRef.current) {
 				formRef.current.reset();
 			}
+			router.refresh();
 		} catch (error) {
 			console.error("Error submitting form:", error);
 		}
-		console.log(getAllJobRequest());
 	}
 
 	return (

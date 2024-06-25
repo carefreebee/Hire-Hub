@@ -8,6 +8,7 @@ export default async function layout({ children }: { children: React.ReactNode }
 
 	if (!user) return redirect("/");
 	else if (user?.role === "user") return redirect("/user");
+	else if (user?.role === "admin") return redirect("/admin");
 	else if (user?.role !== "hr_head") return redirect("/dashboard/applicant");
 
 	return (

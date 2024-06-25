@@ -2,9 +2,9 @@
 
 import { ColumnDef, flexRender } from "@tanstack/react-table";
 import { SearchInput } from "~/components/pages/authenticated/SearchInput";
+import TableHeaderComponent from "~/components/pages/authenticated/table/Header";
 import TableFooter from "~/components/pages/authenticated/table/TableFooter";
 import TableTopMostHeader from "~/components/pages/authenticated/table/TableTopMostHeader";
-import TableHeaderComponent from "~/components/pages/authenticated/table/Header";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "~/components/ui/table";
 import useDataTable from "~/hooks/useCustom";
 import { usePagination } from "~/hooks/usePagination";
@@ -17,19 +17,17 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
 	const table = useDataTable({ data, columns });
 	const { pageIndex, totalFilteredRows, displayedRows } = usePagination(table);
-	const searchApplicantNameColumn = table.getColumn("applicant_name");
+	const searchApplicantName = table.getColumn("first_name");
 
 	return (
 		<div>
 			<div className="flex items-center py-4">
-				<TableTopMostHeader title="Total Applicant" data={30} />
-				{searchApplicantNameColumn && (
-					<SearchInput
-						placeholder="Search..."
-						column={searchApplicantNameColumn}
-						className="ml-auto w-[299px]"
-					/>
-				)}
+				<TableTopMostHeader title="Total Applicant" data={data.length} />
+				<SearchInput
+					placeholder="Search..."
+					column={searchApplicantName!}
+					className="w-[299px] ml-auto"
+				/>
 			</div>
 			<div className="my-5 h-[616px] rounded-lg border bg-white">
 				<Table>

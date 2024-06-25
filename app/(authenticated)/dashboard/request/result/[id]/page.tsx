@@ -18,7 +18,6 @@ function LabelTag({ label }: { label: string }) {
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { id: string } }) {
 	const jobRequestByID = await getAllJobRequestByID(Number(params.id));
-	console.log(jobRequestByID);
 
 	return (
 		<section className="bg-slate-200/30">

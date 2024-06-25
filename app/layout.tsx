@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "~/app/api/uploadthing/core";
+import { Toaster } from "~/components/ui/toaster";
 import { cn } from "~/lib/utils";
 import "~/styles/globals.css";
 
@@ -39,6 +40,7 @@ export default function RootLayout({
 					routerConfig={extractRouterConfig(ourFileRouter)}
 				/>
 				{children}
+				<Toaster />
 			</body>
 		</html>
 	);

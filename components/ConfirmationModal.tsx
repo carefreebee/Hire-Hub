@@ -10,7 +10,6 @@ import {
 	AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
 import Confirmation from "./ui/confirmation";
-import Link from "next/link";
 
 type ConfirmationModalProps = {
 	children: React.ReactNode;

@@ -32,6 +32,7 @@ function FormContainer({ label, type, name, minLength, maxLength, inputMode }: F
 // RADIO BUTTONS ARE NOT YET INCLUDED IN THE CONSOLE LOG
 function RadioGroupContainer({
 	label,
+	name,
 	FirstRadioGroupItemValue,
 	FirstRadioGroupItemLabel,
 	SecondRadioGroupItemValue,
@@ -41,7 +42,7 @@ function RadioGroupContainer({
 		<div className="h-[66px]">
 			<Label className="font-semibold">{label}</Label>
 			<div className="mt-3 font-semibold">
-				<RadioGroup defaultValue="" className="flex">
+				<RadioGroup name={name} className="flex">
 					<div className="flex flex-1 items-center space-x-2">
 						<RadioGroupItem value={FirstRadioGroupItemValue} id="r1" />
 						<Label htmlFor="r1" className="font-semibold">
