@@ -1,27 +1,13 @@
-import { DEPARTMENT } from "~/constants/constants";
-import { getApplicantFormByID } from "~/controller/ApplicantController";
+import {
+	NonTeachingStaff,
+	SelectedCategoryTeachingStaff,
+	TeachingStaff,
+} from "~/constant/constant";
 import { TypographySmall } from "../../ui/typography-small";
+import { getApplicantData } from "~/hooks/useApplicantStages";
 
 export default async function HrPageHeader({ id }: { id: string }) {
-	const applicant = await getApplicantFormByID(Number(id));
-
-	const {
-		screening,
-		teaching_demo,
-		panel_interview,
-		initial_interview,
-		psychological_exam,
-		recommendation_for_hiring,
-	} = applicant?.stages || {};
-
-	const stages = [
-		{ name: "Screening", status: screening?.status },
-		{ name: "Initial Interview", status: initial_interview?.status },
-		{ name: "Teaching Demo", status: teaching_demo?.status },
-		{ name: "Psychological Exam", status: psychological_exam?.status },
-		{ name: "Panel Interview", status: panel_interview?.status },
-		{ name: "Recommendation", status: recommendation_for_hiring?.status },
-	];
+	const { applicant, stages } = await getApplicantData(Number(id));
 
 	return (
 		<header>
@@ -31,8 +17,12 @@ export default async function HrPageHeader({ id }: { id: string }) {
 						<TypographySmall className="font-semibold">Department</TypographySmall>
 					</div>
 					<div>
-						<TypographySmall size={"sm"} variant={"outline"} className="font-medium">
-							{DEPARTMENT}
+						<TypographySmall
+							size={"sm"}
+							variant={"outline"}
+							className="font-medium shadow-md"
+						>
+							{applicant?.selected_department}
 						</TypographySmall>
 					</div>
 				</div>
@@ -41,8 +31,14 @@ export default async function HrPageHeader({ id }: { id: string }) {
 						<TypographySmall className="font-medium">Applied as:</TypographySmall>
 					</div>
 					<div>
-						<TypographySmall size={"sm"} variant={"outline"} className="font-medium">
-							Teaching Staff
+						<TypographySmall
+							size={"sm"}
+							variant={"outline"}
+							className="font-medium shadow-md"
+						>
+							{applicant?.positionType === SelectedCategoryTeachingStaff
+								? TeachingStaff
+								: NonTeachingStaff}
 						</TypographySmall>
 					</div>
 				</div>

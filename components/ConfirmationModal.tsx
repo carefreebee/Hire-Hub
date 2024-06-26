@@ -1,6 +1,5 @@
 import {
 	AlertDialog,
-	AlertDialogAction,
 	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogDescription,
@@ -12,13 +11,21 @@ import {
 import Confirmation from "./ui/confirmation";
 
 type ConfirmationModalProps = {
+	mainButton: React.ReactNode;
+	descriptionButtonLabel: string;
+	cancelButtonLabel: string;
 	children: React.ReactNode;
 };
 
-export function ConfirmationModal({ children }: ConfirmationModalProps) {
+export function ConfirmationModal({
+	mainButton,
+	descriptionButtonLabel,
+	cancelButtonLabel,
+	children,
+}: ConfirmationModalProps) {
 	return (
 		<AlertDialog>
-			<AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+			<AlertDialogTrigger asChild>{mainButton}</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader className="flex flex-row gap-5">
 					<div className="bg-[#F5F5F5]">
@@ -26,16 +33,12 @@ export function ConfirmationModal({ children }: ConfirmationModalProps) {
 					</div>
 					<div>
 						<AlertDialogTitle>Confirm submit form</AlertDialogTitle>
-						<AlertDialogDescription>
-							Are you sure you want to submit the form?
-						</AlertDialogDescription>
+						<AlertDialogDescription>{descriptionButtonLabel}</AlertDialogDescription>
 					</div>
 				</AlertDialogHeader>
 				<AlertDialogFooter className="flex gap-4">
-					<AlertDialogCancel className="w-full">No, cancel</AlertDialogCancel>
-					<AlertDialogAction className="w-full bg-[#7F0000] hover:bg-[#7F0000]">
-						Yes, confirm
-					</AlertDialogAction>
+					<AlertDialogCancel className="w-full">{cancelButtonLabel}</AlertDialogCancel>
+					{children}
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

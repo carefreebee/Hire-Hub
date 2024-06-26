@@ -42,6 +42,10 @@ export const users = pgTable("users", {
 	avatarUrl: text("avatar_url"),
 	email: text("email").unique().notNull(),
 	role: roleEnums("role").notNull().default("user"),
+	department_id: integer("department_id").references(() => department.department_id),
+	office_id: integer("office_id").references(() => office.office_id),
+	selected_department: text("selected_department"),
+	selected_office: text("selected_office"),
 	appliedAt: timestamp("applied_at").defaultNow(),
 });
 
@@ -214,3 +218,5 @@ export type JobRequestInsert = typeof jobRequest.$inferInsert;
 export type UserRole = typeof roleEnums.enumValues;
 export type communicationEnums = typeof communicationEnums.enumValues;
 export type StatusEnums = typeof statusEnums.enumValues;
+
+export type RoleEnumsType = User["role"];

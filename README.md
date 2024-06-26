@@ -7,8 +7,8 @@
 
 ADMIN:
 ✅ Read Users Registration
+✅ Updated Users Roles
 
--   Update Job Request
 
 HR HEAD:
 ✅ Create Job Request

@@ -17,6 +17,10 @@ interface GoogleUser {
 	email_verified: boolean;
 	locale: string;
 	role: string;
+	department_id?: number;
+	office_id?: number;
+	selected_department?: string;
+	selected_office?: string;
 }
 
 export async function GET(request: Request): Promise<Response> {

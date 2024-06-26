@@ -1,4 +1,3 @@
-import { ConfirmationModal } from "~/components/ConfirmationModal";
 import Previous from "~/components/pages/Previous";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -121,14 +120,13 @@ export default async function SuccessAddNewRequestPage({ params }: { params: { i
 						/>
 					</div>
 					<div className="flex justify-center">
-						<ConfirmationModal>
-							<Button
-								type="submit"
-								className="bg-[#7F0000] hover:scale-95 hover:bg-[#7F0000]"
-							>
-								Submit Edited Request Form
-							</Button>
-						</ConfirmationModal>
+						{/* PLEASE UPDATE ALSO MUST USE THE CONFIRMATION MODAL BELOW IS NOT YET UDPATED */}
+						<Button
+							type="submit"
+							className="bg-[#7F0000] hover:scale-95 hover:bg-[#7F0000]"
+						>
+							Submit Edited Request Form
+						</Button>
 					</div>
 				</form>
 			</div>

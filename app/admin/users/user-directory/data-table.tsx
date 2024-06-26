@@ -1,8 +1,6 @@
 "use client";
 
 import { ColumnDef, flexRender } from "@tanstack/react-table";
-import { SearchInput } from "~/components/pages/authenticated/SearchInput";
-import { AdminSubNav } from "~/components/pages/authenticated/admin/SubNav";
 import TableHeaderComponent from "~/components/pages/authenticated/table/Header";
 import TableFooter from "~/components/pages/authenticated/table/TableFooter";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "~/components/ui/table";
@@ -17,18 +15,10 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
 	const table = useDataTable({ data, columns });
 	const { pageIndex, totalFilteredRows, displayedRows } = usePagination(table);
-	const searchDepartmentOrOffice = table.getColumn("requested_department");
+	// const searchDepartmentOrOffice = table.getColumn("requested_department");
 
 	return (
-		<div>
-			<div className="flex items-center justify-between py-4">
-				<AdminSubNav />
-				<SearchInput
-					placeholder="Search..."
-					column={searchDepartmentOrOffice!}
-					className="w-[299px]"
-				/>
-			</div>
+		<>
 			<div className="my-5 h-[616px] rounded-lg border bg-white">
 				<Table>
 					<TableHeader className="mb-5">
@@ -67,6 +57,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 				totalFilteredRows={totalFilteredRows}
 				displayedRows={displayedRows}
 			/>
-		</div>
+		</>
 	);
 }

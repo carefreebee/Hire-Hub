@@ -1,6 +1,5 @@
 export const HR_HEAD = "HR Head";
 export const RECRUITMENT_STAFF = "Recruitment Officer";
-export const APPLICANT = "Applicant";
 export const REQUESTER_STAFF = "Requester Staff";
 export const DEPARTMNET_CHAIR = "Department Chair";
 export const DEAN = "Dean";
@@ -20,3 +19,4 @@ export const SelectedPartTimeType = "part_time";
 export const SelectedFullTimeType = "full_time";
 export const PartTimeType = "Part Time";
 export const FullTimeType = "Full Time";
+

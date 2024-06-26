@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
+import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -15,7 +16,7 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
-import { getAllJobRequest, handleSubmitJobRequest } from "~/controller/JobRequestController";
+import { handleSubmitJobRequest } from "~/controller/JobRequestController";
 import { useSelectedCategoryOptions } from "~/hooks/useSelectedCategoryOptions";
 import { SelectTagProps } from "~/types/types";
 
@@ -117,13 +118,21 @@ export default function Form() {
 					/>
 				</div>
 				<div className="flex justify-center">
-					<ConfirmationModal>
-						<Button
-							onClick={handleSubmit}
-							className="bg-[#7F0000] hover:scale-95 hover:bg-[#7F0000]"
-						>
-							Submit Request Form
-						</Button>
+					<ConfirmationModal
+						mainButton={
+							<Button
+								type="submit"
+								className="bg-[#7F0000] hover:scale-95 hover:bg-[#7F0000]"
+							>
+								Submit Request Form
+							</Button>
+						}
+						descriptionButtonLabel="Are you sure you want to submit the form?"
+						cancelButtonLabel="No, cancel"
+					>
+						<AlertDialogAction className="w-full" onClick={handleSubmit}>
+							Yes, submit
+						</AlertDialogAction>
 					</ConfirmationModal>
 				</div>
 			</div>

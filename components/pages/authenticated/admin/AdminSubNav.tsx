@@ -16,12 +16,8 @@ const AdminSubNavLinks = [
 		label: "Manage Users",
 	},
 	{
-		href: "/admin/users/department",
-		label: "Department",
-	},
-	{
-		href: "/admin/users/office",
-		label: "Office",
+		href: "/admin/users/user-directory",
+		label: "User Directory",
 	},
 ];
 

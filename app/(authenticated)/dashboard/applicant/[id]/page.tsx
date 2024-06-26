@@ -1,6 +1,5 @@
-import { TypographySmall } from "~/components/ui/typography-small";
-import { DATE, DEPARTMENT, STATUS } from "~/constants/constants";
 import { MoreHorizontal } from "lucide-react";
+import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -8,31 +7,49 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Button } from "~/components/ui/button";
+import { TypographySmall } from "~/components/ui/typography-small";
+import { getApplicantFormByID } from "~/controller/ApplicantController";
 
-export default function ApplicantIdPage({ params }: { params: { id: string } }) {
+export default async function ApplicantIdPage({ params }: { params: { id: string } }) {
+	// const { applicant, stages } = await getApplicantData(Number(params.id));
+	const applicant = await getApplicantFormByID(Number(params.id));
+
+	const {
+		screening,
+		teaching_demo,
+		panel_interview,
+		initial_interview,
+		psychological_exam,
+		recommendation_for_hiring,
+	} = applicant?.stages || {};
+
+	const stages = [
+		{ name: "Screening", status: screening?.status },
+		{ name: "Initial Interview", status: initial_interview?.status },
+		{ name: "Teaching Demo", status: teaching_demo?.status },
+		{ name: "Psychological Exam", status: psychological_exam?.status },
+		{ name: "Panel Interview", status: panel_interview?.status },
+		{ name: "Recommendation", status: recommendation_for_hiring?.status },
+	];
+
 	return (
 		<>
 			<section className="my-14 h-[197px] border-2">
 				<header className="flex items-center border-b-2">
 					<div className="flex-1">
-						<TypographySmall className="px-5">{STATUS}</TypographySmall>
-					</div>
-					<div className="mr-10 flex-1">
-						Assigned:{" "}
-						<TypographySmall variant={"outline"} className="h-8 px-3">
-							{DEPARTMENT}
-						</TypographySmall>
+						<TypographySmall className="px-5">{applicant?.status}</TypographySmall>
 					</div>
 				</header>
 				<div className="flex items-center">
 					<div className="mb-16 mt-4 flex flex-1 flex-col">
 						<div>
-							<TypographySmall size={"md"} className="mr-20">{STATUS}</TypographySmall>
+							<TypographySmall size={"md"} className="mr-20">
+								{applicant?.status}
+							</TypographySmall>
 							<DropdownMeneComponent />
 						</div>
 						<TypographySmall size={"md"} className="pt-0 text-xs">
-							{DATE}
+							{""}
 						</TypographySmall>
 					</div>
 					<div className="mb-16 mr-10 mt-4 flex flex-1 flex-col">

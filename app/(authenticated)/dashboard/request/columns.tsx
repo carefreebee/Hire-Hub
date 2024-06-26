@@ -3,7 +3,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -158,18 +157,13 @@ export const columns: ColumnDef<JobRequestSelect>[] = [
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
-								<ConfirmationModal>
-									<Button
-										type="submit"
-										onClick={async () =>
-											await handleDeleteJobRequest(Number(id))
-										}
-										variant={"ghost"}
-										className="h-auto p-0 text-[#EC3838] hover:text-[#EC3838]"
-									>
-										Delete
-									</Button>
-								</ConfirmationModal>
+								<Button
+									onClick={async () => await handleDeleteJobRequest(Number(id))}
+									variant={"ghost"}
+									className="h-auto p-0 text-[#EC3838] hover:text-[#EC3838]"
+								>
+									Delete
+								</Button>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
