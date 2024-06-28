@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ChangeEvent, useRef, useState } from "react";
 import {
 	AlertDialog,
@@ -39,9 +40,7 @@ export default function UpdateInput({
 	requestedDepartment,
 	requestedOffice,
 }: ApplicantFormProps) {
-	const [selectedPosition, setSelectedPosition] = useState<
-		"teaching_staff" | "non-teaching_staff"
-	>();
+	const [selectedOption, setSelectedOption] = useState<"teaching_staff" | "non-teaching_staff">();
 	const formRef = useRef<HTMLFormElement>(null);
 
 	// Extract the role enums from the schema
@@ -90,7 +89,7 @@ export default function UpdateInput({
 				<div className="w-full">
 					<RadioGroup
 						onChange={(e: ChangeEvent<HTMLInputElement>) =>
-							setSelectedPosition(
+							setSelectedOption(
 								e.target.value as "teaching_staff" | "non-teaching_staff"
 							)
 						}
@@ -109,7 +108,7 @@ export default function UpdateInput({
 				</div>
 			</div>
 			<div className="flex items-center">
-				{selectedPosition === "teaching_staff" ? (
+				{selectedOption === "teaching_staff" ? (
 					<>
 						<Label className="w-52">Department</Label>
 						<Select name="selected_department" required>
@@ -128,7 +127,7 @@ export default function UpdateInput({
 							</SelectContent>
 						</Select>
 					</>
-				) : selectedPosition === "non-teaching_staff" ? (
+				) : selectedOption === "non-teaching_staff" ? (
 					<>
 						<Label className="w-52">Office</Label>
 						<Select name="selected_office" required>
@@ -191,7 +190,7 @@ export default function UpdateInput({
 							onClick={handleSubmit}
 							className="w-full bg-[#7F0000] hover:bg-[#7F0000]"
 						>
-							Yes, confirm
+							<Link href={"/admin/users/manage-users"}>Yes, confirm</Link>
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>

@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import LogoutButton from "~/components/LogoutButton";
 import Navbar from "~/components/Navbar";
 import { Links } from "~/components/SideNav";
@@ -36,7 +35,7 @@ export default async function layout({ children }: { children: React.ReactNode }
 				<section className="bg-slate-200/30 px-10 py-10">
 					<TypographyH4 text="Users List" />
 					<div className="mx-auto">
-						<div className="h-screen">
+						<div>
 							<div className="flex items-center justify-between py-4">
 								<AdminSubNav />
 							</div>

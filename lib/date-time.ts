@@ -1,5 +1,9 @@
-export function formattedDate(date: Date) {
-	const readableDate = new Date(date).toLocaleString();
-	const splitDate = readableDate.split(",");
-	return splitDate[0];
+import moment from "moment";
+
+export function formatDate(date: Date) {
+	return moment(date).format("YYYY-MM-DD");
+}
+
+export function formattedDateTime(dateTime: Date) {
+	return moment(dateTime).format("YYYY-MM-DD HH:mm A");
 }

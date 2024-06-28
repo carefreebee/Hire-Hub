@@ -69,9 +69,11 @@ export default async function Sidebar({ id }: { id: string }) {
 								<div>
 									<p>{item.name}</p>
 									<p
-										className={`${item.status === "" && "text-slate-400"} mt-2 w-[113px] rounded-xl bg-[#F9F3E5] py-1 text-center text-xs font-medium`}
+										className={`${item.status === "in-progress" ? "text-black" : "text-slate-400"} mt-2 w-[113px] rounded-xl bg-[#F9F3E5] py-1 text-center text-xs font-medium`}
 									>
-										{item.status === "" ? "In Progress" : ""}
+										{item.status === "in-progress"
+											? "In Progress"
+											: item.status === "" && "In Progress"}
 									</p>
 								</div>
 							</div>

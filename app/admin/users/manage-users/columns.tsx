@@ -10,7 +10,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { formattedDate } from "~/lib/date-time";
+import { formatDate } from "~/lib/date-time";
 import { User } from "~/lib/schema";
 
 export const columns: ColumnDef<User>[] = [
@@ -109,8 +109,8 @@ export const columns: ColumnDef<User>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			const date = formattedDate(row.getValue("appliedAt"));
-			return <div className="flex items-center justify-center gap-2">{date}</div>;
+			const date: Date = row.getValue("appliedAt");
+			return <div className="flex items-center justify-center gap-2">{formatDate(date)}</div>;
 		},
 	},
 	{

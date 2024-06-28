@@ -33,7 +33,7 @@ export default async function Header({
 				<div className="h-16 w-16 rounded-full bg-[#D9D9D9]"></div>
 				<div className="flex flex-col justify-center">
 					<div className="text-lg font-bold">{fullName}</div>
-					<small className="font-medium text-slate-600">
+					<small className="w-32 bg-[#F9E7BE] px-1.5 rounded-lg py-1 text-center font-medium text-slate-600">
 						<b>Applicant</b> - ID {id}
 					</small>
 				</div>

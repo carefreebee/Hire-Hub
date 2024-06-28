@@ -1,85 +1,67 @@
-import { MoreHorizontal } from "lucide-react";
+import dynamic from "next/dynamic";
+import ApplicantIDAssessedBy from "~/components/pages/authenticated/applicant/screening/ApplicantIDAssessedBy";
+import ApplicantIDUpdateDateFooter from "~/components/pages/authenticated/applicant/screening/ApplicantIDUpdateDateFooter";
+import ApplicantIDUpdateStatusFooter from "~/components/pages/authenticated/applicant/screening/ApplicantIDUpdateStatusFooter";
+import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
 import { Button } from "~/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getApplicantFormByID } from "~/controller/ApplicantController";
 
+const ApplicantIDDisplayDateNoSSR = dynamic(
+	() => import("~/components/pages/authenticated/applicant/screening/ApplicantIDDisplayDate"),
+	{
+		ssr: false,
+	}
+);
+
 export default async function ApplicantIdPage({ params }: { params: { id: string } }) {
-	// const { applicant, stages } = await getApplicantData(Number(params.id));
 	const applicant = await getApplicantFormByID(Number(params.id));
 
-	const {
-		screening,
-		teaching_demo,
-		panel_interview,
-		initial_interview,
-		psychological_exam,
-		recommendation_for_hiring,
-	} = applicant?.stages || {};
-
-	const stages = [
-		{ name: "Screening", status: screening?.status },
-		{ name: "Initial Interview", status: initial_interview?.status },
-		{ name: "Teaching Demo", status: teaching_demo?.status },
-		{ name: "Psychological Exam", status: psychological_exam?.status },
-		{ name: "Panel Interview", status: panel_interview?.status },
-		{ name: "Recommendation", status: recommendation_for_hiring?.status },
-	];
-
 	return (
-		<>
-			<section className="my-14 h-[197px] border-2">
-				<header className="flex items-center border-b-2">
-					<div className="flex-1">
-						<TypographySmall className="px-5">{applicant?.status}</TypographySmall>
-					</div>
-				</header>
-				<div className="flex items-center">
-					<div className="mb-16 mt-4 flex flex-1 flex-col">
-						<div>
-							<TypographySmall size={"md"} className="mr-20">
-								{applicant?.status}
-							</TypographySmall>
-							<DropdownMeneComponent />
-						</div>
-						<TypographySmall size={"md"} className="pt-0 text-xs">
-							{""}
-						</TypographySmall>
-					</div>
-					<div className="mb-16 mr-10 mt-4 flex flex-1 flex-col">
-						<TypographySmall size={"md"} className="px-0">
-							Assessed by:
-						</TypographySmall>
-						<TypographySmall size={"md"} className="px-0 text-xs">
-							Random Name | Human Resource Staff
-						</TypographySmall>
-					</div>
+		<section className="my-14 h-auto border-2">
+			<header className="flex items-center border-b-2">
+				<div className="flex-1">
+					<TypographySmall className="px-5">{applicant?.status}</TypographySmall>
 				</div>
-			</section>
-		</>
-	);
-}
-
-function DropdownMeneComponent() {
-	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" className="h-8 bg-gray-200 p-0 px-2 hover:bg-gray-300">
-					<span className="mr-2">In Progress</span>
-					<MoreHorizontal />
-				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent align="center" className="rounded-xl">
-				<DropdownMenuItem>Passed</DropdownMenuItem>
-				<DropdownMenuSeparator />
-				<DropdownMenuItem className="text-[#EC3838]">Failed</DropdownMenuItem>
-			</DropdownMenuContent>
-		</DropdownMenu>
+			</header>
+			<div className="mt-5 flex h-36">
+				<div className="flex flex-1 flex-col">
+					<div className="flex items-center gap-24">
+						<TypographySmall size={"md"}>{applicant?.status}</TypographySmall>
+						{applicant?.stages?.screening.status === "in-progress" ? (
+							<SelectPassedOrFailed />
+						) : (
+							<Button variant={"outline"} disabled className="text-[#039E38]">
+								{applicant?.stages?.screening.status}
+							</Button>
+						)}
+					</div>
+					<ApplicantIDDisplayDateNoSSR
+						date={applicant?.stages?.screening?.date as Date}
+					/>
+				</div>
+				<div className="mr-10 flex flex-1 flex-col">
+					<TypographySmall size={"md"} className="px-0">
+						Assessed by:
+					</TypographySmall>
+					<ApplicantIDAssessedBy
+						status={applicant?.stages?.screening.status as "passed" | "failed"}
+						assessedBy={applicant?.stages?.screening.assessed_by as string}
+					/>
+				</div>
+			</div>
+			<footer className="flex items-center justify-between border-t-2">
+				{!applicant?.stages?.screening.date ? (
+					<ApplicantIDUpdateDateFooter
+						id={applicant?.id as number}
+						date={applicant?.stages?.screening.date as Date}
+					/>
+				) : applicant?.stages?.screening.status !== "passed" ? (
+					<ApplicantIDUpdateStatusFooter id={applicant?.id as number} />
+				) : (
+					<div className="h-[40px]"></div>
+				)}
+			</footer>
+		</section>
 	);
 }

@@ -11,7 +11,6 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { formattedDate } from "~/lib/date-time";
 import { User } from "~/lib/schema";
 
 export const columns: ColumnDef<User>[] = [
@@ -77,41 +76,58 @@ export const columns: ColumnDef<User>[] = [
 		},
 	},
 	{
-		accessorKey: "email",
+		accessorKey: "role",
 		header: ({ column }) => {
 			return (
 				<Button
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 				>
-					Request Department
+					Position
 					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			const role: string = row.getValue("role");
+			const cleanRole = role
+				.replaceAll("_", " ")
+				.toLowerCase()
+				.split(" ")
+				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+				.join(" ");
+
+			return <div className="flex items-center justify-center gap-2">{cleanRole}</div>;
+		},
+	},
+	{
+		accessorKey: "selected_department",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					Department/Office
 				</Button>
 			);
 		},
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">
-					{row.getValue("email")}
+					{row.getValue("selected_department")}
+					{row.getValue("selected_office")}
 				</div>
 			);
 		},
 	},
 	{
-		accessorKey: "appliedAt",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Date Registered
-				</Button>
-			);
+		accessorKey: "selected_office",
+		header: () => {
+			return <div className="hidden"></div>;
 		},
-		cell: ({ row }) => {
-			const date = formattedDate(row.getValue("appliedAt"));
-			return <div className="flex items-center justify-center gap-2">{date}</div>;
+		cell: () => {
+			return <div className="hidden"></div>;
 		},
 	},
 	{
@@ -137,7 +153,9 @@ export const columns: ColumnDef<User>[] = [
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem asChild>
-								<Link href={`/admin/users/user-directory/manage/${id}`}>Manage</Link>
+								<Link href={`/admin/users/user-directory/manage/${id}`}>
+									Manage
+								</Link>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

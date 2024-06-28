@@ -13,7 +13,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { FullTimeType, PartTimeType, SelectedPartTimeType } from "~/constant/constant";
 import { handleDeleteJobRequest } from "~/controller/JobRequestController";
-import { formattedDate } from "~/lib/date-time";
+import { formatDate } from "~/lib/date-time";
 import { JobRequestSelect } from "~/lib/schema";
 
 export const columns: ColumnDef<JobRequestSelect>[] = [
@@ -126,8 +126,8 @@ export const columns: ColumnDef<JobRequestSelect>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			const date = formattedDate(row.getValue("requested_date"));
-			return <div className="flex items-center justify-center gap-2">{date}</div>;
+			const date: Date = row.getValue("requested_date");
+			return <div className="flex items-center justify-center gap-2">{formatDate(date)}</div>;
 		},
 	},
 	{

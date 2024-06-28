@@ -85,3 +85,17 @@ export const usersSchema = z.object({
 });
 
 export type Users = z.infer<typeof usersSchema>;
+
+export const applicantStagesDateSchema = z.object({
+	selected_date: z.string().refine((val) => !isNaN(Date.parse(val)), {
+		message: "Invalid date",
+	}),
+});
+
+export type ApplicantStagesDate = z.infer<typeof applicantStagesDateSchema>;
+
+export const applicantStatusStatusSchema = z.object({
+	applicant_status: z.enum(["passed", "failed"]),
+});
+
+export type ApplicantStagesStatus = z.infer<typeof applicantStatusStatusSchema>;

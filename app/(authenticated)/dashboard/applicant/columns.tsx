@@ -10,8 +10,8 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { formattedDate } from "~/lib/date-time";
-import { ApplicantSelect, ApplicantStages } from "~/lib/schema";
+import { formatDate } from "~/lib/date-time";
+import { ApplicantSelect } from "~/lib/schema";
 
 export const columns: ColumnDef<ApplicantSelect>[] = [
 	{
@@ -117,7 +117,7 @@ export const columns: ColumnDef<ApplicantSelect>[] = [
 		},
 	},
 	{
-		accessorKey: "stages",
+		accessorKey: "applied_date",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -130,12 +130,8 @@ export const columns: ColumnDef<ApplicantSelect>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			const stages: ApplicantStages = row.getValue("stages");
-			const {
-				screening: { date },
-			} = stages;
-			const dateResults = formattedDate(date);
-			return <div className="flex items-center justify-center gap-2">{dateResults}</div>;
+			const date: Date = row.getValue("applied_date");
+			return <div className="flex items-center justify-center gap-2">{formatDate(date)}</div>;
 		},
 	},
 	{

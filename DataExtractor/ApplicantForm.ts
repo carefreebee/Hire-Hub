@@ -15,4 +15,10 @@ export class DataExtractor {
 			resume: formData.get("resume") as string,
 		};
 	}
+
+	static extractApplicantStagesDate(formData: FormData) {
+		return {
+			selected_date: formData.get("selected_date") as string,
+		};
+	}
 }

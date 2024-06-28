@@ -70,7 +70,8 @@ export const sessions = pgTable("sessions", {
 
 interface StageStatus {
 	status: "in-progress" | "passed" | "failed" | "";
-	date?: Date;
+	date?: Date | "";
+	assessed_by?: RoleEnumsType | "";
 	mode?: "online" | "in-person";
 }
 
@@ -97,28 +98,35 @@ export const applicant = pgTable("applicant", {
 	office_id: integer("office_id").references(() => office.office_id),
 	selected_department: text("selected_department"),
 	selected_office: text("selected_office"),
+	applied_date: timestamp("applied_date").defaultNow(),
 	status: statusEnums("statusEnums").default("Screening"),
 	stages: jsonb("stages")
 		.$type<ApplicantStages>()
 		.default({
 			screening: {
 				status: "in-progress",
-				date: new Date(),
+				date: "",
+				assessed_by: "hr_head",
 			},
 			initial_interview: {
 				status: "",
+				date: "",
 			},
 			teaching_demo: {
 				status: "",
+				date: "",
 			},
 			psychological_exam: {
 				status: "",
+				date: "",
 			},
 			panel_interview: {
 				status: "",
+				date: "",
 			},
 			recommendation_for_hiring: {
 				status: "",
+				date: "",
 			},
 		}),
 });
@@ -147,29 +155,6 @@ export const office = pgTable("office", {
 	office_name: text("office_name").notNull().unique(),
 });
 
-// export const requestRelation = relations()
-
-// export const requestRelation = relations(jobRequest, ({ one }) => ({
-// 	department: one(department, {
-// 		fields: [jobRequest.departmentId],
-// 		references: [department.department_id],
-// 	}),
-// 	office: one(office, {
-// 		fields: [jobRequest.officeId],
-// 		references: [office.office_id],
-// 	}),
-// }));
-
-// export const departmenttRelation = relations(department, ({ many, one }) => ({
-// 	applicant: many(applicant),
-// 	user: one(users),
-// }));
-
-// export const officeRelation = relations(office, ({ many, one }) => ({
-// 	applicant: many(applicant),
-// 	user: one(users),
-// }));
-
 // export const applicantRelation = relations(applicant, ({ one }) => ({
 // 	department: one(department, {
 // 		fields: [applicant.departmentId],
@@ -191,20 +176,6 @@ export const office = pgTable("office", {
 // 		references: [office.office_id],
 // 	}),
 // }));
-
-// export const departmentRelation = relations(department, ({ }) => ({
-//   user:
-// }))
-
-// export const Office = pgTable("Office", {
-//     office_id: serial("OfficeID").primaryKey(),
-//     office_name: text("office_name").unique().notNull(),
-
-// })
-
-// Department must have a choices that the applicant can select
-// department: text("department").notNull(),
-//role: roleEnums("role").notNull().default("applicant"),
 
 export type User = typeof users.$inferSelect;
 export type ApplicantSelect = typeof applicant.$inferSelect;
