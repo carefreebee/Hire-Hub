@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import Navbar from "~/components/Navbar";
 import SideNav from "~/components/SideNav";
 import { validateRequest } from "~/lib/auth";
+import { RoleEnumsType } from "~/lib/schema";
+import { authorizedRoles } from "~/util/filter-roles";
 
 export default async function layout({ children }: { children: React.ReactNode }) {
 	const { user } = await validateRequest();
@@ -9,13 +11,20 @@ export default async function layout({ children }: { children: React.ReactNode }
 	if (!user) return redirect("/");
 	else if (user?.role === "user") return redirect("/user");
 	else if (user?.role === "admin") return redirect("/admin/users/manage-users");
-	else if (user?.role !== "hr_head") return redirect("/dashboard/applicant");
+	else if (!authorizedRoles.includes(user?.role)) {
+		return redirect("/applicant");
+	}
 
 	return (
 		<div className="flex justify-center">
-			<SideNav />
+			<SideNav role={user?.role} />
 			<section className="container px-0">
-				<Navbar />
+				<Navbar
+					name={user?.name as string}
+					department={user?.selected_department as string}
+					office={user?.selected_office as string}
+					role={user?.role as RoleEnumsType}
+				/>
 				{children}
 			</section>
 		</div>

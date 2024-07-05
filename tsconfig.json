@@ -22,6 +22,13 @@
 			"~/*": ["./*"]
 		}
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(authenticated)/dashboard/applicant/[id]/stages/psychological-exam", "app/(authenticated)/dashboard/applicant/[id]/stages/recommendation-for-hiring"],
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts",
+		"app/(authenticated)/dashboard/applicant/[id]/stages/[role]/psychological-exam",
+		"app/(authenticated)/dashboard/applicant/[id]/stages/[role]/recommendation-for-hiring"
+	],
 	"exclude": ["node_modules"]
 }

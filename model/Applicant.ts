@@ -7,13 +7,14 @@ export class Applicant {
 	email: string;
 	contactNumber: bigint | null;
 	resume: string | null;
-	applicationLetter: string | null;
 	communicationType: typeof communicationEnums;
 	positionType: typeof positionEnums;
+	positionApplied: string;
 	departmentId: number | null;
 	officeId: number | null;
 	departmentName: string;
 	officeName: string;
+	appliedDate: Date;
 	status: typeof statusEnums;
 	stages: ApplicantStages;
 
@@ -24,13 +25,14 @@ export class Applicant {
 		email: string,
 		contactNumber: bigint | null,
 		resume: string | null,
-		applicationLetter: string | null,
 		communicationType: typeof communicationEnums,
 		positionType: typeof positionEnums,
 		departmentId: number | null,
+		positionApplied: string,
 		officeId: number | null,
 		departmentName: string,
 		officeName: string,
+		appliedDate: Date,
 		status: typeof statusEnums,
 		stages: ApplicantStages
 	) {
@@ -40,13 +42,14 @@ export class Applicant {
 		this.email = email;
 		this.contactNumber = contactNumber;
 		this.resume = resume;
-		this.applicationLetter = applicationLetter;
 		this.communicationType = communicationType;
+		this.positionApplied = positionApplied;
 		this.positionType = positionType;
 		this.departmentId = departmentId;
 		this.officeId = officeId;
 		this.departmentName = departmentName;
 		this.officeName = officeName;
+		this.appliedDate = appliedDate;
 		this.status = status;
 		this.stages = stages;
 	}

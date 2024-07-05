@@ -1,3 +1,9 @@
+import { RoleEnumsType } from "~/lib/schema";
+
+export type ComponentChildrenProps = {
+	children: React.ReactNode;
+};
+
 export type FormContainerProps = {
 	label: string;
 	type: string;
@@ -18,7 +24,7 @@ export type FormContainerProps = {
 
 export type RadioGroupProps = {
 	label: string;
-	name: string
+	name: string;
 	FirstRadioGroupItemValue: string;
 	FirstRadioGroupItemLabel: string;
 	SecondRadioGroupItemValue: string;
@@ -40,34 +46,68 @@ export type SelectTagProps = {
 };
 
 export type TextProps = {
-	text: string
-}
+	text: string;
+};
 
 export type SelectCommunicationMode = "email" | "phone_number";
 export type SelectCategory = "teaching_staff" | "non-teaching_staff";
 export type SelectType = "full_time" | "part_time";
 
-interface JobRequestRecord {
-	request_id: number;
-	requested_position: string;
-	requested_category: "teaching_staff" | "non-teaching_staff";
-	requested_department: string | null;
-	requested_office: string | null;
-	requested_type: "full_time" | "part_time";
-	requested_description: string;
-	requested_qualification: string;
-	requested_date: Date;
-	department_id: number | null;
-	office_id: number | null;
+// interface JobRequestRecord {
+// 	request_id: number;
+// 	requested_position: string;
+// 	requested_category: "teaching_staff" | "non-teaching_staff";
+// 	requested_department: string | null;
+// 	requested_office: string | null;
+// 	requested_type: "full_time" | "part_time";
+// 	requested_description: string;
+// 	requested_qualification: string;
+// 	requested_date: Date;
+// 	department_id: number | null;
+// 	office_id: number | null;
+// }
+
+// interface DepartmentRecord {
+// 	department_id: number;
+// 	department_name: string;
+// }
+
+// interface OfficeRecord {
+// 	office_id: number;
+// 	office_name: string;
+// }
+
+export interface StageStatus {
+	status?: "in-progress" | "passed" | "failed" | "";
+	date?: Date | "";
+	assessed_by?: RoleEnumsType[];
+	mode?: "online" | "in-person" | "";
+	comment_id?: number[];
 }
 
-interface DepartmentRecord {
-	department_id: number;
-	department_name: string;
+export interface ApplicantStages {
+	screening: StageStatus;
+	initial_interview: StageStatus;
+	teaching_demo: StageStatus;
+	psychological_exam: StageStatus;
+	panel_interview: StageStatus;
+	recommendation_for_hiring: StageStatus;
 }
 
-interface OfficeRecord {
-	office_id: number;
-	office_name: string;
-}
+export type StageType = keyof ApplicantStages;
 
+export type UserNameAndRole = {
+	name: string;
+	role: RoleEnumsType;
+};
+
+export type RatingFormWithUserData = {
+	rating_id: number;
+	applicant_id: number | null;
+	user_id: string | null;
+	rate: string;
+	recruitment_stage: string;
+	created_at: Date | null;
+	name: string;
+	role: string;
+};

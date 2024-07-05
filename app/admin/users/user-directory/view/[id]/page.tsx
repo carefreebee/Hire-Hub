@@ -3,6 +3,7 @@ import ArrowLeft from "~/components/ui/arrow-left";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { getUsersByID } from "~/controller/UsersController";
+import { formattedName } from "~/util/formatted-name";
 
 function UserIDContainer({ children }: { children: React.ReactNode }) {
 	return <div className="flex w-full flex-col items-center gap-1.5">{children}</div>;
@@ -39,10 +40,7 @@ export default async function ManageUserIDPage({ params }: { params: { id: strin
 					<UserIDChildren label="E-mail Address" value={user?.email as string} />
 				</UserIDContainer>
 				<UserIDContainer>
-					<UserIDChildren
-						label="Position"
-						value={user?.role.replaceAll("_", " ").toLowerCase() as string}
-					/>
+					<UserIDChildren label="Position" value={formattedName(user?.role as string)} />
 					<UserIDChildren label="Department" value={isDepartmentOrOffice as string} />
 				</UserIDContainer>
 			</div>

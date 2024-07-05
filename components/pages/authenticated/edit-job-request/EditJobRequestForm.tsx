@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
@@ -13,6 +14,7 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
+import { toast } from "~/components/ui/use-toast";
 import {
 	NonTeachingStaff,
 	SelectedCategoryTeachingStaff,
@@ -31,8 +33,31 @@ function LabelTag({ label }: { label: string }) {
 }
 
 export default function EditJobrequestForm({ jobRequestByID, id }: EditJobrequestFormProps) {
+	const formRef = useRef<HTMLFormElement>(null);
+
+	async function handleSubmit(): Promise<void> {
+		const formData = new FormData(formRef.current!);
+		try {
+			await handleEditJobRequest(formData);
+			// Reset the form after successful submission
+			if (formRef.current) {
+				formRef.current.reset();
+			}
+			toast({
+				title: "Updated Successfully.",
+				description: "Job Request has been updated successfully.",
+			});
+		} catch (error) {
+			console.error("Error submitting form:", error);
+		}
+	}
+
 	return (
-		<form className="mx-auto flex w-[686px] flex-col justify-center gap-8 rounded-xl bg-white py-10 shadow-md">
+		<form
+			ref={formRef}
+			onSubmit={(e) => e.preventDefault()}
+			className="mx-auto flex w-[686px] flex-col justify-center gap-8 rounded-xl bg-white py-10 shadow-md"
+		>
 			<h4 className="scroll-m-20 text-center text-xl font-bold tracking-tight text-[#7F0000]">
 				Edit Request Details
 			</h4>
@@ -45,14 +70,6 @@ export default function EditJobrequestForm({ jobRequestByID, id }: EditJobreques
 					className="border-2"
 				/>
 			</div>
-
-			{/* <div className="mx-auto w-[564px]">
-						<LabelTag label="Request Date" />
-						<Input
-							defaultValue={formattedDate(jobRequestByID?.requested_date!)}
-							className="border-2"
-						/>
-					</div> */}
 
 			<div className="mx-auto w-[564px]">
 				<LabelTag label="Category" />
@@ -120,15 +137,6 @@ export default function EditJobrequestForm({ jobRequestByID, id }: EditJobreques
 				/>
 			</div>
 			<div className="flex justify-center">
-				{/* PLEASE UPDATE ALSO MUST USE THE CONFIRMATION MODAL BELOW IS NOT YET UDPATED */}
-				{/* <ConfirmationModal>
-							<Button
-								type="submit"
-								className="bg-[#7F0000] hover:scale-95 hover:bg-[#7F0000]"
-							>
-								Submit Edited Request Form
-							</Button>
-						</ConfirmationModal> */}
 				<ConfirmationModal
 					mainButton={
 						<Button
@@ -141,7 +149,7 @@ export default function EditJobrequestForm({ jobRequestByID, id }: EditJobreques
 					descriptionButtonLabel="Are you sure you want to submit the form?"
 					cancelButtonLabel="No, cancel"
 				>
-					<AlertDialogAction className="w-full" formAction={handleEditJobRequest}>
+					<AlertDialogAction className="w-full" onClick={handleSubmit}>
 						Yes, submit
 					</AlertDialogAction>
 				</ConfirmationModal>

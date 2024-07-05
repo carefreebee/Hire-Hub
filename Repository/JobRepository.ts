@@ -1,74 +1,53 @@
 import { eq } from "drizzle-orm";
 import { db } from "~/lib/db";
-import * as schema from "~/lib/schema";
+import { department, jobRequest, JobRequestInsert, office } from "~/lib/schema";
 
 export class JobRequestRepository {
-	static async insertDepartment(departmentName: string) {
-		try {
-			const insertDepartmentData = await db
-				.insert(schema.department)
-				.values({ department_name: departmentName })
-				.returning();
+	static async createJobRequest(jobRequestData: JobRequestInsert) {
+		const [insertedJobRequestData] = await db
+			.insert(jobRequest)
+			.values(jobRequestData)
+			.returning();
 
-			console.log(
-				"Department Inserted to the database (Department Table)",
-				insertDepartmentData
-			);
+		const { request_id, requested_category, requested_department, requested_office } =
+			insertedJobRequestData;
 
-			return insertDepartmentData[0].department_id;
-		} catch (error) {
-			console.error("Failed to insert department:", error);
-			throw new Error("Department insertion failed");
+		let id: number | null = null;
+		if (requested_category === "teaching_staff" && requested_department !== null) {
+			const [insertedDepartment] = await this.insertDepartment(requested_department);
+			id = insertedDepartment.department_id;
+			await this.updateDepartmentJobRequest(id, request_id);
+		} else if (requested_category === "non-teaching_staff" && requested_office !== null) {
+			const [insertedOffice] = await this.insertOffice(requested_office);
+			id = insertedOffice.office_id;
+			await this.updateOfficeRequest(id, request_id);
 		}
 	}
 
-	static async insertOffice(officeName: string) {
-		try {
-			const insertOfficeData = await db
-				.insert(schema.office)
-				.values({ office_name: officeName })
-				.returning();
-
-			console.log("Office Inserted to the database (Office Table)", insertOfficeData);
-
-			return insertOfficeData[0].office_id;
-		} catch (error) {
-			console.error("Failed to insert office:", error);
-			throw new Error("Office insertion failed");
-		}
+	static async insertDepartment(requested_department: string) {
+		return await db
+			.insert(department)
+			.values({ department_name: requested_department })
+			.returning();
 	}
 
-	static async updateJobRequestIDDepartment(requestId: number, departmentId: number) {
-		try {
-			const updatedJobRequestData = await db
-				.update(schema.jobRequest)
-				.set({ department_id: departmentId })
-				.where(eq(schema.jobRequest.request_id, requestId))
-				.returning();
-
-			console.log("Job Request Updated with Department ID:", updatedJobRequestData);
-
-			return updatedJobRequestData;
-		} catch (error) {
-			console.error("Failed to update job request with department ID:", error);
-			throw new Error("Updating job request with department ID failed");
-		}
+	static async insertOffice(requested_office: string) {
+		return db.insert(office).values({ office_name: requested_office }).returning();
 	}
 
-	static async updateJobRequestIDOffice(requestId: number, officeId: number) {
-		try {
-			const updatedJobRequestData = await db
-				.update(schema.jobRequest)
-				.set({ office_id: officeId })
-				.where(eq(schema.jobRequest.request_id, requestId))
-				.returning();
+	static async updateDepartmentJobRequest(id: number, request_id: number) {
+		return await db
+			.update(jobRequest)
+			.set({ department_id: id })
+			.where(eq(jobRequest.request_id, request_id))
+			.returning();
+	}
 
-			console.log("Job Request Updated with Office ID:", updatedJobRequestData);
-
-			return updatedJobRequestData;
-		} catch (error) {
-			console.error("Failed to update job request with office ID:", error);
-			throw new Error("Updating job request with office ID failed");
-		}
+	static async updateOfficeRequest(id: number, request_id: number) {
+		return await db
+			.update(jobRequest)
+			.set({ office_id: id })
+			.where(eq(jobRequest.request_id, request_id))
+			.returning();
 	}
 }

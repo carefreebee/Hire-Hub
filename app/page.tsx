@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { validateRequest } from "~/lib/auth";
+import { RoleEnumsType } from "~/lib/schema";
+import { authorizedRoles } from "~/util/filter-roles";
 
 interface FeatureCardProps {
 	iconSrc: string;
@@ -18,7 +20,10 @@ export default async function Home() {
 
 	if (user?.role === "user") return redirect("/user");
 	else if (user?.role === "admin") return redirect("/admin/users/manage-users");
-	else if (user?.role === "hr_head") return redirect("/dashboard/applicant");
+	else if (user?.role === "hr_head") return redirect("/dashboard");
+	else if (authorizedRoles.includes(user?.role as RoleEnumsType)) {
+		return redirect("/dashboard/applicant");
+	}
 
 	return (
 		<>

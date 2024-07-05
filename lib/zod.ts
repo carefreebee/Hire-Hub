@@ -1,5 +1,6 @@
 import validator from "validator";
 import { z } from "zod";
+import { roleEnums } from "./schema";
 
 export const applicantSchema = z.object({
 	first_name: z
@@ -87,15 +88,29 @@ export const usersSchema = z.object({
 export type Users = z.infer<typeof usersSchema>;
 
 export const applicantStagesDateSchema = z.object({
-	selected_date: z.string().refine((val) => !isNaN(Date.parse(val)), {
-		message: "Invalid date",
-	}),
+	selected_date: z.string().refine((val) => !isNaN(Date.parse(val))),
 });
 
 export type ApplicantStagesDate = z.infer<typeof applicantStagesDateSchema>;
 
-export const applicantStatusStatusSchema = z.object({
-	applicant_status: z.enum(["passed", "failed"]),
+export const applicantStagesInitialInterview = z.object({
+	applicant_id: z.number(),
+	selected_date: z.string().refine((val) => !isNaN(Date.parse(val))),
+	selected_mode: z.enum(["online", "in-person"]),
+	assessed_by: z.array(z.enum(roleEnums.enumValues)),
 });
 
-export type ApplicantStagesStatus = z.infer<typeof applicantStatusStatusSchema>;
+export type ApplicantStagesInitialInterivew = z.infer<typeof applicantStagesInitialInterview>;
+
+export const commentSchema = z.object({
+	comment: z.string().min(5, { message: "Comment must have 5 or more characters" }),
+});
+
+export type Comment = z.infer<typeof commentSchema>;
+
+
+export const initialInterviewFormSchema = z.object({
+	rate: z.string().min(5, { message: "Rate must have 5 or more characters" }),
+});
+
+export type InitialInterviewForm = z.infer<typeof initialInterviewFormSchema>;

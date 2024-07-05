@@ -1,31 +1,45 @@
 import { eq } from "drizzle-orm";
 import { db } from "~/lib/db";
-import * as schema from "~/lib/schema";
+import { ApplicantInsert, applicant, department, office } from "~/lib/schema";
 
 export class ApplicantFormRepository {
 	static async getDepartmentId(departmentName: string): Promise<number> {
-		const department = await db.query.department.findFirst({
-			where: eq(schema.department.department_name, departmentName),
+		const departmentId = await db.query.department.findFirst({
+			where: eq(department.department_name, departmentName),
 		});
 
-		if (!department) {
+		if (!departmentId) {
 			console.error("Department not found");
 			throw new Error("Department not found");
 		}
 
-		return department.department_id;
+		return departmentId.department_id;
 	}
 
 	static async getOfficeId(officeName: string): Promise<number> {
-		const office = await db.query.office.findFirst({
-			where: eq(schema.office.office_name, officeName),
+		const officeId = await db.query.office.findFirst({
+			where: eq(office.office_name, officeName),
 		});
 
-		if (!office) {
+		if (!officeId) {
 			console.error("Office not found");
 			throw new Error("Office not found");
 		}
 
-		return office.office_id;
+		return officeId.office_id;
+	}
+
+	static async createApplicantForm(applicantFormData: ApplicantInsert) {
+		try {
+			const [createApplicantFormData]: ApplicantInsert[] = await db
+				.insert(applicant)
+				.values(applicantFormData)
+				.returning();
+
+			return createApplicantFormData;
+		} catch (error) {
+			console.error("Database insertion failed:", error);
+			throw new Error("Database insertion failed");
+		}
 	}
 }

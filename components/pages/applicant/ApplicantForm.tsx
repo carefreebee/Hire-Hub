@@ -1,6 +1,8 @@
 "use client";
 
 import { ChangeEvent, useRef, useState } from "react";
+import { ConfirmationModal } from "~/components/ConfirmationModal";
+import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
@@ -15,7 +17,7 @@ import {
 } from "~/components/ui/select";
 import { useToast } from "~/components/ui/use-toast";
 import { handleSubmitApplicantForm } from "~/controller/ApplicantController";
-import { UploadButton } from "~/util/uploadthing";
+import { UploadDropzone } from "~/util/uploadthing";
 import { FormContainer, Note, RadioGroupContainer } from "./Form";
 
 type ApplicantFormProps = {
@@ -76,10 +78,18 @@ export default function ApplicantForm({
 					<FormContainer label="Email" type="email" name="email" />
 					<FormContainer
 						label="Contact Number"
-						type="text"
+						type="number"
 						name="contact_number"
 						inputMode="numeric"
 					/>
+					{/* <div className="flex flex-col gap-3">
+						<Label className="font-semibold">Contact Number</Label>
+						<Input
+							type="number"
+							name="contact_number"
+							required
+						/>
+					</div> */}
 					<RadioGroupContainer
 						label="Preferred mode of communication"
 						name="communication_type"
@@ -90,14 +100,6 @@ export default function ApplicantForm({
 					/>
 				</section>
 				<section className="flex flex-1 flex-col gap-5">
-					{/* <RadioGroupContainer
-						label="Choose the type you are applying for"
-						name="type_applying_for"
-						FirstRadioGroupItemValue="teaching_staff"
-						FirstRadioGroupItemLabel="Teaching Staff"
-						SecondRadioGroupItemValue="non-teaching_staff"
-						SecondRadioGroupItemLabel="Non-Teaching Staff"
-					/> */}
 					<div className="h-[66px]">
 						<Label className="font-semibold">
 							Choose the type you are applying for
@@ -187,7 +189,7 @@ export default function ApplicantForm({
 
 					<Note />
 
-					{/* IMAGE INPUT */}
+					{/* RESUME INPUT */}
 					<input
 						type="text"
 						name="resume"
@@ -197,7 +199,7 @@ export default function ApplicantForm({
 					/>
 
 					{/* TODO: UPLOAD FILE */}
-					<UploadButton
+					<UploadDropzone
 						endpoint="productPdf"
 						onClientUploadComplete={(res) => {
 							// Do something with the response
@@ -215,12 +217,22 @@ export default function ApplicantForm({
 				</section>
 			</section>
 			<div className="flex items-center justify-center">
-				<Button
-					onClick={handleSubmit}
-					className="bg-[#7F0000] hover:scale-95 hover:bg-[#5e1e1e]"
+				<ConfirmationModal
+					mainButton={
+						<Button
+							type="button"
+							className="bg-[#7F0000] hover:scale-95 hover:bg-[#5e1e1e]"
+						>
+							Submit Application
+						</Button>
+					}
+					descriptionButtonLabel="Are you sure you want to submit the form?"
+					cancelButtonLabel="No, cancel"
 				>
-					Submit Application
-				</Button>
+					<AlertDialogAction className="w-full" onClick={handleSubmit}>
+						Yes, submit
+					</AlertDialogAction>
+				</ConfirmationModal>
 			</div>
 		</form>
 	);

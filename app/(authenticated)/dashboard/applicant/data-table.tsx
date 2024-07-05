@@ -26,7 +26,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 				<SearchInput
 					placeholder="Search..."
 					column={searchApplicantName!}
-					className="w-[299px] ml-auto"
+					className="ml-auto w-[299px]"
 				/>
 			</div>
 			<div className="my-5 h-[616px] rounded-lg border bg-white">

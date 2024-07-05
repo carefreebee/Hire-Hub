@@ -11,6 +11,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { toast } from "~/components/ui/use-toast";
 import { FullTimeType, PartTimeType, SelectedPartTimeType } from "~/constant/constant";
 import { handleDeleteJobRequest } from "~/controller/JobRequestController";
 import { formatDate } from "~/lib/date-time";
@@ -158,7 +159,14 @@ export const columns: ColumnDef<JobRequestSelect>[] = [
 							<DropdownMenuSeparator />
 							<DropdownMenuItem>
 								<Button
-									onClick={async () => await handleDeleteJobRequest(Number(id))}
+									onClick={async () => {
+										await handleDeleteJobRequest(Number(id));
+										toast({
+											title: "Deleted Job Request",
+											description:
+												"Job Request has been deleted successfully",
+										});
+									}}
 									variant={"ghost"}
 									className="h-auto p-0 text-[#EC3838] hover:text-[#EC3838]"
 								>

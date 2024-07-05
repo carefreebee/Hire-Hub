@@ -16,6 +16,7 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
+import { toast } from "~/components/ui/use-toast";
 import { handleSubmitJobRequest } from "~/controller/JobRequestController";
 import { useSelectedCategoryOptions } from "~/hooks/useSelectedCategoryOptions";
 import { SelectTagProps } from "~/types/types";
@@ -51,7 +52,10 @@ export default function Form() {
 			if (formRef.current) {
 				formRef.current.reset();
 			}
-			router.refresh();
+			toast({
+				title: "A New Job Request Created!",
+				description: "Thank you for submitting the form.",
+			});
 		} catch (error) {
 			console.error("Error submitting form:", error);
 		}

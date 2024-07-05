@@ -69,20 +69,22 @@ export const sessions = pgTable("sessions", {
 });
 
 interface StageStatus {
-	status: "in-progress" | "passed" | "failed" | "";
+	status?: "in-progress" | "passed" | "failed" | "";
 	date?: Date | "";
-	assessed_by?: RoleEnumsType | "";
-	mode?: "online" | "in-person";
+	assessed_by?: RoleEnumsType[];
+	mode?: "online" | "in-person" | "";
+	comment_id?: number[];
+	rating_forms_id?: number[];
 }
 
-export type ApplicantStages = {
+interface ApplicantStages {
 	screening: StageStatus;
-	initial_interview: StageStatus;
-	teaching_demo: StageStatus;
-	psychological_exam: StageStatus;
-	panel_interview: StageStatus;
-	recommendation_for_hiring: StageStatus;
-};
+	initial_interview?: StageStatus;
+	teaching_demo?: StageStatus;
+	psychological_exam?: StageStatus;
+	panel_interview?: StageStatus;
+	recommendation_for_hiring?: StageStatus;
+}
 
 export const applicant = pgTable("applicant", {
 	id: serial("id").primaryKey(),
@@ -99,36 +101,35 @@ export const applicant = pgTable("applicant", {
 	selected_department: text("selected_department"),
 	selected_office: text("selected_office"),
 	applied_date: timestamp("applied_date").defaultNow(),
-	status: statusEnums("statusEnums").default("Screening"),
+	// status: statusEnums("statusEnums").default("Screening"),
 	stages: jsonb("stages")
 		.$type<ApplicantStages>()
 		.default({
 			screening: {
 				status: "in-progress",
 				date: "",
-				assessed_by: "hr_head",
-			},
-			initial_interview: {
-				status: "",
-				date: "",
-			},
-			teaching_demo: {
-				status: "",
-				date: "",
-			},
-			psychological_exam: {
-				status: "",
-				date: "",
-			},
-			panel_interview: {
-				status: "",
-				date: "",
-			},
-			recommendation_for_hiring: {
-				status: "",
-				date: "",
+				assessed_by: ["hr_head"],
+				comment_id: [],
+				rating_forms_id: [],
 			},
 		}),
+});
+
+export const ratingForms = pgTable("rating_forms", {
+	rating_id: serial("rating_id").primaryKey(),
+	applicant_id: integer("applicant_id").references(() => applicant.id),
+	user_id: text("user_id").references(() => users.id),
+	rate: text("rate").notNull(),
+	recruitment_stage: text("recruitment_stage").notNull(),
+	created_at: timestamp("created_at").defaultNow(),
+});
+
+export const comments = pgTable("comments", {
+	id: serial("id").primaryKey(),
+	applicant_id: integer("applicant_id").references(() => applicant.id),
+	commented_by: text("user_id").references(() => users.id),
+	comment: text("comment").notNull(),
+	commented_at: timestamp("commented_at").defaultNow(),
 });
 
 export const jobRequest = pgTable("jobRequest", {
@@ -154,6 +155,10 @@ export const office = pgTable("office", {
 	office_id: serial("office_id").primaryKey(),
 	office_name: text("office_name").notNull().unique(),
 });
+
+// export const evaluate = pgTable("evaluate", {
+// 	evaluate_id: serial("evaluate_id").primaryKey(),
+// })
 
 // export const applicantRelation = relations(applicant, ({ one }) => ({
 // 	department: one(department, {
@@ -189,5 +194,9 @@ export type JobRequestInsert = typeof jobRequest.$inferInsert;
 export type UserRole = typeof roleEnums.enumValues;
 export type communicationEnums = typeof communicationEnums.enumValues;
 export type StatusEnums = typeof statusEnums.enumValues;
+export type CommentsInsert = typeof comments.$inferInsert;
+export type CommentsSelect = typeof comments.$inferSelect;
+export type RatingFormsInsert = typeof ratingForms.$inferInsert;
+export type RatingFormsSelect = typeof ratingForms.$inferSelect;
 
 export type RoleEnumsType = User["role"];

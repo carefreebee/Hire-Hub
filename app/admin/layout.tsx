@@ -7,6 +7,7 @@ import DashboardSVG from "~/components/ui/dashboard-svg";
 import LogoutSVG from "~/components/ui/logout-svg";
 import TypographyH4 from "~/components/ui/typography-h4";
 import { validateRequest } from "~/lib/auth";
+import { RoleEnumsType } from "~/lib/schema";
 
 export default async function layout({ children }: { children: React.ReactNode }) {
 	const { user } = await validateRequest();
@@ -31,7 +32,7 @@ export default async function layout({ children }: { children: React.ReactNode }
 				</ul>
 			</nav>
 			<section className="container px-0">
-				<Navbar />
+				<Navbar name={user?.name as string} role={user?.role as RoleEnumsType} />
 				<section className="bg-slate-200/30 px-10 py-10">
 					<TypographyH4 text="Users List" />
 					<div className="mx-auto">

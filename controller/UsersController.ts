@@ -2,6 +2,11 @@
 
 import { UsersService } from "~/service/UsersService";
 
+export async function getUsersByUserID(id: string) {
+	const usersService = new UsersService();
+	return await usersService.getUsersByUserID(id);
+}
+
 export async function getUsersByUserRole() {
 	const usersService = new UsersService();
 	return await usersService.getUsersByUserRole();

@@ -4,6 +4,7 @@ import { columns } from "./columns";
 import { DataTable } from "./data-table";
 
 export default async function ApplicantPage() {
+	// const { user } = await validateRequest();
 	const applicant = await getAllApplicantForm();
 
 	return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef, flexRender } from "@tanstack/react-table";
-import AddRequest from "~/components/pages/authenticated/AddRequest";
+import Link from "next/link";
 import { SearchInput } from "~/components/pages/authenticated/SearchInput";
 import TableHeaderComponent from "~/components/pages/authenticated/table/Header";
 import TableFooter from "~/components/pages/authenticated/table/TableFooter";
@@ -24,7 +24,12 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 		<div>
 			<div className="flex items-center justify-between py-4">
 				<TableTopMostHeader title="Total Job Request" data={data.length} />
-				<AddRequest />
+				<Link
+					href={"/dashboard/request/add-new-request"}
+					className="rounded-lg bg-[#7F0000] px-3.5 py-1.5 text-white hover:scale-95"
+				>
+					+Add New Request
+				</Link>
 				<SearchInput
 					placeholder="Search..."
 					column={searchDepartmentOrOffice!}

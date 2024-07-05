@@ -26,8 +26,10 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "~/components/ui/select";
+import { toast } from "~/components/ui/use-toast";
 import { handleUpdateUserRole } from "~/controller/UsersController";
-import { roleEnums } from "~/lib/schema";
+import { roleEnums, RoleEnumsType } from "~/lib/schema";
+import { formattedName } from "~/util/formatted-name";
 
 type ApplicantFormProps = {
 	id: string;
@@ -54,8 +56,21 @@ export default function UpdateInput({
 			if (formRef.current) {
 				formRef.current.reset();
 			}
+			toast({
+				title: "User role updated successfully",
+				description: "User role updated successfully.",
+			});
 		} catch (error) {
 			console.error("Error submitting form:", error);
+		}
+	}
+
+	const [selectedHrHead, setSelectedHrHead] = useState<RoleEnumsType | null | string>(null);
+	function handleSelectChange(role: "hr_head") {
+		if (role === "hr_head") {
+			setSelectedHrHead(role);
+		} else {
+			setSelectedHrHead(null);
 		}
 	}
 
@@ -68,7 +83,10 @@ export default function UpdateInput({
 			<div className="flex items-center">
 				<input type="hidden" name="id" value={id} readOnly />
 				<Label className="w-52">Position</Label>
-				<Select name="selected_position">
+				<Select
+					name="selected_position"
+					onValueChange={(role: "hr_head") => handleSelectChange(role)}
+				>
 					<SelectTrigger>
 						<SelectValue placeholder="Select a position" />
 					</SelectTrigger>
@@ -77,7 +95,7 @@ export default function UpdateInput({
 							<SelectLabel>Positions</SelectLabel>
 							{roleEnum.map((role) => (
 								<SelectItem key={role} value={role}>
-									{role.replaceAll("_", " ").toLowerCase()}
+									{formattedName(role)}
 								</SelectItem>
 							))}
 						</SelectGroup>
@@ -88,6 +106,7 @@ export default function UpdateInput({
 				<Label className="w-52">Select option</Label>
 				<div className="w-full">
 					<RadioGroup
+						disabled={selectedHrHead === "hr_head"}
 						onChange={(e: ChangeEvent<HTMLInputElement>) =>
 							setSelectedOption(
 								e.target.value as "teaching_staff" | "non-teaching_staff"
@@ -149,7 +168,7 @@ export default function UpdateInput({
 				) : (
 					<>
 						<Label className="w-52">Department/Office</Label>
-						<Select>
+						<Select disabled={selectedHrHead === "hr_head"}>
 							<SelectTrigger className="w-full">
 								<SelectValue placeholder="Choose a position..." />
 							</SelectTrigger>
@@ -195,6 +214,25 @@ export default function UpdateInput({
 					</AlertDialogFooter>
 				</AlertDialogContent>
 			</AlertDialog>
+			{/* <ConfirmationModal
+				mainButton={
+					<Button
+						type="submit"
+						className="mb-10 ml-auto mt-20 w-32 bg-[#7F0000] hover:bg-[#7F0000]"
+					>
+						Update Role
+					</Button>
+				}
+				descriptionButtonLabel="Are you sure you want to submit the form?"
+				cancelButtonLabel="No, cancel"
+			>
+				<AlertDialogAction
+					onClick={handleSubmit}
+					className="w-full bg-[#7F0000] hover:bg-[#7F0000]"
+				>
+					<Link href={"/admin/users/manage-users"}>Yes, confirm</Link>
+				</AlertDialogAction>
+			</ConfirmationModal> */}
 		</form>
 	);
 }

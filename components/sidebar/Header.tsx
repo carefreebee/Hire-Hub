@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 
 type HeaderProps = {
 	id: string;
+	role: string;
 	fullName: string;
 	email: string;
 	positionType: string;
@@ -18,8 +19,9 @@ type HeaderProps = {
 	communicationType: string;
 };
 
-export default async function Header({
+export default function Header({
 	id,
+	role,
 	fullName,
 	email,
 	positionType,
@@ -33,7 +35,7 @@ export default async function Header({
 				<div className="h-16 w-16 rounded-full bg-[#D9D9D9]"></div>
 				<div className="flex flex-col justify-center">
 					<div className="text-lg font-bold">{fullName}</div>
-					<small className="w-32 bg-[#F9E7BE] px-1.5 rounded-lg py-1 text-center font-medium text-slate-600">
+					<small className="w-32 rounded-lg bg-[#F9E7BE] px-1.5 py-1 text-center font-medium text-slate-600">
 						<b>Applicant</b> - ID {id}
 					</small>
 				</div>
@@ -72,9 +74,14 @@ export default async function Header({
 						</DropDownContentComponent>
 					</DropdownMenuContent>
 				</DropdownMenu>
-				<Button variant={"outline"} className="w-full text-blue-700 hover:text-blue-700">
-					<Link href={`mailto:${email}`}>Send Email</Link>
-				</Button>
+				{role === "hr_head" && (
+					<Button
+						variant={"outline"}
+						className="w-full text-blue-700 hover:text-blue-700"
+					>
+						<Link href={`mailto:${email}`}>Send Email</Link>
+					</Button>
+				)}
 			</div>
 		</header>
 	);

@@ -1,4 +1,5 @@
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/JobRequest";
 import { JobRequestRepository } from "~/Repository/JobRepository";
 import { Validator } from "~/Validator/JobRequest";
@@ -21,38 +22,7 @@ export class JobRequestService {
 
 		// Insert validated data into the database
 		try {
-			const [insertedJobRequestData] = await db
-				.insert(schema.jobRequest)
-				.values(jobRequestData)
-				.returning();
-
-			console.log("Job Request Inserted:", insertedJobRequestData);
-
-			const { request_id, requested_category, requested_department, requested_office } =
-				insertedJobRequestData;
-
-			let id = null;
-			if (requested_category === "teaching_staff" && requested_department) {
-				id = await JobRequestRepository.insertDepartment(requested_department);
-			} else if (requested_category === "non-teaching_staff" && requested_office) {
-				id = await JobRequestRepository.insertOffice(requested_office);
-			}
-
-			if (id !== null) {
-				let updateFunction;
-
-				if (requested_category === "teaching_staff") {
-					updateFunction = JobRequestRepository.updateJobRequestIDDepartment;
-				} else if (requested_category === "non-teaching_staff") {
-					updateFunction = JobRequestRepository.updateJobRequestIDOffice;
-				} else {
-					throw new Error("Invalid requested category");
-				}
-
-				return await updateFunction(request_id, id);
-			}
-
-			return insertedJobRequestData;
+			await JobRequestRepository.createJobRequest(jobRequestData);
 		} catch (error) {
 			console.error("Database insertion failed:", error);
 			throw new Error("Database insertion failed");
@@ -76,17 +46,34 @@ export class JobRequestService {
 				.where(eq(schema.jobRequest.request_id, id));
 
 			console.log("Update successful:", updatedJobRequestData);
-			return updatedJobRequestData;
+			revalidatePath(`/dashboard/request/result/${id}`);
 		} catch (error) {
 			console.error("Update failed:", error);
 			throw new Error("Update failed");
 		}
 	}
 
+	// async delete(formData: FormData) {
+	// 	try {
+	// 		const jobRequestId = {
+	// 			request_id: Number(formData.get("request_id")),
+	// 		};
+
+	// 		await db
+	// 			.delete(schema.jobRequest)
+	// 			.where(eq(schema.jobRequest.request_id, jobRequestId.request_id));
+
+	// 		revalidatePath("/dashboard/request");
+	// 	} catch (error) {
+	// 		console.error("Deletion failed:", error);
+	// 		throw new Error("Deletion failed");
+	// 	}
+	// }
 	async delete(id: number) {
 		try {
 			await db.delete(schema.jobRequest).where(eq(schema.jobRequest.request_id, id));
-			console.log(`Job Request with ID ${id} deleted.`);
+
+			revalidatePath("/dashboard/request");
 		} catch (error) {
 			console.error("Deletion failed:", error);
 			throw new Error("Deletion failed");

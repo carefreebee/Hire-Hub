@@ -9,14 +9,16 @@ import DashboardSVG from "./ui/dashboard-svg";
 import JobRequestSVG from "./ui/job-request-svg";
 import LogoutSVG from "./ui/logout-svg";
 
-export default function SideNav() {
+export default function SideNav({ role }: { role: string }) {
 	return (
 		<nav className="flex w-[239px] flex-col items-center border-r-2 border-black/30">
 			<p className="py-10 text-lg font-bold">HireHub</p>
 			<ul className="flex flex-col items-center justify-center gap-8 text-sm font-semibold">
-				<Links href="/dashboard" label="Dashboard">
-					<DashboardSVG />
-				</Links>
+				{role === "hr_head" && (
+					<Links href="/dashboard" label="Dashboard">
+						<DashboardSVG />
+					</Links>
+				)}
 				<Links href="/dashboard/applicant" label="Applicant">
 					<ApplicantSVG />
 				</Links>

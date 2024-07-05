@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
-import { handleUdpateApplicantStatusScreeningStatus } from "~/controller/ApplicantController";
+import { handleHrHeadUpdatesApplicantStatusInitialInterview, handleUdpateApplicantStatusScreeningStatus } from "~/controller/HrHeadUpdatesApplicantStatusController";
 import { useSelectPassedOrFailed } from "~/util/zustand";
 
 type ApplicantIDFooterProps = {
@@ -31,7 +31,7 @@ export default function ApplicantIDUpdateStatusFooter({ id }: ApplicantIDFooterP
 				<input type="hidden" name="applicant_status" value={status} readOnly />
 				<ConfirmationModal
 					mainButton={
-						<Button type="submit" variant={"ghost"}>
+						<Button type="submit" variant={"ghost"} className="text-[#0F91D2]">
 							Update
 						</Button>
 					}

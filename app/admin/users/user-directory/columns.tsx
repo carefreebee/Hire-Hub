@@ -12,6 +12,7 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { User } from "~/lib/schema";
+import { formattedName } from "~/util/formatted-name";
 
 export const columns: ColumnDef<User>[] = [
 	{
@@ -90,14 +91,10 @@ export const columns: ColumnDef<User>[] = [
 		},
 		cell: ({ row }) => {
 			const role: string = row.getValue("role");
-			const cleanRole = role
-				.replaceAll("_", " ")
-				.toLowerCase()
-				.split(" ")
-				.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-				.join(" ");
 
-			return <div className="flex items-center justify-center gap-2">{cleanRole}</div>;
+			return (
+				<div className="flex items-center justify-center gap-2">{formattedName(role)}</div>
+			);
 		},
 	},
 	{
@@ -109,6 +106,7 @@ export const columns: ColumnDef<User>[] = [
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 				>
 					Department/Office
+					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
 		},

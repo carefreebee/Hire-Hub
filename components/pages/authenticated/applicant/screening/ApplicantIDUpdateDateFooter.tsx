@@ -8,7 +8,7 @@ import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
-import { handleUdpateApplicantStatusScreeningDate } from "~/controller/ApplicantController";
+import { handleHrHeadUdpatesApplicantStatusScreeningDate } from "~/controller/HrHeadUpdatesApplicantStatusController";
 import { formattedDateTime } from "~/lib/date-time";
 import { useSelectedDateAndTime } from "~/util/zustand";
 
@@ -42,7 +42,7 @@ export default function ApplicantIDUpdateDateFooter({ id, date }: ApplicantIDFoo
 	async function handleSubmit() {
 		const formData = new FormData(formRef.current!);
 		try {
-			await handleUdpateApplicantStatusScreeningDate(formData);
+			await handleHrHeadUdpatesApplicantStatusScreeningDate(formData);
 		} catch (error) {
 			console.error("Error submitting form:", error);
 		}
@@ -56,7 +56,7 @@ export default function ApplicantIDUpdateDateFooter({ id, date }: ApplicantIDFoo
 						<Button
 							disabled={!!date}
 							variant={"ghost"}
-							className="w-auto justify-start text-left font-normal"
+							className="w-auto justify-start text-left text-[#0F91D2]"
 						>
 							<CalendarIcon className="mr-2 h-4 w-4" />
 							{dateTime ? formattedDateTime(dateTime) : <span>+Add Schedule</span>}
@@ -73,7 +73,7 @@ export default function ApplicantIDUpdateDateFooter({ id, date }: ApplicantIDFoo
 					</PopoverContent>
 				</Popover>
 			</div>
-			<form ref={formRef} onSubmit={(e) => e.preventDefault()}>
+			<form ref={formRef} onSubmit={(e) => e.preventDefault()} className="text-[#0F91D2]">
 				<input type="hidden" name="applicant_id" value={id} readOnly />
 				{dateTime && (
 					<input
@@ -85,7 +85,7 @@ export default function ApplicantIDUpdateDateFooter({ id, date }: ApplicantIDFoo
 				)}
 				<ConfirmationModal
 					mainButton={
-						<Button type="submit" variant={"ghost"}>
+						<Button type="submit" variant={"ghost"} className="text-[#0F91D2]">
 							Update
 						</Button>
 					}
