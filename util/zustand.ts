@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { getAllApplicantForm } from "~/controller/ApplicantController";
-import { ApplicantSelect, RoleEnumsType } from "~/lib/schema";
+import { RoleEnumsType, User } from "~/lib/schema";
 
 type UploadDropZoneProps = {
 	file: string | null;
@@ -63,8 +62,8 @@ export const useSelectedMode = create<SelectedMode>((set) => ({
 }));
 
 type SelectedAssessedBy = {
-	assessedBy: RoleEnumsType[];
-	setAssessedBy: (assessedBy: RoleEnumsType[]) => void;
+	assessedBy: Partial<User> | Partial<User>[];
+	setAssessedBy: (assessedBy: Partial<User> | Partial<User>[]) => void;
 };
 
 export const useSelectedAssessedBy = create<SelectedAssessedBy>((set) => ({

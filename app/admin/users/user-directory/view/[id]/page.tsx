@@ -2,7 +2,7 @@ import Link from "next/link";
 import ArrowLeft from "~/components/ui/arrow-left";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { getUsersByID } from "~/controller/UsersController";
+import { getUserByID } from "~/controller/UsersController";
 import { formattedName } from "~/util/formatted-name";
 
 function UserIDContainer({ children }: { children: React.ReactNode }) {
@@ -26,7 +26,7 @@ function UserIDChildren({ label, value }: UserIDChildrenProps) {
 }
 
 export default async function ManageUserIDPage({ params }: { params: { id: string } }) {
-	const user = await getUsersByID(params.id);
+	const user = await getUserByID(params.id);
 
 	const isDepartmentOrOffice =
 		user?.selected_department !== null ? user?.selected_department : user?.selected_office;

@@ -10,13 +10,13 @@ import ApplicantResume from "../authenticated/applicant/ApplicantResume";
 import CommentForm from "../authenticated/applicant/CommentForm";
 import ApplicantIDCommentDisplay from "../authenticated/applicant/screening/ApplicantIDCommentDisplay";
 
-type HrPageFooterProps = {
+type CommentsAndDocumentsProps = {
 	stage: StageType;
 	applicantId: string;
 	evaluatorsId: string;
 };
 
-export default function HrPageFooter({ stage, applicantId, evaluatorsId }: HrPageFooterProps) {
+export default function CommentsAndDocuments({ stage, applicantId, evaluatorsId }: CommentsAndDocumentsProps) {
 	return (
 		<section className="flex gap-5">
 			<Card className="my-0 flex-1">

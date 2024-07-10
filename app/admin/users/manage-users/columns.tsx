@@ -34,27 +34,6 @@ export const columns: ColumnDef<User>[] = [
 		},
 	},
 	{
-		accessorKey: "lastName",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Last Name
-					<ArrowUpDown className="ml-2 h-4 w-4" />
-				</Button>
-			);
-		},
-		cell: ({ row }) => {
-			return (
-				<div className="flex items-center justify-center gap-2">
-					{row.getValue("lastName")}
-				</div>
-			);
-		},
-	},
-	{
 		accessorKey: "firstName",
 		header: ({ column }) => {
 			return (
@@ -71,6 +50,27 @@ export const columns: ColumnDef<User>[] = [
 			return (
 				<div className="flex items-center justify-center gap-2">
 					{row.getValue("firstName")}
+				</div>
+			);
+		},
+	},
+	{
+		accessorKey: "lastName",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					Last Name
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			return (
+				<div className="flex items-center justify-center gap-2">
+					{row.getValue("lastName")}
 				</div>
 			);
 		},

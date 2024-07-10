@@ -1,51 +1,36 @@
-import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/DeptOrOfficeUpdatesApplicantForm";
+import { DeptOrOfficeUpdateRepository } from "~/Repository/DeptOrOfficeUpdateRepository";
 import { Validator } from "~/Validator/DeptOrOfficeUpdatesApplicantForm";
 import { getApplicantFormByID } from "~/controller/ApplicantController";
 import { db } from "~/lib/db";
-import { applicant, ratingForms } from "~/lib/schema";
+import { ratingForms, RatingFormsInsert } from "~/lib/schema";
+import { InitialInterviewForm } from "~/lib/zod";
+import { StageType } from "~/types/types";
 
 export class DeptOrOfficeUpdatesApplicantStatusService {
-	async updateApplicantStatusInitialInterview(formData: FormData) {
-		const initialInterviewForm = DataExtractor.extractApplicantInitialInterviewForm(formData);
-		const validateData = Validator.validateInitialInterviewForm(initialInterviewForm);
+	async insertForm(initialInterviewForm: RatingFormsInsert) {
+		return await db.insert(ratingForms).values(initialInterviewForm).returning();
+	}
 
-		if (!validateData.success) {
-			throw new Error("Rate for Initial Interview is required");
-		}
+	async updateForm(formData: FormData, stageType: StageType) {
+		const initialInterviewForm = DataExtractor.extractApplicantInitialInterviewForm(formData);
+		this.validateForm(initialInterviewForm);
 
 		try {
-			const insertedRatingForm = await db
-				.insert(ratingForms)
-				.values(initialInterviewForm)
-				.returning();
+			const insertedRatingForm = await this.insertForm(initialInterviewForm);
 			const currentApplicant = await getApplicantFormByID(initialInterviewForm.applicant_id);
 
 			if (!currentApplicant) {
 				throw new Error("Applicant not found");
 			}
 
-			await db
-				.update(applicant)
-				.set({
-					stages: {
-						...currentApplicant.stages,
-						screening: {
-							...currentApplicant.stages?.screening,
-						},
-						initial_interview: {
-							...currentApplicant.stages?.initial_interview,
-							rating_forms_id: [
-								...(currentApplicant.stages?.initial_interview?.rating_forms_id ??
-									[]),
-								insertedRatingForm[0].rating_id,
-							],
-						},
-					},
-				})
-				.where(eq(applicant.id, initialInterviewForm.applicant_id))
-				.returning();
+			await DeptOrOfficeUpdateRepository.udpateInitialInterviewForm(
+				currentApplicant,
+				stageType,
+				insertedRatingForm[0].rating_id,
+				initialInterviewForm.applicant_id
+			);
 
 			revalidatePath(`/dashboard/applicant/${initialInterviewForm.applicant_id}`);
 		} catch (error) {
@@ -54,51 +39,63 @@ export class DeptOrOfficeUpdatesApplicantStatusService {
 		}
 	}
 
-	async updateApplicantStatusTeachingDemo(formData: FormData) {
-		const initialInterviewForm = DataExtractor.extractApplicantInitialInterviewForm(formData);
+	async updateInitialInterviewForm(formData: FormData) {
+		await this.updateForm(formData, "initial_interview");
+	}
+
+	async updateTeachingDemoForm(formData: FormData) {
+		await this.updateForm(formData, "teaching_demo");
+	}
+
+	async updatePsychologicalExam(formData: FormData) {
+		await this.updateForm(formData, "psychological_exam");
+	}
+
+	async updatePanelInterview(formData: FormData) {
+		await this.updateForm(formData, "panel_interview");
+	}
+
+	async updateRecommendationForHiring(formData: FormData) {
+		await this.updateForm(formData, "recommendation_for_hiring");
+	}
+
+	// async updateTeachingDemoForm(formData: FormData) {
+	// 	const initialInterviewForm = DataExtractor.extractApplicantInitialInterviewForm(formData);
+	// 	this.validateForm(initialInterviewForm);
+
+	// 	try {
+	// 		const insertedRatingForm = await this.insertForm(initialInterviewForm);
+	// 		const currentApplicant = await getApplicantFormByID(initialInterviewForm.applicant_id);
+
+	// 		if (!currentApplicant) {
+	// 			throw new Error("Applicant not found");
+	// 		}
+
+	// 		const ratingFormId = insertedRatingForm.map((rating) => rating.rating_id);
+
+	// 		await DeptOrOfficeUpdateRepository.udpateInitialInterviewForm(
+	// 			currentApplicant,
+	// 			"teaching_demo",
+	// 			ratingFormId,
+	// 			initialInterviewForm.applicant_id
+	// 		);
+
+	// 		revalidatePath(`/dashboard/applicant/${initialInterviewForm.applicant_id}`);
+	// 	} catch (error) {
+	// 		console.error("Update Applicant Status failed:", error);
+	// 		throw new Error("Update Applicant Status failed");
+	// 	}
+	// }
+
+	private validateForm(initialInterviewForm: InitialInterviewForm) {
 		const validateData = Validator.validateInitialInterviewForm(initialInterviewForm);
 
 		if (!validateData.success) {
 			throw new Error("Rate for Initial Interview is required");
 		}
-
-		try {
-			const insertedRatingForm = await db
-				.insert(ratingForms)
-				.values(initialInterviewForm)
-				.returning();
-			const currentApplicant = await getApplicantFormByID(initialInterviewForm.applicant_id);
-
-			console.log(insertedRatingForm);
-
-			if (!currentApplicant) {
-				throw new Error("Applicant not found");
-			}
-
-			await db
-				.update(applicant)
-				.set({
-					stages: {
-						...currentApplicant.stages,
-						screening: {
-							...currentApplicant.stages?.screening,
-						},
-						teaching_demo: {
-							...currentApplicant.stages?.teaching_demo,
-							rating_forms_id: [
-								...(currentApplicant.stages?.teaching_demo?.rating_forms_id ?? []),
-								insertedRatingForm[0].rating_id,
-							],
-						},
-					},
-				})
-				.where(eq(applicant.id, initialInterviewForm.applicant_id))
-				.returning();
-
-			revalidatePath(`/dashboard/applicant/${initialInterviewForm.applicant_id}`);
-		} catch (error) {
-			console.error("Update Applicant Status failed:", error);
-			throw new Error("Update Applicant Status failed");
-		}
 	}
+
+	// private StageStatus(currentApplicant: ApplicantSelect, stage: StageType) {
+	// 	return currentApplicant?.stages?.[stage]?.status;
+	// }
 }

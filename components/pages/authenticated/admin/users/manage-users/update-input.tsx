@@ -28,20 +28,17 @@ import {
 } from "~/components/ui/select";
 import { toast } from "~/components/ui/use-toast";
 import { handleUpdateUserRole } from "~/controller/UsersController";
-import { roleEnums, RoleEnumsType } from "~/lib/schema";
+import { DepartmentSelect, OfficeSelect, roleEnums, RoleEnumsType } from "~/lib/schema";
+import { rolesWithoutDeptAndOffice } from "~/types/types";
 import { formattedName } from "~/util/formatted-name";
 
 type ApplicantFormProps = {
 	id: string;
-	requestedDepartment: string[];
-	requestedOffice: string[];
+	department: DepartmentSelect[];
+	office: OfficeSelect[];
 };
 
-export default function UpdateInput({
-	id,
-	requestedDepartment,
-	requestedOffice,
-}: ApplicantFormProps) {
+export default function UpdateInput({ id, department, office }: ApplicantFormProps) {
 	const [selectedOption, setSelectedOption] = useState<"teaching_staff" | "non-teaching_staff">();
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -66,14 +63,14 @@ export default function UpdateInput({
 	}
 
 	const [selectedHrHead, setSelectedHrHead] = useState<RoleEnumsType | null | string>(null);
-	function handleSelectChange(role: "hr_head") {
-		if (role === "hr_head") {
+	function handleSelectChange(role: RoleEnumsType) {
+		if (rolesWithoutDeptAndOffice.includes(role)) {
 			setSelectedHrHead(role);
 		} else {
 			setSelectedHrHead(null);
 		}
 	}
-
+	// console.log(selectedHrHead);
 	return (
 		<form
 			ref={formRef}
@@ -85,7 +82,7 @@ export default function UpdateInput({
 				<Label className="w-52">Position</Label>
 				<Select
 					name="selected_position"
-					onValueChange={(role: "hr_head") => handleSelectChange(role)}
+					onValueChange={(role: RoleEnumsType) => handleSelectChange(role)}
 				>
 					<SelectTrigger>
 						<SelectValue placeholder="Select a position" />
@@ -93,8 +90,8 @@ export default function UpdateInput({
 					<SelectContent>
 						<SelectGroup>
 							<SelectLabel>Positions</SelectLabel>
-							{roleEnum.map((role) => (
-								<SelectItem key={role} value={role}>
+							{roleEnum.map((role, index) => (
+								<SelectItem key={index} value={role}>
 									{formattedName(role)}
 								</SelectItem>
 							))}
@@ -106,7 +103,7 @@ export default function UpdateInput({
 				<Label className="w-52">Select option</Label>
 				<div className="w-full">
 					<RadioGroup
-						disabled={selectedHrHead === "hr_head"}
+						disabled={selectedHrHead !== null}
 						onChange={(e: ChangeEvent<HTMLInputElement>) =>
 							setSelectedOption(
 								e.target.value as "teaching_staff" | "non-teaching_staff"
@@ -137,9 +134,9 @@ export default function UpdateInput({
 							<SelectContent>
 								<SelectGroup>
 									<SelectLabel>Select department</SelectLabel>
-									{requestedDepartment.map((department, index) => (
-										<SelectItem key={index} value={department}>
-											{department}
+									{department.map((department) => (
+										<SelectItem key={department.department_id} value={department.department_name}>
+											{department.department_name}
 										</SelectItem>
 									))}
 								</SelectGroup>
@@ -156,9 +153,9 @@ export default function UpdateInput({
 							<SelectContent>
 								<SelectGroup>
 									<SelectLabel>Select office</SelectLabel>
-									{requestedOffice.map((office, index) => (
-										<SelectItem key={index} value={office}>
-											{office}
+									{office.map((office) => (
+										<SelectItem key={office.office_id} value={office.office_name}>
+											{office.office_name}
 										</SelectItem>
 									))}
 								</SelectGroup>
@@ -168,7 +165,7 @@ export default function UpdateInput({
 				) : (
 					<>
 						<Label className="w-52">Department/Office</Label>
-						<Select disabled={selectedHrHead === "hr_head"}>
+						<Select disabled={selectedHrHead !== null}>
 							<SelectTrigger className="w-full">
 								<SelectValue placeholder="Choose a position..." />
 							</SelectTrigger>

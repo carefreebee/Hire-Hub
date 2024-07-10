@@ -28,8 +28,6 @@ export class RatingFormsService {
 		}
 
 		try {
-			await RatingFormsRepository.updateRatingForm(updateEvaluateApplicantStatus);
-
 			const currentApplicant = await getApplicantFormByID(
 				updateEvaluateApplicantStatus.applicantId
 			);

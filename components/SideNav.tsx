@@ -8,13 +8,14 @@ import ApplicantSVG from "./ui/applicant-svg";
 import DashboardSVG from "./ui/dashboard-svg";
 import JobRequestSVG from "./ui/job-request-svg";
 import LogoutSVG from "./ui/logout-svg";
+import { RoleEnumsType } from "~/lib/schema";
 
-export default function SideNav({ role }: { role: string }) {
+export default function SideNav({ role }: { role: RoleEnumsType }) {
 	return (
 		<nav className="flex w-[239px] flex-col items-center border-r-2 border-black/30">
 			<p className="py-10 text-lg font-bold">HireHub</p>
 			<ul className="flex flex-col items-center justify-center gap-8 text-sm font-semibold">
-				{role === "hr_head" && (
+				{role === "recruitment_officer" && (
 					<Links href="/dashboard" label="Dashboard">
 						<DashboardSVG />
 					</Links>
@@ -22,9 +23,9 @@ export default function SideNav({ role }: { role: string }) {
 				<Links href="/dashboard/applicant" label="Applicant">
 					<ApplicantSVG />
 				</Links>
-				<Links href="/dashboard/request" label="Request">
+				{role === "requester_staff" && <Links href="/dashboard/request" label="Request">
 					<JobRequestSVG />
-				</Links>
+				</Links>}
 				<div className="flex w-[96%] justify-start gap-4 rounded-xl px-5 py-3 font-medium hover:bg-[#7F0000] hover:text-white">
 					<LogoutSVG />
 					<LogoutButton />

@@ -14,7 +14,7 @@ import { useCurrentRole } from "~/util/zustand";
 export default function IDColumn({ id }: { id: number }) {
 	const currentRole = useCurrentRole((state) => state.currentRole);
 
-	const HRHEADLINK = `/dashboard/applicant/${id}/stages/hr_head/screening`;
+	const RECRUITMENTOFFICERLINK = `/dashboard/applicant/${id}/stages/recruitment_officer/screening`;
 	const EVALUATELINK = `/dashboard/applicant/${id}/stages/${currentRole}/evaluate`;
 
 	return (
@@ -27,7 +27,7 @@ export default function IDColumn({ id }: { id: number }) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="center" className="rounded-xl">
 				<DropdownMenuItem>
-					<Link href={currentRole === "hr_head" ? HRHEADLINK : EVALUATELINK}>View</Link>
+					<Link href={currentRole === "recruitment_officer" ? RECRUITMENTOFFICERLINK : EVALUATELINK}>View</Link>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

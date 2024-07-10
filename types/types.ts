@@ -80,7 +80,7 @@ export type SelectType = "full_time" | "part_time";
 export interface StageStatus {
 	status?: "in-progress" | "passed" | "failed" | "";
 	date?: Date | "";
-	assessed_by?: RoleEnumsType[];
+	assessed_by?: string[];
 	mode?: "online" | "in-person" | "";
 	comment_id?: number[];
 }
@@ -108,6 +108,20 @@ export type RatingFormWithUserData = {
 	rate: string;
 	recruitment_stage: string;
 	created_at: Date | null;
+	name: string;
+	role: string;
+};
+
+export const rolesWithoutDeptAndOffice: RoleEnumsType[] = [
+	"user",
+	"hr_head",
+	"vp_acad_affairs",
+	"vp_administration",
+	"univ_president",
+];
+
+export type AssessedByUserDetails = {
+	id: string;
 	name: string;
 	role: string;
 };

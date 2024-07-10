@@ -5,40 +5,35 @@ import {
 	CardHeader,
 	CardTitle,
 } from "~/components/pages/authenticated/applicant/ApplicantIDCard";
-import AssessedBy from "~/components/pages/authenticated/applicant/evaluate/AssessedBy";
+import Assessor from "~/components/pages/authenticated/applicant/Assessor";
 import EvaluateDisplay from "~/components/pages/authenticated/applicant/evaluate/EvaluateDisplay";
 import SubmitEvaluateButton from "~/components/pages/authenticated/applicant/initial-interview/SubmitEvaluateButton";
 import { getAllRatingFormsFilesById } from "~/controller/RatingFormsController";
 import { getApplicantData } from "~/hooks/useApplicantStages";
 import { validateRequest } from "~/lib/auth";
+import { getUserRole } from "~/lib/fetch";
 import { RatingFormWithUserData } from "~/types/types";
-import { getCurrentStatus, mergeRatingFormData } from "~/util/check-status-in-progress";
+import { mergeRatingFormData } from "~/util/check-status-in-progress";
 
 export default async function EvaluatePage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
+	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
+	const getFinalAssessor = await getUserRole();
+	// GETTING THE APPLICANT BY ID
+	const { applicant, stages } = await getApplicantData(Number(params.id));
+	// FINDING THE IN PROGRESS STATUS BASED ON THE STAGES
+	const currentInProgress = stages.find((stage) => stage.status === "in-progress");
+	// GET THE FIRST ASSESSOR
+	const getAssessedBy = currentInProgress?.assessed_by?.[0] ?? "";
+	// FINDING THE FINAL ASSESSOR BASED ON THE USER ID
+	const finalAssessor = getFinalAssessor?.find((user) => user.id === getAssessedBy);
+	// GETTING THE RATING FORM
 	const ratingForm = await getAllRatingFormsFilesById(Number(params.id));
-
 	if (!ratingForm) {
 		return <CardContainer>No Rating Form yet.</CardContainer>;
 	}
-
+	// MERGING THE RATING FORM DATA
 	const mergedData = await mergeRatingFormData(ratingForm);
-
-	const { stages } = await getApplicantData(Number(params.id));
-	const { currentStatus, finalSubmitter } = getCurrentStatus(stages);
-	// const nameSubmitter = getSubmitterName(mergedData, finalSubmitter as string);
-	const nameSubmitter = mergedData.find((role) => role.role === user?.name);
-	console.log(stages);
-	// 	{
-	//     name: 'Initial Interview',
-	//     status: 'in-progress',
-	//     assessed_by: [ 'department_chair', 'dean' ]
-	//   },
-
-	const assessors = stages.find((stage) => stage.status === "in-progress" && stage.assessed_by);
-	const checkIfAssessedByIsComplete = assessors
-		? assessors.assessed_by?.length === ratingForm.length
-		: false;
 
 	return (
 		<Card className="h-[600px]">
@@ -48,13 +43,26 @@ export default async function EvaluatePage({ params }: { params: { id: string } 
 			<CardContent className="mt-0 flex h-[550px] w-full flex-col justify-between gap-5 p-5">
 				<EvaluateDisplay mergedData={mergedData as RatingFormWithUserData[]} />
 				<CardFooter className="pt-5">
-					<AssessedBy
-						nameSubmitter={nameSubmitter as string}
-						finalSubmitter={finalSubmitter as string}
-					/>
-					{user?.role === finalSubmitter && checkIfAssessedByIsComplete && (
-						<SubmitEvaluateButton id={params.id} currentStatus={currentStatus} />
+					{/* SHOWS WHAT DEPARTMENT/OFFICE TYPE THE ASSESSOR IS */}
+					{finalAssessor ? (
+						<Assessor
+							finalAssessorName={finalAssessor?.name as string}
+							finalAssessorRole={finalAssessor?.role as string}
+						/>
+					) : (
+						<p className="text-sm">
+							Wating for Recruitment Officer to set the assessor
+						</p>
 					)}
+					{user?.role === "recruitment_officer" &&
+						applicant?.stages?.initial_interview?.status === "in-progress" && (
+							<SubmitEvaluateButton id={params.id} />
+						)}
+					{user?.id === finalAssessor?.id &&
+						currentInProgress?.assessed_by?.length ===
+							currentInProgress?.rating_forms_id?.length && (
+							<SubmitEvaluateButton id={params.id} />
+						)}
 				</CardFooter>
 			</CardContent>
 		</Card>

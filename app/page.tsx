@@ -20,8 +20,8 @@ export default async function Home() {
 
 	if (user?.role === "user") return redirect("/user");
 	else if (user?.role === "admin") return redirect("/admin/users/manage-users");
-	else if (user?.role === "hr_head") return redirect("/dashboard");
-	else if (authorizedRoles.includes(user?.role as RoleEnumsType)) {
+	else if (user?.role === "hr_head") return redirect("/dashboard/applicant");
+	else if (authorizedRoles.includes(user?.role as RoleEnumsType[])) {
 		return redirect("/dashboard/applicant");
 	}
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { Calendar as CalendarIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
@@ -8,8 +9,9 @@ import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
-import { handleHrHeadUdpatesApplicantStatusScreeningDate } from "~/controller/HrHeadUpdatesApplicantStatusController";
+import { UpdateScreeningAndInitialInterviewDate } from "~/controller/ApplicantStatusController";
 import { formattedDateTime } from "~/lib/date-time";
+import { CheckPathname } from "~/util/path";
 import { useSelectedDateAndTime } from "~/util/zustand";
 
 type ApplicantIDFooterProps = {
@@ -38,11 +40,13 @@ export default function ApplicantIDUpdateDateFooter({ id, date }: ApplicantIDFoo
 			}
 		}
 	}
+	const pathname = usePathname();
+	const lastSegment = CheckPathname(pathname);
 
 	async function handleSubmit() {
 		const formData = new FormData(formRef.current!);
 		try {
-			await handleHrHeadUdpatesApplicantStatusScreeningDate(formData);
+			await UpdateScreeningAndInitialInterviewDate(formData);
 		} catch (error) {
 			console.error("Error submitting form:", error);
 		}
@@ -74,6 +78,7 @@ export default function ApplicantIDUpdateDateFooter({ id, date }: ApplicantIDFoo
 				</Popover>
 			</div>
 			<form ref={formRef} onSubmit={(e) => e.preventDefault()} className="text-[#0F91D2]">
+				<input type="hidden" name="pathname" value={lastSegment} readOnly />
 				<input type="hidden" name="applicant_id" value={id} readOnly />
 				{dateTime && (
 					<input

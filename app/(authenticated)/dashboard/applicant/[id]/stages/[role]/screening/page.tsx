@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import HrPageFooter from "~/components/pages/applicant/HrPageFooter";
+import CommentsAndDocuments from "~/components/pages/applicant/CommentsAndDocuments";
 import {
 	Card,
 	CardContent,
@@ -9,15 +9,15 @@ import {
 	CardTitle,
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/ApplicantIDCard";
-import ApplicantIDAssessedBy from "~/components/pages/authenticated/applicant/screening/ApplicantIDAssessedBy";
+import AssessedBy from "~/components/pages/authenticated/applicant/AssessedBy";
 import ApplicantIDUpdateDateFooter from "~/components/pages/authenticated/applicant/screening/ApplicantIDUpdateDateFooter";
 import ApplicantIDUpdateStatusFooter from "~/components/pages/authenticated/applicant/screening/ApplicantIDUpdateStatusFooter";
 import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
 import { Button } from "~/components/ui/button";
 import { TypographySmall } from "~/components/ui/typography-small";
-import { getApplicantFormByID } from "~/controller/ApplicantController";
+import { getUsersByUserID } from "~/controller/UsersController";
 import { validateRequest } from "~/lib/auth";
-import { RoleEnumsType } from "~/lib/schema";
+import { GetApplicantById } from "~/util/get-applicant-by-id";
 
 const ApplicantIDDisplayDateNoSSR = dynamic(
 	() => import("~/components/pages/authenticated/applicant/screening/ApplicantIDDisplayDate"),
@@ -27,21 +27,29 @@ const ApplicantIDDisplayDateNoSSR = dynamic(
 );
 
 export default async function ApplicantIdPage({ params }: { params: { id: string } }) {
+	const { applicant, applicantStage } = await GetApplicantById(Number(params.id), "screening");
 	const { user } = await validateRequest();
-	const applicant = await getApplicantFormByID(Number(params.id));
-	const Screening = applicant?.stages?.screening && "Screening";
+	const getUserWhoAssessed = await getUsersByUserID(applicantStage?.assessed_by?.[0] ?? "");
+	const assessedBy = getUserWhoAssessed?.find((user) => ({
+		name: user.name,
+		role: user.role,
+	}));
+
+	const screening = "Screening";
+	const isApplicantInProgress = applicantStage?.status === "in-progress";
+	const isRecruitmentOfficer = user?.role === "recruitment_officer";
 
 	return (
 		<>
 			<Card>
 				<CardHeader>
-					<CardTitle>{Screening}</CardTitle>
+					<CardTitle>{screening}</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<CardSubContent>
 						<CardTopLeftSubContent>
-							<TypographySmall size={"md"}>{Screening}</TypographySmall>
-							{applicant?.stages?.screening.status === "in-progress" ? (
+							<TypographySmall size={"md"}>{screening}</TypographySmall>
+							{isApplicantInProgress && isRecruitmentOfficer ? (
 								<SelectPassedOrFailed />
 							) : (
 								<Button
@@ -49,40 +57,37 @@ export default async function ApplicantIdPage({ params }: { params: { id: string
 									disabled
 									className="h-auto w-32 py-1 text-[#039E38]"
 								>
-									{applicant?.stages?.screening.status}
+									{applicantStage?.status}
 								</Button>
 							)}
 						</CardTopLeftSubContent>
-						<ApplicantIDDisplayDateNoSSR
-							date={applicant?.stages?.screening?.date as Date}
-						/>
+						<ApplicantIDDisplayDateNoSSR date={applicantStage?.date as Date} />
 					</CardSubContent>
 					<CardSubContent>
-						<TypographySmall size={"md"} className="px-0">
-							Assessed by:
-						</TypographySmall>
-						<ApplicantIDAssessedBy
-							status={applicant?.stages?.screening.status as "passed" | "failed"}
-							assessedBy={
-								applicant?.stages?.screening.assessed_by as unknown as RoleEnumsType[]
-							}
+						<AssessedBy
+							status={applicantStage?.status as "passed" | "failed"}
+							assessedByName={assessedBy?.name as string}
+							assessedByRole={assessedBy?.role as string}
 						/>
 					</CardSubContent>
 				</CardContent>
 				<CardFooter>
-					{!applicant?.stages?.screening.date ? (
+					{!applicantStage?.date && isRecruitmentOfficer ? (
 						<ApplicantIDUpdateDateFooter
 							id={applicant?.id as number}
-							date={applicant?.stages?.screening.date as Date}
+							date={applicantStage?.date as Date}
 						/>
-					) : applicant?.stages?.screening.status !== "passed" ? (
-						<ApplicantIDUpdateStatusFooter id={applicant?.id as number} />
+					) : applicantStage?.status !== "passed" && isRecruitmentOfficer ? (
+						<ApplicantIDUpdateStatusFooter
+							id={applicant?.id as number}
+							assessorId={user?.id as string}
+						/>
 					) : (
 						<div className="h-[40px]"></div>
 					)}
 				</CardFooter>
 			</Card>
-			<HrPageFooter
+			<CommentsAndDocuments
 				stage="screening"
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}

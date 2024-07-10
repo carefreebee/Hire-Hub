@@ -1,4 +1,4 @@
-import { getUsersByID } from "~/controller/UsersController";
+import { getUserByID } from "~/controller/UsersController";
 import { GetCommentsById, GetCurrentStage } from "~/lib/fetch";
 import { StageType } from "~/types/types";
 
@@ -23,7 +23,7 @@ export default async function ApplicantIDCommentDisplay({
 	}
 
 	const evaluatorsPromises = comments.map((comment) =>
-		getUsersByID(comment?.commented_by as string)
+		getUserByID(comment?.commented_by as string)
 	);
 	const evaluators = await Promise.all(evaluatorsPromises);
 

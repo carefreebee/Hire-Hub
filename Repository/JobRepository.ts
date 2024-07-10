@@ -4,6 +4,8 @@ import { department, jobRequest, JobRequestInsert, office } from "~/lib/schema";
 
 export class JobRequestRepository {
 	static async createJobRequest(jobRequestData: JobRequestInsert) {
+		// PLEASE UPDATE THE CODE BELOW INSERTION WILL BE DONE IN ADMIN SIDE
+		// THIS CLASS MUST DO UPDATE ONLY BASED ON THE REQUESTED CATEGORY ON THE FRONTEND
 		const [insertedJobRequestData] = await db
 			.insert(jobRequest)
 			.values(jobRequestData)

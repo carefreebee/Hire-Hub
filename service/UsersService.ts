@@ -1,10 +1,11 @@
-import { and, eq, ne } from "drizzle-orm";
+import { and, eq, isNotNull, ne } from "drizzle-orm";
 import { DataExtractor } from "~/DataExtractor/UserRole";
 import { ApplicantFormRepository } from "~/Repository/ApplicantFormRepository";
 import { Validator } from "~/Validator/Users";
 import { db } from "~/lib/db";
 import { RoleEnumsType, users } from "~/lib/schema";
 import { Users } from "~/lib/zod";
+import { rolesWithoutDeptAndOffice } from "~/types/types";
 
 export class UsersService {
 	// HELPER FUNCTION
@@ -19,6 +20,17 @@ export class UsersService {
 		} catch (error) {
 			console.error("Error in getUsersByUserID:", error);
 			throw new Error("Error in getUsersByUserID");
+		}
+	}
+
+	async getUserById(id: string) {
+		try {
+			return await this.queryUser().findFirst({
+				where: eq(users.id, id),
+			});
+		} catch (error) {
+			console.error("Error in getUsersByUserID:", error);
+			throw new Error("Error in getUserById");
 		}
 	}
 
@@ -42,14 +54,21 @@ export class UsersService {
 		}
 	}
 
-	async getAllUsersByID(id: string) {
+	async getUsersWithDepartment() {
 		try {
-			return await this.queryUser().findFirst({
-				where: eq(users.id, id),
-			});
+			return await db.query.users.findMany({ where: isNotNull(users.department_id) });
 		} catch (error) {
-			console.error("Error in getUsersByUserID:", error);
-			throw new Error("Error in getAllUsersByID");
+			console.error("Error in getUsersWithDepartment:", error);
+			throw new Error("Error in getUsersWithDepartment");
+		}
+	}
+
+	async getUsersWithOffice() {
+		try {
+			return await db.query.users.findMany({ where: isNotNull(users.office_id) });
+		} catch (error) {
+			console.error("Error in getUsersWithOffice:", error);
+			throw new Error("Error in getUsersWithOffice");
 		}
 	}
 
@@ -57,8 +76,11 @@ export class UsersService {
 		const userRoleData = DataExtractor.extractUserRole(formData);
 		const id = formData.get("id") as string;
 
-		if (userRoleData.selected_position === "hr_head") {
-			return await db.update(users).set({ role: "hr_head" }).where(eq(users.id, id));
+		if (rolesWithoutDeptAndOffice.includes(userRoleData.selected_position as RoleEnumsType)) {
+			return await db
+				.update(users)
+				.set({ role: userRoleData.selected_position as RoleEnumsType })
+				.where(eq(users.id, id));
 		}
 
 		const validatedData = this.validateUsersData(userRoleData);

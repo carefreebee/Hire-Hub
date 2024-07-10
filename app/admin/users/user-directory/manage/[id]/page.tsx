@@ -3,8 +3,8 @@ import UpdateInput from "~/components/pages/authenticated/admin/users/manage-use
 import ArrowLeft from "~/components/ui/arrow-left";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { getAllJobRequest } from "~/controller/JobRequestController";
-import { getUsersByID } from "~/controller/UsersController";
+import { getAllDepartment, getAllOffice } from "~/controller/DepartmentOrOfficeController";
+import { getUserByID } from "~/controller/UsersController";
 
 function UserIDContainer({ children }: { children: React.ReactNode }) {
 	return <div className="grid w-full items-center gap-1.5">{children}</div>;
@@ -27,16 +27,9 @@ function UserIDChildren({ label, value }: UserIDChildrenProps) {
 }
 
 export default async function UserIDPage({ params }: { params: { id: string } }) {
-	const user = await getUsersByID(params.id);
-	const job = await getAllJobRequest();
-
-	const requestedDepartment = job
-		.filter((job) => job.requested_department !== null)
-		.map((job) => job.requested_department) as string[];
-
-	const requestedOffice = job
-		.filter((job) => job.requested_office !== null)
-		.map((job) => job.requested_office) as string[];
+	const user = await getUserByID(params.id);
+	const department = await getAllDepartment();
+	const office = await getAllOffice();
 
 	return (
 		<section className="flex h-[474px] items-end justify-between bg-white px-14">
@@ -56,11 +49,7 @@ export default async function UserIDPage({ params }: { params: { id: string } })
 				</Link>
 			</div>
 			<div className="flex flex-col gap-10 text-[#6F767E]">
-				<UpdateInput
-					id={params.id}
-					requestedDepartment={requestedDepartment}
-					requestedOffice={requestedOffice}
-				/>
+				<UpdateInput id={params.id} department={department} office={office} />
 			</div>
 		</section>
 	);

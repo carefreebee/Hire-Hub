@@ -5,19 +5,20 @@ import { CommentsInsert, applicant, comments } from "~/lib/schema";
 import { StageType } from "~/types/types";
 
 export class CommentRepository {
-	static async insertComment(comment: CommentsInsert) {
-		return await db.insert(comments).values(comment).returning();
-	}
-
 	static async insertAndGetCurrentInsertedComment(comment: CommentsInsert, applicantId: number) {
-		const insertingComment = await CommentRepository.insertComment(comment);
-		const currentApplicant = await getApplicantFormByID(applicantId);
+		try {
+			const insertingComment = await db.insert(comments).values(comment).returning();
+			const currentApplicant = await getApplicantFormByID(applicantId);
 
-		if (!currentApplicant) {
-			throw new Error("Applicant not found");
+			if (!currentApplicant) {
+				throw new Error("Applicant not found");
+			}
+
+			return { insertingComment, currentApplicant };
+		} catch (error) {
+			console.error("Inserting comment failed:", error);
+			throw new Error("Inserting comment failed");
 		}
-
-		return { insertingComment, currentApplicant };
 	}
 
 	static async updateApplicantScreeningComment(applicantId: number, comment: CommentsInsert) {

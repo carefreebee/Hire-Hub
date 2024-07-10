@@ -16,7 +16,7 @@ export default function AssessedBy({ nameSubmitter, finalSubmitter }: AssessedBy
 				</p>
 			) : (
 				<p className="rounded-sm bg-[#F9F3E5] px-4 py-1 text-sm">
-					Wating for HR Head to set the assessor
+					Wating for Recruitment Office to set the assessor
 				</p>
 			)}
 		</div>

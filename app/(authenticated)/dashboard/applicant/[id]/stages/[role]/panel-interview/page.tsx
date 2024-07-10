@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import HrPageFooter from "~/components/pages/applicant/HrPageFooter";
+import CommentsAndDocuments from "~/components/pages/applicant/CommentsAndDocuments";
 import {
 	Card,
 	CardContent,
@@ -11,6 +11,8 @@ import {
 } from "~/components/pages/authenticated/applicant/ApplicantIDCard";
 import AssessedBy from "~/components/pages/authenticated/applicant/AssessedBy";
 import Assessor from "~/components/pages/authenticated/applicant/Assessor";
+import Waiting from "~/components/pages/authenticated/applicant/Card/waiting";
+import CheckboxAssessedBy from "~/components/pages/authenticated/applicant/CheckboxAssessedBy";
 import DownloadForm from "~/components/pages/authenticated/applicant/DownloadForm";
 import UploadRatingForm from "~/components/pages/authenticated/applicant/UploadRatingForm";
 import ApplicantIDUpdateInitialInterviewFooter from "~/components/pages/authenticated/applicant/initial-interview/ApplicantIDUpdateInitialInterviewFooter";
@@ -19,12 +21,13 @@ import SubmitInitialInterviewForm from "~/components/pages/authenticated/applica
 import { Button } from "~/components/ui/button";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
-import { getApplicantData } from "~/hooks/useApplicantStages";
+import { getApplicantFormByID } from "~/controller/ApplicantController";
+import { getAllRatingFormsFilesById } from "~/controller/RatingFormsController";
 import { validateRequest } from "~/lib/auth";
-import { RoleEnumsType, User } from "~/lib/schema";
-import { checkStatusInProgress } from "~/util/check-status-in-progress";
+import { getUserRole, MatchingUser } from "~/lib/fetch";
+import { User } from "~/lib/schema";
+import { AssessedByUserDetails } from "~/types/types";
 import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
-import { GetApplicantById } from "~/util/get-applicant-by-id";
 
 const ApplicantIDDisplayDateNoSSR = dynamic(
 	() =>
@@ -36,18 +39,23 @@ const ApplicantIDDisplayDateNoSSR = dynamic(
 	}
 );
 
+const currentStageName = "Panel Interview";
+
 export default async function PanelInterviewPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
-	// LOCATING THE CURRENT STAGE WHICH IS THE PANEL INTERVIEW STAGE
-	const { applicant, applicantStage } = await GetApplicantById(
-		Number(params.id),
-		"panel_interview"
-	);
-	// IF MATCHING THE CURRENT STAGE, IT WILL RETURN THE UPDATED STAGE NAME
-	// before -> panel_interview, after -> Panel Interview
-	const currentStageName = applicantStage && "Panel Interview";
+	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
+	const users = await getUserRole();
+	// GETTING THE APPLICANT BY ID
+	const applicant = await getApplicantFormByID(Number(params.id));
+	// LOCATING THE CURRENT STAGE WHICH IS THE PSYCHOLOGICAL EXAM STAGE
+	const applicantStage = applicant?.stages && applicant?.stages.panel_interview;
+	// const matchingTheUser = await getUsersByRole(applicantStage?.assessed_by?.filter(user => user) );
+	// Logging the initial user IDs
+	const assessedByIds = applicantStage?.assessed_by || [];
+	// console.log("Initial assessed_by IDs:", assessedByIds);
+	const assessors = await MatchingUser(assessedByIds);
 
-	if (user?.role === "hr_head") {
+	if (user?.role === "recruitment_officer") {
 		return (
 			<>
 				<Card>
@@ -70,20 +78,27 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 						</CardSubContent>
 						<CardSubContent>
 							<AssessedBy
-								status={applicantStage?.status as "passed" | "failed"}
-								assessedBy={applicantStage?.assessed_by as RoleEnumsType[]}
+								isThereAssessors={assessedByIds}
+								assessors={assessors as AssessedByUserDetails[]}
 							/>
 						</CardSubContent>
 					</CardContent>
 					<CardFooter>
 						{applicantStage?.status === "in-progress" ? (
-							<ApplicantIDUpdateInitialInterviewFooter id={applicant?.id as number} />
+							<>
+								<ApplicantIDUpdateInitialInterviewFooter
+									id={applicant?.id as number}
+								/>
+								<div className="flex-1">
+									<CheckboxAssessedBy assessed_by={users as Partial<User>[]} />
+								</div>
+							</>
 						) : (
 							<div className="h-[40px]"></div>
 						)}
 					</CardFooter>
 				</Card>
-				<HrPageFooter
+				<CommentsAndDocuments
 					stage="panel_interview"
 					applicantId={params.id as string}
 					evaluatorsId={user?.id as string}
@@ -92,20 +107,33 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 		);
 	}
 
-	const { stages } = await getApplicantData(Number(params.id));
-	// LOCATING THE CURRENT STAGE, IF THE STATUS DOES NOT MATCH
-	// THE CURRENT PAGE IT WILL DISPLAY "This applicant is not yet available."
-	const findStatusInProgress = checkStatusInProgress(stages);
-	// console.log(applicantStage?.status)
 	// CHECK IF THE BOTH USER AND APPLICANT HAS THE SAME VALUES WHETHER IT IS DEPARTMENT OR OFFICE
 	const { isUserDepartmentAllowed, isUserOfficeAllowed } = checkUserAndApplicantIfValid(
 		applicant,
 		user as User
 	);
 	// CHECK IF THE USER IS ALLOWED TO ASSESSED THE APPLICANT WHETHER IT IS DEPARTMENT OR OFFICE
-	const checkIfUserIsAllowedToAssessed = isUserDepartmentAllowed || isUserOfficeAllowed;
+	const checkIfUserIsAllowedToAssess = isUserDepartmentAllowed || isUserOfficeAllowed;
 	// THESE ARE THE USER's WHO CAN ASSESS TO THE APPLICANT
-	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.role as RoleEnumsType);
+	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
+	// GETTING ALL THE RATING FORMS FILES BY ID
+	const ratingForm = await getAllRatingFormsFilesById(Number(params.id));
+	// CHECK IF THE CURRENT USER HAS SUBMITTED THE RATING FORM
+	// const hasUserPostedRating = ratingForm?.some((form) => form.user_id === user?.id);
+	// console.log(applicantStage);
+	// console.log(ratingForm.find((stage) => stage.recruitment_stage === currentStageName));
+	// // CHECK THE CURRENT USER's ROLE
+	// Check if the user has already posted a rating for the current stage
+	const hasUserPostedRating = ratingForm.some(
+		(stage) => stage.recruitment_stage === currentStageName && stage.user_id === user?.id
+	);
+	console.log(hasUserPostedRating); // true if the user has posted a rating, false otherwise
+
+	const getAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
+	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID
+	const finalAssessor = users.find((user) => user.id === getAssessedBy);
+	// THE CODE BELOW CAN BE USE TO UPDATE THE USER's STATUS WHETHER IT IS PASSED OR FAILED
+	// const isCurrentUserTheAssessor = user?.id === finalAssessor?.id;
 
 	return (
 		<>
@@ -122,7 +150,14 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 					</CardTitle>
 				</CardHeader>
 				{/* CHECKS IF THE USER's DEPARTMENT/OFFICE MATCHES THE APPLICANT's SELECTED_DEPARTMENT/SELECTED_OFFICE */}
-				{applicantStage?.status === "passed" ? (
+				{applicantStage?.status === "in-progress" && !applicantStage.assessed_by?.length ? (
+					<Waiting />
+				) : assessedByUsers && checkIfUserIsAllowedToAssess && !hasUserPostedRating ? (
+					<CardContent className="mt-0 flex h-auto flex-col p-5">
+						<InformationSVG />
+						<UploadRatingForm />
+					</CardContent>
+				) : hasUserPostedRating ? (
 					<CardContent className="mt-0 h-52 flex-col items-center justify-center">
 						<p className="text-xl font-medium">Success!</p>
 						<div className="mt-2 flex flex-col items-center">
@@ -132,19 +167,6 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 							<small className="text-[#4F4F4F]">your documents to view file.</small>
 						</div>
 					</CardContent>
-				) : applicantStage?.status === "in-progress" &&
-				  !applicantStage.assessed_by?.length ? (
-					<CardContent className="mt-0 flex-col items-center justify-center gap-2">
-						<p className="text-xl font-medium">Waiting...!</p>
-						<small className="text-[#4F4F4F]">
-							Wating for HR Head to set the assessor.
-						</small>
-					</CardContent>
-				) : assessedByUsers && checkIfUserIsAllowedToAssessed ? (
-					<CardContent className="mt-0 flex h-auto flex-col p-5">
-						<InformationSVG />
-						<UploadRatingForm />
-					</CardContent>
 				) : (
 					<CardContent className="mt-0 items-center justify-center">
 						Not authorized to assess.
@@ -153,19 +175,24 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 				{applicantStage?.status === "in-progress" && (
 					<CardFooter className="p-5">
 						{/* SHOWS WHAT DEPARTMENT/OFFICE TYPE THE ASSESSOR IS */}
-						<Assessor assessed_by={applicantStage?.assessed_by as RoleEnumsType[]} />
+						<Assessor
+							finalAssessorName={finalAssessor?.name as string}
+							finalAssessorRole={finalAssessor?.role as string}
+						/>
 						{/* BELOW IS WHERE THE FORM IS LOCATED SO THAT THE APPLICANT STATUS WILL BE UPDATED */}
-						{assessedByUsers && checkIfUserIsAllowedToAssessed && (
-							<SubmitInitialInterviewForm
-								id={params.id}
-								evaluatorsId={user?.id as string}
-								recruitment_stage={currentStageName as string}
-							/>
-						)}
+						{assessedByUsers &&
+							checkIfUserIsAllowedToAssess &&
+							!hasUserPostedRating && (
+								<SubmitInitialInterviewForm
+									id={params.id}
+									evaluatorsId={user?.id as string}
+									recruitment_stage={currentStageName as string}
+								/>
+							)}
 					</CardFooter>
 				)}
 			</Card>
-			<HrPageFooter
+			<CommentsAndDocuments
 				stage="panel_interview"
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}

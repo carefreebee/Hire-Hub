@@ -19,15 +19,16 @@ import { useToast } from "~/components/ui/use-toast";
 import { handleSubmitApplicantForm } from "~/controller/ApplicantController";
 import { UploadDropzone } from "~/util/uploadthing";
 import { FormContainer, Note, RadioGroupContainer } from "./Form";
+import { DepartmentSelect, OfficeSelect } from "~/lib/schema";
 
 type ApplicantFormProps = {
-	requestedDepartment: string[];
-	requestedOffice: string[];
+	department: DepartmentSelect[];
+	office: OfficeSelect[];
 };
 
 export default function ApplicantForm({
-	requestedDepartment,
-	requestedOffice,
+	department,
+	office,
 }: ApplicantFormProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const [resumeUrl, setResumeUrl] = useState<string | undefined>("");
@@ -147,9 +148,9 @@ export default function ApplicantForm({
 								<SelectContent>
 									<SelectGroup>
 										<SelectLabel>Fruits</SelectLabel>
-										{requestedDepartment.map((department, index) => (
-											<SelectItem key={index} value={department}>
-												{department}
+										{department.map((department) => (
+											<SelectItem key={department.department_id} value={department.department_name}>
+												{department.department_name}
 											</SelectItem>
 										))}
 									</SelectGroup>
@@ -163,9 +164,9 @@ export default function ApplicantForm({
 								<SelectContent>
 									<SelectGroup>
 										<SelectLabel>Fruits</SelectLabel>
-										{requestedOffice.map((office, index) => (
-											<SelectItem key={index} value={office}>
-												{office}
+										{office.map((office) => (
+											<SelectItem key={office.office_id} value={office.office_name}>
+												{office.office_name}
 											</SelectItem>
 										))}
 									</SelectGroup>

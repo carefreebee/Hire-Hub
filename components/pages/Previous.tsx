@@ -1,23 +1,11 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import { TextProps } from "~/types/types";
+import Link from "next/link";
 import ArrowLeft from "../ui/arrow-left";
-import { Button } from "../ui/button";
 
-export default function Previous({ text }: TextProps) {
-	const router = useRouter();
-
+export default function Previous({ href, text }: { href: string; text: string }) {
 	return (
-		<div>
-			<Button
-				onClick={() => router.back()}
-				variant={"ghost"}
-				className="text-lg font-bold hover:bg-transparent"
-			>
-				<ArrowLeft />
-				{text}
-			</Button>
-		</div>
+		<Link href={href} className="flex items-center text-lg font-bold hover:bg-transparent">
+			<ArrowLeft />
+			{text}
+		</Link>
 	);
 }

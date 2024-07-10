@@ -7,13 +7,7 @@ import { Button } from "~/components/ui/button";
 import { handleUpdateEvaluateApplicantStatus } from "~/controller/RatingFormsController";
 import { useSelectPassedOrFailed } from "~/util/zustand";
 
-export default function SubmitEvaluateButton({
-	id,
-	currentStatus,
-}: {
-	id: string;
-	currentStatus: string;
-}) {
+export default function SubmitEvaluateButton({ id }: { id: string }) {
 	const status = useSelectPassedOrFailed((state) => state.status);
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -33,12 +27,6 @@ export default function SubmitEvaluateButton({
 	return (
 		<form ref={formRef} onSubmit={(e) => e.preventDefault()}>
 			<input type="hidden" name="applicant_id" value={id} readOnly />
-			<input
-				type="hidden"
-				name="recruitment_stage"
-				value={currentStatus}
-				readOnly
-			/>
 			<input type="hidden" name="status" value={status} readOnly />
 			<ConfirmationModal
 				mainButton={

@@ -17,7 +17,7 @@ export const roleEnums = pgEnum("role", [
 	"requester_staff",
 	"department_chair",
 	"dean",
-	// "faculty",
+	"faculty",
 	"guidance_center_staff",
 	"vp_acad_affairs",
 	"vp_administration",
@@ -42,8 +42,10 @@ export const users = pgTable("users", {
 	avatarUrl: text("avatar_url"),
 	email: text("email").unique().notNull(),
 	role: roleEnums("role").notNull().default("user"),
-	department_id: integer("department_id").references(() => department.department_id),
-	office_id: integer("office_id").references(() => office.office_id),
+	department_id: integer("department_id").references(() => department.department_id, {
+		onDelete: "cascade",
+	}),
+	office_id: integer("office_id").references(() => office.office_id, { onDelete: "cascade" }),
 	selected_department: text("selected_department"),
 	selected_office: text("selected_office"),
 	appliedAt: timestamp("applied_at").defaultNow(),
@@ -71,7 +73,7 @@ export const sessions = pgTable("sessions", {
 interface StageStatus {
 	status?: "in-progress" | "passed" | "failed" | "";
 	date?: Date | "";
-	assessed_by?: RoleEnumsType[];
+	assessed_by?: string[];
 	mode?: "online" | "in-person" | "";
 	comment_id?: number[];
 	rating_forms_id?: number[];
@@ -96,29 +98,26 @@ export const applicant = pgTable("applicant", {
 	communication_type: communicationEnums("communicationType").notNull(),
 	positionType: positionEnums("positionType").notNull(),
 	position_applied: text("position_applied").notNull(),
-	department_id: integer("department_id").references(() => department.department_id),
-	office_id: integer("office_id").references(() => office.office_id),
+	department_id: integer("department_id").references(() => department.department_id, {
+		onDelete: "cascade",
+	}),
+	office_id: integer("office_id").references(() => office.office_id, { onDelete: "cascade" }),
 	selected_department: text("selected_department"),
 	selected_office: text("selected_office"),
 	applied_date: timestamp("applied_date").defaultNow(),
-	// status: statusEnums("statusEnums").default("Screening"),
 	stages: jsonb("stages")
 		.$type<ApplicantStages>()
 		.default({
 			screening: {
 				status: "in-progress",
-				date: "",
-				assessed_by: ["hr_head"],
-				comment_id: [],
-				rating_forms_id: [],
 			},
 		}),
 });
 
 export const ratingForms = pgTable("rating_forms", {
 	rating_id: serial("rating_id").primaryKey(),
-	applicant_id: integer("applicant_id").references(() => applicant.id),
-	user_id: text("user_id").references(() => users.id),
+	applicant_id: integer("applicant_id").references(() => applicant.id, { onDelete: "cascade" }),
+	user_id: text("user_id").references(() => users.id, { onDelete: "cascade" }),
 	rate: text("rate").notNull(),
 	recruitment_stage: text("recruitment_stage").notNull(),
 	created_at: timestamp("created_at").defaultNow(),
@@ -126,8 +125,8 @@ export const ratingForms = pgTable("rating_forms", {
 
 export const comments = pgTable("comments", {
 	id: serial("id").primaryKey(),
-	applicant_id: integer("applicant_id").references(() => applicant.id),
-	commented_by: text("user_id").references(() => users.id),
+	applicant_id: integer("applicant_id").references(() => applicant.id, { onDelete: "cascade" }),
+	commented_by: text("user_id").references(() => users.id, { onDelete: "cascade" }),
 	comment: text("comment").notNull(),
 	commented_at: timestamp("commented_at").defaultNow(),
 });
@@ -142,8 +141,10 @@ export const jobRequest = pgTable("jobRequest", {
 	requested_description: text("requested_description").notNull(),
 	requested_qualification: text("requested_qualification").notNull(),
 	requested_date: timestamp("requested_date").defaultNow(),
-	department_id: integer("department_id").references(() => department.department_id),
-	office_id: integer("office_id").references(() => office.office_id),
+	department_id: integer("department_id").references(() => department.department_id, {
+		onDelete: "cascade",
+	}),
+	office_id: integer("office_id").references(() => office.office_id, { onDelete: "cascade" }),
 });
 
 export const department = pgTable("department", {
@@ -156,47 +157,24 @@ export const office = pgTable("office", {
 	office_name: text("office_name").notNull().unique(),
 });
 
-// export const evaluate = pgTable("evaluate", {
-// 	evaluate_id: serial("evaluate_id").primaryKey(),
-// })
 
-// export const applicantRelation = relations(applicant, ({ one }) => ({
-// 	department: one(department, {
-// 		fields: [applicant.departmentId],
-// 		references: [department.department_id],
-// 	}),
-// 	office: one(office, {
-// 		fields: [applicant.officeId],
-// 		references: [office.office_id],
-// 	}),
-// }));
-
-// export const userRelation = relations(users, ({ one }) => ({
-// 	department: one(department, {
-// 		fields: [users.departmentId],
-// 		references: [department.department_id],
-// 	}),
-// 	office: one(office, {
-// 		fields: [users.officeId],
-// 		references: [office.office_id],
-// 	}),
-// }));
-
-export type User = typeof users.$inferSelect;
-export type ApplicantSelect = typeof applicant.$inferSelect;
-export type ApplicantInsert = typeof applicant.$inferInsert;
-export type DepartmentSelect = typeof department.$inferSelect;
-export type DepartmentInsert = typeof department.$inferSelect;
-export type OfficeSelect = typeof office.$inferSelect;
-export type OfficeInsert = typeof office.$inferInsert;
-export type JobRequestSelect = typeof jobRequest.$inferSelect;
-export type JobRequestInsert = typeof jobRequest.$inferInsert;
 export type UserRole = typeof roleEnums.enumValues;
 export type communicationEnums = typeof communicationEnums.enumValues;
 export type StatusEnums = typeof statusEnums.enumValues;
-export type CommentsInsert = typeof comments.$inferInsert;
+
+export type User = typeof users.$inferSelect;
+export type ApplicantSelect = typeof applicant.$inferSelect;
+export type DepartmentSelect = typeof department.$inferSelect;
+export type OfficeSelect = typeof office.$inferSelect;
+export type JobRequestSelect = typeof jobRequest.$inferSelect;
 export type CommentsSelect = typeof comments.$inferSelect;
-export type RatingFormsInsert = typeof ratingForms.$inferInsert;
 export type RatingFormsSelect = typeof ratingForms.$inferSelect;
+
+export type ApplicantInsert = typeof applicant.$inferInsert;
+export type DepartmentInsert = typeof department.$inferSelect;
+export type OfficeInsert = typeof office.$inferInsert;
+export type JobRequestInsert = typeof jobRequest.$inferInsert;
+export type CommentsInsert = typeof comments.$inferInsert;
+export type RatingFormsInsert = typeof ratingForms.$inferInsert;
 
 export type RoleEnumsType = User["role"];

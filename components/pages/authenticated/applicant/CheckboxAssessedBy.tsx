@@ -1,23 +1,27 @@
+"use client";
+
 import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
-import { RoleEnumsType, roleEnums } from "~/lib/schema";
+import { User } from "~/lib/schema";
 import { useSelectedAssessedBy } from "~/util/zustand";
 
-export default function CheckboxAssessedBy() {
+type CheckboxAssessedByProps = {
+	assessed_by: Partial<User>[];
+};
+
+export default function CheckboxAssessedBy({ assessed_by }: CheckboxAssessedByProps) {
 	const { assessedBy, setAssessedBy } = useSelectedAssessedBy((state) => ({
-		assessedBy: state.assessedBy,
+		assessedBy: state.assessedBy as Partial<User>[],
 		setAssessedBy: state.setAssessedBy,
 	}));
 
-	function handleAssessedBy(event: React.ChangeEvent<HTMLInputElement>) {
-		const { value, checked } = event.target;
+	function handleAssessedBy(user: Partial<User>, checked: boolean) {
 		if (checked) {
-			setAssessedBy([...assessedBy, value as RoleEnumsType]);
+			setAssessedBy([...assessedBy, user]);
 		} else {
-			setAssessedBy(assessedBy.filter((role) => role !== value));
+			setAssessedBy(assessedBy.filter((u) => u.id !== user.id));
 		}
 	}
 
@@ -25,7 +29,10 @@ export default function CheckboxAssessedBy() {
 		<Popover>
 			<PopoverTrigger asChild>
 				<Button variant="ghost" className="text-[#0F91D2]">
-					{assessedBy.length === 0 ? "+Add Evaluators" : assessedBy.join(", ")}
+					{/* {assessedBy.length === 0
+						? "+ Add Evaluators"
+						: assessedBy.map((user) => user.name).join(", ")} */}
+					+ Add Evaluators
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className="w-80">
@@ -33,21 +40,20 @@ export default function CheckboxAssessedBy() {
 					<div className="space-y-2">
 						<h4 className="font-medium leading-none">Evaluators</h4>
 					</div>
-					{roleEnums.enumValues
-						.filter((role) => role !== "user" && role !== "admin" && role !== "hr_head")
-						.map((role) => (
-							<div key={role} className="flex gap-2">
-								<Input
-									key={role}
-									type="checkbox"
-									value={role}
-									checked={assessedBy.includes(role)}
-									onChange={handleAssessedBy}
-									className="h-auto w-auto"
-								/>
-								<Label>{role}</Label>
-							</div>
-						))}
+					{assessed_by.map((user) => (
+						<div key={user.id} className="flex gap-2">
+							<Input
+								type="checkbox"
+								value={user.role}
+								checked={assessedBy.some((u) => u.id === user.id)}
+								onChange={(e) => handleAssessedBy(user, e.target.checked)}
+								className="h-auto w-auto"
+							/>
+							<Label>
+								{user.name} - {user.role}
+							</Label>
+						</div>
+					))}
 				</form>
 			</PopoverContent>
 		</Popover>
