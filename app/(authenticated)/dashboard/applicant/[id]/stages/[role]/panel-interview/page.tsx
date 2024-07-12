@@ -23,8 +23,9 @@ import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getApplicantFormByID } from "~/controller/ApplicantController";
 import { getAllRatingFormsFilesById } from "~/controller/RatingFormsController";
+import { DisplayAssessedBy } from "~/util/display-assessed-by";
 import { validateRequest } from "~/lib/auth";
-import { getUserRole, MatchingUser } from "~/lib/fetch";
+import { MatchingUser } from "~/util/matching-users";
 import { User } from "~/lib/schema";
 import { AssessedByUserDetails } from "~/types/types";
 import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
@@ -44,7 +45,7 @@ const currentStageName = "Panel Interview";
 export default async function PanelInterviewPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
-	const users = await getUserRole();
+	const users = await DisplayAssessedBy();
 	// GETTING THE APPLICANT BY ID
 	const applicant = await getApplicantFormByID(Number(params.id));
 	// LOCATING THE CURRENT STAGE WHICH IS THE PSYCHOLOGICAL EXAM STAGE

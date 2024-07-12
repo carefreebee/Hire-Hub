@@ -12,7 +12,7 @@ export class DepartmentOrOfficeService {
 		this.validateDepartment(departmentName);
 
 		try {
-			await db.insert(department).values({ department_name: departmentName.department_name });
+			await db.insert(department).values({ department_name: departmentName.department_name }).returning();
 			revalidatePath("/admin/units/department");
 		} catch (error) {
 			console.error("Creating Applicant Status failed:", error);
@@ -51,6 +51,17 @@ export class DepartmentOrOfficeService {
 				.update(department)
 				.set({ department_name: updateDepartment.department_name })
 				.where(eq(department.department_id, updateDepartment.department_id));
+
+			revalidatePath("/admin/units/department");
+		} catch (error) {
+			console.error("Update Applicant Status failed:", error);
+			throw new Error("Update Applicant Status failed");
+		}
+	}
+
+	async deleteDepartment(id: number) {
+		try {
+			await db.delete(department).where(eq(department.department_id, id));
 
 			revalidatePath("/admin/units/department");
 		} catch (error) {
@@ -105,6 +116,17 @@ export class DepartmentOrOfficeService {
 				.update(office)
 				.set({ office_name: updateOffice.office_name })
 				.where(eq(office.office_id, updateOffice.office_id));
+
+			revalidatePath("/admin/units/office");
+		} catch (error) {
+			console.error("Update Applicant Status failed:", error);
+			throw new Error("Update Applicant Status failed");
+		}
+	}
+
+	async deleteOffice(id: number) {
+		try {
+			await db.delete(office).where(eq(office.office_id, id));
 
 			revalidatePath("/admin/units/office");
 		} catch (error) {

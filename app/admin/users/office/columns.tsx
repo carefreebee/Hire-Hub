@@ -10,7 +10,6 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { formatDate } from "~/lib/date-time";
 import { User } from "~/lib/schema";
 
 export const columns: ColumnDef<User>[] = [
@@ -30,27 +29,6 @@ export const columns: ColumnDef<User>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">{row.getValue("id")}</div>
-			);
-		},
-	},
-	{
-		accessorKey: "lastName",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Last Name
-					<ArrowUpDown className="ml-2 h-4 w-4" />
-				</Button>
-			);
-		},
-		cell: ({ row }) => {
-			return (
-				<div className="flex items-center justify-center gap-2">
-					{row.getValue("lastName")}
-				</div>
 			);
 		},
 	},
@@ -76,14 +54,14 @@ export const columns: ColumnDef<User>[] = [
 		},
 	},
 	{
-		accessorKey: "email",
+		accessorKey: "lastName",
 		header: ({ column }) => {
 			return (
 				<Button
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 				>
-					Request Department
+					Last Name
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
@@ -91,26 +69,49 @@ export const columns: ColumnDef<User>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">
-					{row.getValue("email")}
+					{row.getValue("lastName")}
 				</div>
 			);
 		},
 	},
 	{
-		accessorKey: "appliedAt",
+		accessorKey: "role",
 		header: ({ column }) => {
 			return (
 				<Button
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 				>
-					Date Registered
+					Position
+					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
 		},
 		cell: ({ row }) => {
-			const date: Date = row.getValue("appliedAt");
-			return <div className="flex items-center justify-center gap-2">{formatDate(date)}</div>;
+			return (
+				<div className="flex items-center justify-center gap-2">{row.getValue("role")}</div>
+			);
+		},
+	},
+	{
+		accessorKey: "selected_office",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+				>
+					Office
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			return (
+				<div className="flex items-center justify-center gap-2">
+					{row.getValue("selected_office")}
+				</div>
+			);
 		},
 	},
 	{

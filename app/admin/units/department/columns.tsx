@@ -12,6 +12,7 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { toast } from "~/components/ui/use-toast";
+import { deleteDepartment } from "~/controller/DepartmentOrOfficeController";
 import { handleDeleteJobRequest } from "~/controller/JobRequestController";
 import { DepartmentSelect } from "~/lib/schema";
 
@@ -87,11 +88,11 @@ export const columns: ColumnDef<DepartmentSelect>[] = [
 							<DropdownMenuItem>
 								<Button
 									onClick={async () => {
-										await handleDeleteJobRequest(Number(id));
+										await deleteDepartment(Number(id));
 										toast({
-											title: "Deleted Job Request",
+											title: "Deleted Department",
 											description:
-												"Job Request has been deleted successfully",
+												"Department has been deleted successfully",
 										});
 									}}
 									variant={"ghost"}

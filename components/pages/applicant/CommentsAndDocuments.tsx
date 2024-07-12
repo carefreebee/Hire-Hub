@@ -6,9 +6,9 @@ import {
 	CardHeader,
 	CardTitle,
 } from "../authenticated/applicant/ApplicantIDCard";
-import ApplicantResume from "../authenticated/applicant/ApplicantResume";
+import ApplicantResume from "../authenticated/applicant/Documents/ApplicantResume";
 import CommentForm from "../authenticated/applicant/CommentForm";
-import ApplicantIDCommentDisplay from "../authenticated/applicant/screening/ApplicantIDCommentDisplay";
+import ApplicantIDCommentDisplay from "../authenticated/applicant/Comments/ApplicantIDCommentDisplay";
 
 type CommentsAndDocumentsProps = {
 	stage: StageType;

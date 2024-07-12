@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
@@ -18,30 +17,21 @@ import {
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
 import { handleSubmitJobRequest } from "~/controller/JobRequestController";
-import { useSelectedCategoryOptions } from "~/hooks/useSelectedCategoryOptions";
 import { SelectTagProps } from "~/types/types";
 
-function LabelTag({ label }: { label: string }) {
-	return <Label className="font-semibold text-[#666666]">{label}</Label>;
-}
+type JobRequestFormProps = {
+	departmentId: number;
+	selectedDepartment: string;
+	officeId: number;
+	selectedOffice: string;
+};
 
-function SelectTag({ label, name, placeholder, children, onValueChange }: SelectTagProps) {
-	return (
-		<div className="mx-auto flex h-[66px] w-[564px] flex-col gap-3">
-			<Label className="font-semibold text-[#666666]">{label}</Label>
-			<Select name={name} required onValueChange={onValueChange}>
-				<SelectTrigger className="w-full border-2">
-					<SelectValue placeholder={placeholder} />
-				</SelectTrigger>
-				<SelectContent>{children}</SelectContent>
-			</Select>
-		</div>
-	);
-}
-
-export default function Form() {
-	const { selectedCategory, handleChangeCategory } = useSelectedCategoryOptions();
-	const router = useRouter();
+export default function JobRequestForm({
+	departmentId,
+	selectedDepartment,
+	officeId,
+	selectedOffice,
+}: JobRequestFormProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 
 	async function handleSubmit(): Promise<void> {
@@ -76,7 +66,6 @@ export default function Form() {
 					name="requested_category"
 					label="Category"
 					placeholder="Choose a category..."
-					onValueChange={handleChangeCategory}
 				>
 					<SelectGroup>
 						<SelectItem value="teaching_staff">Teaching Staff</SelectItem>
@@ -85,16 +74,32 @@ export default function Form() {
 				</SelectTag>
 
 				<div className="mx-auto w-[564px]">
-					<LabelTag
-						label={`${selectedCategory === "teaching_staff" ? "Requested Department" : "Requested Office"}`}
-					/>
-					{
-						<Input
-							type="text"
-							name={`${selectedCategory === "teaching_staff" ? "requested_department" : "requested_office"}`}
-							className="border-2"
-						/>
-					}
+					{selectedDepartment !== null && (
+						<>
+							<LabelTag label="Requested Department" />
+							<Input
+								type="text"
+								name="requested_department"
+								value={selectedDepartment}
+								readOnly
+								className="border-2"
+							/>
+							<Input type="hidden" name="department_id" value={departmentId} />
+						</>
+					)}
+					{selectedOffice !== null && (
+						<>
+							<LabelTag label="Requested Office" />
+							<Input
+								type="text"
+								name="requested_office"
+								value={selectedOffice}
+								readOnly
+								className="border-2"
+							/>
+							<Input type="hidden" name="office_id" value={officeId} />
+						</>
+					)}
 				</div>
 
 				<SelectTag name="requested_type" label="Type" placeholder="Select a type...">
@@ -141,5 +146,23 @@ export default function Form() {
 				</div>
 			</div>
 		</form>
+	);
+}
+
+function LabelTag({ label }: { label: string }) {
+	return <Label className="font-semibold text-[#666666]">{label}</Label>;
+}
+
+function SelectTag({ label, name, placeholder, children }: SelectTagProps) {
+	return (
+		<div className="mx-auto flex h-[66px] w-[564px] flex-col gap-3">
+			<Label className="font-semibold text-[#666666]">{label}</Label>
+			<Select name={name} required>
+				<SelectTrigger className="w-full border-2">
+					<SelectValue placeholder={placeholder} />
+				</SelectTrigger>
+				<SelectContent>{children}</SelectContent>
+			</Select>
+		</div>
 	);
 }

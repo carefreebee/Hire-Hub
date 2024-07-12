@@ -1,5 +1,6 @@
 import { Column } from "@tanstack/react-table";
 import { Input } from "~/components/ui/input";
+import SearchSvg from "~/components/ui/search-svg";
 
 interface SearchInputProps {
 	placeholder: string;
@@ -14,11 +15,14 @@ export function SearchInput({ placeholder, column, className }: SearchInputProps
 	}
 
 	return (
-		<Input
-			placeholder={placeholder}
-			value={(column.getFilterValue() as string) ?? ""}
-			onChange={handleSearchChange}
-			className={className}
-		/>
+		<div className="flex">
+			<Input
+				placeholder={placeholder}
+				value={(column.getFilterValue() as string) ?? ""}
+				onChange={handleSearchChange}
+				className={className}
+			/>
+			<SearchSvg />
+		</div>
 	);
 }

@@ -6,9 +6,9 @@ import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { toast } from "~/components/ui/use-toast";
 import {
 	handleSubmitInitialInterviewComment,
-	handleSubmitInitialTeachingDemo,
 	handleSubmitPanelInterviewComment,
 	handleSubmitPsychologicalExamComment,
 	handleSubmitRecommendationForHiringComment,
@@ -36,7 +36,7 @@ export default function CommentForm({ applicantId, evaluatorsId }: CommentFormPr
 				await handleSubmitInitialInterviewComment(formData);
 			} else if (lastSegment === "teaching-demo") {
 				await handleSubmitTeachingDemo(formData);
-			} else if (lastSegment === "pyschological-exam") {
+			} else if (lastSegment === "psychological-exam") {
 				await handleSubmitPsychologicalExamComment(formData);
 			} else if (lastSegment === "panel-interview") {
 				await handleSubmitPanelInterviewComment(formData);
@@ -47,8 +47,16 @@ export default function CommentForm({ applicantId, evaluatorsId }: CommentFormPr
 			if (formRef.current) {
 				formRef.current.reset();
 			}
+			toast({
+				title: "Comment submitted!",
+				description: "Your comment has been submitted successfully.",
+			});
 		} catch (error) {
-			console.error("Error submitting form:", error);
+			toast({
+				variant: "destructive",
+				title: "Error submitting comment!",
+				description: "Comment must be at least 5 characters long. Please try again.",
+			});
 		}
 	}
 

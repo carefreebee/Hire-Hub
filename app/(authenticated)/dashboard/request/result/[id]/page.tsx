@@ -22,7 +22,7 @@ export default async function SuccessAddNewRequestPage({ params }: { params: { i
 	return (
 		<section className="bg-slate-200/30">
 			<div className="flex flex-col py-10">
-				<Previous text="View all Request" />
+				<Previous href="/dashboard/request" text="View all Request" />
 				<section className="py-10">
 					<div className="mx-auto flex w-[686px] flex-col justify-center gap-8 rounded-xl bg-white py-10 shadow-md">
 						<h4 className="scroll-m-20 text-center text-xl font-bold tracking-tight text-[#7F0000]">

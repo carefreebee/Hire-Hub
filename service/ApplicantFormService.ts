@@ -1,4 +1,5 @@
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/ApplicantForm";
 import { ApplicantFormRepository } from "~/Repository/ApplicantFormRepository";
 import { Validator } from "~/Validator/ApplicantForm";
@@ -7,6 +8,28 @@ import * as schema from "~/lib/schema";
 import { ApplicantForm } from "~/lib/zod";
 
 export class ApplicantFormService {
+	async create(formData: FormData) {
+		const applicantFormData = DataExtractor.extractApplicantFormData(formData);
+		this.validateApplicantFormData(applicantFormData);
+
+		const departmentId = await this.fetchDepartmentId(applicantFormData);
+		const officeId = await this.fetchOfficeId(applicantFormData);
+
+		try {
+			await ApplicantFormRepository.createApplicantForm({
+				...applicantFormData,
+				contact_number: Number(applicantFormData.contact_number),
+				department_id: departmentId,
+				office_id: officeId,
+			});
+
+			revalidatePath("/dashboard/applicant");
+		} catch (error) {
+			console.error("Database insertion failed:", error);
+			throw new Error("Database insertion failed");
+		}
+	}
+
 	async getAllApplicantForm() {
 		return await db.query.applicant.findMany();
 	}
@@ -23,30 +46,10 @@ export class ApplicantFormService {
 		});
 	}
 
-	async create(formData: FormData) {
-		const applicantFormData = DataExtractor.extractApplicantFormData(formData);
-		this.validateApplicantFormData(applicantFormData);
-
-		const departmentId = await this.fetchDepartmentId(applicantFormData);
-		const officeId = await this.fetchOfficeId(applicantFormData);
-
-		try {
-			return await ApplicantFormRepository.createApplicantForm({
-				...applicantFormData,
-				contact_number: Number(applicantFormData.contact_number),
-				department_id: departmentId,
-				office_id: officeId,
-			});
-		} catch (error) {
-			console.error("Database insertion failed:", error);
-			throw new Error("Database insertion failed");
-		}
-	}
-
 	private validateApplicantFormData(applicantFormData: ApplicantForm): void {
 		const validateData = Validator.validateApplicantFormData(applicantFormData);
 		if (!validateData.success) {
-			console.error("Validation failed:", validateData.error);
+			console.error("Validation failed:", validateData.error.format);
 			throw new Error("Validation failed");
 		}
 	}

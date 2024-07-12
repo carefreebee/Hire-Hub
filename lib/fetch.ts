@@ -4,34 +4,15 @@ import { getUsersByUserID, getUsersWithoutUserRoles } from "~/controller/UsersCo
 import { StageType } from "~/types/types";
 import { User } from "./schema";
 
-export async function getUserRole() {
-	const users = await getUsersWithoutUserRoles();
+// export async function getUserRole() {
+// 	const users = await getUsersWithoutUserRoles();
 
-	return users.map((user) => ({
-		id: user.id,
-		name: user.name,
-		role: user.role,
-	}));
-}
-
-export async function MatchingUser(assessedByUserIds: string[]) {
-	const userDetailsArray: Partial<User[]> = [];
-	await Promise.all(
-		assessedByUserIds.map(async (userId) => {
-			const userDetails = await getUsersByUserID(userId);
-			if (Array.isArray(userDetails)) {
-				userDetailsArray.push(...userDetails);
-			} else {
-				userDetailsArray.push(userDetails);
-			}
-		})
-	);
-	return userDetailsArray.map((user) => ({
-		id: user?.id,
-		name: user?.name,
-		role: user?.role,
-	}));
-}
+// 	return users.map((user) => ({
+// 		id: user.id,
+// 		name: user.name,
+// 		role: user.role,
+// 	}));
+// }
 
 // export const GetAllApplicant = cache(async () => {
 // 	const response = await db.select().from(schema.applicant);
@@ -50,26 +31,23 @@ export async function MatchingUser(assessedByUserIds: string[]) {
 // 	return applicant.stages && (applicant.stages[stage] as StageStatus | null);
 // }
 
-export async function GetCurrentStage(applicantId: string, stage: StageType) {
-	const applicant = await getApplicantFormByID(Number(applicantId));
-	if (!applicant) {
-		return;
-	}
-	const stages = applicant.stages && applicant.stages[stage];
-	return stages;
-}
+// export async function GetCurrentStage(applicantId: string, stage: StageType) {
+// 	const applicant = await getApplicantFormByID(Number(applicantId));
+// 	if (!applicant) {
+// 		return;
+// 	}
+// 	const stages = applicant.stages && applicant.stages[stage];
+// 	return stages;
+// }
 
-export async function GetCommentsById(commentIds: number[]) {
-	const getCommentById = commentIds?.map((commentId) => getApplicantCommentByID(commentId));
-	return await Promise.all(getCommentById || []);
-}
 
-export async function GetStageAssessedBy(stageAssessedBy: number[]) {
-	const getStageAssessedBy = stageAssessedBy?.map((assessedById) =>
-		getAllRatingFormsFilesById(assessedById)
-	);
-	return await Promise.all(getStageAssessedBy || []);
-}
+
+// export async function GetStageAssessedBy(stageAssessedBy: number[]) {
+// 	const getStageAssessedBy = stageAssessedBy?.map((assessedById) =>
+// 		getAllRatingFormsFilesById(assessedById)
+// 	);
+// 	return await Promise.all(getStageAssessedBy || []);
+// }
 
 // export async function GetUsersById(ratingForm: string[]) {
 // 	// const user = user_id.map((user) => getUsersByUserID(user));

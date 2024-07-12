@@ -32,24 +32,27 @@ export default async function UserIDPage({ params }: { params: { id: string } })
 	const office = await getAllOffice();
 
 	return (
-		<section className="mb-20 flex h-[474px] items-end justify-between bg-white px-14">
-			<div className="flex flex-col text-[#6F767E]">
-				<UserIDContainer>
-					<UserIDChildren label="First Name" value={user?.firstName as string} />
-					<UserIDChildren label="Last Name" value={user?.lastName as string} />
-					<UserIDChildren label="E-mail Address" value={user?.email as string} />
-				</UserIDContainer>
+		<section className="mb-32 flex flex-col gap-20 bg-white">
+			<p className="border-b px-10 py-3 text-sm font-semibold">User ID {user?.id}</p>
+			<div className="flex justify-between px-10">
+				<div className="flex flex-col text-[#6F767E]">
+					<UserIDContainer>
+						<UserIDChildren label="First Name" value={user?.firstName as string} />
+						<UserIDChildren label="Last Name" value={user?.lastName as string} />
+						<UserIDChildren label="E-mail Address" value={user?.email as string} />
+					</UserIDContainer>
 
-				<Link
-					href={"/admin/users/manage-users"}
-					className="mb-10 mt-20 flex items-center text-sm font-medium"
-				>
-					<ArrowLeft />
-					Go Back
-				</Link>
-			</div>
-			<div className="flex flex-col gap-10 text-[#6F767E]">
-				<UpdateInput id={params.id} department={department} office={office} />
+					<Link
+						href={"/admin/users/manage-users"}
+						className="mb-5 mt-20 flex items-center text-sm font-medium"
+					>
+						<ArrowLeft />
+						Go Back
+					</Link>
+				</div>
+				<div className="flex flex-col gap-10 text-[#6F767E]">
+					<UpdateInput id={params.id} department={department} office={office} />
+				</div>
 			</div>
 		</section>
 	);

@@ -42,7 +42,6 @@ export type SelectTagProps = {
 	name?: string;
 	placeholder: string;
 	children: React.ReactNode;
-	onValueChange?: (value: SelectCategory) => void;
 };
 
 export type TextProps = {

@@ -18,8 +18,8 @@ export default function UploadRatingForm() {
 					// Do something with the response
 					setFile(res[0].url);
 					toast({
-						title: "Resume uploaded",
-						description: "Resume uploaded successfully",
+						title: "Rating Form uploaded",
+						description: "Rating Form uploaded successfully",
 					});
 				}}
 				onUploadError={(error: Error) => {

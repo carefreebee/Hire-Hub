@@ -23,8 +23,9 @@ import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getApplicantFormByID } from "~/controller/ApplicantController";
 import { getAllRatingFormsFilesById } from "~/controller/RatingFormsController";
+import { DisplayAssessedBy } from "~/util/display-assessed-by";
 import { validateRequest } from "~/lib/auth";
-import { getUserRole, MatchingUser } from "~/lib/fetch";
+import { MatchingUser } from "~/util/matching-users";
 import { User } from "~/lib/schema";
 import { AssessedByUserDetails } from "~/types/types";
 import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
@@ -43,15 +44,22 @@ const currentStageName = "Teaching Demo";
 
 export default async function TeachingDemoPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
+
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
-	const users = await getUserRole();
+	const users = await DisplayAssessedBy();
+
 	// GETTING THE APPLICANT BY ID
 	const applicant = await getApplicantFormByID(Number(params.id));
+
 	// LOCATING THE CURRENT STAGE WHICH IS THE TEACHING DEMO STAGE
 	const applicantStage = applicant?.stages && applicant?.stages.teaching_demo;
+	console.log(applicantStage);
+
 	// const matchingTheUser = await getUsersByRole(applicantStage?.assessed_by?.filter(user => user) );
+
 	// GETTING ALL THE ASSESSED BY
 	const assessedByIds = applicantStage?.assessed_by || [];
+
 	// console.log("Initial assessed_by IDs:", assessedByIds);
 	const assessors = await MatchingUser(assessedByIds);
 
@@ -127,7 +135,7 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 	const hasUserPostedRating = ratingForm.some(
 		(stage) => stage.recruitment_stage === currentStageName && stage.user_id === user?.id
 	);
-	console.log(hasUserPostedRating); // true if the user has posted a rating, false otherwise
+	// console.log(hasUserPostedRating); // true if the user has posted a rating, false otherwise
 
 	const getAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
 	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID

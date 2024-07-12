@@ -9,16 +9,16 @@ import Assessor from "~/components/pages/authenticated/applicant/Assessor";
 import EvaluateDisplay from "~/components/pages/authenticated/applicant/evaluate/EvaluateDisplay";
 import SubmitEvaluateButton from "~/components/pages/authenticated/applicant/initial-interview/SubmitEvaluateButton";
 import { getAllRatingFormsFilesById } from "~/controller/RatingFormsController";
+import { DisplayAssessedBy } from "~/util/display-assessed-by";
 import { getApplicantData } from "~/hooks/useApplicantStages";
 import { validateRequest } from "~/lib/auth";
-import { getUserRole } from "~/lib/fetch";
 import { RatingFormWithUserData } from "~/types/types";
 import { mergeRatingFormData } from "~/util/check-status-in-progress";
 
 export default async function EvaluatePage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
-	const getFinalAssessor = await getUserRole();
+	const getFinalAssessor = await DisplayAssessedBy();
 	// GETTING THE APPLICANT BY ID
 	const { applicant, stages } = await getApplicantData(Number(params.id));
 	// FINDING THE IN PROGRESS STATUS BASED ON THE STAGES

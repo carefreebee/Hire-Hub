@@ -5,6 +5,7 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { User } from "~/lib/schema";
+import { formattedApplicantStatus, formattedName } from "~/util/formatted-name";
 import { useSelectedAssessedBy } from "~/util/zustand";
 
 type CheckboxAssessedByProps = {
@@ -50,7 +51,8 @@ export default function CheckboxAssessedBy({ assessed_by }: CheckboxAssessedByPr
 								className="h-auto w-auto"
 							/>
 							<Label>
-								{user.name} - {user.role}
+								{formattedName(user?.name ?? "")} -{" "}
+								{formattedApplicantStatus(user?.role ?? "")}
 							</Label>
 						</div>
 					))}

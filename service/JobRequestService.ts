@@ -1,10 +1,9 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/JobRequest";
-import { JobRequestRepository } from "~/Repository/JobRepository";
 import { Validator } from "~/Validator/JobRequest";
 import { db } from "~/lib/db";
-import * as schema from "~/lib/schema";
+import { jobRequest } from "~/lib/schema";
 import { EditJobRequest, JobRequest } from "~/lib/zod";
 
 export class JobRequestService {
@@ -22,7 +21,11 @@ export class JobRequestService {
 
 		// Insert validated data into the database
 		try {
-			await JobRequestRepository.createJobRequest(jobRequestData);
+			// await JobRequestRepository.createJobRequest(jobRequestData);
+			// console.log("Job request data:", jobRequestData);
+			if (jobRequestData.requested_category === "teaching_staff") {
+				await db.insert(jobRequest).values(jobRequestData).returning();
+			}
 		} catch (error) {
 			console.error("Database insertion failed:", error);
 			throw new Error("Database insertion failed");
@@ -41,9 +44,9 @@ export class JobRequestService {
 
 		try {
 			const updatedJobRequestData = await db
-				.update(schema.jobRequest)
+				.update(jobRequest)
 				.set(jobRequestData)
-				.where(eq(schema.jobRequest.request_id, id));
+				.where(eq(jobRequest.request_id, id));
 
 			console.log("Update successful:", updatedJobRequestData);
 			revalidatePath(`/dashboard/request/result/${id}`);
@@ -60,8 +63,8 @@ export class JobRequestService {
 	// 		};
 
 	// 		await db
-	// 			.delete(schema.jobRequest)
-	// 			.where(eq(schema.jobRequest.request_id, jobRequestId.request_id));
+	// 			.delete(jobRequest)
+	// 			.where(eq(jobRequest.request_id, jobRequestId.request_id));
 
 	// 		revalidatePath("/dashboard/request");
 	// 	} catch (error) {
@@ -71,7 +74,7 @@ export class JobRequestService {
 	// }
 	async delete(id: number) {
 		try {
-			await db.delete(schema.jobRequest).where(eq(schema.jobRequest.request_id, id));
+			await db.delete(jobRequest).where(eq(jobRequest.request_id, id));
 
 			revalidatePath("/dashboard/request");
 		} catch (error) {
@@ -92,7 +95,7 @@ export class JobRequestService {
 	async getAllJobRequestByID(id: number) {
 		try {
 			return await db.query.jobRequest.findFirst({
-				where: eq(schema.jobRequest.request_id, id),
+				where: eq(jobRequest.request_id, id),
 			});
 		} catch (error) {
 			console.error(`Fetching job request with ID ${id} failed:`, error);

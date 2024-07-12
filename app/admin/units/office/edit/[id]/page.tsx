@@ -7,7 +7,7 @@ export default async function SuccessAddNewRequestPage({ params }: { params: { i
 
 	return (
 		<>
-			<Previous href="/admin/units/office" text="Units" />
+			<Previous href="/admin/units/office" text="View All Units" />
 			<EditOffice
 				unitId={String(office?.office_id)}
 				unitName={office?.office_name as string}

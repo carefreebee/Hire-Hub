@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
+import { toast } from "~/components/ui/use-toast";
 import { handleUpdateEvaluateApplicantStatus } from "~/controller/RatingFormsController";
 import { useSelectPassedOrFailed } from "~/util/zustand";
 
@@ -19,8 +20,16 @@ export default function SubmitEvaluateButton({ id }: { id: string }) {
 			if (formRef.current) {
 				formRef.current.reset();
 			}
+			toast({
+				title: "Status Updated Success.",
+				description: "Status Updated Successfully.",
+			});
 		} catch (error) {
-			console.error("Error submitting form:", error);
+			toast({
+				variant: "destructive",
+				title: "Error Updating Status",
+				description: "Please select passed or failed.",
+			});
 		}
 	}
 

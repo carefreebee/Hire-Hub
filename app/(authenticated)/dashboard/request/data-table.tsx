@@ -25,10 +25,10 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 			<div className="flex items-center justify-between py-4">
 				<TableTopMostHeader title="Total Job Request" data={data.length} />
 				<Link
-					href={"/dashboard/request/add-new-request"}
+					href={"/dashboard/request/add-job-request"}
 					className="rounded-lg bg-[#7F0000] px-3.5 py-1.5 text-white hover:scale-95"
 				>
-					+Add New Request
+					+ Add Job Request
 				</Link>
 				<SearchInput
 					placeholder="Search..."

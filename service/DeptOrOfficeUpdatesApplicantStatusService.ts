@@ -1,8 +1,10 @@
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { DataExtractor } from "~/DataExtractor/DeptOrOfficeUpdatesApplicantForm";
 import { DeptOrOfficeUpdateRepository } from "~/Repository/DeptOrOfficeUpdateRepository";
 import { Validator } from "~/Validator/DeptOrOfficeUpdatesApplicantForm";
 import { getApplicantFormByID } from "~/controller/ApplicantController";
+import { validateRequest } from "~/lib/auth";
 import { db } from "~/lib/db";
 import { ratingForms, RatingFormsInsert } from "~/lib/schema";
 import { InitialInterviewForm } from "~/lib/zod";
@@ -14,6 +16,7 @@ export class DeptOrOfficeUpdatesApplicantStatusService {
 	}
 
 	async updateForm(formData: FormData, stageType: StageType) {
+		const { user } = await validateRequest();
 		const initialInterviewForm = DataExtractor.extractApplicantInitialInterviewForm(formData);
 		this.validateForm(initialInterviewForm);
 
@@ -33,6 +36,9 @@ export class DeptOrOfficeUpdatesApplicantStatusService {
 			);
 
 			revalidatePath(`/dashboard/applicant/${initialInterviewForm.applicant_id}`);
+			redirect(
+				`/dashboard/applicant/${initialInterviewForm.applicant_id}/stages/${user?.role}/evaluate`
+			);
 		} catch (error) {
 			console.error("Update Applicant Status failed:", error);
 			throw new Error("Update Applicant Status failed");

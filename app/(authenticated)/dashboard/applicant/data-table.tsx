@@ -21,7 +21,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
 	return (
 		<div>
-			<div className="flex items-center py-4">
+			<div className="flex items-center justify-between py-4">
 				<TableTopMostHeader title="Total Applicant" data={data.length} />
 				<SearchInput
 					placeholder="Search..."

@@ -17,7 +17,8 @@ import { Button } from "~/components/ui/button";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getUsersByUserID } from "~/controller/UsersController";
 import { validateRequest } from "~/lib/auth";
-import { GetApplicantById } from "~/util/get-applicant-by-id";
+import { MatchingUser } from "~/util/matching-users";
+import { GetCurrentStage } from "~/util/get-applicant-by-id";
 
 const ApplicantIDDisplayDateNoSSR = dynamic(
 	() => import("~/components/pages/authenticated/applicant/screening/ApplicantIDDisplayDate"),
@@ -27,13 +28,18 @@ const ApplicantIDDisplayDateNoSSR = dynamic(
 );
 
 export default async function ApplicantIdPage({ params }: { params: { id: string } }) {
-	const { applicant, applicantStage } = await GetApplicantById(Number(params.id), "screening");
+	const { applicant, applicantStage } = await GetCurrentStage(Number(params.id), "screening");
 	const { user } = await validateRequest();
 	const getUserWhoAssessed = await getUsersByUserID(applicantStage?.assessed_by?.[0] ?? "");
 	const assessedBy = getUserWhoAssessed?.find((user) => ({
 		name: user.name,
 		role: user.role,
 	}));
+
+	// GETTING ALL THE ASSESSED BY
+	const assessedByIds = applicantStage?.assessed_by || [];
+	// console.log("Initial assessed_by IDs:", assessedByIds);
+	const assessors = await MatchingUser(assessedByIds);
 
 	const screening = "Screening";
 	const isApplicantInProgress = applicantStage?.status === "in-progress";
@@ -66,7 +72,7 @@ export default async function ApplicantIdPage({ params }: { params: { id: string
 					<CardSubContent>
 						<AssessedBy
 							status={applicantStage?.status as "passed" | "failed"}
-							assessedByName={assessedBy?.name as string}
+							assessedByName={assessedByIds}
 							assessedByRole={assessedBy?.role as string}
 						/>
 					</CardSubContent>

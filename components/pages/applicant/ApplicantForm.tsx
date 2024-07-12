@@ -15,27 +15,23 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "~/components/ui/select";
-import { useToast } from "~/components/ui/use-toast";
+import { toast } from "~/components/ui/use-toast";
 import { handleSubmitApplicantForm } from "~/controller/ApplicantController";
-import { UploadDropzone } from "~/util/uploadthing";
-import { FormContainer, Note, RadioGroupContainer } from "./Form";
 import { DepartmentSelect, OfficeSelect } from "~/lib/schema";
+import { UploadDropzone } from "~/util/uploadthing";
+import { FormContainer, Note, RadioGroupContainer } from "./FormContainer";
 
 type ApplicantFormProps = {
 	department: DepartmentSelect[];
 	office: OfficeSelect[];
 };
 
-export default function ApplicantForm({
-	department,
-	office,
-}: ApplicantFormProps) {
+export default function ApplicantForm({ department, office }: ApplicantFormProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const [resumeUrl, setResumeUrl] = useState<string | undefined>("");
 	const [selectedPosition, setSelectedPosition] = useState<
 		"teaching_staff" | "non-teaching_staff"
 	>();
-	const { toast } = useToast();
 
 	async function handleSubmit(): Promise<void> {
 		const formData = new FormData(formRef.current!);
@@ -50,7 +46,12 @@ export default function ApplicantForm({
 				description: "Please wait at least 5 days",
 			});
 		} catch (error) {
-			console.error("Error submitting form:", error);
+			console.error("Error", { error });
+			toast({
+				variant: "destructive",
+				title: "Error submitting form",
+				description: "Please fill up the form correctly.",
+			});
 		}
 	}
 
@@ -83,14 +84,6 @@ export default function ApplicantForm({
 						name="contact_number"
 						inputMode="numeric"
 					/>
-					{/* <div className="flex flex-col gap-3">
-						<Label className="font-semibold">Contact Number</Label>
-						<Input
-							type="number"
-							name="contact_number"
-							required
-						/>
-					</div> */}
 					<RadioGroupContainer
 						label="Preferred mode of communication"
 						name="communication_type"
@@ -147,9 +140,12 @@ export default function ApplicantForm({
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
-										<SelectLabel>Fruits</SelectLabel>
+										<SelectLabel>Department</SelectLabel>
 										{department.map((department) => (
-											<SelectItem key={department.department_id} value={department.department_name}>
+											<SelectItem
+												key={department.department_id}
+												value={department.department_name}
+											>
 												{department.department_name}
 											</SelectItem>
 										))}
@@ -163,9 +159,12 @@ export default function ApplicantForm({
 								</SelectTrigger>
 								<SelectContent>
 									<SelectGroup>
-										<SelectLabel>Fruits</SelectLabel>
+										<SelectLabel>Office</SelectLabel>
 										{office.map((office) => (
-											<SelectItem key={office.office_id} value={office.office_name}>
+											<SelectItem
+												key={office.office_id}
+												value={office.office_name}
+											>
 												{office.office_name}
 											</SelectItem>
 										))}

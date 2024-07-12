@@ -11,16 +11,11 @@ import { RoleEnumsType } from "~/lib/schema";
 export default async function layout({ children }: { children: React.ReactNode }) {
 	const { user } = await validateRequest();
 
-	// if (user?.role !== "admin") return redirect("/admin/users/manage-users");
-
 	return (
 		<div className="flex justify-center">
 			<nav className="flex w-[239px] flex-col items-center border-r-2 border-black/30">
 				<p className="py-10 text-lg font-bold">HireHub</p>
 				<ul className="flex flex-col items-center justify-center gap-8 text-sm font-semibold">
-					<Links href="/admin" label="Dashboard">
-						<DashboardSVG />
-					</Links>
 					<Links href="/admin/users/manage-users" label="Users">
 						<ApplicantSVG />
 					</Links>

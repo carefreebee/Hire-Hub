@@ -39,7 +39,7 @@ export class CommentService {
 	}
 
 	async createInitialInterviewComment(formData: FormData) {
-		await this.createComment(formData, "initial_interview")
+		await this.createComment(formData, "initial_interview");
 	}
 
 	async createTeachingDemoComment(formData: FormData) {

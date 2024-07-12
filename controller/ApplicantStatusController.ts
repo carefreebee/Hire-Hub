@@ -12,26 +12,6 @@ export async function UpdateScreeningAndInitialInterviewStatus(formData: FormDat
 	return await applicantFormService.updateStatus(formData);
 }
 
-// export async function UpdateApplicantDateStatus(formData: FormData) {
-// 	const applicantFormService = new ApplicantStatusService();
-// 	return await applicantFormService.udpateScreeningDate(formData);
-// }
-
-// export async function UpdateApplicantScreeningStatus(formData: FormData) {
-// 	const applicantFormService = new ApplicantStatusService();
-// 	return await applicantFormService.updateScreeningStatus(formData);
-// }
-
-// export async function UpdateApplicantInitialInterviewDate(formData: FormData) {
-// 	const applicantFormService = new ApplicantStatusService();
-// 	return await applicantFormService.updateInitialInterviewDate(formData);
-// }
-
-// export async function UpdateApplicantInitialInterviewStatus(formData: FormData) {
-// 	const applicantFormService = new ApplicantStatusService();
-// 	return await applicantFormService.updateIntialInterviewStatus(formData);
-// }
-
 export async function handleHrHeadUpdatesApplicantStatusTeachingDemo(formData: FormData) {
 	const applicantFormService = new ApplicantStatusService();
 	return await applicantFormService.updateApplicantStatusTeachingDemo(formData);
@@ -53,3 +33,23 @@ export async function handleHrHeadUpdatesApplicantStatusRecommendationForHiring(
 	const applicantFormService = new ApplicantStatusService();
 	return await applicantFormService.updateApplicantStatusRecommendationForHiring(formData);
 }
+
+// export async function UpdateApplicantDateStatus(formData: FormData) {
+// 	const applicantFormService = new ApplicantStatusService();
+// 	return await applicantFormService.udpateScreeningDate(formData);
+// }
+
+// export async function UpdateApplicantScreeningStatus(formData: FormData) {
+// 	const applicantFormService = new ApplicantStatusService();
+// 	return await applicantFormService.updateScreeningStatus(formData);
+// }
+
+// export async function UpdateApplicantInitialInterviewDate(formData: FormData) {
+// 	const applicantFormService = new ApplicantStatusService();
+// 	return await applicantFormService.updateInitialInterviewDate(formData);
+// }
+
+// export async function UpdateApplicantInitialInterviewStatus(formData: FormData) {
+// 	const applicantFormService = new ApplicantStatusService();
+// 	return await applicantFormService.updateIntialInterviewStatus(formData);
+// }

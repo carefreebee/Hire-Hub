@@ -6,12 +6,12 @@ export default async function SuccessAddNewRequestPage({ params }: { params: { i
 	const department = await getDepartmentById(Number(params.id));
 
 	return (
-		<>
-			<Previous href="/admin/units/department" text="Units" />
+		<div className="h-screen">
+			<Previous href="/admin/units/department" text="View all Units" />
 			<EditDepartment
 				unitId={String(department?.department_id)}
 				unitName={department?.department_name as string}
 			/>
-		</>
+		</div>
 	);
 }

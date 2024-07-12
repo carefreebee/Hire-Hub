@@ -1,6 +1,7 @@
 import { getUserByID } from "~/controller/UsersController";
-import { GetCommentsById, GetCurrentStage } from "~/lib/fetch";
 import { StageType } from "~/types/types";
+import { GetCurrentStage } from "~/util/get-applicant-by-id";
+import { GetCommentsById } from "~/util/get-comments";
 
 interface ApplicantIDCommentDisplayProps {
 	applicantId: string;
@@ -11,8 +12,10 @@ export default async function ApplicantIDCommentDisplay({
 	applicantId,
 	stage,
 }: ApplicantIDCommentDisplayProps) {
-	const getCurrentStage = await GetCurrentStage(applicantId, stage);
-	const comments = await GetCommentsById((getCurrentStage?.comment_id as number[]) || []);
+	// GETTING THE CURRENT STAGE OF THE APPLICANT eg. initial_interview, screening, etc.
+	const { applicantStage } = await GetCurrentStage(Number(applicantId), stage);
+
+	const comments = await GetCommentsById((applicantStage?.comment_id as number[]) || []);
 
 	if (!comments || comments.length === 0) {
 		return (
@@ -28,7 +31,6 @@ export default async function ApplicantIDCommentDisplay({
 	const evaluators = await Promise.all(evaluatorsPromises);
 
 	const evaluatorMap = new Map(evaluators.map((evaluator) => [evaluator?.id, evaluator]));
-	// console.log(evaluatorMap)
 
 	return (
 		<div className="flex h-[180px] flex-1 flex-col gap-3 overflow-y-auto pb-3">

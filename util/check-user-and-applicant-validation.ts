@@ -11,12 +11,12 @@ export function checkUserAndApplicantIfValid(
 ): checkUserAndApplicantIfValidProps {
 	return {
 		isUserDepartmentAllowed:
-			applicant?.selected_department !== null &&
-			user?.selected_department !== null &&
-			applicant?.selected_department === user?.selected_department,
+			applicant?.department_id !== null &&
+			user?.department_id !== null &&
+			applicant?.department_id === user?.department_id,
 		isUserOfficeAllowed:
-			applicant?.selected_office !== null &&
-			user?.selected_office !== null &&
-			applicant?.selected_office === user?.selected_office,
+			applicant?.office_id !== null &&
+			user?.office_id !== null &&
+			applicant?.office_id === user?.office_id,
 	};
 }

@@ -27,7 +27,15 @@ export default function IDColumn({ id }: { id: number }) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="center" className="rounded-xl">
 				<DropdownMenuItem>
-					<Link href={currentRole === "recruitment_officer" ? RECRUITMENTOFFICERLINK : EVALUATELINK}>View</Link>
+					<Link
+						href={
+							currentRole === "recruitment_officer"
+								? RECRUITMENTOFFICERLINK
+								: EVALUATELINK
+						}
+					>
+						View
+					</Link>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>

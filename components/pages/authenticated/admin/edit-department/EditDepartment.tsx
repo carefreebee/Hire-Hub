@@ -44,7 +44,7 @@ export default function EditDepartment({ unitId, unitName }: EditResultProps) {
 				Department Details
 			</h4>
 
-			<input type="text" name="department_id" value={unitId} readOnly />
+			<input type="hidden" name="department_id" value={unitId} readOnly />
 
 			<div className="mx-auto w-[564px]">
 				<Label className="font-semibold text-[#666666]">Department Name</Label>

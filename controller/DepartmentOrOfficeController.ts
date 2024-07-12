@@ -24,6 +24,11 @@ export async function updateDepartment(formData: FormData) {
 	return await departmentOrOfficeService.updateDepartment(formData);
 }
 
+export async function deleteDepartment(id: number) {
+	const departmentOrOfficeService = new DepartmentOrOfficeService();
+	return await departmentOrOfficeService.deleteDepartment(id);
+}
+
 // END OF DEPARTMENT
 
 // START OF OFFICE
@@ -46,6 +51,11 @@ export async function getOfficeById(id: number) {
 export async function updateOffice(formData: FormData) {
 	const departmentOrOfficeService = new DepartmentOrOfficeService();
 	return await departmentOrOfficeService.updateOffice(formData);
+}
+
+export async function deleteOffice(id: number) {
+	const departmentOrOfficeService = new DepartmentOrOfficeService();
+	return await departmentOrOfficeService.deleteOffice(id);
 }
 
 // END OF OFFICE

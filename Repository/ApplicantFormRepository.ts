@@ -3,6 +3,20 @@ import { db } from "~/lib/db";
 import { ApplicantInsert, applicant, department, office } from "~/lib/schema";
 
 export class ApplicantFormRepository {
+	static async createApplicantForm(applicantFormData: ApplicantInsert) {
+		try {
+			const [createApplicantFormData]: ApplicantInsert[] = await db
+				.insert(applicant)
+				.values(applicantFormData)
+				.returning();
+
+			return createApplicantFormData;
+		} catch (error) {
+			console.error("Database insertion failed:", error);
+			throw new Error("Database insertion failed");
+		}
+	}
+
 	static async getDepartmentId(departmentName: string): Promise<number> {
 		const departmentId = await db.query.department.findFirst({
 			where: eq(department.department_name, departmentName),
@@ -27,19 +41,5 @@ export class ApplicantFormRepository {
 		}
 
 		return officeId.office_id;
-	}
-
-	static async createApplicantForm(applicantFormData: ApplicantInsert) {
-		try {
-			const [createApplicantFormData]: ApplicantInsert[] = await db
-				.insert(applicant)
-				.values(applicantFormData)
-				.returning();
-
-			return createApplicantFormData;
-		} catch (error) {
-			console.error("Database insertion failed:", error);
-			throw new Error("Database insertion failed");
-		}
 	}
 }
