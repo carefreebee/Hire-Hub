@@ -1,4 +1,4 @@
-import { getApplicantFormByID } from "~/controller/ApplicantController";
+import { getApplicantFormByID } from "~/Controller/ApplicantFormController";
 
 export async function getApplicantData(id: number) {
 	const applicant = await getApplicantFormByID(Number(id));

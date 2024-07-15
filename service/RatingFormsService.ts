@@ -1,24 +1,22 @@
-import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { getApplicantFormByID } from "~/controller/ApplicantController";
+import { getApplicantFormByID } from "~/Controller/ApplicantFormController";
 import { DataExtractor } from "~/DataExtractor/RatingForms";
-import { db } from "~/lib/db";
-import { ApplicantSelect, ratingForms } from "~/lib/schema";
+import { ApplicantSelect } from "~/lib/schema";
 import { RatingFormsRepository } from "~/Repository/RatingFormsRepository";
 import { StageType } from "~/types/types";
 
 export class RatingFormsService {
-	async getAllRatingFormsFiles() {
-		return await db.query.ratingForms.findMany();
+	constructor(private ratingFormsRepo: RatingFormsRepository) {}
+
+	public async getAllRatingFormsFilesById(id: number) {
+		return await this.ratingFormsRepo.getAllRatingFormsFilesById(id);
 	}
 
-	async getAllRatingFormsFilesById(id: number) {
-		return await db.query.ratingForms.findMany({
-			where: eq(ratingForms.applicant_id, id),
-		});
+	public async getRatingFormsById(id: number) {
+		return await this.ratingFormsRepo.getRatingFormsById(id);
 	}
 
-	async updateEvaluateApplicantStatus(formData: FormData) {
+	public async updateEvaluateApplicantStatus(formData: FormData) {
 		const updateEvaluateApplicantStatus = DataExtractor.extractRatingFormData(formData);
 
 		const requiredFields = ["passed" || "failed"];
@@ -48,35 +46,35 @@ export class RatingFormsService {
 				this.StageStatus(currentApplicant, "recommendation_for_hiring") !== "passed";
 
 			if (checkIfInitialInterviewIsPassed) {
-				await RatingFormsRepository.updateCurrentApplicantEvaluate(
+				await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
 					currentApplicant,
 					"initial_interview",
 					updateEvaluateApplicantStatus,
 					"teaching_demo"
 				);
 			} else if (checkIfInitialTeachingDemo) {
-				await RatingFormsRepository.updateCurrentApplicantEvaluate(
+				await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
 					currentApplicant,
 					"teaching_demo",
 					updateEvaluateApplicantStatus,
 					"psychological_exam"
 				);
 			} else if (checkIfInitialPsychologicalExam) {
-				await RatingFormsRepository.updateCurrentApplicantEvaluate(
+				await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
 					currentApplicant,
 					"psychological_exam",
 					updateEvaluateApplicantStatus,
 					"panel_interview"
 				);
 			} else if (checkIfInitialPanelInterview) {
-				await RatingFormsRepository.updateCurrentApplicantEvaluate(
+				await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
 					currentApplicant,
 					"panel_interview",
 					updateEvaluateApplicantStatus,
 					"recommendation_for_hiring"
 				);
 			} else if (checkIfInitialRecommendedForHiring) {
-				await RatingFormsRepository.updateCurrentApplicantEvaluate(
+				await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
 					currentApplicant,
 					"recommendation_for_hiring",
 					updateEvaluateApplicantStatus

@@ -2,7 +2,7 @@ import Link from "next/link";
 import ArrowLeft from "~/components/ui/arrow-left";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { getUserByID } from "~/controller/UsersController";
+import { getUserByID } from "~/Controller/UsersController";
 import { formattedName } from "~/util/formatted-name";
 
 function UserIDContainer({ children }: { children: React.ReactNode }) {

@@ -1,7 +1,7 @@
-import { getUserByID } from "~/controller/UsersController";
+import { getUserByID } from "~/Controller/UsersController";
 import { StageType } from "~/types/types";
-import { GetCurrentStage } from "~/util/get-applicant-by-id";
 import { GetCommentsById } from "~/util/get-comments";
+import { GetCurrentStage } from "~/util/get-current-stage";
 
 interface ApplicantIDCommentDisplayProps {
 	applicantId: string;

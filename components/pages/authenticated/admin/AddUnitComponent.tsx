@@ -8,7 +8,8 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { toast } from "~/components/ui/use-toast";
-import { createDepartment, createOffice } from "~/controller/DepartmentOrOfficeController";
+import { createDepartment } from "~/Controller/DepartmentController";
+import { createOffice } from "~/Controller/OfficeController";
 import { CheckPathname } from "~/util/path";
 
 type DepartmentFormProps = {

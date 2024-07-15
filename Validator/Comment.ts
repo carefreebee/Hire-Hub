@@ -1,9 +1,14 @@
-import { Comment, commentSchema } from "~/lib/zod";
+import { z } from "zod";
 
 export class Validator {
-	static validateComment(comment: Comment) {
+	static validateComment(comment: CommentType) {
 		const validationResult = commentSchema.safeParse(comment);
-		console.log(validationResult);
 		return validationResult;
 	}
 }
+
+export const commentSchema = z.object({
+	comment: z.string().min(5, { message: "Comment must have 5 or more characters" }),
+});
+
+export type CommentType = z.infer<typeof commentSchema>;

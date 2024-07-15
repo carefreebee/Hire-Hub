@@ -13,7 +13,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { toast } from "~/components/ui/use-toast";
 import { FullTimeType, PartTimeType, SelectedPartTimeType } from "~/constant/constant";
-import { handleDeleteJobRequest } from "~/controller/JobRequestController";
+import { handleDeleteJobRequest } from "~/Controller/JobRequestController";
 import { formatDate } from "~/lib/date-time";
 import { JobRequestSelect } from "~/lib/schema";
 

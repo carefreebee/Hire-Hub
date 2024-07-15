@@ -4,17 +4,19 @@ import { applicant, ApplicantSelect, ratingForms } from "~/lib/schema";
 import { StageType } from "~/types/types";
 
 export class RatingFormsRepository {
-	// static async updateRatingForm(
-	// 	updateEvaluateApplicantStatus: UpdateEvaluateApplicantStatusModel
-	// ) {
-	// 	return await db
-	// 		.update(ratingForms)
-	// 		.set({ recruitment_stage: updateEvaluateApplicantStatus.recruitment_stage })
-	// 		.where(eq(ratingForms.applicant_id, updateEvaluateApplicantStatus.applicantId))
-	// 		.returning();
-	// }
+	public async getAllRatingFormsFilesById(id: number) {
+		return await db.query.ratingForms.findMany({
+			where: eq(ratingForms.applicant_id, id),
+		});
+	}
 
-	static async updateCurrentApplicantEvaluate(
+	public async getRatingFormsById(id: number) {
+		return await db.query.ratingForms.findMany({
+			where: eq(ratingForms.rating_id, id),
+		});
+	}
+
+	public async updateCurrentApplicantEvaluate(
 		currentApplicant: ApplicantSelect,
 		stagePassed: StageType,
 		updateEvaluateApplicantStatus: UpdateEvaluateApplicantStatusModel,

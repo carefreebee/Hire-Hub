@@ -1,86 +1,89 @@
-import { and, eq, isNotNull, ne } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/UserRole";
-import { ApplicantFormRepository } from "~/Repository/ApplicantFormRepository";
-import { Validator } from "~/Validator/Users";
-import { db } from "~/lib/db";
-import { RoleEnumsType, users } from "~/lib/schema";
-import { Users } from "~/lib/zod";
+import { DepartmentRepository } from "~/Repository/DepartmentRepository";
+import { OfficeRepository } from "~/Repository/OfficeRepository";
+import { UserRepository } from "~/Repository/UsersRepository";
+import { Users, Validator } from "~/Validator/Users";
+import { RoleEnumsType } from "~/lib/schema";
 import { rolesWithoutDeptAndOffice } from "~/types/types";
 
 export class UsersService {
-	// HELPER FUNCTION
-	private queryUser() {
-		return db.query.users;
-	}
+	constructor(
+		private readonly userRepo: UserRepository,
+		private readonly departmentRepo: DepartmentRepository,
+		private readonly officeRepo: OfficeRepository
+	) {}
 
-	async getUsersByUserID(id: string) {
+	public async getUsersByUserID(id: string) {
 		try {
-			const result = await this.queryUser().findMany({ where: eq(users.id, id) });
-			return result;
+			return await this.userRepo.getUsersByUserID(id);
 		} catch (error) {
-			console.error("Error in getUsersByUserID:", error);
-			throw new Error("Error in getUsersByUserID");
+			console.error("Error during fetching User by ID:", error);
+			throw new Error("Error during fetching User by ID");
 		}
 	}
 
-	async getUserById(id: string) {
+	public async getUserById(id: string) {
 		try {
-			return await this.queryUser().findFirst({
-				where: eq(users.id, id),
-			});
+			return await this.userRepo.getUserById(id);
 		} catch (error) {
 			console.error("Error in getUsersByUserID:", error);
 			throw new Error("Error in getUserById");
 		}
 	}
 
-	async getUsersByUserRole() {
+	public async getUsersByUserRole() {
 		try {
-			return await this.queryUser().findMany({ where: eq(users.role, "user") });
+			return await this.userRepo.getUsersByUserRole();
 		} catch (error) {
 			console.error("Error in getUsersByUserID:", error);
 			throw new Error("Error in getUsersByUserRole");
 		}
 	}
 
-	async getUsersWithoutUserRoles() {
+	public async getUsersWithoutUserRoles() {
 		try {
-			return await this.queryUser().findMany({
-				where: and(ne(users.role, "user"), ne(users.role, "admin")),
-			});
+			return await this.userRepo.getUsersWithoutUserRoles();
 		} catch (error) {
 			console.error("Error in getUsersByUserID:", error);
 			throw new Error("Error in getUsersWithoutUserRoles");
 		}
 	}
 
-	async getUsersWithDepartment() {
+	public async getUsersWithDepartment() {
 		try {
-			return await db.query.users.findMany({ where: isNotNull(users.department_id) });
+			return await this.userRepo.getUsersWithDepartment();
 		} catch (error) {
 			console.error("Error in getUsersWithDepartment:", error);
 			throw new Error("Error in getUsersWithDepartment");
 		}
 	}
 
-	async getUsersWithOffice() {
+	public async getUsersWithOffice() {
 		try {
-			return await db.query.users.findMany({ where: isNotNull(users.office_id) });
+			return await this.userRepo.getUsersWithOffice();
 		} catch (error) {
 			console.error("Error in getUsersWithOffice:", error);
 			throw new Error("Error in getUsersWithOffice");
 		}
 	}
 
-	async updateUserRole(formData: FormData) {
+	public async updateUserRole(formData: FormData) {
 		const userRoleData = DataExtractor.extractUserRole(formData);
 		const id = formData.get("id") as string;
 
-		if (rolesWithoutDeptAndOffice.includes(userRoleData.selected_position as RoleEnumsType)) {
-			return await db
-				.update(users)
-				.set({ role: userRoleData.selected_position as RoleEnumsType })
-				.where(eq(users.id, id));
+		if (userRoleData.selected_position === "user") {
+			return await this.userRepo.updateUserRoleToUser(
+				userRoleData.selected_position as RoleEnumsType,
+				id
+			);
+		} else if (
+			rolesWithoutDeptAndOffice.includes(userRoleData.selected_position as RoleEnumsType)
+		) {
+			return await this.userRepo.usersWithoutDeptAndOffice(
+				userRoleData.selected_position as RoleEnumsType,
+				id
+			);
 		}
 
 		const validatedData = this.validateUsersData(userRoleData);
@@ -92,25 +95,16 @@ export class UsersService {
 		let officeId: number | null = null;
 
 		if (teachingStaff && userRoleData.selected_department) {
-			departmentId = await ApplicantFormRepository.getDepartmentId(
+			departmentId = await this.departmentRepo.GetDepartmentIdByName(
 				userRoleData.selected_department
 			);
 		} else if (nonTeachingStaff && userRoleData.selected_office) {
-			officeId = await ApplicantFormRepository.getOfficeId(userRoleData.selected_office);
+			officeId = await this.officeRepo.GetOfficeIdByName(userRoleData.selected_office);
 		}
 
 		try {
-			const udpateUserRole = await db
-				.update(users)
-				.set({
-					...validatedData.data,
-					role: validatedData.data.selected_position as RoleEnumsType,
-					department_id: departmentId,
-					office_id: officeId,
-				})
-				.where(eq(users.id, id));
-
-			console.log("User role updated successfully:", udpateUserRole);
+			await this.userRepo.updateUserRole(validatedData.data, departmentId, officeId, id);
+			revalidatePath("/admin/users/manage-users");
 		} catch (error) {
 			console.error("Database insertion failed:", error);
 			throw new Error("Database insertion failed");

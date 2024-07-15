@@ -1,4 +1,4 @@
-import { getUsersWithoutUserRoles } from "~/controller/UsersController";
+import { getUsersWithoutUserRoles } from "~/Controller/UsersController";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 

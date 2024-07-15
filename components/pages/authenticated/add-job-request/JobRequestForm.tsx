@@ -16,7 +16,7 @@ import {
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
-import { handleSubmitJobRequest } from "~/controller/JobRequestController";
+import { handleSubmitJobRequest } from "~/Controller/JobRequestController";
 import { SelectTagProps } from "~/types/types";
 
 type JobRequestFormProps = {
@@ -37,6 +37,9 @@ export default function JobRequestForm({
 	async function handleSubmit(): Promise<void> {
 		const formData = new FormData(formRef.current!);
 		try {
+			// NEED UPDATE: MAKE SURE TO CHANGE THE CATEGORY INSTEAD OF DROPDOWN,
+			// MAKE IT STATIC BASED ON WHAT THE USER IS CURRENTLY AT,
+			// WHETHER THE USER IS AT THE DEPARTMENT/OFFICE.
 			await handleSubmitJobRequest(formData);
 			// Reset the form after successful submission
 			if (formRef.current) {

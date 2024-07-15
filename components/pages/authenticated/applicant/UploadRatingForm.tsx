@@ -5,10 +5,7 @@ import { UploadDropzone } from "~/util/uploadthing";
 import { useUploadDropZone } from "~/util/zustand";
 
 export default function UploadRatingForm() {
-	const { file, setFile } = useUploadDropZone((state) => ({
-		file: state.file,
-		setFile: state.setFile,
-	}));
+	const setFile = useUploadDropZone((state) => state.setFile);
 
 	return (
 		<>

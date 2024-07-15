@@ -1,6 +1,6 @@
 import EditJobrequestForm from "~/components/pages/authenticated/edit-job-request/EditJobRequestForm";
 import Previous from "~/components/pages/Previous";
-import { getAllJobRequestByID } from "~/controller/JobRequestController";
+import { getAllJobRequestByID } from "~/Controller/JobRequestController";
 import { JobRequestSelect } from "~/lib/schema";
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { id: string } }) {

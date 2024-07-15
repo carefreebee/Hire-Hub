@@ -11,11 +11,11 @@ import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { toast } from "~/components/ui/use-toast";
 import {
-	handleHrHeadUpdatesApplicantStatusPanelInterview,
-	handleHrHeadUpdatesApplicantStatusPsychologicalExam,
-	handleHrHeadUpdatesApplicantStatusRecommendationForHiring,
-	handleHrHeadUpdatesApplicantStatusTeachingDemo,
-} from "~/controller/ApplicantStatusController";
+	UpdatePanelInterview,
+	UpdatePsychologicalExam,
+	UpdateRecommendationForHiring,
+	UpdateTeachingDemo,
+} from "~/Controller/ApplicantStatusController";
 import { formattedDateTime } from "~/lib/date-time";
 import { CheckPathname } from "~/util/path";
 import { useSelectedAssessedBy, useSelectedDateAndTime, useSelectedMode } from "~/util/zustand";
@@ -24,7 +24,7 @@ type ApplicantIDFooterProps = {
 	id: number;
 };
 
-export default function ApplicantIDUpdateInitialInterviewFooter({ id }: ApplicantIDFooterProps) {
+export default function AddEvaluators({ id }: ApplicantIDFooterProps) {
 	const assessedBy = useSelectedAssessedBy((state) => state.assessedBy);
 	const selectedAssessedBy = Array.isArray(assessedBy)
 		? assessedBy.map((user) => user.id).join(", ")
@@ -57,25 +57,30 @@ export default function ApplicantIDUpdateInitialInterviewFooter({ id }: Applican
 	const lastSegment = CheckPathname(pathname);
 
 	async function handleSubmit() {
-		const formData = new FormData(formRef.current!);
-		try {
-			if (lastSegment === "teaching-demo") {
-				await handleHrHeadUpdatesApplicantStatusTeachingDemo(formData);
-			} else if (lastSegment === "psychological-exam") {
-				await handleHrHeadUpdatesApplicantStatusPsychologicalExam(formData);
-			} else if (lastSegment === "panel-interview") {
-				await handleHrHeadUpdatesApplicantStatusPanelInterview(formData);
-			} else if (lastSegment === "recommendation-for-hiring") {
-				await handleHrHeadUpdatesApplicantStatusRecommendationForHiring(formData);
-			}
-
+		if (!dateTime) {
 			toast({
-				title: "Applicant Status Updated",
-				description: "Applicant status has been updated successfully",
+				variant: "destructive",
+				title: "Error Updating Applicant Status!",
+				description: "Please add date and time to update the status.",
 			});
-		} catch (error) {
-			console.error("Error submitting form:", error);
+			return;
 		}
+
+		const formData = new FormData(formRef.current!);
+		if (lastSegment === "teaching-demo") {
+			await UpdateTeachingDemo(formData);
+		} else if (lastSegment === "psychological-exam") {
+			await UpdatePsychologicalExam(formData);
+		} else if (lastSegment === "panel-interview") {
+			await UpdatePanelInterview(formData);
+		} else if (lastSegment === "recommendation-for-hiring") {
+			await UpdateRecommendationForHiring(formData);
+		}
+
+		toast({
+			title: "Applicant Status Updated!",
+			description: "Applicant status has been updated successfully.",
+		});
 	}
 
 	return (

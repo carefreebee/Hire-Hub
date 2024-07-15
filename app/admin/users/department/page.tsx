@@ -1,5 +1,5 @@
 import TypographyH4 from "~/components/ui/typography-h4";
-import { getUsersWithDepartment } from "~/controller/UsersController";
+import { getUsersWithDepartment } from "~/Controller/UsersController";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 

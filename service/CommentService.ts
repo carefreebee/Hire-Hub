@@ -1,17 +1,18 @@
 import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/Comment";
-import { Comment } from "~/lib/zod";
 import { CommentRepository } from "~/Repository/CommentRepository";
 import { StageType } from "~/types/types";
-import { Validator } from "~/Validator/Comment";
+import { CommentType, Validator } from "~/Validator/Comment";
 
 export class CommentService {
-	async createScreeningComment(formData: FormData) {
+	constructor(private readonly commentRepo: CommentRepository) {}
+
+	public async createScreeningComment(formData: FormData) {
 		const comment = DataExtractor.extractApplicantScreeningComment(formData);
 		this.validateComment(comment);
 
 		try {
-			await CommentRepository.updateApplicantScreeningComment(comment.applicant_id, comment);
+			await this.commentRepo.updateApplicantScreeningComment(comment.applicant_id, comment);
 
 			revalidatePath(`/dashboard/applicant/${comment.applicant_id}`);
 		} catch (error) {
@@ -20,12 +21,32 @@ export class CommentService {
 		}
 	}
 
-	async createComment(formData: FormData, commentType: StageType) {
+	public async createInitialInterviewComment(formData: FormData) {
+		await this.createComment(formData, "initial_interview");
+	}
+
+	public async createTeachingDemoComment(formData: FormData) {
+		await this.createComment(formData, "teaching_demo");
+	}
+
+	public async createPsychologicalExamComment(formData: FormData) {
+		await this.createComment(formData, "psychological_exam");
+	}
+
+	public async createPanelInterviewComment(formData: FormData) {
+		await this.createComment(formData, "panel_interview");
+	}
+
+	public async createRecommendationForHiringComment(formData: FormData) {
+		await this.createComment(formData, "recommendation_for_hiring");
+	}
+
+	private async createComment(formData: FormData, commentType: StageType) {
 		const comment = DataExtractor.extractApplicantScreeningComment(formData);
 		this.validateComment(comment);
 
 		try {
-			await CommentRepository.updateApplicantComment(
+			await this.commentRepo.updateApplicantComment(
 				comment.applicant_id,
 				comment,
 				commentType
@@ -38,27 +59,7 @@ export class CommentService {
 		}
 	}
 
-	async createInitialInterviewComment(formData: FormData) {
-		await this.createComment(formData, "initial_interview");
-	}
-
-	async createTeachingDemoComment(formData: FormData) {
-		await this.createComment(formData, "teaching_demo");
-	}
-
-	async createPsychologicalExamComment(formData: FormData) {
-		await this.createComment(formData, "psychological_exam");
-	}
-
-	async createPanelInterviewComment(formData: FormData) {
-		await this.createComment(formData, "panel_interview");
-	}
-
-	async createRecommendationForHiringComment(formData: FormData) {
-		await this.createComment(formData, "recommendation_for_hiring");
-	}
-
-	private validateComment(comment: Comment): void {
+	private validateComment(comment: CommentType): void {
 		const validateData = Validator.validateComment(comment);
 		if (!validateData.success) {
 			console.error("Validation failed:", validateData.error);

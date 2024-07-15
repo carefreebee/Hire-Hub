@@ -5,7 +5,7 @@ import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { toast } from "~/components/ui/use-toast";
-import { handleUpdateEvaluateApplicantStatus } from "~/controller/RatingFormsController";
+import { handleUpdateEvaluateApplicantStatus } from "~/Controller/RatingFormsController";
 import { useSelectPassedOrFailed } from "~/util/zustand";
 
 export default function SubmitEvaluateButton({ id }: { id: string }) {

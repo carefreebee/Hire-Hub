@@ -8,26 +8,26 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
 import {
-	updateInitialInterviewForm,
-	updatePanelInterview,
-	updatePsychologicalExam,
-	updateRecommendationForHiring,
-	updateTeachingDemoForm,
-} from "~/controller/DeptOrOfficeUpdatesApplicantStatusController";
+	UpdateInitalInterview,
+	UpdatePanelInterview,
+	UpdatePsychologicalExam,
+	UpdateRecommendationForHiring,
+	UpdateTeachingDemo,
+} from "~/Controller/StagesFormController";
 import { CheckPathname } from "~/util/path";
 import { useUploadDropZone } from "~/util/zustand";
 
-type SubmitInitialInterviewFormProps = {
+type SubmitStagesFormProps = {
 	id: string;
 	evaluatorsId: string;
 	recruitment_stage: string;
 };
 
-export default function SubmitInitialInterviewForm({
+export default function SubmitStagesForm({
 	id,
 	evaluatorsId,
 	recruitment_stage,
-}: SubmitInitialInterviewFormProps) {
+}: SubmitStagesFormProps) {
 	const file = useUploadDropZone((state) => state.file);
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -38,15 +38,15 @@ export default function SubmitInitialInterviewForm({
 		const formData = new FormData(formRef.current!);
 		try {
 			if (lastSegment === "initial-interview") {
-				await updateInitialInterviewForm(formData);
+				await UpdateInitalInterview(formData);
 			} else if (lastSegment === "teaching-demo") {
-				await updateTeachingDemoForm(formData);
+				await UpdateTeachingDemo(formData);
 			} else if (lastSegment === "psychological-exam") {
-				await updatePsychologicalExam(formData);
+				await UpdatePsychologicalExam(formData);
 			} else if (lastSegment === "panel-interview") {
-				await updatePanelInterview(formData);
+				await UpdatePanelInterview(formData);
 			} else if (lastSegment === "recommendation-for-hiring") {
-				await updateRecommendationForHiring(formData);
+				await UpdateRecommendationForHiring(formData);
 			}
 			// Reset the form after successful submission
 			if (formRef.current) {
@@ -57,7 +57,10 @@ export default function SubmitInitialInterviewForm({
 				description: "Rating Form Submitted Successfully.",
 			});
 		} catch (error) {
-			console.error("Error submitting form:", error);
+			toast({
+				title: "Update Error!",
+				description: "Please don't forget to add the rating form.",
+			});
 		}
 	}
 

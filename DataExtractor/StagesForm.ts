@@ -1,5 +1,5 @@
 export class DataExtractor {
-	static extractApplicantInitialInterviewForm(formData: FormData) {
+	static extractApplicantStagesForm(formData: FormData) {
 		return {
 			applicant_id: Number(formData.get("applicant_id")),
 			user_id: formData.get("user_id") as string,

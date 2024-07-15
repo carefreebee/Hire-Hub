@@ -8,13 +8,13 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
 import {
-	handleSubmitInitialInterviewComment,
-	handleSubmitPanelInterviewComment,
-	handleSubmitPsychologicalExamComment,
-	handleSubmitRecommendationForHiringComment,
-	handleSubmitScreeningComment,
-	handleSubmitTeachingDemo,
-} from "~/controller/CommentController";
+	CreateInitialInterviewComment,
+	CreatePanelInterviewComment,
+	CreatePsychologicalExamComment,
+	CreateRecommendationForHiringComment,
+	CreateScreeningComment,
+	CreateTeachingDemoComment,
+} from "~/Controller/CommentController";
 import { CheckPathname } from "~/util/path";
 
 type CommentFormProps = {
@@ -31,17 +31,17 @@ export default function CommentForm({ applicantId, evaluatorsId }: CommentFormPr
 		const formData = new FormData(formRef.current!);
 		try {
 			if (lastSegment === "screening") {
-				await handleSubmitScreeningComment(formData);
+				await CreateScreeningComment(formData);
 			} else if (lastSegment === "initial-interview") {
-				await handleSubmitInitialInterviewComment(formData);
+				await CreateInitialInterviewComment(formData);
 			} else if (lastSegment === "teaching-demo") {
-				await handleSubmitTeachingDemo(formData);
+				await CreateTeachingDemoComment(formData);
 			} else if (lastSegment === "psychological-exam") {
-				await handleSubmitPsychologicalExamComment(formData);
+				await CreatePsychologicalExamComment(formData);
 			} else if (lastSegment === "panel-interview") {
-				await handleSubmitPanelInterviewComment(formData);
+				await CreatePanelInterviewComment(formData);
 			} else if (lastSegment === "recommendation-for-hiring") {
-				await handleSubmitRecommendationForHiringComment(formData);
+				await CreateRecommendationForHiringComment(formData);
 			}
 			// Reset the form after successful submission
 			if (formRef.current) {

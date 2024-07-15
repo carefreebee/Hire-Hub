@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import CommentsAndDocuments from "~/components/pages/applicant/CommentsAndDocuments";
+import Link from "next/link";
 import {
 	Card,
 	CardContent,
@@ -9,16 +9,18 @@ import {
 	CardTitle,
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/ApplicantIDCard";
+import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CommentsAndDocuments";
 import DownloadForm from "~/components/pages/authenticated/applicant/DownloadForm";
-import SubmitInitialInterviewForm from "~/components/pages/authenticated/applicant/initial-interview/SubmitInitialInterviewForm";
-import ApplicantIDUpdateDateFooter from "~/components/pages/authenticated/applicant/screening/ApplicantIDUpdateDateFooter";
-import ApplicantIDUpdateStatusFooter from "~/components/pages/authenticated/applicant/screening/ApplicantIDUpdateStatusFooter";
+import UpdateStatus from "~/components/pages/authenticated/applicant/UdpateStatus";
+import SubmitStagesForm from "~/components/pages/authenticated/applicant/SubmitStagesForm";
+import UpdateDate from "~/components/pages/authenticated/applicant/UdpateDate";
 import UploadRatingForm from "~/components/pages/authenticated/applicant/UploadRatingForm";
+import { Button } from "~/components/ui/button";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
-import { getAllRatingFormsFilesById } from "~/controller/RatingFormsController";
+import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
 import { validateRequest } from "~/lib/auth";
-import { GetCurrentStage } from "~/util/get-applicant-by-id";
+import { GetCurrentStage } from "~/util/get-current-stage";
 
 const ApplicantIDDisplayDateNoSSR = dynamic(
 	() =>
@@ -30,30 +32,26 @@ const ApplicantIDDisplayDateNoSSR = dynamic(
 	}
 );
 
+const currentStageName = "Initial Interview";
+
 export default async function InitialInterviewPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
-	// LOCATING THE CURRENT STAGE WHICH IS THE INITIAL INTERVIEW STAGE
+	// GETTING THE APPLICANT BY ID
+	// GETTING THE CURRENT STAGE OF THE APPLICANT eg. initial_interview, screening, etc.
 	const { applicant, applicantStage } = await GetCurrentStage(
 		Number(params.id),
 		"initial_interview"
 	);
-	console.log(applicantStage);
-	// IF MATCHING THE CURRENT STAGE, IT WILL RETURN THE UPDATED STAGE NAME
-	// before -> initial_interview, after -> Initial Interview
-	const currentStageName = "Initial Interview";
-	// const isApplicantInProgress = applicantStage?.status === "in-progress";
-	const isRecruitmentOfficer = user?.role === "recruitment_officer";
-	// const isStatusPassed = applicantStage?.status === "passed";
 
-	// const getUserWhoAssessed = await getUsersByUserID(applicantStage?.assessed_by?.[0] ?? "");
-	// const assessedBy = getUserWhoAssessed?.find((user) => ({
-	// 	name: user.name,
-	// 	role: user.role,
-	// }));
+	const isRecruitmentOfficer = user?.role === "recruitment_officer";
 
 	const ratingForm = await getAllRatingFormsFilesById(Number(params.id));
 	const isRatingFormSubmitted = ratingForm?.length > 0;
-	console.log(isRatingFormSubmitted);
+
+	const documentIds = (applicantStage?.rating_forms_id as number[]) || [];
+	const documentPromises = documentIds.map((id) => getRatingFormsById(id));
+	const documentResults = await Promise.all(documentPromises);
+	const document = documentResults.flat();
 
 	return (
 		<>
@@ -90,12 +88,12 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 						</CardContent>
 						<CardFooter>
 							{!applicantStage?.date && isRecruitmentOfficer ? (
-								<ApplicantIDUpdateDateFooter
+								<UpdateDate
 									id={applicant?.id as number}
 									date={applicantStage?.date as Date}
 								/>
 							) : applicantStage?.status !== "passed" && isRecruitmentOfficer ? (
-								<ApplicantIDUpdateStatusFooter
+								<UpdateStatus
 									id={applicant?.id as number}
 									assessorId={user?.id as string}
 								/>
@@ -111,7 +109,7 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 							<UploadRatingForm />
 						</CardContent>
 						<CardFooter className="justify-end px-5 py-4">
-							<SubmitInitialInterviewForm
+							<SubmitStagesForm
 								id={params.id}
 								evaluatorsId={user?.id as string}
 								recruitment_stage={currentStageName as string}
@@ -134,137 +132,35 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 					</CardContent>
 				)}
 			</Card>
+
 			<CommentsAndDocuments
 				stage="initial_interview"
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}
-			/>
+				resume={applicant?.resume as string}
+			>
+				<Button
+					variant={"outline"}
+					asChild
+					className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
+				>
+					<Link href={applicant?.resume as string} target="_blank">
+						Resume
+					</Link>
+				</Button>
+				{document.map((doc) => (
+					<Button
+						key={doc.rating_id}
+						variant={"outline"}
+						asChild
+						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
+					>
+						<Link href={doc?.rate as string} target="_blank">
+							{doc.recruitment_stage}
+						</Link>
+					</Button>
+				))}
+			</CommentsAndDocuments>
 		</>
 	);
 }
-
-// return (
-// 	<>
-// 		<Card>
-// 			<CardHeader>
-// 				<CardTitle>{currentStageName}</CardTitle>
-// 			</CardHeader>
-// 			<CardContent>
-// 				<CardSubContent>
-// 					<CardTopLeftSubContent>
-// 						<TypographySmall size={"md"}>{currentStageName}</TypographySmall>
-// 						{isApplicantInProgress && isRecruitmentOfficer ? (
-// 							<SelectMode />
-// 						) : (
-// 							<Button
-// 								variant={"outline"}
-// 								disabled
-// 								className={`${isStatusPassed ? "text-[#039E38]" : "text-black"}`}
-// 							>
-// 								{formattedApplicantStatus(applicantStage?.status as string)}
-// 							</Button>
-// 						)}
-// 					</CardTopLeftSubContent>
-// 					<ApplicantIDDisplayDateNoSSR date={applicantStage?.date as Date} />
-// 				</CardSubContent>
-// 				<CardSubContent>
-// 					<AssessedBy
-// 						status={applicantStage?.status as "passed" | "failed"}
-// 						assessedBy={applicantStage?.assessed_by as RoleEnumsType[]}
-// 					/>
-// 				</CardSubContent>
-// 			</CardContent>
-// 			<CardFooter>
-// 				{isApplicantInProgress && isRecruitmentOfficer ? (
-// 					<ApplicantIDUpdateInitialInterviewFooter id={applicant?.id as number} />
-// 				) : (
-// 					<div className="h-[40px]"></div>
-// 				)}
-// 			</CardFooter>
-// 		</Card>
-// 		<CommentsAndDocuments
-// 			stage="initial_interview"
-// 			applicantId={params.id as string}
-// 			evaluatorsId={user?.id as string}
-// 		/>
-// 	</>
-// );
-
-// // CHECK IF THE BOTH USER AND APPLICANT HAS THE SAME VALUES WHETHER IT IS DEPARTMENT OR OFFICE
-// const { isUserDepartmentAllowed, isUserOfficeAllowed } = checkUserAndApplicantIfValid(
-// 	applicant,
-// 	user as User
-// );
-// // CHECK IF THE USER IS ALLOWED TO ASSESSED THE APPLICANT WHETHER IT IS DEPARTMENT OR OFFICE
-// const checkIfUserIsAllowedToAssessed = isUserDepartmentAllowed || isUserOfficeAllowed;
-// // THESE ARE THE USER's WHO CAN ASSESS TO THE APPLICANT
-// const assessedByUsers = applicantStage?.assessed_by?.includes(user?.role as RoleEnumsType);
-
-// // console.log(assessedByUsers);
-// console.log(isUserDepartmentAllowed);
-
-// return (
-// 	<>
-// 		<Card>
-// 			<CardHeader>
-// 				<CardTitle className="flex justify-between">
-// 					<p>{currentStageName}</p>
-// 					<DownloadForm
-// 						file={"/files/initial-interview-rating-form.xlsx"}
-// 						downloadText="Intial Interview Rating Form"
-// 					>
-// 						Download Inital Interview Rating Form
-// 					</DownloadForm>
-// 				</CardTitle>
-// 			</CardHeader>
-// 			{/* CHECKS IF THE USER's DEPARTMENT/OFFICE MATCHES THE APPLICANT's SELECTED_DEPARTMENT/SELECTED_OFFICE */}
-// 			{applicantStage?.status === "passed" ? (
-// 				<CardContent className="mt-0 h-52 flex-col items-center justify-center">
-// 					<p className="text-xl font-medium">Success!</p>
-// 					<div className="mt-2 flex flex-col items-center">
-// 						<small className="text-[#4F4F4F]">
-// 							Rating form has been submitted successfully, check
-// 						</small>
-// 						<small className="text-[#4F4F4F]">your documents to view file.</small>
-// 					</div>
-// 				</CardContent>
-// 			) : applicantStage?.status === "in-progress" &&
-// 			  !applicantStage.assessed_by?.length ? (
-// 				<CardContent className="mt-0 flex-col items-center justify-center gap-2">
-// 					<p className="text-xl font-medium">Waiting...!</p>
-// 					<small className="text-[#4F4F4F]">
-// 						Wating for HR Head to set the assessor.
-// 					</small>
-// 				</CardContent>
-// 			) : assessedByUsers && checkIfUserIsAllowedToAssessed ? (
-// 				<CardContent className="mt-0 flex h-auto flex-col p-5">
-// 					<InformationSVG />
-// 					<UploadRatingForm />
-// 				</CardContent>
-// 			) : (
-// 				<CardContent className="mt-0 items-center justify-center">
-// 					Not authorized to assess.
-// 				</CardContent>
-// 			)}
-// 			{applicantStage?.status === "in-progress" && (
-// 				<CardFooter className="p-5">
-// 					{/* SHOWS WHAT DEPARTMENT/OFFICE TYPE THE ASSESSOR IS */}
-// 					<Assessor assessed_by={applicantStage?.assessed_by as RoleEnumsType[]} />
-// 					{/* BELOW IS WHERE THE FORM IS LOCATED SO THAT THE APPLICANT STATUS WILL BE UPDATED */}
-// 					{assessedByUsers && checkIfUserIsAllowedToAssessed && (
-// 						<SubmitInitialInterviewForm
-// 							id={params.id}
-// 							evaluatorsId={user?.id as string}
-// 							recruitment_stage={currentStageName as string}
-// 						/>
-// 					)}
-// 				</CardFooter>
-// 			)}
-// 		</Card>
-// 		<CommentsAndDocuments
-// 			stage="initial_interview"
-// 			applicantId={params.id as string}
-// 			evaluatorsId={user?.id as string}
-// 		/>
-// 	</>
-// );

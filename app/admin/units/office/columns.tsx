@@ -12,8 +12,7 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { toast } from "~/components/ui/use-toast";
-import { deleteOffice } from "~/controller/DepartmentOrOfficeController";
-import { handleDeleteJobRequest } from "~/controller/JobRequestController";
+import { deleteOffice } from "~/Controller/OfficeController";
 import { OfficeSelect } from "~/lib/schema";
 
 export const columns: ColumnDef<OfficeSelect>[] = [
@@ -91,8 +90,7 @@ export const columns: ColumnDef<OfficeSelect>[] = [
 										await deleteOffice(Number(id));
 										toast({
 											title: "Deleted Office",
-											description:
-												"Office has been deleted successfully",
+											description: "Office has been deleted successfully",
 										});
 									}}
 									variant={"ghost"}

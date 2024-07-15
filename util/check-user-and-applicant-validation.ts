@@ -6,8 +6,8 @@ type checkUserAndApplicantIfValidProps = {
 };
 
 export function checkUserAndApplicantIfValid(
-	applicant?: ApplicantSelect,
-	user?: User
+	applicant: ApplicantSelect,
+	user: User
 ): checkUserAndApplicantIfValidProps {
 	return {
 		isUserDepartmentAllowed:

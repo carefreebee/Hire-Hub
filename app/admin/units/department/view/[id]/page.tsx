@@ -1,5 +1,5 @@
 import ViewResult from "~/components/pages/authenticated/admin/ViewResult";
-import { getDepartmentById } from "~/controller/DepartmentOrOfficeController";
+import { getDepartmentById } from "~/Controller/DepartmentController";
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { id: string } }) {
 	const department = await getDepartmentById(Number(params.id));

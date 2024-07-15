@@ -1,4 +1,4 @@
-import { getUsersWithoutUserRoles } from "~/controller/UsersController";
+import { getUsersWithoutUserRoles } from "~/Controller/UsersController";
 
 // USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 export async function DisplayAssessedBy() {

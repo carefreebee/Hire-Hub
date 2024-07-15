@@ -1,17 +1,38 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/JobRequest";
-import { Validator } from "~/Validator/JobRequest";
+import { JobRequestRepository } from "~/Repository/JobRequestRepository";
+import { EditJobRequest, JobRequest, Validator } from "~/Validator/JobRequest";
 import { db } from "~/lib/db";
 import { jobRequest } from "~/lib/schema";
-import { EditJobRequest, JobRequest } from "~/lib/zod";
 
 export class JobRequestService {
-	async create(formData: FormData) {
-		// Extract and structure data from formData
+	constructor(private readonly jobRequestRepo: JobRequestRepository) {}
+
+	public async getAllJobRequest() {
+		try {
+			return await this.jobRequestRepo.getAllJobRequest();
+		} catch (error) {
+			console.error("Fetching all job requests failed:", error);
+			throw new Error("Fetching all job requests failed");
+		}
+	}
+
+	public async getAllJobRequestByID(id: number) {
+		try {
+			return await this.jobRequestRepo.getAllJobRequestByID(id);
+		} catch (error) {
+			console.error(`Fetching job request with ID ${id} failed:`, error);
+			throw new Error(`Fetching job request with ID ${id} failed`);
+		}
+	}
+
+	// NEED UPDATE: MAKE SURE TO CHANGE THE CATEGORY INSTEAD OF DROPDOWN,
+	// MAKE IT STATIC BASED ON WHAT THE USER IS CURRENTLY AT,
+	// WHETHER THE USER IS AT THE DEPARTMENT/OFFICE.
+	public async create(formData: FormData) {
 		const jobRequestData: JobRequest = DataExtractor.extractJobRequestData(formData);
 
-		// Validate the structured data
 		const validatedData = Validator.validateJobRequestData(jobRequestData);
 
 		if (!validatedData.success) {
@@ -19,20 +40,17 @@ export class JobRequestService {
 			throw new Error("Validation failed");
 		}
 
-		// Insert validated data into the database
 		try {
-			// await JobRequestRepository.createJobRequest(jobRequestData);
-			// console.log("Job request data:", jobRequestData);
-			if (jobRequestData.requested_category === "teaching_staff") {
-				await db.insert(jobRequest).values(jobRequestData).returning();
-			}
+			await db.insert(jobRequest).values(jobRequestData).returning();
+
+			revalidatePath("/department/request");
 		} catch (error) {
 			console.error("Database insertion failed:", error);
 			throw new Error("Database insertion failed");
 		}
 	}
 
-	async edit(formData: FormData) {
+	public async edit(formData: FormData) {
 		const jobRequestData: EditJobRequest = DataExtractor.extractEditJobRequestData(formData);
 		const id = Number(formData.get("request_id"));
 		const validatedData = Validator.validateEditJobRequestData(jobRequestData);
@@ -56,23 +74,7 @@ export class JobRequestService {
 		}
 	}
 
-	// async delete(formData: FormData) {
-	// 	try {
-	// 		const jobRequestId = {
-	// 			request_id: Number(formData.get("request_id")),
-	// 		};
-
-	// 		await db
-	// 			.delete(jobRequest)
-	// 			.where(eq(jobRequest.request_id, jobRequestId.request_id));
-
-	// 		revalidatePath("/dashboard/request");
-	// 	} catch (error) {
-	// 		console.error("Deletion failed:", error);
-	// 		throw new Error("Deletion failed");
-	// 	}
-	// }
-	async delete(id: number) {
+	public async delete(id: number) {
 		try {
 			await db.delete(jobRequest).where(eq(jobRequest.request_id, id));
 
@@ -80,26 +82,6 @@ export class JobRequestService {
 		} catch (error) {
 			console.error("Deletion failed:", error);
 			throw new Error("Deletion failed");
-		}
-	}
-
-	async getAllJobRequest() {
-		try {
-			return await db.query.jobRequest.findMany();
-		} catch (error) {
-			console.error("Fetching all job requests failed:", error);
-			throw new Error("Fetching all job requests failed");
-		}
-	}
-
-	async getAllJobRequestByID(id: number) {
-		try {
-			return await db.query.jobRequest.findFirst({
-				where: eq(jobRequest.request_id, id),
-			});
-		} catch (error) {
-			console.error(`Fetching job request with ID ${id} failed:`, error);
-			throw new Error(`Fetching job request with ID ${id} failed`);
 		}
 	}
 }

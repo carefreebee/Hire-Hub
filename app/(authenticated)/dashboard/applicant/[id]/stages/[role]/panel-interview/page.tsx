@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
-import CommentsAndDocuments from "~/components/pages/applicant/CommentsAndDocuments";
+import Link from "next/link";
+import AddEvaluators from "~/components/pages/authenticated/applicant/AddEvaluators";
 import {
 	Card,
 	CardContent,
@@ -13,22 +14,22 @@ import AssessedBy from "~/components/pages/authenticated/applicant/AssessedBy";
 import Assessor from "~/components/pages/authenticated/applicant/Assessor";
 import Waiting from "~/components/pages/authenticated/applicant/Card/waiting";
 import CheckboxAssessedBy from "~/components/pages/authenticated/applicant/CheckboxAssessedBy";
+import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CommentsAndDocuments";
 import DownloadForm from "~/components/pages/authenticated/applicant/DownloadForm";
-import UploadRatingForm from "~/components/pages/authenticated/applicant/UploadRatingForm";
-import ApplicantIDUpdateInitialInterviewFooter from "~/components/pages/authenticated/applicant/initial-interview/ApplicantIDUpdateInitialInterviewFooter";
 import SelectMode from "~/components/pages/authenticated/applicant/initial-interview/SelectMode";
-import SubmitInitialInterviewForm from "~/components/pages/authenticated/applicant/initial-interview/SubmitInitialInterviewForm";
+import SubmitStagesForm from "~/components/pages/authenticated/applicant/SubmitStagesForm";
+import UploadRatingForm from "~/components/pages/authenticated/applicant/UploadRatingForm";
 import { Button } from "~/components/ui/button";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
-import { getApplicantFormByID } from "~/controller/ApplicantController";
-import { getAllRatingFormsFilesById } from "~/controller/RatingFormsController";
-import { DisplayAssessedBy } from "~/util/display-assessed-by";
+import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
 import { validateRequest } from "~/lib/auth";
-import { MatchingUser } from "~/util/matching-users";
-import { User } from "~/lib/schema";
+import { ApplicantSelect, User } from "~/lib/schema";
 import { AssessedByUserDetails } from "~/types/types";
 import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
+import { DisplayAssessedBy } from "~/util/display-assessed-by";
+import { GetCurrentStage } from "~/util/get-current-stage";
+import { MatchingUser } from "~/util/matching-users";
 
 const ApplicantIDDisplayDateNoSSR = dynamic(
 	() =>
@@ -46,15 +47,22 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 	const { user } = await validateRequest();
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 	const users = await DisplayAssessedBy();
+
 	// GETTING THE APPLICANT BY ID
-	const applicant = await getApplicantFormByID(Number(params.id));
-	// LOCATING THE CURRENT STAGE WHICH IS THE PSYCHOLOGICAL EXAM STAGE
-	const applicantStage = applicant?.stages && applicant?.stages.panel_interview;
-	// const matchingTheUser = await getUsersByRole(applicantStage?.assessed_by?.filter(user => user) );
-	// Logging the initial user IDs
+	// GETTING THE CURRENT STAGE OF THE APPLICANT eg. initial_interview, screening, etc.
+	const { applicant, applicantStage } = await GetCurrentStage(
+		Number(params.id),
+		"panel_interview"
+	);
+
 	const assessedByIds = applicantStage?.assessed_by || [];
 	// console.log("Initial assessed_by IDs:", assessedByIds);
 	const assessors = await MatchingUser(assessedByIds);
+
+	const documentIds = (applicantStage?.rating_forms_id as number[]) || [];
+	const documentPromises = documentIds.map((id) => getRatingFormsById(id));
+	const documentResults = await Promise.all(documentPromises);
+	const document = documentResults.flat();
 
 	if (user?.role === "recruitment_officer") {
 		return (
@@ -87,9 +95,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 					<CardFooter>
 						{applicantStage?.status === "in-progress" ? (
 							<>
-								<ApplicantIDUpdateInitialInterviewFooter
-									id={applicant?.id as number}
-								/>
+								<AddEvaluators id={applicant?.id as number} />
 								<div className="flex-1">
 									<CheckboxAssessedBy assessed_by={users as Partial<User>[]} />
 								</div>
@@ -103,14 +109,37 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 					stage="panel_interview"
 					applicantId={params.id as string}
 					evaluatorsId={user?.id as string}
-				/>
+					resume={applicant?.resume as string}
+				>
+					<Button
+						variant={"outline"}
+						asChild
+						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
+					>
+						<Link href={applicant?.resume as string} target="_blank">
+							Resume
+						</Link>
+					</Button>
+					{document.map((doc) => (
+						<Button
+							key={doc.rating_id}
+							variant={"outline"}
+							asChild
+							className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
+						>
+							<Link href={doc?.rate as string} target="_blank">
+								{doc.recruitment_stage}
+							</Link>
+						</Button>
+					))}
+				</CommentsAndDocuments>
 			</>
 		);
 	}
 
 	// CHECK IF THE BOTH USER AND APPLICANT HAS THE SAME VALUES WHETHER IT IS DEPARTMENT OR OFFICE
 	const { isUserDepartmentAllowed, isUserOfficeAllowed } = checkUserAndApplicantIfValid(
-		applicant,
+		applicant as ApplicantSelect,
 		user as User
 	);
 	// CHECK IF THE USER IS ALLOWED TO ASSESSED THE APPLICANT WHETHER IT IS DEPARTMENT OR OFFICE
@@ -184,7 +213,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 						{assessedByUsers &&
 							checkIfUserIsAllowedToAssess &&
 							!hasUserPostedRating && (
-								<SubmitInitialInterviewForm
+								<SubmitStagesForm
 									id={params.id}
 									evaluatorsId={user?.id as string}
 									recruitment_stage={currentStageName as string}
@@ -197,7 +226,30 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 				stage="panel_interview"
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}
-			/>
+				resume={applicant?.resume as string}
+			>
+				<Button
+					variant={"outline"}
+					asChild
+					className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
+				>
+					<Link href={applicant?.resume as string} target="_blank">
+						Resume
+					</Link>
+				</Button>
+				{document.map((doc) => (
+					<Button
+						key={doc.rating_id}
+						variant={"outline"}
+						asChild
+						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
+					>
+						<Link href={doc?.rate as string} target="_blank">
+							{doc.recruitment_stage}
+						</Link>
+					</Button>
+				))}
+			</CommentsAndDocuments>
 		</>
 	);
 }

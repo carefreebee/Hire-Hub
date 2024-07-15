@@ -8,32 +8,39 @@ import {
 import Assessor from "~/components/pages/authenticated/applicant/Assessor";
 import EvaluateDisplay from "~/components/pages/authenticated/applicant/evaluate/EvaluateDisplay";
 import SubmitEvaluateButton from "~/components/pages/authenticated/applicant/initial-interview/SubmitEvaluateButton";
-import { getAllRatingFormsFilesById } from "~/controller/RatingFormsController";
-import { DisplayAssessedBy } from "~/util/display-assessed-by";
+import { getAllRatingFormsFilesById } from "~/Controller/RatingFormsController";
 import { getApplicantData } from "~/hooks/useApplicantStages";
 import { validateRequest } from "~/lib/auth";
 import { RatingFormWithUserData } from "~/types/types";
-import { mergeRatingFormData } from "~/util/check-status-in-progress";
+import { DisplayAssessedBy } from "~/util/display-assessed-by";
+import { RatingForms } from "~/util/rating-forms";
 
 export default async function EvaluatePage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
+
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 	const getFinalAssessor = await DisplayAssessedBy();
+
 	// GETTING THE APPLICANT BY ID
 	const { applicant, stages } = await getApplicantData(Number(params.id));
+
 	// FINDING THE IN PROGRESS STATUS BASED ON THE STAGES
 	const currentInProgress = stages.find((stage) => stage.status === "in-progress");
-	// GET THE FIRST ASSESSOR
+
+	// GET THE FIRST ASSESSOR BASED ON THE CURRENT IN PROGRESS
 	const getAssessedBy = currentInProgress?.assessed_by?.[0] ?? "";
+
 	// FINDING THE FINAL ASSESSOR BASED ON THE USER ID
 	const finalAssessor = getFinalAssessor?.find((user) => user.id === getAssessedBy);
+
 	// GETTING THE RATING FORM
 	const ratingForm = await getAllRatingFormsFilesById(Number(params.id));
 	if (!ratingForm) {
 		return <CardContainer>No Rating Form yet.</CardContainer>;
 	}
+
 	// MERGING THE RATING FORM DATA
-	const mergedData = await mergeRatingFormData(ratingForm);
+	const mergedData = await RatingForms(ratingForm);
 
 	return (
 		<Card className="h-[600px]">

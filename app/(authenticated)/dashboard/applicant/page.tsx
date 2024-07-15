@@ -1,5 +1,5 @@
 import TypographyH4 from "~/components/ui/typography-h4";
-import { getAllApplicantForm } from "~/controller/ApplicantController";
+import { getAllApplicantForm } from "~/Controller/ApplicantFormController";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 

@@ -1,8 +1,8 @@
-import { getUsersByUserID } from "~/controller/UsersController";
+import { getUsersByUserID } from "~/Controller/UsersController";
 import { User } from "~/lib/schema";
 
 // GETTING THE USERS WHO WILL ASSESS THE APPLICANT
-export async function MatchingUser(assessedByUserIds: string[]) {
+export async function MatchingUser(assessedByUserIds: string[]): Promise<Partial<User>[]> {
 	const userDetailsArray: Partial<User[]> = [];
 	await Promise.all(
 		assessedByUserIds.map(async (userId) => {

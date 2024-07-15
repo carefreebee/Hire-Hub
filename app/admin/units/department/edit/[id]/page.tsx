@@ -1,6 +1,6 @@
 import EditDepartment from "~/components/pages/authenticated/admin/edit-department/EditDepartment";
 import Previous from "~/components/pages/Previous";
-import { getDepartmentById } from "~/controller/DepartmentOrOfficeController";
+import { getDepartmentById } from "~/Controller/DepartmentController";
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { id: string } }) {
 	const department = await getDepartmentById(Number(params.id));

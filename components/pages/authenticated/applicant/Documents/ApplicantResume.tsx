@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
-import { getApplicantFormByID } from "~/controller/ApplicantController";
+import { getApplicantFormByID } from "~/Controller/ApplicantFormController";
 
 export default async function ApplicantResume({ applicantId }: { applicantId: string }) {
 	const applicant = await getApplicantFormByID(Number(applicantId));

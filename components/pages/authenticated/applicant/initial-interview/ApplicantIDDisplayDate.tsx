@@ -1,5 +1,3 @@
-"use client";
-
 import { TypographySmall } from "~/components/ui/typography-small";
 import { formattedDateTime } from "~/lib/date-time";
 

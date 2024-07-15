@@ -1,9 +1,3 @@
-import { getApplicantCommentByID, getApplicantFormByID } from "~/controller/ApplicantController";
-import { getAllRatingFormsFilesById } from "~/controller/RatingFormsController";
-import { getUsersByUserID, getUsersWithoutUserRoles } from "~/controller/UsersController";
-import { StageType } from "~/types/types";
-import { User } from "./schema";
-
 // export async function getUserRole() {
 // 	const users = await getUsersWithoutUserRoles();
 
@@ -39,8 +33,6 @@ import { User } from "./schema";
 // 	const stages = applicant.stages && applicant.stages[stage];
 // 	return stages;
 // }
-
-
 
 // export async function GetStageAssessedBy(stageAssessedBy: number[]) {
 // 	const getStageAssessedBy = stageAssessedBy?.map((assessedById) =>

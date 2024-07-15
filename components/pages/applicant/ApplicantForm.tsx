@@ -16,7 +16,7 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { toast } from "~/components/ui/use-toast";
-import { handleSubmitApplicantForm } from "~/controller/ApplicantController";
+import { CreateApplicantForm } from "~/Controller/ApplicantFormController";
 import { DepartmentSelect, OfficeSelect } from "~/lib/schema";
 import { UploadDropzone } from "~/util/uploadthing";
 import { FormContainer, Note, RadioGroupContainer } from "./FormContainer";
@@ -36,7 +36,7 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 	async function handleSubmit(): Promise<void> {
 		const formData = new FormData(formRef.current!);
 		try {
-			await handleSubmitApplicantForm(formData);
+			await CreateApplicantForm(formData);
 			// Reset the form after successful submission
 			if (formRef.current) {
 				formRef.current.reset();
@@ -54,6 +54,16 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 			});
 		}
 	}
+
+	const uniqueDepartmentIds = new Set();
+	const uniqueDepartments: typeof department = [];
+
+	department.forEach((dept) => {
+		if (!uniqueDepartmentIds.has(dept.department_id)) {
+			uniqueDepartmentIds.add(dept.department_id);
+			uniqueDepartments.push(dept);
+		}
+	});
 
 	return (
 		<form
@@ -141,11 +151,17 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 								<SelectContent>
 									<SelectGroup>
 										<SelectLabel>Department</SelectLabel>
-										{department.map((department) => (
+										{uniqueDepartments.map((department) => (
 											<SelectItem
 												key={department.department_id}
 												value={department.department_name}
 											>
+												<input
+													type="hidden"
+													name="department_id"
+													value={department.department_id}
+													readOnly
+												/>
 												{department.department_name}
 											</SelectItem>
 										))}
@@ -193,7 +209,7 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 					<input
 						type="text"
 						name="resume"
-						// value={resumeUrl!}
+						defaultValue={resumeUrl as string}
 						// readOnly
 						className="text-black"
 					/>

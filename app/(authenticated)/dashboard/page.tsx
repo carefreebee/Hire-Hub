@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Card } from "~/components/pages/authenticated/applicant/ApplicantIDCard";
-import { getAllApplicantForm } from "~/controller/ApplicantController";
-import { getAllJobRequest } from "~/controller/JobRequestController";
+import { getAllApplicantForm } from "~/Controller/ApplicantFormController";
+import { getAllJobRequest } from "~/Controller/JobRequestController";
 import Banner from "~/public/images/banner.png";
 
 export default async function DashboardPage() {

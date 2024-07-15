@@ -12,8 +12,7 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { toast } from "~/components/ui/use-toast";
-import { deleteDepartment } from "~/controller/DepartmentOrOfficeController";
-import { handleDeleteJobRequest } from "~/controller/JobRequestController";
+import { deleteDepartment } from "~/Controller/DepartmentController";
 import { DepartmentSelect } from "~/lib/schema";
 
 export const columns: ColumnDef<DepartmentSelect>[] = [
@@ -91,8 +90,7 @@ export const columns: ColumnDef<DepartmentSelect>[] = [
 										await deleteDepartment(Number(id));
 										toast({
 											title: "Deleted Department",
-											description:
-												"Department has been deleted successfully",
+											description: "Department has been deleted successfully",
 										});
 									}}
 									variant={"ghost"}

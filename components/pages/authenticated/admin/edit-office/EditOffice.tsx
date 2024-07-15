@@ -7,7 +7,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { toast } from "~/components/ui/use-toast";
-import { updateOffice } from "~/controller/DepartmentOrOfficeController";
+import { updateOffice } from "~/Controller/OfficeController";
 
 type EditResultProps = {
 	unitId: string;
@@ -44,7 +44,7 @@ export default function EditOffice({ unitId, unitName }: EditResultProps) {
 				Office Details
 			</h4>
 
-			<input type="text" name="office_id" value={unitId} readOnly />
+			<input type="hidden" name="office_id" value={unitId} readOnly />
 
 			<div className="mx-auto w-[564px]">
 				<Label className="font-semibold text-[#666666]">Office Name</Label>

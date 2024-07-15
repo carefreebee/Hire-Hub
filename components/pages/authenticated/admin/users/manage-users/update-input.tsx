@@ -27,7 +27,7 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { toast } from "~/components/ui/use-toast";
-import { handleUpdateUserRole } from "~/controller/UsersController";
+import { UpdateUserRole } from "~/Controller/UsersController";
 import { DepartmentSelect, OfficeSelect, roleEnums, RoleEnumsType } from "~/lib/schema";
 import { rolesWithoutDeptAndOffice } from "~/types/types";
 import { formattedName } from "~/util/formatted-name";
@@ -48,7 +48,7 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 	async function handleSubmit() {
 		const formData = new FormData(formRef.current!);
 		try {
-			await handleUpdateUserRole(formData);
+			await UpdateUserRole(formData);
 			// Reset the form after successful submission
 			if (formRef.current) {
 				formRef.current.reset();
@@ -58,7 +58,11 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 				description: "User role updated successfully.",
 			});
 		} catch (error) {
-			console.error("Error submitting form:", error);
+			toast({
+				variant: "destructive",
+				title: "User role updated failed",
+				description: "User role updated failed.",
+			});
 		}
 	}
 
@@ -70,7 +74,7 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 			setSelectedHrHead(null);
 		}
 	}
-	// console.log(selectedHrHead);
+
 	return (
 		<form
 			ref={formRef}
@@ -135,7 +139,10 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 								<SelectGroup>
 									<SelectLabel>Select department</SelectLabel>
 									{department.map((department) => (
-										<SelectItem key={department.department_id} value={department.department_name}>
+										<SelectItem
+											key={department.department_id}
+											value={department.department_name}
+										>
 											{department.department_name}
 										</SelectItem>
 									))}
@@ -154,7 +161,10 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 								<SelectGroup>
 									<SelectLabel>Select office</SelectLabel>
 									{office.map((office) => (
-										<SelectItem key={office.office_id} value={office.office_name}>
+										<SelectItem
+											key={office.office_id}
+											value={office.office_name}
+										>
 											{office.office_name}
 										</SelectItem>
 									))}

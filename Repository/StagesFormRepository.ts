@@ -1,10 +1,14 @@
 import { eq } from "drizzle-orm";
 import { db } from "~/lib/db";
-import { applicant, ApplicantSelect } from "~/lib/schema";
+import { applicant, ApplicantSelect, ratingForms, RatingFormsInsert } from "~/lib/schema";
 import { StageType } from "~/types/types";
 
-export class DeptOrOfficeUpdateRepository {
-	static async udpateInitialInterviewForm(
+export class StagesFormRepository {
+	public async insertForm(stagesForm: RatingFormsInsert) {
+		return await db.insert(ratingForms).values(stagesForm).returning();
+	}
+
+	public async updateStagesForm(
 		currentApplicant: ApplicantSelect,
 		stageType: StageType,
 		rating_id: number,

@@ -5,7 +5,8 @@ import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
-import { UpdateScreeningAndInitialInterviewStatus } from "~/controller/ApplicantStatusController";
+import { toast } from "~/components/ui/use-toast";
+import { UpdateScreeningAndInitialInterviewStatus } from "~/Controller/ApplicantStatusController";
 import { CheckPathname } from "~/util/path";
 import { useSelectPassedOrFailed } from "~/util/zustand";
 
@@ -14,7 +15,7 @@ type ApplicantIDFooterProps = {
 	assessorId: string;
 };
 
-export default function ApplicantIDUpdateStatusFooter({ id, assessorId }: ApplicantIDFooterProps) {
+export default function UpdateStatus({ id, assessorId }: ApplicantIDFooterProps) {
 	const status = useSelectPassedOrFailed((state) => state.status);
 	const formRef = useRef<HTMLFormElement>(null);
 	const pathname = usePathname();
@@ -24,8 +25,16 @@ export default function ApplicantIDUpdateStatusFooter({ id, assessorId }: Applic
 		const formData = new FormData(formRef.current!);
 		try {
 			await UpdateScreeningAndInitialInterviewStatus(formData);
+			toast({
+				title: "Status Updated!",
+				description: "The status has been updated successfully",
+			});
 		} catch (error) {
-			console.error("Error submitting form:", error);
+			toast({
+				variant: "destructive",
+				title: "Error Updating Status!",
+				description: "Please select a passed or failed",
+			});
 		}
 	}
 

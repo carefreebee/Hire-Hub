@@ -1,11 +1,11 @@
 import { eq } from "drizzle-orm";
-import { getApplicantFormByID } from "~/controller/ApplicantController";
+import { getApplicantFormByID } from "~/Controller/ApplicantFormController";
 import { db } from "~/lib/db";
-import { applicant, RoleEnumsType } from "~/lib/schema";
+import { applicant } from "~/lib/schema";
 import { StageType } from "~/types/types";
 
 export class ApplicantStatusRepository {
-	static async getCurrentApplicantById(applicantId: number) {
+	public async getCurrentApplicantById(applicantId: number) {
 		const currentApplicant = await getApplicantFormByID(applicantId);
 
 		if (!currentApplicant) {
@@ -15,7 +15,7 @@ export class ApplicantStatusRepository {
 		return currentApplicant;
 	}
 
-	static async updateScreeningDate(applicantId: number, updatedDate: Date) {
+	public async updateScreeningDate(applicantId: number, updatedDate: Date) {
 		const currentApplicant = await this.getCurrentApplicantById(applicantId);
 
 		await db
@@ -33,7 +33,7 @@ export class ApplicantStatusRepository {
 			.returning();
 	}
 
-	static async updateInitialInterviewDate(applicantId: number, updatedDate: Date) {
+	public async updateInitialInterviewDate(applicantId: number, updatedDate: Date) {
 		const currentApplicant = await this.getCurrentApplicantById(applicantId);
 
 		await db
@@ -54,7 +54,7 @@ export class ApplicantStatusRepository {
 			.returning();
 	}
 
-	static async updateScreeningStatus(
+	public async updateScreeningStatus(
 		applicantId: number,
 		updateAssessedBy: string,
 		applicantUpdateStatus: "passed" | "failed",
@@ -82,7 +82,7 @@ export class ApplicantStatusRepository {
 			.returning();
 	}
 
-	static async updateInitialInterviewStatus(
+	public async updateInitialInterviewStatus(
 		applicantId: number,
 		stageType: StageType,
 		updateAssessedBy: string,
@@ -113,7 +113,7 @@ export class ApplicantStatusRepository {
 			.returning();
 	}
 
-	static async updateApplicantStatus(
+	public async updateApplicantStatus(
 		applicantId: number,
 		selectedMode: "online" | "in-person",
 		assessedBy: string[],

@@ -106,7 +106,7 @@ export const applicant = pgTable("applicant", {
 	selected_office: text("selected_office"),
 	applied_date: timestamp("applied_date").defaultNow(),
 	stages: jsonb("stages")
-		.$type<ApplicantStages>()
+	.$type<ApplicantStages>()
 		.default({
 			screening: {
 				status: "in-progress",
@@ -157,6 +157,7 @@ export const office = pgTable("office", {
 	office_name: text("office_name").notNull().unique(),
 });
 
+export type RoleEnumsType = User["role"];
 
 export type UserRole = typeof roleEnums.enumValues;
 export type communicationEnums = typeof communicationEnums.enumValues;
@@ -176,5 +177,3 @@ export type OfficeInsert = typeof office.$inferInsert;
 export type JobRequestInsert = typeof jobRequest.$inferInsert;
 export type CommentsInsert = typeof comments.$inferInsert;
 export type RatingFormsInsert = typeof ratingForms.$inferInsert;
-
-export type RoleEnumsType = User["role"];

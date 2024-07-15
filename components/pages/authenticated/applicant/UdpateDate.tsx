@@ -9,7 +9,8 @@ import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
-import { UpdateScreeningAndInitialInterviewDate } from "~/controller/ApplicantStatusController";
+import { toast } from "~/components/ui/use-toast";
+import { UpdateScreeningAndInitialInterviewDate } from "~/Controller/ApplicantStatusController";
 import { formattedDateTime } from "~/lib/date-time";
 import { CheckPathname } from "~/util/path";
 import { useSelectedDateAndTime } from "~/util/zustand";
@@ -19,7 +20,7 @@ type ApplicantIDFooterProps = {
 	date: Date;
 };
 
-export default function ApplicantIDUpdateDateFooter({ id, date }: ApplicantIDFooterProps) {
+export default function UpdateDate({ id, date }: ApplicantIDFooterProps) {
 	const { dateTime, setDateTime } = useSelectedDateAndTime((state) => ({
 		dateTime: state.dateTime,
 		setDateTime: state.setDateTime,
@@ -47,8 +48,16 @@ export default function ApplicantIDUpdateDateFooter({ id, date }: ApplicantIDFoo
 		const formData = new FormData(formRef.current!);
 		try {
 			await UpdateScreeningAndInitialInterviewDate(formData);
+			toast({
+				title: "Date Updated!",
+				description: "The date has been updated successfully",
+			});
 		} catch (error) {
-			console.error("Error submitting form:", error);
+			toast({
+				variant: "destructive",
+				title: "Error Updating Date!",
+				description: "Please add a date and time",
+			});
 		}
 	}
 

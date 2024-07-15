@@ -1,55 +1,27 @@
 "use server";
 
-import { ApplicantStatusService } from "~/service/ApplicantStatusService";
+import { applicantStatusService } from "~/Dependencies/dependencies";
 
 export async function UpdateScreeningAndInitialInterviewDate(formData: FormData) {
-	const applicantFormService = new ApplicantStatusService();
-	return await applicantFormService.updateDate(formData);
+	return await applicantStatusService.updateDate(formData);
 }
 
 export async function UpdateScreeningAndInitialInterviewStatus(formData: FormData) {
-	const applicantFormService = new ApplicantStatusService();
-	return await applicantFormService.updateStatus(formData);
+	return await applicantStatusService.updateStatus(formData);
 }
 
-export async function handleHrHeadUpdatesApplicantStatusTeachingDemo(formData: FormData) {
-	const applicantFormService = new ApplicantStatusService();
-	return await applicantFormService.updateApplicantStatusTeachingDemo(formData);
+export async function UpdateTeachingDemo(formData: FormData) {
+	return await applicantStatusService.updateTeachingDemo(formData);
 }
 
-export async function handleHrHeadUpdatesApplicantStatusPsychologicalExam(formData: FormData) {
-	const applicantFormService = new ApplicantStatusService();
-	return await applicantFormService.updateApplicantStatusPsychologicalExam(formData);
+export async function UpdatePsychologicalExam(formData: FormData) {
+	return await applicantStatusService.updatePsychologicalExam(formData);
 }
 
-export async function handleHrHeadUpdatesApplicantStatusPanelInterview(formData: FormData) {
-	const applicantFormService = new ApplicantStatusService();
-	return await applicantFormService.updateApplicantStatusPanelInterview(formData);
+export async function UpdatePanelInterview(formData: FormData) {
+	return await applicantStatusService.updatePanelInterview(formData);
 }
 
-export async function handleHrHeadUpdatesApplicantStatusRecommendationForHiring(
-	formData: FormData
-) {
-	const applicantFormService = new ApplicantStatusService();
-	return await applicantFormService.updateApplicantStatusRecommendationForHiring(formData);
+export async function UpdateRecommendationForHiring(formData: FormData) {
+	return await applicantStatusService.updateRecommendationForHiring(formData);
 }
-
-// export async function UpdateApplicantDateStatus(formData: FormData) {
-// 	const applicantFormService = new ApplicantStatusService();
-// 	return await applicantFormService.udpateScreeningDate(formData);
-// }
-
-// export async function UpdateApplicantScreeningStatus(formData: FormData) {
-// 	const applicantFormService = new ApplicantStatusService();
-// 	return await applicantFormService.updateScreeningStatus(formData);
-// }
-
-// export async function UpdateApplicantInitialInterviewDate(formData: FormData) {
-// 	const applicantFormService = new ApplicantStatusService();
-// 	return await applicantFormService.updateInitialInterviewDate(formData);
-// }
-
-// export async function UpdateApplicantInitialInterviewStatus(formData: FormData) {
-// 	const applicantFormService = new ApplicantStatusService();
-// 	return await applicantFormService.updateIntialInterviewStatus(formData);
-// }

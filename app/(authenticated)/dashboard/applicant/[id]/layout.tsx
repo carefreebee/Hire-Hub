@@ -16,7 +16,7 @@ export default function Layout({ children, params }: LayoutProps) {
 				<section className="w-[960px]">
 					<AssessorHeader id={params.id} />
 					{children}
-					{/* <CommentsAndDocuments applicantId={params.id as string} evaluatorsId={user?.id as string} /> */}
+					{/* <Comments applicantId={params.id as string} evaluatorsId={user?.id as string} /> */}
 				</section>
 			</div>
 		</section>
