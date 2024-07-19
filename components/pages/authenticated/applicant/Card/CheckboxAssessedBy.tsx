@@ -30,9 +30,6 @@ export default function CheckboxAssessedBy({ assessed_by }: CheckboxAssessedByPr
 		<Popover>
 			<PopoverTrigger asChild>
 				<Button variant="ghost" className="text-[#0F91D2]">
-					{/* {assessedBy.length === 0
-						? "+ Add Evaluators"
-						: assessedBy.map((user) => user.name).join(", ")} */}
 					+ Add Evaluators
 				</Button>
 			</PopoverTrigger>

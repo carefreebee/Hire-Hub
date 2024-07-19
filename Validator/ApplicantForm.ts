@@ -30,7 +30,11 @@ const applicantFormSchema = z.object({
 	selected_department: z.string().optional().nullable(),
 	office_id: z.number().optional().nullable(),
 	selected_office: z.string().optional().nullable(),
-	resume: z.string().min(5, { message: "Please upload a resume" }),
+	// resume: z.array(z.string()),
+	resume_name: z.string().min(2, { message: "Need Resume name" }),
+	resume_url: z.string().min(2, { message: "Need Resume url" }),
+	letter_name: z.string().min(2, { message: "Need Letter name" }),
+	letter_url: z.string().min(2, { message: "Need Letter url" }),
 });
 
 export type ApplicantForm = z.infer<typeof applicantFormSchema>;

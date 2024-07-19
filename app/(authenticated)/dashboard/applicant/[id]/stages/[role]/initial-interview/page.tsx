@@ -8,25 +8,25 @@ import {
 	CardSubContent,
 	CardTitle,
 	CardTopLeftSubContent,
-} from "~/components/pages/authenticated/applicant/ApplicantIDCard";
-import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CommentsAndDocuments";
-import DownloadForm from "~/components/pages/authenticated/applicant/DownloadForm";
-import UpdateStatus from "~/components/pages/authenticated/applicant/UdpateStatus";
-import SubmitStagesForm from "~/components/pages/authenticated/applicant/SubmitStagesForm";
-import UpdateDate from "~/components/pages/authenticated/applicant/UdpateDate";
-import UploadRatingForm from "~/components/pages/authenticated/applicant/UploadRatingForm";
+} from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
+import SubmitStagesForm from "~/components/pages/authenticated/applicant/Card/SubmitStagesForm";
+import UpdateDate from "~/components/pages/authenticated/applicant/Card/UdpateDate";
+import UpdateStatus from "~/components/pages/authenticated/applicant/Card/UdpateStatus";
+import UploadRatingForm from "~/components/pages/authenticated/applicant/Card/UploadRatingForm";
+import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import { Button } from "~/components/ui/button";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
 import { validateRequest } from "~/lib/auth";
+import { ResumeProps } from "~/types/types";
+import { DisplayAssessedBy } from "~/util/display-assessed-by";
+import { formattedName } from "~/util/formatted-name";
 import { GetCurrentStage } from "~/util/get-current-stage";
 
-const ApplicantIDDisplayDateNoSSR = dynamic(
-	() =>
-		import(
-			"~/components/pages/authenticated/applicant/initial-interview/ApplicantIDDisplayDate"
-		),
+const DisplayDateNoSSR = dynamic(
+	() => import("~/components/pages/authenticated/applicant/Card/DisplayDate"),
 	{
 		ssr: false,
 	}
@@ -42,6 +42,10 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 		Number(params.id),
 		"initial_interview"
 	);
+	const { resume_name, resume_url, letter_name, letter_url } = applicant?.resume as ResumeProps;
+
+	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
+	const users = await DisplayAssessedBy();
 
 	const isRecruitmentOfficer = user?.role === "recruitment_officer";
 
@@ -76,7 +80,7 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 										{currentStageName}
 									</TypographySmall>
 								</CardTopLeftSubContent>
-								<ApplicantIDDisplayDateNoSSR date={applicantStage?.date as Date} />
+								<DisplayDateNoSSR date={applicantStage?.date as Date} />
 							</CardSubContent>
 							<CardSubContent>
 								{/* SHOWS WHAT DEPARTMENT/OFFICE TYPE THE ASSESSOR IS */}
@@ -137,30 +141,13 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 				stage="initial_interview"
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}
-				resume={applicant?.resume as string}
-			>
-				<Button
-					variant={"outline"}
-					asChild
-					className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
-				>
-					<Link href={applicant?.resume as string} target="_blank">
-						Resume
-					</Link>
-				</Button>
-				{document.map((doc) => (
-					<Button
-						key={doc.rating_id}
-						variant={"outline"}
-						asChild
-						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
-					>
-						<Link href={doc?.rate as string} target="_blank">
-							{doc.recruitment_stage}
-						</Link>
-					</Button>
-				))}
-			</CommentsAndDocuments>
+				resume_name={resume_name}
+				resume_url={resume_url}
+				letter_name={letter_name}
+				letter_url={letter_url}
+				document={document}
+				users={users}
+			/>
 		</>
 	);
 }

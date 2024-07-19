@@ -12,9 +12,11 @@ import LogoutSVG from "./ui/logout-svg";
 
 export default function SideNav({ role }: { role: RoleEnumsType }) {
 	return (
-		<nav className="flex w-[239px] flex-col items-center border-r-2 border-black/30">
-			<p className="py-10 text-lg font-bold">HireHub</p>
-			<ul className="flex flex-col items-center justify-center gap-8 text-sm font-semibold">
+		<nav className="flex w-[239px] flex-col items-center border-r-2 border-black/30 bg-gradient-to-t from-[#7F0000]/30 from-10% via-white">
+			<p className="flex h-[74px] w-full items-center justify-center bg-[#7F0000] text-xl font-semibold text-white">
+				HireHub
+			</p>
+			<ul className="mt-5 flex w-full flex-col items-center justify-center gap-8 text-sm font-semibold">
 				{role === "recruitment_officer" && (
 					<Links href="/dashboard" label="Dashboard">
 						<DashboardSVG />
@@ -28,7 +30,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 						<JobRequestSVG />
 					</Links>
 				)}
-				<div className="flex w-[96%] justify-start gap-4 rounded-xl px-5 py-3 font-medium hover:bg-[#7F0000] hover:text-white">
+				<div className="flex w-[96%] justify-start gap-4 rounded-xl py-3 pl-10 font-medium hover:bg-[#7F0000] hover:text-white">
 					<LogoutSVG />
 					<LogoutButton />
 				</div>
@@ -49,7 +51,7 @@ export function Links({ href, children, label }: LinksProps) {
 	return (
 		<Link
 			href={href}
-			className={`${isAdminAtUsers && isAdminAtUnits && isUserAtApplicant && isUserAtRequest ? "bg-[#7F0000] text-white" : ""} flex w-[96%] justify-start gap-4 rounded-xl px-5 py-3 font-medium hover:bg-[#7F0000] hover:text-white`}
+			className={`${isAdminAtUsers && isAdminAtUnits && isUserAtApplicant && isUserAtRequest ? "bg-[#7F0000] text-white" : ""} flex w-[96%] justify-start gap-4 rounded-xl py-3 pl-10 font-medium hover:bg-[#7F0000] hover:text-white`}
 		>
 			{children}
 			<p>{label}</p>

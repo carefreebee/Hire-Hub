@@ -10,7 +10,7 @@ export default function UploadRatingForm() {
 	return (
 		<>
 			<UploadDropzone
-				endpoint="productPdf"
+				endpoint="RatingUpload"
 				onClientUploadComplete={(res) => {
 					// Do something with the response
 					setFile(res[0].url);

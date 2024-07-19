@@ -1,4 +1,4 @@
-import { EditJobRequest, JobRequest } from "~/lib/zod";
+import { EditJobRequest, JobRequest } from "~/Validator/JobRequest";
 
 export class DataExtractor {
 	static extractJobRequestData(formData: FormData): JobRequest {

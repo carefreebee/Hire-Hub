@@ -102,3 +102,10 @@ export type AssessedByUserDetails = {
 	name: string;
 	role: string;
 };
+
+export type ResumeProps = {
+	resume_name: string;
+	resume_url: string;
+	letter_name: string;
+	letter_url: string;
+}

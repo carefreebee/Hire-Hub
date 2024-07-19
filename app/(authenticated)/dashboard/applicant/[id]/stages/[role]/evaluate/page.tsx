@@ -1,12 +1,12 @@
+import Assessor from "~/components/pages/authenticated/applicant/Card/Assessor";
 import {
 	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 	CardTitle,
-} from "~/components/pages/authenticated/applicant/ApplicantIDCard";
-import Assessor from "~/components/pages/authenticated/applicant/Assessor";
-import EvaluateDisplay from "~/components/pages/authenticated/applicant/evaluate/EvaluateDisplay";
+} from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import EvaluateComponent from "~/components/pages/authenticated/applicant/evaluate/EvaluateComponent";
 import SubmitEvaluateButton from "~/components/pages/authenticated/applicant/initial-interview/SubmitEvaluateButton";
 import { getAllRatingFormsFilesById } from "~/Controller/RatingFormsController";
 import { getApplicantData } from "~/hooks/useApplicantStages";
@@ -48,7 +48,7 @@ export default async function EvaluatePage({ params }: { params: { id: string } 
 				<CardTitle>Evaluate Applicant</CardTitle>
 			</CardHeader>
 			<CardContent className="mt-0 flex h-[550px] w-full flex-col justify-between gap-5 p-5">
-				<EvaluateDisplay mergedData={mergedData as RatingFormWithUserData[]} />
+				<EvaluateComponent mergedData={mergedData as RatingFormWithUserData[]} />
 				<CardFooter className="pt-5">
 					{/* SHOWS WHAT DEPARTMENT/OFFICE TYPE THE ASSESSOR IS */}
 					{finalAssessor ? (

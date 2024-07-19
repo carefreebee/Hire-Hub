@@ -18,17 +18,17 @@ export class ApplicantStatusRepository {
 	public async updateScreeningDate(applicantId: number, updatedDate: Date) {
 		const currentApplicant = await this.getCurrentApplicantById(applicantId);
 
+		const updateStage = {
+			...currentApplicant.stages,
+			screening: {
+				...currentApplicant.stages?.screening,
+				date: updatedDate,
+			},
+		};
+
 		await db
 			.update(applicant)
-			.set({
-				stages: {
-					...currentApplicant.stages,
-					screening: {
-						...currentApplicant.stages?.screening,
-						date: updatedDate,
-					},
-				},
-			})
+			.set({ stages: updateStage })
 			.where(eq(applicant.id, applicantId))
 			.returning();
 	}
@@ -36,20 +36,20 @@ export class ApplicantStatusRepository {
 	public async updateInitialInterviewDate(applicantId: number, updatedDate: Date) {
 		const currentApplicant = await this.getCurrentApplicantById(applicantId);
 
+		const updateStage = {
+			...currentApplicant.stages,
+			screening: {
+				...currentApplicant.stages?.screening,
+			},
+			initial_interview: {
+				...currentApplicant.stages?.initial_interview,
+				date: updatedDate,
+			},
+		};
+
 		await db
 			.update(applicant)
-			.set({
-				stages: {
-					...currentApplicant.stages,
-					screening: {
-						...currentApplicant.stages?.screening,
-					},
-					initial_interview: {
-						...currentApplicant.stages?.initial_interview,
-						date: updatedDate,
-					},
-				},
-			})
+			.set({ stages: updateStage })
 			.where(eq(applicant.id, applicantId))
 			.returning();
 	}
@@ -62,22 +62,24 @@ export class ApplicantStatusRepository {
 	) {
 		const currentApplicant = await this.getCurrentApplicantById(applicantId);
 
+		const updateStage = {
+			...currentApplicant.stages,
+			screening: {
+				...currentApplicant.stages?.screening,
+				assessed_by: [updateAssessedBy],
+				status: applicantUpdateStatus,
+			},
+			...(applicantUpdateStatus === "passed" && {
+				[stageType]: {
+					...currentApplicant.stages?.[stageType],
+					status: "in-progress",
+				},
+			}),
+		};
+
 		await db
 			.update(applicant)
-			.set({
-				stages: {
-					...currentApplicant.stages,
-					screening: {
-						...currentApplicant.stages?.screening,
-						assessed_by: [updateAssessedBy],
-						status: applicantUpdateStatus,
-					},
-					[stageType]: {
-						...currentApplicant.stages?.[stageType],
-						status: "in-progress",
-					},
-				},
-			})
+			.set({ stages: updateStage })
 			.where(eq(applicant.id, applicantId))
 			.returning();
 	}
@@ -91,24 +93,26 @@ export class ApplicantStatusRepository {
 	) {
 		const currentApplicant = await this.getCurrentApplicantById(applicantId);
 
+		const updateStage = {
+			...currentApplicant.stages,
+			screening: {
+				...currentApplicant.stages?.screening,
+			},
+			[stageType]: {
+				...currentApplicant.stages?.[stageType],
+				assessed_by: [updateAssessedBy],
+				status: applicantUpdateStatus,
+			},
+			...(applicantUpdateStatus === "passed" && {
+				[nextStage]: {
+					status: "in-progress",
+				},
+			}),
+		};
+
 		await db
 			.update(applicant)
-			.set({
-				stages: {
-					...currentApplicant.stages,
-					screening: {
-						...currentApplicant.stages?.screening,
-					},
-					[stageType]: {
-						...currentApplicant.stages?.[stageType],
-						assessed_by: [updateAssessedBy],
-						status: applicantUpdateStatus,
-					},
-					[`${nextStage}`]: {
-						status: "in-progress",
-					},
-				},
-			})
+			.set({ stages: updateStage })
 			.where(eq(applicant.id, applicantId))
 			.returning();
 	}
@@ -122,22 +126,22 @@ export class ApplicantStatusRepository {
 	) {
 		const currentApplicant = await this.getCurrentApplicantById(applicantId);
 
+		const updateStage = {
+			...currentApplicant.stages,
+			screening: {
+				...currentApplicant.stages?.screening,
+			},
+			[stageType]: {
+				...currentApplicant.stages?.[stageType],
+				mode: selectedMode,
+				assessed_by: assessedBy,
+				date: new Date(selectedDate),
+			},
+		};
+
 		await db
 			.update(applicant)
-			.set({
-				stages: {
-					...currentApplicant.stages,
-					screening: {
-						...currentApplicant.stages?.screening,
-					},
-					[stageType]: {
-						...currentApplicant.stages?.[stageType],
-						mode: selectedMode,
-						assessed_by: assessedBy,
-						date: new Date(selectedDate),
-					},
-				},
-			})
+			.set({ stages: updateStage })
 			.where(eq(applicant.id, applicantId))
 			.returning();
 	}

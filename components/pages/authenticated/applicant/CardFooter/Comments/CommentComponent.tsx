@@ -2,16 +2,14 @@ import { getUserByID } from "~/Controller/UsersController";
 import { StageType } from "~/types/types";
 import { GetCommentsById } from "~/util/get-comments";
 import { GetCurrentStage } from "~/util/get-current-stage";
+import CommentDisplay from "./CommentDisplay";
 
-interface ApplicantIDCommentDisplayProps {
+interface CommentDisplayProps {
 	applicantId: string;
 	stage: StageType;
 }
 
-export default async function ApplicantIDCommentDisplay({
-	applicantId,
-	stage,
-}: ApplicantIDCommentDisplayProps) {
+export default async function CommentComponent({ applicantId, stage }: CommentDisplayProps) {
 	// GETTING THE CURRENT STAGE OF THE APPLICANT eg. initial_interview, screening, etc.
 	const { applicantStage } = await GetCurrentStage(Number(applicantId), stage);
 
@@ -37,15 +35,13 @@ export default async function ApplicantIDCommentDisplay({
 			{comments.map((comment) => {
 				const evaluator = evaluatorMap.get(comment?.commented_by as string);
 				return (
-					<div key={comment?.id} className="flex items-center gap-3">
-						<div className="h-12 w-12 rounded-full bg-slate-400"></div>
-						<div className="flex-1">
-							<p className="text-sm">
-								{evaluator?.name} | {evaluator?.role}
-							</p>
-							<small className="text-[#949498]">{comment?.comment}</small>
-						</div>
-					</div>
+					<CommentDisplay
+						key={comment?.id}
+						id={comment?.id as number}
+						comment={comment?.comment as string}
+						evaluatorName={evaluator?.name as string}
+						evaluatorRole={evaluator?.role as string}
+					/>
 				);
 			})}
 		</div>

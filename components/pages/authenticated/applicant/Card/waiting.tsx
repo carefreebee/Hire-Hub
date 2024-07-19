@@ -1,5 +1,5 @@
 import { TypographySmall } from "~/components/ui/typography-small";
-import { CardContent } from "../ApplicantIDCard";
+import { CardContent } from "./CardComponent";
 
 export default function Waiting() {
 	return (

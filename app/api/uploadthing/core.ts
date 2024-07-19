@@ -2,7 +2,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
+// const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -28,7 +28,16 @@ export const ourFileRouter = {
 	// 		// !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
 	// 		return { uploadedBy: metadata.userId };
 	// 	}),
-	productPdf: f(["pdf"]).onUploadComplete(async ({ metadata, file }) => {
+	applicantUpload: f({
+		pdf: { maxFileCount: 2 },
+		"application/msword": { maxFileCount: 2 },
+	}).onUploadComplete(async ({ file }) => {
+		console.log("file url", file.url);
+	}),
+	RatingUpload: f([
+		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+		"application/msword",
+	]).onUploadComplete(async ({ metadata, file }) => {
 		const userId = (metadata as any).userId;
 		console.log("Upload complete for userId:", userId);
 		console.log("file url", file.url);

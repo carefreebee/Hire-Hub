@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { Card } from "~/components/pages/authenticated/applicant/ApplicantIDCard";
+import { Card } from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import { Chart } from "~/components/pages/authenticated/dashboard/Chart";
 import { getAllApplicantForm } from "~/Controller/ApplicantFormController";
 import { getAllJobRequest } from "~/Controller/JobRequestController";
 import Banner from "~/public/images/banner.png";
@@ -7,6 +8,36 @@ import Banner from "~/public/images/banner.png";
 export default async function DashboardPage() {
 	const applicants = await getAllApplicantForm();
 	const jobRequests = await getAllJobRequest();
+
+	const applicantsByMonth = Array(12).fill(0); // Initialize an array to count applicants for each month
+
+	applicants.forEach((applicant) => {
+		if (applicant.applied_date) {
+			const appliedDate = new Date(applicant.applied_date);
+			const appliedMonth = appliedDate.getMonth();
+			applicantsByMonth[appliedMonth]++;
+		}
+	});
+
+	const monthNames = [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	];
+
+	const chartData = monthNames.map((month, index) => ({
+		month: month,
+		applicants: applicantsByMonth[index],
+	}));
 
 	return (
 		<section>
@@ -28,7 +59,10 @@ export default async function DashboardPage() {
 					/>
 					<DisplayCard svg={<NewHires />} count={0} label="New Hires" />
 				</div>
-				<Card className="my-0 flex-1">hehe</Card>
+
+				<Card>
+					<Chart chartData={chartData} />
+				</Card>
 			</div>
 		</section>
 	);

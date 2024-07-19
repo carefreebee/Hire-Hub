@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import {
 	Card,
 	CardContent,
@@ -8,18 +7,21 @@ import {
 	CardSubContent,
 	CardTitle,
 	CardTopLeftSubContent,
-} from "~/components/pages/authenticated/applicant/ApplicantIDCard";
-import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CommentsAndDocuments";
+} from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import FinalStatus from "~/components/pages/authenticated/applicant/Card/FinalStatus";
+import UpdateDate from "~/components/pages/authenticated/applicant/Card/UdpateDate";
+import UpdateStatus from "~/components/pages/authenticated/applicant/Card/UdpateStatus";
+import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
-import UpdateDate from "~/components/pages/authenticated/applicant/UdpateDate";
-import UpdateStatus from "~/components/pages/authenticated/applicant/UdpateStatus";
 import { Button } from "~/components/ui/button";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { validateRequest } from "~/lib/auth";
+import { ResumeProps } from "~/types/types";
+import { formattedName } from "~/util/formatted-name";
 import { GetCurrentStage } from "~/util/get-current-stage";
 
-const ApplicantIDDisplayDateNoSSR = dynamic(
-	() => import("~/components/pages/authenticated/applicant/screening/ApplicantIDDisplayDate"),
+const DisplayDateNoSSR = dynamic(
+	() => import("~/components/pages/authenticated/applicant/Card/DisplayDate"),
 	{
 		ssr: false,
 	}
@@ -31,6 +33,7 @@ export default async function ApplicantIdPage({ params }: { params: { id: string
 	// GETTING THE APPLICANT BY ID
 	// GETTING THE CURRENT STAGE OF THE APPLICANT eg. initial_interview, screening, etc.
 	const { applicant, applicantStage } = await GetCurrentStage(Number(params.id), "screening");
+	const { resume_name, resume_url, letter_name, letter_url } = applicant?.resume as ResumeProps;
 
 	const screening = "Screening";
 	const isApplicantInProgress = applicantStage?.status === "in-progress";
@@ -49,24 +52,18 @@ export default async function ApplicantIdPage({ params }: { params: { id: string
 							{isApplicantInProgress && isRecruitmentOfficer ? (
 								<SelectPassedOrFailed />
 							) : (
-								<Button
-									variant={"outline"}
-									disabled
-									className="h-auto w-32 py-1 text-[#039E38]"
-								>
-									{applicantStage?.status}
-								</Button>
+								<FinalStatus status={applicantStage?.status as string} />
 							)}
 						</CardTopLeftSubContent>
-						<ApplicantIDDisplayDateNoSSR date={applicantStage?.date as Date} />
+						<DisplayDateNoSSR date={applicantStage?.date as Date} />
 					</CardSubContent>
-					<CardSubContent>
-						{/* <AssessedBy
+					{/* <CardSubContent>
+						<AssessedBy
 							status={applicantStage?.status as "passed" | "failed"}
 							assessedByName={assessedByIds}
 							assessedByRole={assessedBy?.role as string}
-						/> */}
-					</CardSubContent>
+						/>
+					</CardSubContent> */}
 				</CardContent>
 				<CardFooter>
 					{!applicantStage?.date && isRecruitmentOfficer ? (
@@ -84,22 +81,16 @@ export default async function ApplicantIdPage({ params }: { params: { id: string
 					)}
 				</CardFooter>
 			</Card>
+
 			<CommentsAndDocuments
 				stage="screening"
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}
-				resume={applicant?.resume as string}
-			>
-				<Button
-					variant={"outline"}
-					asChild
-					className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
-				>
-					<Link href={applicant?.resume as string} target="_blank">
-						Resume
-					</Link>
-				</Button>
-			</CommentsAndDocuments>
+				resume_name={resume_name}
+				resume_url={resume_url}
+				letter_name={letter_name}
+				letter_url={letter_url}
+			/>
 		</>
 	);
 }

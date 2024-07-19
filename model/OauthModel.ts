@@ -1,10 +1,15 @@
-// import { pgTable, text } from "drizzle-orm/pg-core";
-// import { users } from "./User.model";
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { User } from "./UserModel";
 
-// export const oauthAccounts = pgTable("oauth_accounts", {
-// 	providerId: text("provider_id"),
-// 	providerUserId: text("provider_user_id"),
-// 	userId: text("user_id")
-// 		.notNull()
-// 		.references(() => users.id),
-// });
+@Entity()
+export class OAuthAccount {
+	@Column()
+    providerId!: string;
+
+	@Column()
+    providerUserId!: string;
+
+	@ManyToOne(() => User, (user) => user.oauthAccounts)
+    @JoinColumn({ name: "user_id" })
+    user!: User;
+}

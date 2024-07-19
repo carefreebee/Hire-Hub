@@ -25,6 +25,16 @@ export const useCurrentRole = create<CurrentRole>((set) => ({
 	},
 }));
 
+type FilteredEvaluate = {
+	filteredEvaluate: string;
+	setFilteredEvaluate: (filteredEvaluate: string) => void;
+};
+
+export const useFilteredEvaluate = create<FilteredEvaluate>((set) => ({
+	filteredEvaluate: "",
+	setFilteredEvaluate: (filter) => set({ filteredEvaluate: filter }),
+}));
+
 type SelectPassedOrFailed = {
 	status: "passed" | "failed" | "In Progress";
 	setStatus: (value: "passed" | "failed" | "In Progress") => void;

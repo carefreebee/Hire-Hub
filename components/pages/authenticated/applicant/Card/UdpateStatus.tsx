@@ -33,7 +33,7 @@ export default function UpdateStatus({ id, assessorId }: ApplicantIDFooterProps)
 			toast({
 				variant: "destructive",
 				title: "Error Updating Status!",
-				description: "Please select a passed or failed",
+				description: "Please select a Passed or Failed",
 			});
 		}
 	}

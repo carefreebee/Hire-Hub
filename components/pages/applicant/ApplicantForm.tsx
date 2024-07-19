@@ -18,8 +18,8 @@ import {
 import { toast } from "~/components/ui/use-toast";
 import { CreateApplicantForm } from "~/Controller/ApplicantFormController";
 import { DepartmentSelect, OfficeSelect } from "~/lib/schema";
-import { UploadDropzone } from "~/util/uploadthing";
 import { FormContainer, Note, RadioGroupContainer } from "./FormContainer";
+import { MultiUploader } from "./MultipleUploader";
 
 type ApplicantFormProps = {
 	department: DepartmentSelect[];
@@ -28,7 +28,7 @@ type ApplicantFormProps = {
 
 export default function ApplicantForm({ department, office }: ApplicantFormProps) {
 	const formRef = useRef<HTMLFormElement>(null);
-	const [resumeUrl, setResumeUrl] = useState<string | undefined>("");
+	const [uploadFiles, setUploadFiles] = useState<{ name: string; url: string }[]>([]);
 	const [selectedPosition, setSelectedPosition] = useState<
 		"teaching_staff" | "non-teaching_staff"
 	>();
@@ -208,14 +208,37 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 					{/* RESUME INPUT */}
 					<input
 						type="text"
-						name="resume"
-						defaultValue={resumeUrl as string}
+						name="resume_name"
+						// defaultValue={uploadFiles[0]?.name}
+						// readOnly
+						className="text-black"
+					/>
+					<input
+						type="text"
+						name="resume_url"
+						// defaultValue={uploadFiles[0]?.url}
+						// readOnly
+						className="text-black"
+					/>
+
+					<input
+						type="text"
+						name="letter_name"
+						// defaultValue={uploadFiles[1]?.name}
+						// readOnly
+						className="text-black"
+					/>
+					<input
+						type="text"
+						name="letter_url"
+						// defaultValue={uploadFiles[1]?.url}
 						// readOnly
 						className="text-black"
 					/>
 
 					{/* TODO: UPLOAD FILE */}
-					<UploadDropzone
+					<MultiUploader setUploadFiles={setUploadFiles} />
+					{/* <UploadDropzone
 						endpoint="productPdf"
 						onClientUploadComplete={(res) => {
 							// Do something with the response
@@ -229,7 +252,7 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 							// Do something with the error.
 							alert(`ERROR! ${error.message}`);
 						}}
-					/>
+					/> */}
 				</section>
 			</section>
 			<div className="flex items-center justify-center">

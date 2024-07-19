@@ -1,13 +1,15 @@
-// import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
-// import { users } from "./User.model";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "./UserModel";
 
-// export const sessions = pgTable("sessions", {
-// 	id: text("id").primaryKey(),
-// 	userId: text("user_id")
-// 		.notNull()
-// 		.references(() => users.id),
-// 	expiresAt: timestamp("expires_at", {
-// 		withTimezone: true,
-// 		mode: "date",
-// 	}).notNull(),
-// });
+@Entity()
+export class Sessions {
+	@PrimaryGeneratedColumn()
+	id!: string;
+
+	@ManyToOne(() => User, (user) => user.sessions)
+	@JoinColumn({ name: "user_id" })
+	user!: User;
+
+	@Column({ name: "expires_at" })
+	expiresAt!: Date;
+}

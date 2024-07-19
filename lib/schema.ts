@@ -17,7 +17,7 @@ export const roleEnums = pgEnum("role", [
 	"requester_staff",
 	"department_chair",
 	"dean",
-	"faculty",
+	// "faculty",
 	"guidance_center_staff",
 	"vp_acad_affairs",
 	"vp_administration",
@@ -94,7 +94,12 @@ export const applicant = pgTable("applicant", {
 	last_name: text("last_name"),
 	email: text("email").unique().notNull(),
 	contact_number: bigint("contact_number", { mode: "number" }),
-	resume: text("resume_url"),
+	resume: jsonb("resume").default({
+		resume_name: "",
+		resume_url: "",
+		letter_name: "",
+		letter_url: "",
+	}),
 	communication_type: communicationEnums("communicationType").notNull(),
 	positionType: positionEnums("positionType").notNull(),
 	position_applied: text("position_applied").notNull(),
@@ -106,7 +111,7 @@ export const applicant = pgTable("applicant", {
 	selected_office: text("selected_office"),
 	applied_date: timestamp("applied_date").defaultNow(),
 	stages: jsonb("stages")
-	.$type<ApplicantStages>()
+		.$type<ApplicantStages>()
 		.default({
 			screening: {
 				status: "in-progress",

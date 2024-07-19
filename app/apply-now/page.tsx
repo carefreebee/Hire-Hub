@@ -5,13 +5,11 @@ import { DepartmentSelect, OfficeSelect } from "~/lib/schema";
 export default async function ApplyNow() {
 	const jobRequest = await getAllJobRequest();
 
-	// GETTING THE REQUESTED DEPARTMENT
 	const department = jobRequest.map((department) => ({
 		department_id: department.department_id,
 		department_name: department.requested_department,
 	}));
 
-	// GETTING THE REQUESTED OFFICE
 	const office = jobRequest.map((office) => ({
 		office_id: office.office_id,
 		office_name: office.requested_office,

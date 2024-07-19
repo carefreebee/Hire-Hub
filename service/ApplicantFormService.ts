@@ -29,7 +29,14 @@ export class ApplicantFormService {
 				contact_number: Number(applicantFormData.contact_number),
 				department_id: departmentId?.department_id,
 				office_id: officeId?.office_id,
+				resume: {
+					resume_name: applicantFormData.resume_name,
+					resume_url: applicantFormData.resume_url,
+					letter_name: applicantFormData.letter_name,
+					letter_url: applicantFormData.letter_url,
+				},
 			});
+			console.log("Applicant form data:", applicantFormData);
 
 			revalidatePath("/dashboard/applicant");
 		} catch (error) {

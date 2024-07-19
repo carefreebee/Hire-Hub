@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
@@ -12,6 +11,7 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { FormContainerProps, RadioGroupProps } from "~/types/types";
+import DownloadForm from "../authenticated/applicant/Card/DownloadForm";
 
 function FormContainer({ label, type, name, minLength, maxLength, inputMode }: FormContainerProps) {
 	return (
@@ -91,9 +91,12 @@ function Note() {
 		<div>
 			<p className="text-sm font-semibold">
 				Note: Click{" "}
-				<Link href={"#"} className="text-[#7F0000]">
-					here
-				</Link>{" "}
+				<DownloadForm
+					file={"/files/applicant-employment.pdf"}
+					downloadText="Applicant Employment"
+				>
+					<span className="text-[#7F0000]">here</span>
+				</DownloadForm>{" "}
 				to download the application for employment form and fill-up the necessary
 				information.
 			</p>

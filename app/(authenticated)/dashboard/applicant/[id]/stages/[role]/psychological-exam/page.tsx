@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
-import Link from "next/link";
-import AddEvaluators from "~/components/pages/authenticated/applicant/AddEvaluators";
+import AddEvaluators from "~/components/pages/authenticated/applicant/Card/AddEvaluators";
+import AssessedBy from "~/components/pages/authenticated/applicant/Card/AssessedBy";
+import Assessor from "~/components/pages/authenticated/applicant/Card/Assessor";
 import {
 	Card,
 	CardContent,
@@ -9,33 +10,29 @@ import {
 	CardSubContent,
 	CardTitle,
 	CardTopLeftSubContent,
-} from "~/components/pages/authenticated/applicant/ApplicantIDCard";
-import AssessedBy from "~/components/pages/authenticated/applicant/AssessedBy";
-import Assessor from "~/components/pages/authenticated/applicant/Assessor";
-import Waiting from "~/components/pages/authenticated/applicant/Card/waiting";
-import CheckboxAssessedBy from "~/components/pages/authenticated/applicant/CheckboxAssessedBy";
-import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CommentsAndDocuments";
-import DownloadForm from "~/components/pages/authenticated/applicant/DownloadForm";
+} from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import CheckboxAssessedBy from "~/components/pages/authenticated/applicant/Card/CheckboxAssessedBy";
+import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
+import FinalStatus from "~/components/pages/authenticated/applicant/Card/FinalStatus";
+import SubmitStagesForm from "~/components/pages/authenticated/applicant/Card/SubmitStagesForm";
+import UploadRatingForm from "~/components/pages/authenticated/applicant/Card/UploadRatingForm";
+import Waiting from "~/components/pages/authenticated/applicant/Card/Waiting";
+import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import SelectMode from "~/components/pages/authenticated/applicant/initial-interview/SelectMode";
-import SubmitStagesForm from "~/components/pages/authenticated/applicant/SubmitStagesForm";
-import UploadRatingForm from "~/components/pages/authenticated/applicant/UploadRatingForm";
 import { Button } from "~/components/ui/button";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
 import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect, User } from "~/lib/schema";
-import { AssessedByUserDetails } from "~/types/types";
+import { AssessedByUserDetails, ResumeProps } from "~/types/types";
 import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
 import { DisplayAssessedBy } from "~/util/display-assessed-by";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import { MatchingUser } from "~/util/matching-users";
 
-const ApplicantIDDisplayDateNoSSR = dynamic(
-	() =>
-		import(
-			"~/components/pages/authenticated/applicant/initial-interview/ApplicantIDDisplayDate"
-		),
+const DisplayDateNoSSR = dynamic(
+	() => import("~/components/pages/authenticated/applicant/Card/DisplayDate"),
 	{
 		ssr: false,
 	}
@@ -54,6 +51,7 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 		Number(params.id),
 		"psychological_exam"
 	);
+	const { resume_name, resume_url, letter_name, letter_url } = applicant?.resume as ResumeProps;
 
 	// GETTING ALL THE ASSESSED BY
 	const assessedByIds = applicantStage?.assessed_by || [];
@@ -80,12 +78,10 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 								{applicantStage?.status === "in-progress" ? (
 									<SelectMode />
 								) : (
-									<Button variant={"outline"} disabled className="text-[#039E38]">
-										{applicantStage?.status}
-									</Button>
+									<FinalStatus status={applicantStage?.status as string} />
 								)}
 							</CardTopLeftSubContent>
-							<ApplicantIDDisplayDateNoSSR date={applicantStage?.date as Date} />
+							<DisplayDateNoSSR date={applicantStage?.date as Date} />
 						</CardSubContent>
 						<CardSubContent>
 							<AssessedBy
@@ -111,30 +107,13 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 					stage="psychological_exam"
 					applicantId={params.id as string}
 					evaluatorsId={user?.id as string}
-					resume={applicant?.resume as string}
-				>
-					<Button
-						variant={"outline"}
-						asChild
-						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
-					>
-						<Link href={applicant?.resume as string} target="_blank">
-							Resume
-						</Link>
-					</Button>
-					{document.map((doc) => (
-						<Button
-							key={doc.rating_id}
-							variant={"outline"}
-							asChild
-							className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
-						>
-							<Link href={doc?.rate as string} target="_blank">
-								{doc.recruitment_stage}
-							</Link>
-						</Button>
-					))}
-				</CommentsAndDocuments>
+					resume_name={resume_name}
+					resume_url={resume_url}
+					letter_name={letter_name}
+					letter_url={letter_url}
+					document={document}
+					users={users}
+				/>
 			</>
 		);
 	}
@@ -159,13 +138,11 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 	const hasUserPostedRating = ratingForm.some(
 		(stage) => stage.recruitment_stage === currentStageName && stage.user_id === user?.id
 	);
-	console.log(hasUserPostedRating); // true if the user has posted a rating, false otherwise
+	// console.log(hasUserPostedRating); // true if the user has posted a rating, false otherwise
 
 	const getAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
 	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID
 	const finalAssessor = users.find((user) => user.id === getAssessedBy);
-	// THE CODE BELOW CAN BE USE TO UPDATE THE USER's STATUS WHETHER IT IS PASSED OR FAILED
-	// const isCurrentUserTheAssessor = user?.id === finalAssessor?.id;
 
 	return (
 		<>
@@ -226,30 +203,13 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 				stage="psychological_exam"
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}
-				resume={applicant?.resume as string}
-			>
-				<Button
-					variant={"outline"}
-					asChild
-					className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
-				>
-					<Link href={applicant?.resume as string} target="_blank">
-						Resume
-					</Link>
-				</Button>
-				{document.map((doc) => (
-					<Button
-						key={doc.rating_id}
-						variant={"outline"}
-						asChild
-						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
-					>
-						<Link href={doc?.rate as string} target="_blank">
-							{doc.recruitment_stage}
-						</Link>
-					</Button>
-				))}
-			</CommentsAndDocuments>
+				resume_name={resume_name}
+				resume_url={resume_url}
+				letter_name={letter_name}
+				letter_url={letter_url}
+				document={document}
+				users={users}
+			/>
 		</>
 	);
 }
