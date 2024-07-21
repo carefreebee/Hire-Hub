@@ -1,7 +1,6 @@
 import dynamic from "next/dynamic";
 import AddEvaluators from "~/components/pages/authenticated/applicant/Card/AddEvaluators";
 import AssessedBy from "~/components/pages/authenticated/applicant/Card/AssessedBy";
-import Assessor from "~/components/pages/authenticated/applicant/Card/Assessor";
 import {
 	Card,
 	CardContent,
@@ -13,13 +12,16 @@ import {
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import CheckboxAssessedBy from "~/components/pages/authenticated/applicant/Card/CheckboxAssessedBy";
 import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
-import FinalStatus from "~/components/pages/authenticated/applicant/Card/FinalStatus";
+import {
+	AssessorInfo,
+	FinalStatus,
+	Waiting,
+} from "~/components/pages/authenticated/applicant/Card/StatusDisplayComponents";
 import SubmitStagesForm from "~/components/pages/authenticated/applicant/Card/SubmitStagesForm";
 import UploadRatingForm from "~/components/pages/authenticated/applicant/Card/UploadRatingForm";
-import Waiting from "~/components/pages/authenticated/applicant/Card/Waiting";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import SelectMode from "~/components/pages/authenticated/applicant/initial-interview/SelectMode";
-import { Button } from "~/components/ui/button";
+import { StageStatus, UploadSuccess } from "~/components/pages/authenticated/Messages";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
@@ -50,6 +52,13 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 	// GETTING THE CURRENT STAGE OF THE APPLICANT eg. initial_interview, screening, etc.
 	const { applicant, applicantStage } = await GetCurrentStage(Number(params.id), "teaching_demo");
 	const { resume_name, resume_url, letter_name, letter_url } = applicant?.resume as ResumeProps;
+	const inProgress = applicantStage?.status === "in-progress";
+	const isPassed = applicantStage?.status === "passed";
+	const isFailed = applicantStage?.status === "failed";
+
+	const getAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
+	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID
+	const finalAssessor = users.find((user) => user.id === getAssessedBy);
 
 	// GETTING ALL THE ASSESSED BY
 	const assessedByIds = applicantStage?.assessed_by || [];
@@ -72,10 +81,12 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 						<CardSubContent>
 							<CardTopLeftSubContent>
 								<TypographySmall size={"md"}>{currentStageName}</TypographySmall>
-								{applicantStage?.status === "in-progress" ? (
+								{inProgress ? (
 									<SelectMode />
 								) : (
-									<FinalStatus status={applicantStage?.status as string} />
+									(isPassed || isFailed) && (
+										<FinalStatus mode={applicantStage?.mode as string} />
+									)
 								)}
 							</CardTopLeftSubContent>
 							<DisplayDateNoSSR date={applicantStage?.date as Date} />
@@ -87,19 +98,24 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 							/>
 						</CardSubContent>
 					</CardContent>
-					<CardFooter>
-						{applicantStage?.status === "in-progress" ? (
-							<>
-								<AddEvaluators id={applicant?.id as number} />
-								<div className="flex-1">
-									<CheckboxAssessedBy assessed_by={users as Partial<User>[]} />
-								</div>
-							</>
-						) : (
-							<div className="h-[40px]"></div>
-						)}
-					</CardFooter>
+
+					{applicantStage?.status === "in-progress" ? (
+						<CardFooter>
+							<AddEvaluators id={applicant?.id as number} />
+							<div className="flex-1">
+								<CheckboxAssessedBy assessed_by={users as Partial<User>[]} />
+							</div>
+						</CardFooter>
+					) : (
+						<CardFooter className="p-5">
+							<AssessorInfo
+								finalAssessorName={finalAssessor?.name as string}
+								finalAssessorRole={finalAssessor?.role as string}
+							/>
+						</CardFooter>
+					)}
 				</Card>
+
 				<CommentsAndDocuments
 					stage="teaching_demo"
 					applicantId={params.id as string}
@@ -132,9 +148,9 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 	);
 	// console.log(hasUserPostedRating); // true if the user has posted a rating, false otherwise
 
-	const getAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
-	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID
-	const finalAssessor = users.find((user) => user.id === getAssessedBy);
+	if (applicant?.office_id !== null && applicant?.selected_office !== null) {
+		return;
+	}
 
 	return (
 		<>
@@ -151,7 +167,7 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 					</CardTitle>
 				</CardHeader>
 				{/* CHECKS IF THE USER's DEPARTMENT/OFFICE MATCHES THE APPLICANT's SELECTED_DEPARTMENT/SELECTED_OFFICE */}
-				{applicantStage?.status === "in-progress" && !applicantStage.assessed_by?.length ? (
+				{inProgress && !applicantStage.assessed_by?.length ? (
 					<Waiting />
 				) : assessedByUsers && checkIfUserIsAllowedToAssess && !hasUserPostedRating ? (
 					<CardContent className="mt-0 flex h-auto flex-col p-5">
@@ -159,24 +175,14 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 						<UploadRatingForm />
 					</CardContent>
 				) : hasUserPostedRating ? (
-					<CardContent className="mt-0 h-52 flex-col items-center justify-center">
-						<p className="text-xl font-medium">Success!</p>
-						<div className="mt-2 flex flex-col items-center">
-							<small className="text-[#4F4F4F]">
-								Rating form has been submitted successfully, check
-							</small>
-							<small className="text-[#4F4F4F]">your documents to view file.</small>
-						</div>
-					</CardContent>
+					<UploadSuccess />
 				) : (
-					<CardContent className="mt-0 items-center justify-center">
-						Not authorized to assess.
-					</CardContent>
+					<StageStatus status={applicantStage?.status as string} />
 				)}
 				{applicantStage?.status === "in-progress" && (
 					<CardFooter className="p-5">
 						{/* SHOWS WHAT DEPARTMENT/OFFICE TYPE THE ASSESSOR IS */}
-						<Assessor
+						<AssessorInfo
 							finalAssessorName={finalAssessor?.name as string}
 							finalAssessorRole={finalAssessor?.role as string}
 						/>

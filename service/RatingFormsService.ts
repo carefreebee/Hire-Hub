@@ -17,74 +17,81 @@ export class RatingFormsService {
 	}
 
 	public async updateEvaluateApplicantStatus(formData: FormData) {
-		const updateEvaluateApplicantStatus = DataExtractor.extractRatingFormData(formData);
+		const updateEvaluate = DataExtractor.extractRatingFormData(formData);
 
-		const requiredFields = ["passed" || "failed"];
-
-		if (!requiredFields.includes(updateEvaluateApplicantStatus.status)) {
-			throw new Error("Please don't forget the update the applicant status passed || failed");
-		}
+		this.validateStatus(updateEvaluate.status);
 
 		try {
-			const currentApplicant = await getApplicantFormByID(
-				updateEvaluateApplicantStatus.applicantId
+			const currentApplicant = await this.fetchApplicant(updateEvaluate.applicantId);
+			const stageOrder: StageType[] = [
+				"initial_interview",
+				"teaching_demo",
+				"psychological_exam",
+				"panel_interview",
+				"recommendation_for_hiring",
+			];
+
+			await this.updateApplicantStage(
+				stageOrder,
+				currentApplicant,
+				updateEvaluate.applicantId,
+				updateEvaluate.status
 			);
 
-			if (!currentApplicant) {
-				throw new Error("Applicant not found");
-			}
-
-			const checkIfInitialInterviewIsPassed =
-				this.StageStatus(currentApplicant, "initial_interview") !== "passed";
-			const checkIfInitialTeachingDemo =
-				this.StageStatus(currentApplicant, "teaching_demo") !== "passed";
-			const checkIfInitialPsychologicalExam =
-				this.StageStatus(currentApplicant, "psychological_exam") !== "passed";
-			const checkIfInitialPanelInterview =
-				this.StageStatus(currentApplicant, "panel_interview") !== "passed";
-			const checkIfInitialRecommendedForHiring =
-				this.StageStatus(currentApplicant, "recommendation_for_hiring") !== "passed";
-
-			if (checkIfInitialInterviewIsPassed) {
-				await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
-					currentApplicant,
-					"initial_interview",
-					updateEvaluateApplicantStatus,
-					"teaching_demo"
-				);
-			} else if (checkIfInitialTeachingDemo) {
-				await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
-					currentApplicant,
-					"teaching_demo",
-					updateEvaluateApplicantStatus,
-					"psychological_exam"
-				);
-			} else if (checkIfInitialPsychologicalExam) {
-				await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
-					currentApplicant,
-					"psychological_exam",
-					updateEvaluateApplicantStatus,
-					"panel_interview"
-				);
-			} else if (checkIfInitialPanelInterview) {
-				await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
-					currentApplicant,
-					"panel_interview",
-					updateEvaluateApplicantStatus,
-					"recommendation_for_hiring"
-				);
-			} else if (checkIfInitialRecommendedForHiring) {
-				await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
-					currentApplicant,
-					"recommendation_for_hiring",
-					updateEvaluateApplicantStatus
-				);
-			}
-
-			revalidatePath(`/dashboard/applicant/${updateEvaluateApplicantStatus.applicantId}`);
+			revalidatePath(`/dashboard/applicant/${updateEvaluate.applicantId}`);
 		} catch (error) {
 			console.error("Update Evaluate Applicant Status failed:", error);
 			throw new Error("Update Evaluate Applicant Status failed");
+		}
+	}
+
+	private async updateApplicantStage(
+		stageOrder: StageType[],
+		currentApplicant: ApplicantSelect,
+		applicantId: number,
+		status: "passed" | "failed"
+	) {
+		for (let i = 0; i < stageOrder.length; i++) {
+			const stage = stageOrder[i];
+			const nextStage = stageOrder[i + 1];
+
+			if (this.StageStatus(currentApplicant, stage) !== "passed") {
+				if (stage === "recommendation_for_hiring") {
+					await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
+						currentApplicant,
+						stage,
+						applicantId,
+						status
+					);
+					break;
+				} else {
+					await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
+						currentApplicant,
+						stage,
+						applicantId,
+						status,
+						nextStage
+					);
+					break;
+				}
+			}
+		}
+	}
+
+	private async fetchApplicant(applicantId: number) {
+		const applicant = await getApplicantFormByID(applicantId);
+		if (!applicant) {
+			throw new Error("Applicant not found");
+		}
+		return applicant;
+	}
+
+	private validateStatus(status: string) {
+		const requiredFields = ["passed", "failed"];
+		if (!requiredFields.includes(status)) {
+			throw new Error(
+				"Please don't forget to update the applicant status as passed or failed"
+			);
 		}
 	}
 

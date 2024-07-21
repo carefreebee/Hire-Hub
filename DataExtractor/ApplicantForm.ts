@@ -14,7 +14,6 @@ export class DataExtractor {
 			selected_department: formData.get("selected_department") as string,
 			office_id: Number(formData.get("office_id")),
 			selected_office: formData.get("selected_office") as string,
-			// resume: formData.getAll("resume") as string[],
 			resume_name: formData.get("resume_name") as string,
 			resume_url: formData.get("resume_url") as string,
 			letter_name: formData.get("letter_name") as string,

@@ -1,19 +1,14 @@
 export function formattedName(role: string): string {
 	if (!role) return "No assessor";
 
-	return role
-		.replaceAll("_", " ")
-		.toLowerCase()
-		.split(" ")
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(" ");
+	return role.charAt(0).toUpperCase() + role.slice(1);
 }
 
-export function formattedApplicantStatus(role: string): string {
+export function formattedNameAndRole(role: string, delimeter: "_" | "-"): string {
 	if (!role) return "No assessor";
 
 	return role
-		.replaceAll("-", " ")
+		.replaceAll(delimeter, " ")
 		.toLowerCase()
 		.split(" ")
 		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))

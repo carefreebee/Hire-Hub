@@ -1,4 +1,3 @@
-import Assessor from "~/components/pages/authenticated/applicant/Card/Assessor";
 import {
 	Card,
 	CardContent,
@@ -6,6 +5,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import { AssessorInfo } from "~/components/pages/authenticated/applicant/Card/StatusDisplayComponents";
 import EvaluateComponent from "~/components/pages/authenticated/applicant/evaluate/EvaluateComponent";
 import SubmitEvaluateButton from "~/components/pages/authenticated/applicant/initial-interview/SubmitEvaluateButton";
 import { getAllRatingFormsFilesById } from "~/Controller/RatingFormsController";
@@ -52,7 +52,7 @@ export default async function EvaluatePage({ params }: { params: { id: string } 
 				<CardFooter className="pt-5">
 					{/* SHOWS WHAT DEPARTMENT/OFFICE TYPE THE ASSESSOR IS */}
 					{finalAssessor ? (
-						<Assessor
+						<AssessorInfo
 							finalAssessorName={finalAssessor?.name as string}
 							finalAssessorRole={finalAssessor?.role as string}
 						/>
@@ -61,15 +61,22 @@ export default async function EvaluatePage({ params }: { params: { id: string } 
 							Wating for Recruitment Officer to set the assessor
 						</p>
 					)}
+
 					{user?.role === "recruitment_officer" &&
 						applicant?.stages?.initial_interview?.status === "in-progress" && (
 							<SubmitEvaluateButton id={params.id} />
 						)}
+
+					{/* ROLES THAT ARE ASSIGNED TO THE DEPARTMENT OR OFFICES */}
 					{user?.id === finalAssessor?.id &&
 						currentInProgress?.assessed_by?.length ===
 							currentInProgress?.rating_forms_id?.length && (
 							<SubmitEvaluateButton id={params.id} />
 						)}
+
+					{user?.role === "univ_president" && user?.id === finalAssessor?.id && (
+						<SubmitEvaluateButton id={params.id} />
+					)}
 				</CardFooter>
 			</CardContent>
 		</Card>

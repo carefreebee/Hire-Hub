@@ -7,27 +7,7 @@ import { getAllDepartment } from "~/Controller/DepartmentController";
 import { getAllOffice } from "~/Controller/OfficeController";
 import { getUserByID } from "~/Controller/UsersController";
 
-function UserIDContainer({ children }: { children: React.ReactNode }) {
-	return <div className="grid w-full items-center gap-1.5">{children}</div>;
-}
-
-type UserIDChildrenProps = {
-	label: string;
-	value: string;
-};
-
-function UserIDChildren({ label, value }: UserIDChildrenProps) {
-	return (
-		<>
-			<div className="flex items-center gap-10">
-				<Label className="w-44">{label}</Label>
-				<Input type="text" value={value} readOnly className="shadow-md" />
-			</div>
-		</>
-	);
-}
-
-export default async function UserIDPage({ params }: { params: { id: string } }) {
+export default async function DepartmentUserIDPage({ params }: { params: { id: string } }) {
 	const user = await getUserByID(params.id);
 	const department = await getAllDepartment();
 	const office = await getAllOffice();
@@ -56,5 +36,25 @@ export default async function UserIDPage({ params }: { params: { id: string } })
 				</div>
 			</div>
 		</section>
+	);
+}
+
+function UserIDContainer({ children }: { children: React.ReactNode }) {
+	return <div className="grid w-full items-center gap-1.5">{children}</div>;
+}
+
+type UserIDChildrenProps = {
+	label: string;
+	value: string;
+};
+
+function UserIDChildren({ label, value }: UserIDChildrenProps) {
+	return (
+		<>
+			<div className="flex items-center gap-10">
+				<Label className="w-44">{label}</Label>
+				<Input type="text" value={value} readOnly className="shadow-md" />
+			</div>
+		</>
 	);
 }

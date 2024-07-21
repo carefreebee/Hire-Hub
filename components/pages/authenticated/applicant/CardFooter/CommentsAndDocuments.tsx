@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import { RatingFormsSelect, User } from "~/lib/schema";
 import { StageType } from "~/types/types";
-import { formattedName } from "~/util/formatted-name";
+import { formattedNameAndRole } from "~/util/formatted-name";
 import { Card, CardContent, CardHeader, CardTitle } from "../Card/CardComponent";
 import CommentComponent from "./Comments/CommentComponent";
 import CommentForm from "./Comments/CommentForm";
@@ -63,7 +63,7 @@ export default function CommentsAndDocuments({
 								>
 									<Link href={doc?.rate as string} target="_blank">
 										{doc.recruitment_stage}{" "}
-										{formattedName(userName?.role as string)}
+										{formattedNameAndRole(userName?.role as string, "_")}
 									</Link>
 								</Button>
 							);

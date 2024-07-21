@@ -22,6 +22,8 @@ export default function CommentDisplay({
 		setSeeMore(!seeMore);
 	}
 
+	const checkCommentLength = comment.length > 101;
+
 	return (
 		<div className="flex gap-3">
 			<div className="h-12 w-12 rounded-full bg-slate-400"></div>
@@ -34,13 +36,15 @@ export default function CommentDisplay({
 				>
 					{comment}
 				</p>
-				<Button
-					variant={"ghost"}
-					onClick={handleSeeMore}
-					className="mt-2 h-auto px-0 py-1 text-xs hover:bg-transparent"
-				>
-					{seeMore ? "See Less" : "See More"}
-				</Button>
+				{checkCommentLength && (
+					<Button
+						variant={"ghost"}
+						onClick={handleSeeMore}
+						className="mt-2 h-auto px-0 py-1 text-xs hover:bg-transparent"
+					>
+						{seeMore ? "See Less" : "See More"}
+					</Button>
+				)}
 			</div>
 		</div>
 	);

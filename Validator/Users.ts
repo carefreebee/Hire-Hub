@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export class Validator {
-	static validateUsersData(usersData: Users) {
+	static validateUsersData(usersData: UserRoleData) {
 		const validationResult = usersSchema.safeParse(usersData);
 		return validationResult;
 	}
@@ -16,4 +16,4 @@ export const usersSchema = z.object({
 	selected_office: z.string().optional().nullable(),
 });
 
-export type Users = z.infer<typeof usersSchema>;
+export type UserRoleData = z.infer<typeof usersSchema>;

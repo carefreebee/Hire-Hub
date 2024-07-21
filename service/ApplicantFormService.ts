@@ -22,6 +22,7 @@ export class ApplicantFormService {
 			applicantFormData.department_id
 		);
 		const officeId = await this.officeRepo.getOfficeById(applicantFormData.office_id);
+		console.log("Applicant form data:", applicantFormData);
 
 		try {
 			await this.applicantRepo.createApplicantForm({
@@ -36,7 +37,6 @@ export class ApplicantFormService {
 					letter_url: applicantFormData.letter_url,
 				},
 			});
-			console.log("Applicant form data:", applicantFormData);
 
 			revalidatePath("/dashboard/applicant");
 		} catch (error) {

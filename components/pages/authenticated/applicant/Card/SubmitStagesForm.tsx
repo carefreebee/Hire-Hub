@@ -30,6 +30,7 @@ export default function SubmitStagesForm({
 }: SubmitStagesFormProps) {
 	const file = useUploadDropZone((state) => state.file);
 	const formRef = useRef<HTMLFormElement>(null);
+	console.log(file);
 
 	const pathname = usePathname();
 	const lastSegment = CheckPathname(pathname);
@@ -58,6 +59,7 @@ export default function SubmitStagesForm({
 			});
 		} catch (error) {
 			toast({
+				variant: "destructive",
 				title: "Update Error!",
 				description: "Please don't forget to add the rating form.",
 			});

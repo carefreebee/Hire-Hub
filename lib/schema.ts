@@ -17,7 +17,7 @@ export const roleEnums = pgEnum("role", [
 	"requester_staff",
 	"department_chair",
 	"dean",
-	// "faculty",
+	"faculty",
 	"guidance_center_staff",
 	"vp_acad_affairs",
 	"vp_administration",

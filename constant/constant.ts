@@ -20,4 +20,6 @@ export const SelectedFullTimeType = "full_time";
 export const PartTimeType = "Part Time";
 export const FullTimeType = "Full Time";
 
+export type STATUS = "in-progress" | "passed" | "failed";
+
 

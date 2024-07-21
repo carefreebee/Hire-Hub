@@ -3,7 +3,7 @@
 import { TypographySmall } from "~/components/ui/typography-small";
 import { User } from "~/lib/schema";
 import { AssessedByUserDetails } from "~/types/types";
-import { formattedName } from "~/util/formatted-name";
+import { formattedNameAndRole } from "~/util/formatted-name";
 import { useSelectedAssessedBy } from "~/util/zustand";
 
 type AssessedByProps = {
@@ -24,8 +24,8 @@ export default function AssessedBy({ isThereAssessors, assessors }: AssessedByPr
 					<>
 						{assessors.map((user) => (
 							<p key={user.id} className="mr-auto">
-								{formattedName(user.name as string)} |{" "}
-								{formattedName(user.role as string)}
+								{formattedNameAndRole(user.name as string, "_")} |{" "}
+								{formattedNameAndRole(user.role as string, "_")}
 							</p>
 						))}
 					</>
@@ -33,8 +33,8 @@ export default function AssessedBy({ isThereAssessors, assessors }: AssessedByPr
 					<>
 						{selectedAssessedBy.map((user) => (
 							<p key={user.id} className="mr-auto">
-								{formattedName(user.name as string)} |{" "}
-								{formattedName(user.role as string)}
+								{formattedNameAndRole(user.name as string, "_")} |{" "}
+								{formattedNameAndRole(user.role as string, "_")}
 							</p>
 						))}
 					</>

@@ -13,7 +13,7 @@ import {
 import { FormContainerProps, RadioGroupProps } from "~/types/types";
 import DownloadForm from "../authenticated/applicant/Card/DownloadForm";
 
-function FormContainer({ label, type, name, minLength, maxLength, inputMode }: FormContainerProps) {
+export function FormContainer({ label, type, name, minLength, maxLength, inputMode }: FormContainerProps) {
 	return (
 		<div className="flex flex-col gap-3">
 			<Label className="font-semibold">{label}</Label>
@@ -29,8 +29,7 @@ function FormContainer({ label, type, name, minLength, maxLength, inputMode }: F
 	);
 }
 
-// RADIO BUTTONS ARE NOT YET INCLUDED IN THE CONSOLE LOG
-function RadioGroupContainer({
+export function RadioGroupContainer({
 	label,
 	name,
 	FirstRadioGroupItemValue,
@@ -61,7 +60,7 @@ function RadioGroupContainer({
 	);
 }
 
-function SelectTag() {
+export function SelectTag() {
 	return (
 		<div className="flex h-[66px] flex-col gap-3">
 			<Label className="font-semibold">
@@ -86,7 +85,7 @@ function SelectTag() {
 	);
 }
 
-function Note() {
+export function Note() {
 	return (
 		<div>
 			<p className="text-sm font-semibold">
@@ -106,5 +105,3 @@ function Note() {
 		</div>
 	);
 }
-
-export { FormContainer, Note, RadioGroupContainer, SelectTag };

@@ -6,11 +6,33 @@ import {
 } from "~/constant/constant";
 import { getApplicantData } from "~/hooks/useApplicantStages";
 import { validateRequest } from "~/lib/auth";
+import { ApplicantSelect } from "~/lib/schema";
+import { StageType } from "~/types/types";
+import { filterStagesByOffice } from "~/util/filter-applicant-status";
 import { TypographySmall } from "../../ui/typography-small";
+
+const STAGES = [
+	{ link: "initial-interview", type: "initial_interview", name: "Initial Interview" },
+	{ link: "teaching-demo", type: "teaching_demo", name: "Teaching Demo" },
+	{ link: "psychological-exam", type: "psychological_exam", name: "Psychological Exam" },
+	{ link: "panel-interview", type: "panel_interview", name: "Panel Interview" },
+	{
+		link: "recommendation-for-hiring",
+		type: "recommendation_for_hiring",
+		name: "Recommendation for Hiring",
+	},
+];
 
 export default async function AssessorHeader({ id }: { id: string }) {
 	const { user } = await validateRequest();
 	const { applicant } = await getApplicantData(Number(id));
+
+	const screeningStatus = getStageStatus(applicant as ApplicantSelect, "screening");
+
+	let filteredStages = STAGES;
+	if (applicant?.office_id !== null && applicant?.selected_office !== null) {
+		filteredStages = STAGES.filter((stage) => stage.name !== "Teaching Demo");
+	}
 
 	return (
 		<header>
@@ -58,43 +80,59 @@ export default async function AssessorHeader({ id }: { id: string }) {
 					{user?.role === "recruitment_officer" && (
 						<Link
 							href={`/dashboard/applicant/${id}/stages/recruitment_officer/screening`}
-							className={`${applicant?.stages?.screening?.status === "in-progress" ? "rounded-lg bg-[#FFCB78]" : applicant?.stages?.screening?.status === "passed" ? "text-green-500" : "text-slate-400"} px-3 py-2 text-sm font-medium`}
+							className={`${screeningStatus} px-3 py-2 text-sm font-medium`}
 						>
 							Screening
 						</Link>
 					)}
-					<Link
-						href={`/dashboard/applicant/${id}/stages/${user?.role}/initial-interview`}
-						className={`${applicant?.stages?.initial_interview?.status === "in-progress" ? "rounded-lg bg-[#FFCB78]" : applicant?.stages?.initial_interview?.status === "passed" ? "text-green-500" : "text-slate-400"} px-3 py-2 text-sm font-medium`}
-					>
-						Initial Interview
-					</Link>
-					<Link
-						href={`/dashboard/applicant/${id}/stages/${user?.role}/teaching-demo`}
-						className={`${applicant?.stages?.teaching_demo?.status === "in-progress" ? "rounded-lg bg-[#FFCB78]" : applicant?.stages?.teaching_demo?.status === "passed" ? "text-green-500" : "text-slate-400"} px-3 py-2 text-sm font-medium`}
-					>
-						Teaching Demo
-					</Link>
-					<Link
-						href={`/dashboard/applicant/${id}/stages/${user?.role}/psychological-exam`}
-						className={`${applicant?.stages?.psychological_exam?.status === "in-progress" ? "rounded-lg bg-[#FFCB78]" : applicant?.stages?.psychological_exam?.status === "passed" ? "text-green-500" : "text-slate-400"} px-3 py-2 text-sm font-medium`}
-					>
-						Psychological Exam
-					</Link>
-					<Link
-						href={`/dashboard/applicant/${id}/stages/${user?.role}/panel-interview`}
-						className={`${applicant?.stages?.panel_interview?.status === "in-progress" ? "rounded-lg bg-[#FFCB78]" : applicant?.stages?.panel_interview?.status === "passed" ? "text-green-500" : "text-slate-400"} px-3 py-2 text-sm font-medium`}
-					>
-						Panel Interview
-					</Link>
-					<Link
-						href={`/dashboard/applicant/${id}/stages/${user?.role}/recommendation-for-hiring`}
-						className={`${applicant?.stages?.recommendation_for_hiring?.status === "in-progress" ? "rounded-lg bg-[#FFCB78]" : applicant?.stages?.recommendation_for_hiring?.status === "passed" ? "text-green-500" : "text-slate-400"} px-3 py-2 text-sm font-medium`}
-					>
-						Recommendation for Hiring
-					</Link>
+					{filteredStages.map((stage) => (
+						<Stages
+							key={stage.link}
+							id={Number(id)}
+							role={user?.role as string}
+							stageLink={stage.link}
+							stageType={stage.type as StageType}
+							applicant={applicant as ApplicantSelect}
+							name={stage.name}
+						/>
+					))}
 				</ul>
 			</div>
 		</header>
 	);
+}
+
+type StagesProps = {
+	id: number;
+	role: string;
+	stageLink: string;
+	stageType: StageType;
+	applicant: ApplicantSelect;
+	name: string;
+};
+
+function Stages({ id, role, stageLink, stageType, applicant, name }: StagesProps) {
+	const statusClass = getStageStatus(applicant, stageType);
+	return (
+		<Link
+			href={`/dashboard/applicant/${id}/stages/${role}/${stageLink}`}
+			className={`${statusClass} px-3 py-2 text-sm font-medium`}
+		>
+			{name}
+		</Link>
+	);
+}
+
+function getStageStatus(applicant: ApplicantSelect, stageType: StageType) {
+	const stageStatus = applicant?.stages?.[stageType]?.status;
+	switch (stageStatus) {
+		case "in-progress":
+			return "rounded-lg bg-[#FFCB78]";
+		case "passed":
+			return "text-green-500";
+		case "failed":
+			return "rounded-lg bg-[#7F0000]";
+		default:
+			return "text-slate-400";
+	}
 }

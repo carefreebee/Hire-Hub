@@ -3,7 +3,7 @@ import { DataExtractor } from "~/DataExtractor/UserRole";
 import { DepartmentRepository } from "~/Repository/DepartmentRepository";
 import { OfficeRepository } from "~/Repository/OfficeRepository";
 import { UserRepository } from "~/Repository/UsersRepository";
-import { Users, Validator } from "~/Validator/Users";
+import { UserRoleData, Validator } from "~/Validator/Users";
 import { RoleEnumsType } from "~/lib/schema";
 import { rolesWithoutDeptAndOffice } from "~/types/types";
 
@@ -72,46 +72,55 @@ export class UsersService {
 		const userRoleData = DataExtractor.extractUserRole(formData);
 		const id = formData.get("id") as string;
 
-		if (userRoleData.selected_position === "user") {
-			return await this.userRepo.updateUserRoleToUser(
-				userRoleData.selected_position as RoleEnumsType,
-				id
-			);
-		} else if (
-			rolesWithoutDeptAndOffice.includes(userRoleData.selected_position as RoleEnumsType)
-		) {
-			return await this.userRepo.usersWithoutDeptAndOffice(
-				userRoleData.selected_position as RoleEnumsType,
-				id
-			);
-		}
-
-		const validatedData = this.validateUsersData(userRoleData);
-
-		const teachingStaff = userRoleData.selected_option === "teaching_staff";
-		const nonTeachingStaff = userRoleData.selected_option === "non-teaching_staff";
-
-		let departmentId: number | null = null;
-		let officeId: number | null = null;
-
-		if (teachingStaff && userRoleData.selected_department) {
-			departmentId = await this.departmentRepo.GetDepartmentIdByName(
-				userRoleData.selected_department
-			);
-		} else if (nonTeachingStaff && userRoleData.selected_office) {
-			officeId = await this.officeRepo.GetOfficeIdByName(userRoleData.selected_office);
-		}
-
 		try {
-			await this.userRepo.updateUserRole(validatedData.data, departmentId, officeId, id);
-			revalidatePath("/admin/users/manage-users");
+			await this.roleUpdate(userRoleData, id);
+			revalidatePath("/admin/users");
 		} catch (error) {
 			console.error("Database insertion failed:", error);
 			throw new Error("Database insertion failed");
 		}
 	}
 
-	private validateUsersData(userRoleData: Users) {
+	private async roleUpdate(userRoleData: UserRoleData, id: string) {
+		const selectedPosition = userRoleData.selected_position as RoleEnumsType;
+
+		if (selectedPosition === "user") {
+			return await this.userRepo.updateUserRoleToUser(selectedPosition as RoleEnumsType, id);
+		}
+
+		if (rolesWithoutDeptAndOffice.includes(selectedPosition as RoleEnumsType)) {
+			return await this.userRepo.usersWithoutDeptAndOffice(
+				selectedPosition as RoleEnumsType,
+				id
+			);
+		}
+
+		const validatedData = this.validateUsersData(userRoleData);
+		const { departmentId, officeId } = await this.getDepartmentOrOfficeById(userRoleData);
+
+		await this.userRepo.updateUserRole(validatedData.data, departmentId, officeId, id);
+	}
+
+	private async getDepartmentOrOfficeById(userRoleData: UserRoleData) {
+		const teachingStaff = userRoleData.selected_option === "teaching_staff";
+		const nonTeachingStaff = userRoleData.selected_option === "non-teaching_staff";
+
+		const selectedDepartment = userRoleData.selected_department;
+		const selectedOffice = userRoleData.selected_office;
+
+		let departmentId: number | null = null;
+		let officeId: number | null = null;
+
+		if (teachingStaff && selectedDepartment) {
+			departmentId = await this.departmentRepo.GetDepartmentIdByName(selectedDepartment);
+		} else if (nonTeachingStaff && selectedOffice) {
+			officeId = await this.officeRepo.GetOfficeIdByName(selectedOffice);
+		}
+
+		return { departmentId, officeId };
+	}
+
+	private validateUsersData(userRoleData: UserRoleData) {
 		const validatedData = Validator.validateUsersData(userRoleData);
 		if (!validatedData.success) {
 			console.error("Validation failed:", validatedData.error);

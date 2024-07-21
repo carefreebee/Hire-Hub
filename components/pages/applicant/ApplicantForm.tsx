@@ -65,6 +65,16 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 		}
 	});
 
+	const uniqueOfficeIds = new Set();
+	const uniqueOffices: typeof office = [];
+
+	office.forEach((dept) => {
+		if (!uniqueOfficeIds.has(dept.office_id)) {
+			uniqueOfficeIds.add(dept.office_id);
+			uniqueOffices.push(dept);
+		}
+	});
+
 	return (
 		<form
 			ref={formRef}
@@ -176,11 +186,17 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 								<SelectContent>
 									<SelectGroup>
 										<SelectLabel>Office</SelectLabel>
-										{office.map((office) => (
+										{uniqueOffices.map((office) => (
 											<SelectItem
 												key={office.office_id}
 												value={office.office_name}
 											>
+												<input
+													type="hidden"
+													name="office_id"
+													value={office.office_id}
+													readOnly
+												/>
 												{office.office_name}
 											</SelectItem>
 										))}
@@ -236,23 +252,7 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 						className="text-black"
 					/>
 
-					{/* TODO: UPLOAD FILE */}
 					<MultiUploader setUploadFiles={setUploadFiles} />
-					{/* <UploadDropzone
-						endpoint="productPdf"
-						onClientUploadComplete={(res) => {
-							// Do something with the response
-							setResumeUrl(res[0].url);
-							toast({
-								title: "Resume uploaded",
-								description: "Resume uploaded successfully",
-							});
-						}}
-						onUploadError={(error: Error) => {
-							// Do something with the error.
-							alert(`ERROR! ${error.message}`);
-						}}
-					/> */}
 				</section>
 			</section>
 			<div className="flex items-center justify-center">

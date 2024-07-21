@@ -11,6 +11,7 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { User } from "~/lib/schema";
+import { formattedName, formattedNameAndRole } from "~/util/formatted-name";
 
 export const columns: ColumnDef<User>[] = [
 	{
@@ -48,7 +49,7 @@ export const columns: ColumnDef<User>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">
-					{row.getValue("firstName")}
+					{formattedName(row.getValue("firstName"))}
 				</div>
 			);
 		},
@@ -69,7 +70,7 @@ export const columns: ColumnDef<User>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">
-					{row.getValue("lastName")}
+					{formattedName(row.getValue("lastName"))}
 				</div>
 			);
 		},
@@ -89,7 +90,9 @@ export const columns: ColumnDef<User>[] = [
 		},
 		cell: ({ row }) => {
 			return (
-				<div className="flex items-center justify-center gap-2">{row.getValue("role")}</div>
+				<div className="flex items-center justify-center gap-2">
+					{formattedNameAndRole(row.getValue("role"), "_")}
+				</div>
 			);
 		},
 	},
@@ -133,7 +136,7 @@ export const columns: ColumnDef<User>[] = [
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="center" className="rounded-xl">
 							<DropdownMenuItem asChild>
-								<Link href={`/admin/users/manage-users/manage/${id}`}>Manage</Link>
+								<Link href={`/admin/users/office/manage/${id}`}>Manage</Link>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

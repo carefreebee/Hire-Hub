@@ -19,30 +19,34 @@ export class RatingFormsRepository {
 	public async updateCurrentApplicantEvaluate(
 		currentApplicant: ApplicantSelect,
 		stagePassed: StageType,
-		updateEvaluateApplicantStatus: UpdateEvaluateApplicantStatusModel,
+		applicantId: number,
+		updateApplicantStatus: "passed" | "failed",
 		stageInProgress?: StageType
 	) {
 		if (!currentApplicant) {
 			throw new Error("Applicant not found");
 		}
 
-		await db
-			.update(applicant)
-			.set({
-				stages: {
-					...currentApplicant.stages,
-					screening: {
-						...currentApplicant.stages?.screening,
-					},
-					[stagePassed]: {
-						...currentApplicant.stages?.[stagePassed],
-						status: updateEvaluateApplicantStatus.status,
-					},
-					[`${stageInProgress}`]: {
+		const updateStage = {
+			...currentApplicant.stages,
+			screening: {
+				...currentApplicant.stages?.screening,
+			},
+			[stagePassed]: {
+				...currentApplicant.stages?.[stagePassed],
+				status: updateApplicantStatus,
+			},
+			...(updateApplicantStatus === "passed" &&
+				stageInProgress && {
+					[stageInProgress]: {
 						status: "in-progress",
 					},
-				},
-			})
-			.where(eq(applicant.id, updateEvaluateApplicantStatus.applicantId));
+				}),
+		};
+
+		await db
+			.update(applicant)
+			.set({ stages: updateStage })
+			.where(eq(applicant.id, applicantId));
 	}
 }

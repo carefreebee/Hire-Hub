@@ -1,7 +1,7 @@
 import { and, eq, isNotNull, ne } from "drizzle-orm";
 import { db } from "~/lib/db";
 import { RoleEnumsType, users } from "~/lib/schema";
-import { Users } from "~/Validator/Users";
+import { UserRoleData } from "~/Validator/Users";
 
 export class UserRepository {
 	// HELPER FUNCTION
@@ -38,7 +38,7 @@ export class UserRepository {
 	}
 
 	public async usersWithoutDeptAndOffice(role: RoleEnumsType, id: string) {
-		return await db.update(users).set({ role }).where(eq(users.id, id));
+		return await db.update(users).set({ role: role }).where(eq(users.id, id));
 	}
 
 	public async updateUserRoleToUser(role: RoleEnumsType, id: string) {
@@ -55,7 +55,7 @@ export class UserRepository {
 	}
 
 	public async updateUserRole(
-		validatedData: Users,
+		validatedData: UserRoleData,
 		departmentId: number | null,
 		officeId: number | null,
 		id: string

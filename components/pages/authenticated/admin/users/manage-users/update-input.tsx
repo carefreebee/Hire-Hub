@@ -30,7 +30,7 @@ import { toast } from "~/components/ui/use-toast";
 import { UpdateUserRole } from "~/Controller/UsersController";
 import { DepartmentSelect, OfficeSelect, roleEnums, RoleEnumsType } from "~/lib/schema";
 import { rolesWithoutDeptAndOffice } from "~/types/types";
-import { formattedName } from "~/util/formatted-name";
+import { formattedNameAndRole } from "~/util/formatted-name";
 
 type ApplicantFormProps = {
 	id: string;
@@ -66,12 +66,14 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 		}
 	}
 
-	const [selectedHrHead, setSelectedHrHead] = useState<RoleEnumsType | null | string>(null);
+	const [selectedRoleWithoutDeptOrOffice, setSelectedRoleWithoutDeptOrOffice] = useState<
+		RoleEnumsType | null | string
+	>(null);
 	function handleSelectChange(role: RoleEnumsType) {
 		if (rolesWithoutDeptAndOffice.includes(role)) {
-			setSelectedHrHead(role);
+			setSelectedRoleWithoutDeptOrOffice(role);
 		} else {
-			setSelectedHrHead(null);
+			setSelectedRoleWithoutDeptOrOffice(null);
 		}
 	}
 
@@ -96,7 +98,7 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 							<SelectLabel>Positions</SelectLabel>
 							{roleEnum.map((role, index) => (
 								<SelectItem key={index} value={role}>
-									{formattedName(role)}
+									{formattedNameAndRole(role, "_")}
 								</SelectItem>
 							))}
 						</SelectGroup>
@@ -107,7 +109,7 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 				<Label className="w-52">Select option</Label>
 				<div className="w-full">
 					<RadioGroup
-						disabled={selectedHrHead !== null}
+						disabled={selectedRoleWithoutDeptOrOffice !== null}
 						onChange={(e: ChangeEvent<HTMLInputElement>) =>
 							setSelectedOption(
 								e.target.value as "teaching_staff" | "non-teaching_staff"
@@ -175,7 +177,7 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 				) : (
 					<>
 						<Label className="w-52">Department/Office</Label>
-						<Select disabled={selectedHrHead !== null}>
+						<Select disabled={selectedRoleWithoutDeptOrOffice !== null}>
 							<SelectTrigger className="w-full">
 								<SelectValue placeholder="Choose a position..." />
 							</SelectTrigger>
