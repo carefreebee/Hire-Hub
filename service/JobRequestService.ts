@@ -4,7 +4,7 @@ import { DataExtractor } from "~/DataExtractor/JobRequest";
 import { JobRequestRepository } from "~/Repository/JobRequestRepository";
 import { EditJobRequest, JobRequest, Validator } from "~/Validator/JobRequest";
 import { db } from "~/lib/db";
-import { jobRequest } from "~/lib/schema";
+import { jobRequest, JobRequestSelect } from "~/lib/schema";
 
 export class JobRequestService {
 	constructor(private readonly jobRequestRepo: JobRequestRepository) {}
@@ -18,9 +18,53 @@ export class JobRequestService {
 		}
 	}
 
-	public async getAllJobRequestByID(id: number) {
+	public async getJobRequest() {
 		try {
-			return await this.jobRequestRepo.getAllJobRequestByID(id);
+			const jobRequest = await this.jobRequestRepo.getAllJobRequest();
+
+			return {
+				department: this.department(jobRequest),
+				office: this.office(jobRequest),
+			};
+		} catch (error) {
+			console.error("Fetching job requests failed:", error);
+			throw new Error("Fetching job requests failed");
+		}
+	}
+
+	private department(jobRequest: JobRequestSelect[]) {
+		return jobRequest
+			.filter((department) => department.department_id && department.requested_department)
+			.map((department) => ({
+				department_id: department.department_id,
+				department_name: department.requested_department,
+			}));
+	}
+
+	private office(jobRequest: JobRequestSelect[]) {
+		return jobRequest
+			.filter((office) => office.office_id && office.requested_office)
+			.map((office) => ({
+				office_id: office.office_id,
+				office_name: office.requested_office,
+			}));
+	}
+
+	public async getDeptOrOffice(department_id: number | null, office_id: number | null) {
+		try {
+			return await this.jobRequestRepo.getDeptOrOffice(department_id, office_id);
+		} catch (error) {
+			console.error(
+				`Fetching job request with ID ${department_id} | ${office_id} failed:`,
+				error
+			);
+			throw new Error(`Fetching job request with ID ${department_id} | ${office_id} failed`);
+		}
+	}
+
+	public async getJobRequestByID(id: number) {
+		try {
+			return await this.jobRequestRepo.getJobRequestByID(id);
 		} catch (error) {
 			console.error(`Fetching job request with ID ${id} failed:`, error);
 			throw new Error(`Fetching job request with ID ${id} failed`);

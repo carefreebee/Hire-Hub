@@ -10,14 +10,14 @@ import {
 	SelectedPartTimeType,
 	TeachingStaff,
 } from "~/constant/constant";
-import { getAllJobRequestByID } from "~/Controller/JobRequestController";
+import { getJobRequestByID } from "~/Controller/JobRequestController";
 
 function LabelTag({ label }: { label: string }) {
 	return <Label className="font-semibold text-[#666666]">{label}</Label>;
 }
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { id: string } }) {
-	const jobRequestByID = await getAllJobRequestByID(Number(params.id));
+	const jobRequestByID = await getJobRequestByID(Number(params.id));
 
 	return (
 		<section className="bg-slate-200/30">

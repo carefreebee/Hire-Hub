@@ -5,6 +5,21 @@ import { getAllApplicantForm } from "~/Controller/ApplicantFormController";
 import { getAllJobRequest } from "~/Controller/JobRequestController";
 import Banner from "~/public/images/banner.png";
 
+const monthNames = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+];
+
 export default async function DashboardPage() {
 	const applicants = await getAllApplicantForm();
 	const jobRequests = await getAllJobRequest();
@@ -19,24 +34,18 @@ export default async function DashboardPage() {
 		}
 	});
 
-	const monthNames = [
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December",
-	];
-
 	const chartData = monthNames.map((month, index) => ({
 		month: month,
 		applicants: applicantsByMonth[index],
+	}));
+
+	function areAllStagesPassed(stages: any) {
+		return Object.values(stages).every((stage: any) => stage.status === "passed");
+	}
+
+	const results = applicants.map((applicant) => ({
+		id: applicant.id,
+		allStagesPassed: areAllStagesPassed(applicant.stages),
 	}));
 
 	return (
@@ -57,7 +66,7 @@ export default async function DashboardPage() {
 						count={jobRequests.length}
 						label="Job Requests"
 					/>
-					<DisplayCard svg={<NewHires />} count={0} label="New Hires" />
+					<DisplayCard svg={<NewHires />} count={results.length} label="New Hires" />
 				</div>
 
 				<Card>

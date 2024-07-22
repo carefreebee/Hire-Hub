@@ -1,5 +1,6 @@
 import { getUserByID } from "~/Controller/UsersController";
 import { StageType } from "~/types/types";
+import { formattedName, formattedNameAndRole } from "~/util/formatted-name";
 import { GetCommentsById } from "~/util/get-comments";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import CommentDisplay from "./CommentDisplay";
@@ -39,8 +40,8 @@ export default async function CommentComponent({ applicantId, stage }: CommentDi
 						key={comment?.id}
 						id={comment?.id as number}
 						comment={comment?.comment as string}
-						evaluatorName={evaluator?.name as string}
-						evaluatorRole={evaluator?.role as string}
+						evaluatorName={formattedName(evaluator?.name as string)}
+						evaluatorRole={formattedNameAndRole(evaluator?.role as string, "_")}
 					/>
 				);
 			})}

@@ -14,6 +14,18 @@ export class ApplicantFormService {
 		private readonly commentRepo: CommentRepository
 	) {}
 
+	public async getAllApplicantForm() {
+		return await this.applicantRepo.getAllApplicantForm();
+	}
+
+	public async getApplicantFormByID(id: number) {
+		return await this.applicantRepo.getApplicantFormByID(id);
+	}
+
+	public async getAllCommentsById(id: number) {
+		return await this.commentRepo.getAllCommentsById(id);
+	}
+
 	public async create(formData: FormData) {
 		const applicantFormData = DataExtractor.extractApplicantFormData(formData);
 		this.validateApplicantFormData(applicantFormData);
@@ -43,18 +55,6 @@ export class ApplicantFormService {
 			console.error("Database insertion failed:", error);
 			throw new Error("Database insertion failed");
 		}
-	}
-
-	public async getAllApplicantForm() {
-		return await this.applicantRepo.getAllApplicantForm();
-	}
-
-	public async getApplicantFormByID(id: number) {
-		return await this.applicantRepo.getApplicantFormByID(id);
-	}
-
-	public async getAllCommentsById(id: number) {
-		return await this.commentRepo.getAllCommentsById(id);
 	}
 
 	private validateApplicantFormData(applicantFormData: ApplicantForm): void {

@@ -6,7 +6,6 @@ import { DataTable } from "./data-table";
 export default async function ManageUsersPage() {
 	const users = await getUsersWithDepartment();
 
-	console.log(users);
 	return (
 		<>
 			<TypographyH4 text="Users List" />

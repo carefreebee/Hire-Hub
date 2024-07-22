@@ -2,12 +2,18 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import LogoutButton from "~/components/LogoutButton";
 import { validateRequest } from "~/lib/auth";
+import { RoleEnumsType } from "~/lib/schema";
 import Pending from "~/public/svg/pending.svg";
+import { authorizedRoles } from "~/util/filter-roles";
 
 export default async function UserPage() {
 	const { user } = await validateRequest();
 
 	if (!user) return redirect("/login");
+	else if (user?.role === "admin") return redirect("/admin/users/manage-users");
+	else if (authorizedRoles.includes(user?.role as RoleEnumsType)) {
+		return redirect("/dashboard/applicant");
+	}
 
 	return (
 		<section className="flex h-screen flex-col items-center justify-center gap-5 bg-red-900 px-5 py-20">

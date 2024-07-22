@@ -25,6 +25,7 @@ export default function FilteredDisplay({ mergedData, tableRowLength }: Filtered
 				<TableCell colSpan={tableRowLength} className="h-12 text-center">
 					No data to display.
 				</TableCell>
+				<td></td>
 			</TableRow>
 		);
 	}

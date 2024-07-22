@@ -56,7 +56,7 @@ export default async function Sidebar({ id }: { id: string }) {
 						<Fragment key={index}>
 							<div className="relative mb-5 flex gap-3">
 								<div
-									className={`mb-5 flex ${item.status === "in-progress" ? "before:h-16" : "before:h-16"} ${index !== stages.length - 1 ? "before:absolute before:left-[7px] before:top-5 before:w-[1.5px] before:bg-[#7F0000]" : ""}`}
+								className={`mb-5 flex ${item.status === "in-progress" ? "before:h-16" : "before:h-16"} ${index !== stages.length - 1 ? "before:absolute before:left-[7px] before:top-5 before:w-[1.5px] before:bg-[#7F0000]" : ""}`}
 								>
 									<CheckedStatus
 										status={item.status as "passed" | "in-progress"}

@@ -1,10 +1,10 @@
 import EditJobrequestForm from "~/components/pages/authenticated/edit-job-request/EditJobRequestForm";
 import Previous from "~/components/pages/Previous";
-import { getAllJobRequestByID } from "~/Controller/JobRequestController";
+import { getJobRequestByID } from "~/Controller/JobRequestController";
 import { JobRequestSelect } from "~/lib/schema";
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { id: string } }) {
-	const jobRequestByID = await getAllJobRequestByID(Number(params.id));
+	const jobRequestByID = await getJobRequestByID(Number(params.id));
 
 	return (
 		<section className="bg-slate-200/30">

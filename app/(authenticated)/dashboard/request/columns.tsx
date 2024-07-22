@@ -34,7 +34,7 @@ export const columns: ColumnDef<JobRequestSelect>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">
-					{row.getValue("request_id")}
+					{row.index + 1}
 				</div>
 			);
 		},

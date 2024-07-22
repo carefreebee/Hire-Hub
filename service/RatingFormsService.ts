@@ -23,6 +23,7 @@ export class RatingFormsService {
 
 		try {
 			const currentApplicant = await this.fetchApplicant(updateEvaluate.applicantId);
+
 			const stageOrder: StageType[] = [
 				"initial_interview",
 				"teaching_demo",
@@ -56,6 +57,12 @@ export class RatingFormsService {
 			const nextStage = stageOrder[i + 1];
 
 			if (this.StageStatus(currentApplicant, stage) !== "passed") {
+				if (stage === "teaching_demo") {
+					if (currentApplicant.office_id !== null) {
+						continue; // Skip teaching_demo if office_id is not null
+					}
+				}
+
 				if (stage === "recommendation_for_hiring") {
 					await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
 						currentApplicant,
@@ -63,7 +70,6 @@ export class RatingFormsService {
 						applicantId,
 						status
 					);
-					break;
 				} else {
 					await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
 						currentApplicant,
@@ -72,10 +78,15 @@ export class RatingFormsService {
 						status,
 						nextStage
 					);
-					break;
 				}
+
+				break; // Break after updating or skipping a stage
 			}
 		}
+	}
+
+	private StageStatus(currentApplicant: ApplicantSelect, stage: StageType) {
+		return currentApplicant?.stages?.[stage]?.status;
 	}
 
 	private async fetchApplicant(applicantId: number) {
@@ -93,9 +104,5 @@ export class RatingFormsService {
 				"Please don't forget to update the applicant status as passed or failed"
 			);
 		}
-	}
-
-	private StageStatus(currentApplicant: ApplicantSelect, stage: StageType) {
-		return currentApplicant?.stages?.[stage]?.status;
 	}
 }

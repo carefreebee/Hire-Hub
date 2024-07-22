@@ -8,7 +8,6 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "~/components/ui/chart";
-import { Applicant } from "~/Model/ApplicantModel";
 
 const chartData = [
 	{ month: "January", desktop: 186 },
@@ -20,28 +19,26 @@ const chartData = [
 ];
 
 type ChartProps = {
-	chartData: ChartDataProps[]
+	chartData: ChartDataProps[];
 };
 
 export type ChartDataProps = {
 	month: string;
 	applicants: number;
-}
+};
+
+const chartConfig = {
+	month: {
+		label: "Month",
+		color: "#2563eb",
+	},
+	applicants: {
+		label: "Applicants",
+		color: "#2563eb",
+	},
+} satisfies ChartConfig;
 
 export function Chart({ chartData }: ChartProps) {
-	console.log(chartData);
-
-	const chartConfig = {
-		month: {
-			label: "Month",
-			color: "#2563eb",
-		},
-		applicants: {
-			label: "Applicants",
-			color: "#2563eb",
-		},
-	} satisfies ChartConfig;
-
 	return (
 		<ChartContainer config={chartConfig} className="min-h-[200px] w-full">
 			<BarChart accessibilityLayer data={chartData}>

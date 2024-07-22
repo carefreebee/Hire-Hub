@@ -7,8 +7,19 @@ export async function getAllJobRequest() {
 	return await jobRequestService.getAllJobRequest();
 }
 
-export async function getAllJobRequestByID(id: number) {
-	return await jobRequestService.getAllJobRequestByID(id);
+export async function getJobRequest() {
+	return await jobRequestService.getJobRequest();
+}
+
+export async function getJobReqByDeptOrOffice(
+	department_id: number | null,
+	office_id: number | null
+) {
+	return await jobRequestService.getDeptOrOffice(department_id, office_id);
+}
+
+export async function getJobRequestByID(id: number) {
+	return await jobRequestService.getJobRequestByID(id);
 }
 
 export async function handleSubmitJobRequest(formData: FormData) {

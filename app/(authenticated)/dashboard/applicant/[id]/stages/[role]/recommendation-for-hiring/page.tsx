@@ -14,13 +14,11 @@ import CheckboxAssessedBy from "~/components/pages/authenticated/applicant/Card/
 import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
 import {
 	AssessorInfo,
-	FinalStatus,
 	Waiting,
 } from "~/components/pages/authenticated/applicant/Card/StatusDisplayComponents";
 import SubmitStagesForm from "~/components/pages/authenticated/applicant/Card/SubmitStagesForm";
 import UploadRatingForm from "~/components/pages/authenticated/applicant/Card/UploadRatingForm";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
-import SelectMode from "~/components/pages/authenticated/applicant/initial-interview/SelectMode";
 import { UploadSuccess } from "~/components/pages/authenticated/Messages";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";

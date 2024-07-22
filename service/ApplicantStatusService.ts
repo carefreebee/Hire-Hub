@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { getApplicantFormByID } from "~/Controller/ApplicantFormController";
 import { DataExtractor } from "~/DataExtractor/ApplicantStatus";
 import { ApplicantStatusRepository } from "~/Repository/ApplicantStatusRepository";
 import { StageType } from "~/types/types";
@@ -48,22 +49,31 @@ export class ApplicantStatusService {
 		const pathname = formData.get("pathname") as string;
 
 		const allowedStatuses = ["passed", "failed"];
-
 		if (!allowedStatuses.includes(applicantUpdateStatus.status)) {
 			throw new Error("Status is required and must be 'passed' or 'failed'");
 		}
 
+		const currentApplicant = await getApplicantFormByID(applicantUpdateStatus.applicant_id);
+
 		try {
 			if (pathname === "screening") {
 				await this.applicantStatusRepo.updateScreeningStatus(
-					applicantUpdateStatus.applicant_id,
+					currentApplicant?.id as number,
 					applicantUpdateStatus.assessed_by_id,
 					applicantUpdateStatus.status,
 					"initial_interview"
 				);
-			} else if (pathname === "initial-interview") {
+			} else if (pathname === "initial-interview" && currentApplicant?.office_id !== null) {
 				await this.applicantStatusRepo.updateInitialInterviewStatus(
-					applicantUpdateStatus.applicant_id,
+					currentApplicant?.id as number,
+					"initial_interview",
+					applicantUpdateStatus.assessed_by_id,
+					applicantUpdateStatus.status,
+					"psychological_exam"
+				);
+			} else if (pathname === "initial-interview" && currentApplicant?.department_id !== null) {
+				await this.applicantStatusRepo.updateInitialInterviewStatus(
+					currentApplicant?.id as number,
 					"initial_interview",
 					applicantUpdateStatus.assessed_by_id,
 					applicantUpdateStatus.status,
