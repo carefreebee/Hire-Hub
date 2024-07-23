@@ -1,4 +1,4 @@
-import ViewResult from "~/components/pages/authenticated/admin/ViewResult";
+import ViewResult from "~/components/pages/applicant/admin/ViewResult";
 import { getDepartmentById } from "~/Controller/DepartmentController";
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { id: string } }) {

@@ -8,8 +8,16 @@ import { StageType } from "~/types/types";
 export class RatingFormsService {
 	constructor(private ratingFormsRepo: RatingFormsRepository) {}
 
+	public async getAllRaitingFormById(id: number) {
+		return await this.ratingFormsRepo.getAllRaitingFormById(id);
+	}
+
 	public async getAllRatingFormsFilesById(id: number) {
 		return await this.ratingFormsRepo.getAllRatingFormsFilesById(id);
+	}
+
+	public async getAllApplicantRatingForms() {
+		return await this.ratingFormsRepo.getAllApplicantRatingForms();
 	}
 
 	public async getRatingFormsById(id: number) {
@@ -52,17 +60,16 @@ export class RatingFormsService {
 		applicantId: number,
 		status: "passed" | "failed"
 	) {
+		// Remove 'teaching_demo' stage if office_id is present
+		if (currentApplicant.office_id !== null) {
+			stageOrder = stageOrder.filter((stage) => stage !== "teaching_demo");
+		}
+
 		for (let i = 0; i < stageOrder.length; i++) {
 			const stage = stageOrder[i];
 			const nextStage = stageOrder[i + 1];
 
 			if (this.StageStatus(currentApplicant, stage) !== "passed") {
-				if (stage === "teaching_demo") {
-					if (currentApplicant.office_id !== null) {
-						continue; // Skip teaching_demo if office_id is not null
-					}
-				}
-
 				if (stage === "recommendation_for_hiring") {
 					await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
 						currentApplicant,
@@ -70,6 +77,7 @@ export class RatingFormsService {
 						applicantId,
 						status
 					);
+					break;
 				} else {
 					await this.ratingFormsRepo.updateCurrentApplicantEvaluate(
 						currentApplicant,
@@ -78,9 +86,8 @@ export class RatingFormsService {
 						status,
 						nextStage
 					);
+					break;
 				}
-
-				break; // Break after updating or skipping a stage
 			}
 		}
 	}

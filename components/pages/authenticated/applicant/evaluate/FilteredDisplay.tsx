@@ -8,14 +8,14 @@ import { formattedNameAndRole } from "~/util/formatted-name";
 import { useFilteredEvaluate } from "~/util/zustand";
 
 type FilteredDisplayProps = {
-	mergedData: RatingFormWithUserData[];
+	rating: RatingFormWithUserData[];
 	tableRowLength: number;
 };
 
-export default function FilteredDisplay({ mergedData, tableRowLength }: FilteredDisplayProps) {
+export default function FilteredDisplay({ rating, tableRowLength }: FilteredDisplayProps) {
 	const filteredEvaluate = useFilteredEvaluate((state) => state.filteredEvaluate);
 
-	const filteredMergeData = mergedData.filter(
+	const filteredMergeData = rating.filter(
 		(data) => !filteredEvaluate || data.recruitment_stage === filteredEvaluate
 	);
 

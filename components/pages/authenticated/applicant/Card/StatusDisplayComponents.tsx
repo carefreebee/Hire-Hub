@@ -12,6 +12,15 @@ export function Waiting() {
 	);
 }
 
+export function ScreeningAndInitial({ status }: { status: string }) {
+	return (
+		<Button variant={"outline"} disabled className="h-auto w-32 py-1">
+			{formattedNameAndRole(status as string, "_")}
+		</Button>
+	);
+}
+
+
 export function FinalStatus({ mode }: { mode: string }) {
 	return (
 		<Button variant={"outline"} disabled className="h-auto w-32 py-1">

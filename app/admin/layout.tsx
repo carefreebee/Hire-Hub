@@ -3,6 +3,7 @@ import LogoutButton from "~/components/LogoutButton";
 import Navbar from "~/components/Navbar";
 import { Links } from "~/components/SideNav";
 import ApplicantSVG from "~/components/ui/applicant-svg";
+import DashboardSVG from "~/components/ui/dashboard-svg";
 import LogoutSVG from "~/components/ui/logout-svg";
 import UnitSvg from "~/components/ui/unit-svg";
 import { validateRequest } from "~/lib/auth";
@@ -24,6 +25,9 @@ export default async function layout({ children }: { children: React.ReactNode }
 					HireHub
 				</p>
 				<ul className="mt-5 flex w-full flex-col items-center justify-center gap-8 text-sm font-semibold">
+					<Links href="/admin/dashboard" label="Dashboard">
+						<DashboardSVG />
+					</Links>
 					<Links href="/admin/users/manage-users" label="Users">
 						<ApplicantSVG />
 					</Links>

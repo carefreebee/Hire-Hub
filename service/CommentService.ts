@@ -7,6 +7,14 @@ import { CommentType, Validator } from "~/Validator/Comment";
 export class CommentService {
 	constructor(private readonly commentRepo: CommentRepository) {}
 
+	public async getAllCommentsById(id: number) {
+		return await this.commentRepo.getAllCommentsById(id);
+	}
+
+	public async getCommentsByID(id: number, commentId: number[]) {
+		return await this.commentRepo.getCommentsByID(id, commentId);
+	}
+
 	public async createScreeningComment(formData: FormData) {
 		const comment = DataExtractor.extractApplicantScreeningComment(formData);
 		this.validateComment(comment);

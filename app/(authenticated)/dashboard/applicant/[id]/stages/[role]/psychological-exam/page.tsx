@@ -25,11 +25,11 @@ import { StageStatus, UploadSuccess } from "~/components/pages/authenticated/Mes
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
+import { getUsersWithoutUserRoles } from "~/Controller/UsersController";
 import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect, User } from "~/lib/schema";
 import { AssessedByUserDetails, ResumeProps } from "~/types/types";
 import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
-import { DisplayAssessedBy } from "~/util/display-assessed-by";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import { MatchingUser } from "~/util/matching-users";
 
@@ -45,7 +45,7 @@ const currentStageName = "Psychological Exam";
 export default async function PsychologicalExamPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
-	const users = await DisplayAssessedBy();
+	const users = await getUsersWithoutUserRoles();
 
 	// GETTING THE APPLICANT BY ID
 	// GETTING THE CURRENT STAGE OF THE APPLICANT eg. initial_interview, screening, etc.
@@ -142,7 +142,7 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
 	// GETTING ALL THE RATING FORMS FILES BY ID
 	const ratingForm = await getAllRatingFormsFilesById(Number(params.id));
-	
+
 	// Check if the user has already posted a rating for the current stage
 	const hasUserPostedRating = ratingForm.some(
 		(stage) => stage.recruitment_stage === currentStageName && stage.user_id === user?.id
@@ -164,7 +164,7 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 				{/* CHECKS IF THE USER's DEPARTMENT/OFFICE MATCHES THE APPLICANT's SELECTED_DEPARTMENT/SELECTED_OFFICE */}
 				{applicantStage?.status === "in-progress" && !applicantStage.assessed_by?.length ? (
 					<Waiting />
-				) : assessedByUsers && checkIfUserIsAllowedToAssess && !hasUserPostedRating ? (
+				) : assessedByUsers && !hasUserPostedRating ? (
 					<CardContent className="mt-0 flex h-auto flex-col p-5">
 						<InformationSVG />
 						<UploadRatingForm />
@@ -182,15 +182,13 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 							finalAssessorRole={finalAssessor?.role as string}
 						/>
 						{/* BELOW IS WHERE THE FORM IS LOCATED SO THAT THE APPLICANT STATUS WILL BE UPDATED */}
-						{assessedByUsers &&
-							checkIfUserIsAllowedToAssess &&
-							!hasUserPostedRating && (
-								<SubmitStagesForm
-									id={params.id}
-									evaluatorsId={user?.id as string}
-									recruitment_stage={currentStageName as string}
-								/>
-							)}
+						{assessedByUsers && !hasUserPostedRating && (
+							<SubmitStagesForm
+								id={params.id}
+								evaluatorsId={user?.id as string}
+								recruitment_stage={currentStageName as string}
+							/>
+						)}
 					</CardFooter>
 				)}
 			</Card>

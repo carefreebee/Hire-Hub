@@ -12,7 +12,7 @@ import LogoutSVG from "./ui/logout-svg";
 
 export default function SideNav({ role }: { role: RoleEnumsType }) {
 	return (
-		<nav className="flex w-[239px] flex-col items-center border-r-2 border-black/30 bg-gradient-to-t from-[#7F0000]/30 from-10% via-white">
+		<nav className="flex w-[239px] flex-col items-center border-r border-black/10 bg-gradient-to-t from-[#7F0000]/30 from-10% via-white">
 			<p className="flex h-[74px] w-full items-center justify-center bg-[#7F0000] text-xl font-semibold text-white">
 				HireHub
 			</p>

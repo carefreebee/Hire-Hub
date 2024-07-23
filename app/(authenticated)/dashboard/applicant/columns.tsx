@@ -25,6 +25,7 @@ export const columns: ColumnDef<ApplicantSelect>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">{row.getValue("id")}</div>
+				// return <div className="flex items-center justify-center gap-2">{row.index + 1}</div>;
 			);
 		},
 	},

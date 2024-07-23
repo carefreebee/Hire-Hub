@@ -1,6 +1,6 @@
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import Previous from "../../Previous";
+import Previous from "../Previous";
 
 type ViewResultProps = {
 	href: string;

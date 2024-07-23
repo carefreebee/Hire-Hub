@@ -1,4 +1,11 @@
 import { MoreHorizontal } from "lucide-react";
+import { getAllRaitingFormById } from "~/Controller/RatingFormsController";
+import {
+	Card,
+	CardContent,
+	CardHeader,
+	CardTitle,
+} from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -34,10 +41,18 @@ const stage = [
 ];
 
 type EvaluateComponentProps = {
-	mergedData: RatingFormWithUserData[];
+	id: number;
 };
 
-export default function EvaluateComponent({ mergedData }: EvaluateComponentProps) {
+export default async function EvaluateComponent({ id }: EvaluateComponentProps) {
+	// GETTING THE RATING FORM
+	const ratingForm = await getAllRaitingFormById(id);
+	if (!ratingForm) {
+		return <CardContainer>No Rating Form yet.</CardContainer>;
+	}
+
+	console.log(ratingForm);
+
 	return (
 		<Table>
 			<TableHeader className="rounded-md border-2 border-b-2">
@@ -69,8 +84,22 @@ export default function EvaluateComponent({ mergedData }: EvaluateComponentProps
 				<TableRow className="border-b-0">
 					<TableCell className="h-5"></TableCell>
 				</TableRow>
-				<FilteredDisplay mergedData={mergedData} tableRowLength={tableRow.length} />
+				<FilteredDisplay
+					rating={ratingForm as RatingFormWithUserData[]}
+					tableRowLength={tableRow.length}
+				/>
 			</TableBody>
 		</Table>
+	);
+}
+
+function CardContainer({ children }: { children: React.ReactNode }) {
+	return (
+		<Card className="my-0 h-[600px]">
+			<CardHeader>
+				<CardTitle>Evaluate Applicant</CardTitle>
+			</CardHeader>
+			<CardContent className="mt-0 h-auto w-full flex-col gap-5 p-5">{children}</CardContent>
+		</Card>
 	);
 }

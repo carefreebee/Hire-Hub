@@ -1,5 +1,5 @@
 import Link from "next/link";
-import UpdateInput from "~/components/pages/authenticated/admin/users/manage-users/update-input";
+import UpdateInput from "~/components/pages/admin/users/manage-users/update-input";
 import ArrowLeft from "~/components/ui/arrow-left";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";

@@ -1,13 +1,36 @@
 import { eq } from "drizzle-orm";
 import { db } from "~/lib/db";
-import { applicant, ApplicantSelect, ratingForms } from "~/lib/schema";
+import { applicant, ApplicantSelect, ratingForms, users } from "~/lib/schema";
 import { StageType } from "~/types/types";
 
 export class RatingFormsRepository {
+	public async getAllRaitingFormById(applicantId: number) {
+		const rawResults = await db
+			.select()
+			.from(ratingForms)
+			.leftJoin(applicant, eq(ratingForms.applicant_id, applicant.id))
+			.leftJoin(users, eq(ratingForms.user_id, users.id))
+			.where(eq(ratingForms.applicant_id, applicantId))
+			.orderBy(ratingForms.rating_id);
+
+		return rawResults.map((row) => ({
+			...row.rating_forms,
+			name: row?.users?.name,
+			role: row?.users?.role,
+		}));
+	}
+
 	public async getAllRatingFormsFilesById(id: number) {
 		return await db.query.ratingForms.findMany({
 			where: eq(ratingForms.applicant_id, id),
 		});
+	}
+
+	public async getAllApplicantRatingForms() {
+		return await db
+			.select()
+			.from(applicant)
+			.leftJoin(ratingForms, eq(applicant.id, ratingForms.applicant_id));
 	}
 
 	public async getRatingFormsById(id: number) {

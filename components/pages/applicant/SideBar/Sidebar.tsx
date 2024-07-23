@@ -52,27 +52,37 @@ export default async function Sidebar({ id }: { id: string }) {
 							</div>
 						</div>
 					</div>
-					{filteredStages.map((item, index) => (
-						<Fragment key={index}>
-							<div className="relative mb-5 flex gap-3">
-								<div
-								className={`mb-5 flex ${item.status === "in-progress" ? "before:h-16" : "before:h-16"} ${index !== stages.length - 1 ? "before:absolute before:left-[7px] before:top-5 before:w-[1.5px] before:bg-[#7F0000]" : ""}`}
-								>
-									<CheckedStatus
-										status={item.status as "passed" | "in-progress"}
-									/>
+					{filteredStages.map((item, index) => {
+						const inProgress = item.status === "in-progress";
+
+						const applicantTeaching = applicant?.department_id !== null;
+						const getLastLineTeaching = index !== stages.length - 1;
+
+						const applicantNonTeaching = applicant?.office_id !== null;
+						const getLastLineNonTeaching = index !== stages.length - 2;
+
+						return (
+							<Fragment key={index}>
+								<div className="relative mb-5 flex gap-3">
+									<div
+										className={`mb-5 flex ${inProgress ? "before:h-16" : "before:h-16"} ${applicantTeaching && getLastLineTeaching && "before:absolute before:left-[7px] before:top-5 before:w-[1.5px] before:bg-[#7F0000]"} ${applicantNonTeaching && getLastLineNonTeaching && "before:absolute before:left-[7px] before:top-5 before:w-[1.5px] before:bg-[#7F0000]"}`}
+									>
+										<CheckedStatus
+											status={item.status as "passed" | "in-progress"}
+										/>
+									</div>
+									<div>
+										<OtherStages
+											status={item.status as string}
+											assessedBy={item.assessed_by as string[]}
+											name={item.name as string}
+											userId={user?.id as string}
+										/>
+									</div>
 								</div>
-								<div>
-									<OtherStages
-										status={item.status as string}
-										assessedBy={item.assessed_by as string[]}
-										name={item.name as string}
-										userId={user?.id as string}
-									/>
-								</div>
-							</div>
-						</Fragment>
-					))}
+							</Fragment>
+						);
+					})}
 				</div>
 			</div>
 		</aside>

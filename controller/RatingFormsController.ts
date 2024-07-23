@@ -2,6 +2,10 @@
 
 import { ratingFormsService } from "~/Dependencies/dependencies";
 
+export async function getAllRaitingFormById(id: number) {
+	return await ratingFormsService.getAllRaitingFormById(id);
+}
+
 export async function getAllRatingFormsFilesById(id: number) {
 	return await ratingFormsService.getAllRatingFormsFilesById(id);
 }

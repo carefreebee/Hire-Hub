@@ -89,12 +89,13 @@ export type RatingFormWithUserData = {
 };
 
 export const rolesWithoutDeptAndOffice: RoleEnumsType[] = [
+	"admin",
 	"user",
-	"hr_head",
-	"vp_acad_affairs",
-	"vp_administration",
-	"univ_president",
-	"recruitment_officer",
+	// "hr_head", // Human Resource Department
+	// "vp_acad_affairs", // Office of the Vice President for Academic Affairs
+	// "vp_administration", // Office
+	// "univ_president", // Office
+	// "recruitment_officer", // Human Resource Department
 ];
 
 export type AssessedByUserDetails = {

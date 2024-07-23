@@ -9,6 +9,18 @@ export class UserRepository {
 		return db.query.users;
 	}
 
+	public async getAllUsers() {
+		return await this.queryUser().findMany();
+	}
+
+	public async getAllUsersFromDepartment() {
+		return await this.queryUser().findMany({ where: isNotNull(users.department_id) });
+	}
+
+	public async getAllUsersFromOffice() {
+		return await this.queryUser().findMany({ where: isNotNull(users.office_id) });
+	}
+
 	public async getUsersByUserID(id: string) {
 		return await this.queryUser().findMany({ where: eq(users.id, id) });
 	}
@@ -23,10 +35,23 @@ export class UserRepository {
 		return await this.queryUser().findMany({ where: eq(users.role, "user") });
 	}
 
+	public async getDeptAndOffice() {
+		return {
+			department: await db.query.department.findMany(),
+			office: await db.query.office.findMany(),
+		};
+	}
+
 	public async getUsersWithoutUserRoles() {
-		return await this.queryUser().findMany({
+		const user = await this.queryUser().findMany({
 			where: and(ne(users.role, "user"), ne(users.role, "admin")),
 		});
+
+		return user.map((user) => ({
+			id: user.id,
+			name: user.name,
+			role: user.role,
+		}));
 	}
 
 	public async getUsersWithDepartment() {

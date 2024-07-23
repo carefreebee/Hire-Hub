@@ -23,11 +23,11 @@ import { UploadSuccess } from "~/components/pages/authenticated/Messages";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
+import { getUsersWithoutUserRoles } from "~/Controller/UsersController";
 import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect, User } from "~/lib/schema";
 import { AssessedByUserDetails, ResumeProps } from "~/types/types";
 import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
-import { DisplayAssessedBy } from "~/util/display-assessed-by";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import { MatchingUser } from "~/util/matching-users";
 
@@ -43,7 +43,7 @@ const currentStageName = "Recommendation for Hiring";
 export default async function RecommendationForHiringPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
-	const users = await DisplayAssessedBy();
+	const users = await getUsersWithoutUserRoles();
 
 	// GETTING THE APPLICANT BY ID
 	// GETTING THE CURRENT STAGE OF THE APPLICANT eg. initial_interview, screening, etc.

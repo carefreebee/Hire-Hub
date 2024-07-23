@@ -1,5 +1,5 @@
 import Previous from "~/components/pages/Previous";
-import Form from "~/components/pages/authenticated/admin/add-new-request/Form";
+import Form from "~/components/pages/admin/add-new-request/Form";
 
 export default function AddNewRequestPage() {
 	return (

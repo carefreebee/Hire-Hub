@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { Button } from "~/components/ui/button";
 import { RatingFormsSelect, User } from "~/lib/schema";
 import { StageType } from "~/types/types";
@@ -37,7 +38,11 @@ export default function CommentsAndDocuments({
 					<CardTitle>Comments</CardTitle>
 				</CardHeader>
 				<CardContent className="h-60 flex-col px-5 pb-5">
-					<CommentComponent applicantId={applicantId} stage={stage || null} />
+					<div className="flex h-[180px] flex-1 flex-col gap-3 overflow-y-auto pb-3">
+						<Suspense fallback={<p>Loading...</p>}>
+							<CommentComponent applicantId={applicantId} stage={stage || null} />
+						</Suspense>
+					</div>
 					<CommentForm applicantId={applicantId} evaluatorsId={evaluatorsId} />
 				</CardContent>
 			</Card>

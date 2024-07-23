@@ -2,6 +2,14 @@
 
 import { commentService } from "~/Dependencies/dependencies";
 
+export async function getApplicantCommentByID(id: number) {
+	return await commentService.getAllCommentsById(id);
+}
+
+export async function getAllCommentsByID(applicantId: number, commentId: number[]) {
+	return await commentService.getCommentsByID(applicantId, commentId);
+}
+
 export async function CreateScreeningComment(formData: FormData) {
 	return await commentService.createScreeningComment(formData);
 }

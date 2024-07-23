@@ -1,5 +1,5 @@
 import Previous from "~/components/pages/Previous";
-import AddUnitComponent from "~/components/pages/authenticated/admin/AddUnitComponent";
+import AddUnitComponent from "~/components/pages/admin/AddUnitComponent";
 
 export default function AddNewRequestPage() {
 	return (

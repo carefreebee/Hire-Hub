@@ -1,4 +1,4 @@
-import EditOffice from "~/components/pages/authenticated/admin/edit-office/EditOffice";
+import EditOffice from "~/components/pages/admin/edit-office/EditOffice";
 import Previous from "~/components/pages/Previous";
 import { getOfficeById } from "~/Controller/OfficeController";
 

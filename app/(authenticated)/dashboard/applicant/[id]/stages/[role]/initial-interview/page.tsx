@@ -9,7 +9,10 @@ import {
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
-import { AssessorInfo } from "~/components/pages/authenticated/applicant/Card/StatusDisplayComponents";
+import {
+	AssessorInfo,
+	ScreeningAndInitial,
+} from "~/components/pages/authenticated/applicant/Card/StatusDisplayComponents";
 import SubmitStagesForm from "~/components/pages/authenticated/applicant/Card/SubmitStagesForm";
 import UpdateDate from "~/components/pages/authenticated/applicant/Card/UdpateDate";
 import UploadRatingForm from "~/components/pages/authenticated/applicant/Card/UploadRatingForm";
@@ -18,9 +21,9 @@ import { StageStatus, UploadSuccess } from "~/components/pages/authenticated/Mes
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
+import { getUsersWithoutUserRoles } from "~/Controller/UsersController";
 import { validateRequest } from "~/lib/auth";
 import { ResumeProps } from "~/types/types";
-import { DisplayAssessedBy } from "~/util/display-assessed-by";
 import { GetCurrentStage } from "~/util/get-current-stage";
 
 const DisplayDateNoSSR = dynamic(
@@ -47,7 +50,7 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 	const isFailed = applicantStage?.status === "failed";
 
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
-	const users = await DisplayAssessedBy();
+	const users = await getUsersWithoutUserRoles();
 
 	const isRecruitmentOfficer = user?.role === "recruitment_officer";
 
@@ -74,8 +77,12 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 							</DownloadForm>
 						</CardTitle>
 					</CardHeader>
-					{isPassed && <DisplayIfPassed date={applicantStage?.date as Date} />}
-					{isFailed && <DisplayIfPassed date={applicantStage?.date as Date} />}
+					{(isPassed || isFailed) && (
+						<DisplayIfPassed
+							date={applicantStage?.date as Date}
+							status={applicantStage?.status}
+						/>
+					)}
 
 					{isRecruitmentOfficer && !applicantStage?.date ? (
 						<>
@@ -154,12 +161,13 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 	);
 }
 
-function DisplayIfPassed({ date }: { date: Date }) {
+function DisplayIfPassed({ date, status }: { date: Date; status?: string }) {
 	return (
 		<CardContent>
 			<CardSubContent>
 				<CardTopLeftSubContent>
 					<TypographySmall size={"md"}>{currentStageName}</TypographySmall>
+					<ScreeningAndInitial status={status as string} />
 				</CardTopLeftSubContent>
 				<DisplayDateNoSSR date={date as Date} />
 			</CardSubContent>

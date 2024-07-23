@@ -6,6 +6,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { formattedName, formattedNameAndRole } from "~/util/formatted-name";
 import { Button } from "../ui/button";
 
 type HeaderProps = {
@@ -52,11 +53,11 @@ export default function Header({
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="w-[253px]">
 						<DropDownContentComponent label="Applied As">
-							{positionType}
+							{formattedNameAndRole(positionType, "_")}
 						</DropDownContentComponent>
 						<DropdownMenuSeparator />
 
-						<DropDownContentComponent label="Applied As">
+						<DropDownContentComponent label="Position Applied">
 							{positionApplied}
 						</DropDownContentComponent>
 						<DropdownMenuSeparator />
@@ -70,7 +71,7 @@ export default function Header({
 						<DropdownMenuSeparator />
 
 						<DropDownContentComponent label="Preferred Mode">
-							{communicationType}
+							{formattedName(communicationType)}
 						</DropDownContentComponent>
 					</DropdownMenuContent>
 				</DropdownMenu>

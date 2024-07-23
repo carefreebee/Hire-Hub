@@ -1,4 +1,4 @@
-import EditDepartment from "~/components/pages/authenticated/admin/edit-department/EditDepartment";
+import EditDepartment from "~/components/pages/admin/edit-department/EditDepartment";
 import Previous from "~/components/pages/Previous";
 import { getDepartmentById } from "~/Controller/DepartmentController";
 

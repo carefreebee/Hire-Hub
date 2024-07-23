@@ -1,11 +1,9 @@
 import Link from "next/link";
-import UpdateInput from "~/components/pages/authenticated/admin/users/manage-users/update-input";
+import UpdateInput from "~/components/pages/admin/users/manage-users/update-input";
 import ArrowLeft from "~/components/ui/arrow-left";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { getAllDepartment } from "~/Controller/DepartmentController";
-import { getAllOffice } from "~/Controller/OfficeController";
-import { getUserByID } from "~/Controller/UsersController";
+import { getDeptAndOffice, getUserByID } from "~/Controller/UsersController";
 
 function UserIDContainer({ children }: { children: React.ReactNode }) {
 	return <div className="grid w-full items-center gap-1.5">{children}</div>;
@@ -29,8 +27,7 @@ function UserIDChildren({ label, value }: UserIDChildrenProps) {
 
 export default async function UserIDPage({ params }: { params: { id: string } }) {
 	const user = await getUserByID(params.id);
-	const department = await getAllDepartment();
-	const office = await getAllOffice();
+	const { department, office } = await getDeptAndOffice();
 
 	return (
 		<section className="mb-32 flex flex-col gap-20 bg-white">

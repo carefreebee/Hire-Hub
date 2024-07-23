@@ -4,14 +4,12 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 
 type CommentDisplayProps = {
-	id: number;
 	comment: string;
 	evaluatorName: string;
 	evaluatorRole: string;
 };
 
 export default function CommentDisplay({
-	id,
 	comment,
 	evaluatorName,
 	evaluatorRole,

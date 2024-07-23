@@ -118,13 +118,13 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 						name="selected_option"
 						className="flex gap-10"
 					>
-						<div className="ml-auto flex items-center space-x-2">
+						<div className="flex items-center space-x-2">
 							<RadioGroupItem value="teaching_staff" id="r1" />
-							<Label htmlFor="r1">Teaching Staff</Label>
+							<Label htmlFor="r1">Department</Label>
 						</div>
 						<div className="flex items-center space-x-2">
 							<RadioGroupItem value="non-teaching_staff" id="r2" />
-							<Label htmlFor="r2">Non-Teaching Staff</Label>
+							<Label htmlFor="r2">Office</Label>
 						</div>
 					</RadioGroup>
 				</div>

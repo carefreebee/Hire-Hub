@@ -14,6 +14,33 @@ export class UsersService {
 		private readonly officeRepo: OfficeRepository
 	) {}
 
+	public async getAllUsers() {
+		try {
+			return await this.userRepo.getAllUsers();
+		} catch (error) {
+			console.error("Error during fetching Users:", error);
+			throw new Error("Error during fetching Users");
+		}
+	}
+
+	public async getAllUsersFromDepartment() {
+		try {
+			return await this.userRepo.getAllUsersFromDepartment();
+		} catch (error) {
+			console.error("Error during fetching User from Departemnt:", error);
+			throw new Error("Error during fetching User from Departemnt");
+		}
+	}
+
+	public async getAllUsersFromOffice() {
+		try {
+			return await this.userRepo.getAllUsersFromOffice();
+		} catch (error) {
+			console.error("Error during fetching User from Office:", error);
+			throw new Error("Error during fetching User from Office");
+		}
+	}
+
 	public async getUsersByUserID(id: string) {
 		try {
 			return await this.userRepo.getUsersByUserID(id);
@@ -35,6 +62,15 @@ export class UsersService {
 	public async getUsersByUserRole() {
 		try {
 			return await this.userRepo.getUsersByUserRole();
+		} catch (error) {
+			console.error("Error in getUsersByUserID:", error);
+			throw new Error("Error in getUsersByUserRole");
+		}
+	}
+
+	public async getDeptAndOffice() {
+		try {
+			return await this.userRepo.getDeptAndOffice();
 		} catch (error) {
 			console.error("Error in getUsersByUserID:", error);
 			throw new Error("Error in getUsersByUserRole");

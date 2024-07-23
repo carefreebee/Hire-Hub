@@ -18,12 +18,15 @@ export class ApplicantFormService {
 		return await this.applicantRepo.getAllApplicantForm();
 	}
 
-	public async getApplicantFormByID(id: number) {
-		return await this.applicantRepo.getApplicantFormByID(id);
+	public async getAllApplicantByDeptOrOffice(
+		department_id: number | null,
+		office_id: number | null
+	) {
+		return await this.applicantRepo.getAllApplicantByDeptOrOffice(department_id, office_id);
 	}
 
-	public async getAllCommentsById(id: number) {
-		return await this.commentRepo.getAllCommentsById(id);
+	public async getApplicantFormByID(id: number) {
+		return await this.applicantRepo.getApplicantFormByID(id);
 	}
 
 	public async create(formData: FormData) {

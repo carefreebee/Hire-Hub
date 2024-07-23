@@ -1,7 +1,7 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { getApplicantFormByID } from "~/Controller/ApplicantFormController";
 import { db } from "~/lib/db";
-import { CommentsInsert, applicant, comments } from "~/lib/schema";
+import { CommentsInsert, applicant, comments, users } from "~/lib/schema";
 import { StageType } from "~/types/types";
 
 export class CommentRepository {
@@ -9,6 +9,28 @@ export class CommentRepository {
 		return await db.query.comments.findFirst({
 			where: eq(comments.id, id),
 		});
+	}
+
+	public async getCommentsByID(applicantId: number, commentId: number[]) {
+		if (!commentId || commentId.length === 0) {
+			return [];
+		}
+
+		const comment = await db
+			.select()
+			.from(applicant)
+			.leftJoin(comments, inArray(comments.id, commentId))
+			.leftJoin(users, eq(users.id, comments.commented_by))
+			.where(eq(applicant.id, applicantId))
+			.orderBy(comments.id);
+
+		return comment.map((row) => ({
+			id: row.applicant.id,
+			commentId: row.comments?.id,
+			comment: row.comments?.comment,
+			commented_by: row.users?.name,
+			commented_role: row.users?.role,
+		}));
 	}
 
 	public async insertAndGetCurrentInsertedComment(comment: CommentsInsert, applicantId: number) {
