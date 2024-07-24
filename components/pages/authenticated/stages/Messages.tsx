@@ -1,4 +1,4 @@
-import { CardContent } from "./applicant/Card/CardComponent";
+import { CardContent } from "../applicant/Card/CardComponent";
 
 export function StageStatus({ status }: { status: string }) {
 	const inProgress = status === "in-progress";

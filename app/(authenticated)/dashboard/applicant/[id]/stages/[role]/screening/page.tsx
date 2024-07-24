@@ -8,6 +8,7 @@ import {
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
+import { LoadingButtonMode, LoadingCardFooter } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import CardContentComponent from "~/components/pages/authenticated/applicant/screening/CardContentComponent";
 import CardFooterComponent from "~/components/pages/authenticated/applicant/screening/CardFooter";
@@ -18,11 +19,7 @@ import { GetCurrentStage } from "~/util/get-current-stage";
 
 export default async function ApplicantIdPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
-
-	// GETTING THE APPLICANT BY ID
-	// GETTING THE CURRENT STAGE OF THE APPLICANT eg. initial_interview, screening, etc.
 	const { applicant, applicantStage } = await GetCurrentStage(Number(params.id), "screening");
-	const { resume_name, resume_url, letter_name, letter_url } = applicant?.resume as ResumeProps;
 
 	return (
 		<>
@@ -34,15 +31,16 @@ export default async function ApplicantIdPage({ params }: { params: { id: string
 					<CardSubContent>
 						<CardTopLeftSubContent>
 							<TypographySmall size={"md"}>Screening</TypographySmall>
-							<Suspense fallback={<p>Loading...</p>}>
+
+							<Suspense fallback={<LoadingButtonMode />}>
 								<CardContentComponent applicantId={Number(params.id)} />
 							</Suspense>
 						</CardTopLeftSubContent>
-					<DisplayDate date={applicantStage?.date as Date} />
+						<DisplayDate date={applicantStage?.date as Date} />
 					</CardSubContent>
 				</CardContent>
 
-				<Suspense fallback={<p>Loading...</p>}>
+				<Suspense fallback={<LoadingCardFooter />}>
 					<CardFooterComponent applicantId={Number(params.id)} />
 				</Suspense>
 			</Card>
@@ -51,10 +49,7 @@ export default async function ApplicantIdPage({ params }: { params: { id: string
 				stage="screening"
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}
-				resume_name={resume_name}
-				resume_url={resume_url}
-				letter_name={letter_name}
-				letter_url={letter_url}
+				resume={applicant?.resume as ResumeProps}
 			/>
 		</>
 	);

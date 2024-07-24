@@ -1,6 +1,7 @@
 "use client";
 
 import { ColumnDef, flexRender } from "@tanstack/react-table";
+import { usePathname } from "next/navigation";
 import { AdminSubNav } from "~/components/pages/admin/AdminSubNav";
 import { SearchInput } from "~/components/pages/authenticated/SearchInput";
 import TableHeaderComponent from "~/components/pages/authenticated/table/Header";

@@ -12,6 +12,10 @@ export class RatingFormsService {
 		return await this.ratingFormsRepo.getAllRaitingFormById(id);
 	}
 
+	public async getAllRaitingFormByIdInEachStages(applicantId: number, ratingFormId: number[]) {
+		return await this.ratingFormsRepo.getAllRaitingFormByIdInEachStages(applicantId, ratingFormId);
+	}
+
 	public async getAllRatingFormsFilesById(id: number) {
 		return await this.ratingFormsRepo.getAllRatingFormsFilesById(id);
 	}

@@ -21,7 +21,7 @@ import SubmitStagesForm from "~/components/pages/authenticated/applicant/Card/Su
 import UploadRatingForm from "~/components/pages/authenticated/applicant/Card/UploadRatingForm";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import SelectMode from "~/components/pages/authenticated/applicant/initial-interview/SelectMode";
-import { StageStatus, UploadSuccess } from "~/components/pages/authenticated/Messages";
+import { StageStatus, UploadSuccess } from "~/components/pages/authenticated/stages/Messages";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
@@ -53,7 +53,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 		Number(params.id),
 		"panel_interview"
 	);
-	const { resume_name, resume_url, letter_name, letter_url } = applicant?.resume as ResumeProps;
+
 	const inProgress = applicantStage?.status === "in-progress";
 	const isPassed = applicantStage?.status === "passed";
 	const isFailed = applicantStage?.status === "failed";
@@ -119,12 +119,8 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 					stage="panel_interview"
 					applicantId={params.id as string}
 					evaluatorsId={user?.id as string}
-					resume_name={resume_name}
-					resume_url={resume_url}
-					letter_name={letter_name}
-					letter_url={letter_url}
+					resume={applicant?.resume as ResumeProps}
 					document={document}
-					users={users}
 				/>
 			</>
 		);
@@ -197,12 +193,8 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 				stage="panel_interview"
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}
-				resume_name={resume_name}
-				resume_url={resume_url}
-				letter_name={letter_name}
-				letter_url={letter_url}
+				resume={applicant?.resume as ResumeProps}
 				document={document}
-				users={users}
 			/>
 		</>
 	);

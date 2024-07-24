@@ -24,26 +24,47 @@ const monthNames = [
 	"December",
 ];
 
+type UsersByMonthAndYear = {
+	[key: string]: {
+		[key: number]: number; // Where key is the year, and the value is an array of 12 numbers (one for each month)
+	};
+};
+
 export default async function AdminDashboardPage() {
 	const users = await getAllUsers();
 	const newUserLogin = await getUsersByUserRole();
 	const departmentUsers = await getAllUsersFromDepartment();
 	const officeUsers = await getAllUsersFromOffice();
 
-	const usersByMonth = Array(12).fill(0); // Initialize an array to count users for each month
+	const usersByMonthAndYear: UsersByMonthAndYear = {};
 
+	// Populate the usersByMonthAndYear object
 	users.forEach((user) => {
 		if (user.appliedAt) {
 			const appliedDate = new Date(user.appliedAt);
-			const appliedMonth = appliedDate.getMonth();
-			usersByMonth[appliedMonth]++;
+			const year = appliedDate.getFullYear();
+			const month = appliedDate.getMonth();
+
+			// Ensure the year key exists
+			if (!usersByMonthAndYear[year]) {
+				usersByMonthAndYear[year] = Array(12).fill(0);
+			}
+
+			// Increment the count for the specific month of the year
+			usersByMonthAndYear[year][month]++;
 		}
 	});
 
-	const totalUsers = monthNames.map((month, index) => ({
-		month: month,
-		users: usersByMonth[index],
-	}));
+	// Convert the data to the format needed for the chart
+	const totalUsers = Object.keys(usersByMonthAndYear).map((year) => {
+		return {
+			year,
+			months: monthNames.map((month, index) => ({
+				month,
+				users: usersByMonthAndYear[+year][index],
+			})),
+		};
+	});
 
 	return (
 		<section>

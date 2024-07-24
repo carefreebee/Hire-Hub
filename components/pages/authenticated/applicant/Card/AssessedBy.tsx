@@ -18,7 +18,6 @@ export default function AssessedBy({ isThereAssessors, assessors }: AssessedByPr
 
 	return (
 		<>
-			<TypographySmall size={"md"}>Assessed by:</TypographySmall>
 			<TypographySmall size={"md"} className="flex-col text-xs">
 				{isThereAssessors && isThereAssessors.length > 0 ? (
 					<>

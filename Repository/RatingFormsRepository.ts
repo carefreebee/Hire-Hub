@@ -1,11 +1,11 @@
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { db } from "~/lib/db";
 import { applicant, ApplicantSelect, ratingForms, users } from "~/lib/schema";
 import { StageType } from "~/types/types";
 
 export class RatingFormsRepository {
 	public async getAllRaitingFormById(applicantId: number) {
-		const rawResults = await db
+		const ratingForm = await db
 			.select()
 			.from(ratingForms)
 			.leftJoin(applicant, eq(ratingForms.applicant_id, applicant.id))
@@ -13,9 +13,31 @@ export class RatingFormsRepository {
 			.where(eq(ratingForms.applicant_id, applicantId))
 			.orderBy(ratingForms.rating_id);
 
-		return rawResults.map((row) => ({
+		return ratingForm.map((row) => ({
 			...row.rating_forms,
 			name: row?.users?.name,
+			role: row?.users?.role,
+		}));
+	}
+
+	public async getAllRaitingFormByIdInEachStages(applicantId: number, ratingFormId: number[]) {
+		if (!ratingFormId || ratingFormId.length === 0) {
+			return [];
+		}
+
+		const ratingForm = await db
+			.select()
+			.from(applicant)
+			.leftJoin(ratingForms, inArray(ratingForms.rating_id, ratingFormId))
+			.leftJoin(users, eq(ratingForms.user_id, users.id))
+			.where(eq(applicant.id, applicantId))
+			.orderBy(ratingForms.rating_id);
+
+		return ratingForm.map((row) => ({
+			id: row.applicant.id,
+			rate: row.rating_forms?.rate,
+			recruitment_stage: row.rating_forms?.recruitment_stage,
+			user_id: row.rating_forms?.user_id,
 			role: row?.users?.role,
 		}));
 	}

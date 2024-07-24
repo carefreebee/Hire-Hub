@@ -20,7 +20,6 @@ export function ScreeningAndInitial({ status }: { status: string }) {
 	);
 }
 
-
 export function FinalStatus({ mode }: { mode: string }) {
 	return (
 		<Button variant={"outline"} disabled className="h-auto w-32 py-1">
@@ -30,8 +29,8 @@ export function FinalStatus({ mode }: { mode: string }) {
 }
 
 type AssessorInfoProps = {
-	finalAssessorName: string;
-	finalAssessorRole: string;
+	finalAssessorName: string | undefined;
+	finalAssessorRole: string | undefined;
 };
 
 export function AssessorInfo({ finalAssessorName, finalAssessorRole }: AssessorInfoProps) {

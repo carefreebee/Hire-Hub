@@ -30,7 +30,7 @@ export default function CommentDisplay({
 					{evaluatorName} | {evaluatorRole}
 				</p>
 				<p
-					className={`${seeMore ? "h-auto" : "h-10"} overflow-hidden text-sm text-[#949498] transition duration-300`}
+					className={`${seeMore ? "h-auto" : "h-10"} overflow-hidden text-sm text-[#949498]`}
 				>
 					{comment}
 				</p>

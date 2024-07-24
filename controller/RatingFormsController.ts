@@ -6,6 +6,13 @@ export async function getAllRaitingFormById(id: number) {
 	return await ratingFormsService.getAllRaitingFormById(id);
 }
 
+export async function getAllRaitingFormByIdInEachStages(
+	applicantId: number,
+	ratingFormId: number[]
+) {
+	return await ratingFormsService.getAllRaitingFormByIdInEachStages(applicantId, ratingFormId);
+}
+
 export async function getAllRatingFormsFilesById(id: number) {
 	return await ratingFormsService.getAllRatingFormsFilesById(id);
 }

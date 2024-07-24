@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
@@ -14,9 +14,12 @@ type ChartProps = {
 	chartData: ChartDataProps[];
 };
 
-export type ChartDataProps = {
-	month: string;
-	users: number;
+type ChartDataProps = {
+	year: string;
+	months: {
+		month: string;
+		users: number;
+	}[];
 };
 
 const chartConfig = {
@@ -31,17 +34,28 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function AdminChart({ chartData }: ChartProps) {
-	const [year, setYear] = useState<number | undefined>();
+	const defaultYear = 2024;
+	const [year, setYear] = useState<number>(defaultYear);
+
+	useEffect(() => {
+		// Initialize year state to defaultYear
+		setYear(defaultYear);
+	}, []);
+
+	// Filter chartData based on the selected year
+	const filteredData = chartData.find((data) => data.year === year.toString());
 
 	return (
 		<div className="bg-white">
-			<div className="flex justify-between">
-				<p>User Statistics</p>
-				<YearPicker selectedYear={year} onYearSelect={setYear} />
+			<div className="px-10 py-5">
+				<div className="flex justify-between">
+					<p className="text-lg font-semibold">User Statistics</p>
+					<YearPicker selectedYear={year} onYearSelect={setYear} />
+				</div>
+				<p className="pt-5 text-sm font-semibold">No. of Users</p>
 			</div>
-			<p>No. of Users</p>
 			<ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-				<BarChart accessibilityLayer data={chartData}>
+				<BarChart data={filteredData?.months || []}>
 					<CartesianGrid vertical={false} />
 					<XAxis
 						dataKey="month"
@@ -60,12 +74,13 @@ export function AdminChart({ chartData }: ChartProps) {
 	);
 }
 
+
 type YearPickerProps = {
 	selectedYear: number | undefined;
 	onYearSelect: (year: number) => void;
 };
 
-const years = Array.from({ length: 100 }, (_, i) => 1900 + i);
+const years = Array.from({ length: 100 }, (_, i) => 2024 + i);
 
 function YearPicker({ selectedYear, onYearSelect }: YearPickerProps) {
 	return (
@@ -85,31 +100,3 @@ function YearPicker({ selectedYear, onYearSelect }: YearPickerProps) {
 		</select>
 	);
 }
-
-// export function AdminChart({ chartData }: ChartProps) {
-// 	const [year, setYear] = useState<number | undefined>();
-
-// 	return (
-// 		<div className="bg-white">
-// 			<div className="flex justify-between">
-// 				<p>User Statistics</p>
-// 				<YearPicker selectedYear={year} onYearSelect={setYear} />
-// 			</div>
-// 			<p>No. of Users</p>
-// 			<ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-// 				<BarChart data={chartData}>
-// 					<CartesianGrid vertical={false} />
-// 					<XAxis
-// 						dataKey="year"
-// 						tickLine={false}
-// 						tickMargin={10}
-// 						axisLine={false}
-// 						tickFormatter={(value) => value} // Display year as is
-// 					/>
-// 					<ChartTooltip content={<ChartTooltipContent />} />
-// 					<Bar dataKey="users" fill="var(--color-users)" radius={4} />
-// 				</BarChart>
-// 			</ChartContainer>
-// 		</div>
-// 	);
-// }

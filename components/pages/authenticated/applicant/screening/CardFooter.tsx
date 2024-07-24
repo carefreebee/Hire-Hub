@@ -1,13 +1,9 @@
-import {
-	CardFooter,
-	CardTopLeftSubContent,
-} from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import { CardFooter } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import { validateRequest } from "~/lib/auth";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import { AssessorInfo } from "../Card/StatusDisplayComponents";
 import UpdateDate from "../Card/UdpateDate";
 import UpdateStatus from "../Card/UdpateStatus";
-import DisplayDate from "../Card/DisplayDate";
 
 export default async function CardFooterComponent({ applicantId }: { applicantId: number }) {
 	const { user } = await validateRequest();
@@ -42,7 +38,6 @@ export default async function CardFooterComponent({ applicantId }: { applicantId
 					</CardFooter>
 				)
 			)}
-			
 		</>
 	);
 }

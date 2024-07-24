@@ -19,7 +19,7 @@ import {
 import SubmitStagesForm from "~/components/pages/authenticated/applicant/Card/SubmitStagesForm";
 import UploadRatingForm from "~/components/pages/authenticated/applicant/Card/UploadRatingForm";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
-import { UploadSuccess } from "~/components/pages/authenticated/Messages";
+import { UploadSuccess } from "~/components/pages/authenticated/stages/Messages";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
@@ -51,7 +51,7 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 		Number(params.id),
 		"recommendation_for_hiring"
 	);
-	const { resume_name, resume_url, letter_name, letter_url } = applicant?.resume as ResumeProps;
+
 	const inProgress = applicantStage?.status === "in-progress";
 	const isPassed = applicantStage?.status === "passed";
 	const isFailed = applicantStage?.status === "failed";
@@ -112,12 +112,8 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 					stage="recommendation_for_hiring"
 					applicantId={params.id as string}
 					evaluatorsId={user?.id as string}
-					resume_name={resume_name}
-					resume_url={resume_url}
-					letter_name={letter_name}
-					letter_url={letter_url}
+					resume={applicant?.resume as ResumeProps}
 					document={document}
-					users={users}
 				/>
 			</>
 		);
@@ -193,12 +189,8 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 				stage="recommendation_for_hiring"
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}
-				resume_name={resume_name}
-				resume_url={resume_url}
-				letter_name={letter_name}
-				letter_url={letter_url}
+				resume={applicant?.resume as ResumeProps}
 				document={document}
-				users={users}
 			/>
 		</>
 	);
