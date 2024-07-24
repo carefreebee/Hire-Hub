@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-
 import {
 	ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 } from "~/components/ui/chart";
+import { YearPicker } from "../../year-picker";
 
 type ChartProps = {
 	chartData: ChartDataProps[];
@@ -71,32 +71,5 @@ export function AdminChart({ chartData }: ChartProps) {
 				</BarChart>
 			</ChartContainer>
 		</div>
-	);
-}
-
-
-type YearPickerProps = {
-	selectedYear: number | undefined;
-	onYearSelect: (year: number) => void;
-};
-
-const years = Array.from({ length: 100 }, (_, i) => 2024 + i);
-
-function YearPicker({ selectedYear, onYearSelect }: YearPickerProps) {
-	return (
-		<select
-			value={selectedYear ?? ""}
-			onChange={(e) => onYearSelect(Number(e.target.value))}
-			className="w-52 p-2"
-		>
-			<option value="" disabled>
-				Select a year
-			</option>
-			{years.map((year) => (
-				<option key={year} value={year}>
-					{year}
-				</option>
-			))}
-		</select>
 	);
 }

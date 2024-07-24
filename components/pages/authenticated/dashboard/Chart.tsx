@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
@@ -8,14 +9,18 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "~/components/ui/chart";
+import { YearPicker } from "../../year-picker";
 
 type ChartProps = {
 	chartData: ChartDataProps[];
 };
 
-export type ChartDataProps = {
-	month: string;
-	applicants: number;
+type ChartDataProps = {
+	year: string;
+	months: {
+		month: string;
+		applicants: number;
+	}[];
 };
 
 const chartConfig = {
@@ -30,15 +35,28 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function Chart({ chartData }: ChartProps) {
+	const defaultYear = 2024;
+	const [year, setYear] = useState<number>(defaultYear);
+
+	useEffect(() => {
+		// Initialize year state to defaultYear
+		setYear(defaultYear);
+	}, []);
+
+	// Filter chartData based on the selected year
+	const filteredData = chartData.find((data) => data.year === year.toString());
+
 	return (
 		<div className="bg-white">
-			<div className="flex justify-between">
-				<p>Applicant Statistics</p>
-				<p>should be year</p>
+			<div className="px-10 py-5">
+				<div className="flex justify-between">
+					<p className="text-lg font-semibold">User Statistics</p>
+					<YearPicker selectedYear={year} onYearSelect={setYear} />
+				</div>
+				<p className="pt-5 text-sm font-semibold">No. of Applicants</p>
 			</div>
-			<p>No. of Applicants</p>
 			<ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-				<BarChart accessibilityLayer data={chartData}>
+				<BarChart accessibilityLayer data={filteredData?.months || []}>
 					<CartesianGrid vertical={false} />
 					<XAxis
 						dataKey="month"

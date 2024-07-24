@@ -14,7 +14,7 @@ type DeptOrOfficeProps = {
 	assessorLength: number | undefined;
 	assessedByUsers: AssessedByUser;
 	hasUserPostedRating: HasUserPostedRating;
-	checkIfUserIsAllowedToAssess: CheckIfUserIsAllowedToAssess;
+	checkIfUserIsAllowedToAssess?: CheckIfUserIsAllowedToAssess;
 	status: string | undefined;
 };
 
@@ -26,6 +26,10 @@ export function DeptOrOfficeComponent({
 	status,
 }: DeptOrOfficeProps) {
 	const inProgress = status === "in-progress";
+	const showAssessmentForm =
+		assessedByUsers &&
+		(!checkIfUserIsAllowedToAssess || checkIfUserIsAllowedToAssess) &&
+		!hasUserPostedRating;
 
 	return (
 		<>
@@ -33,10 +37,10 @@ export function DeptOrOfficeComponent({
 				<CardContent className="mt-0 flex-col items-center justify-center gap-2">
 					<p className="text-xl font-medium">Waiting...</p>
 					<TypographySmall>
-						Wating for Recruitment Officer to set the assessor.
+						Waiting for Recruitment Officer to set the assessor.
 					</TypographySmall>
 				</CardContent>
-			) : assessedByUsers && checkIfUserIsAllowedToAssess && !hasUserPostedRating ? (
+			) : showAssessmentForm ? (
 				<CardContent className="mt-0 flex h-auto flex-col p-5">
 					<InformationSVG />
 					<UploadRatingForm />
@@ -44,7 +48,7 @@ export function DeptOrOfficeComponent({
 			) : hasUserPostedRating ? (
 				<UploadSuccess />
 			) : (
-				<StageStatus status={status as string} />
+				<StageStatus status={status ?? ""} />
 			)}
 		</>
 	);
@@ -55,7 +59,7 @@ type DeptOrOfficeFooterProps = {
 	assessorsName: string | undefined;
 	assessorsRole: string | undefined;
 	assessedByUsers: AssessedByUser;
-	checkIfUserIsAllowedToAssess: CheckIfUserIsAllowedToAssess;
+	checkIfUserIsAllowedToAssess?: CheckIfUserIsAllowedToAssess;
 	hasUserPostedRating: HasUserPostedRating;
 	applicantId: string;
 	userId: string;
@@ -74,6 +78,10 @@ export function DeptOrOfficeFooter({
 	currentStageName,
 }: DeptOrOfficeFooterProps) {
 	const inProgress = status === "in-progress";
+	const showSubmitButton =
+		assessedByUsers &&
+		(!checkIfUserIsAllowedToAssess || checkIfUserIsAllowedToAssess) &&
+		!hasUserPostedRating;
 
 	return (
 		<>
@@ -85,7 +93,7 @@ export function DeptOrOfficeFooter({
 						finalAssessorRole={assessorsRole}
 					/>
 					{/* BELOW IS WHERE THE FORM IS LOCATED SO THAT THE APPLICANT STATUS WILL BE UPDATED */}
-					{assessedByUsers && checkIfUserIsAllowedToAssess && !hasUserPostedRating && (
+					{showSubmitButton && (
 						<SubmitStagesForm
 							id={applicantId}
 							evaluatorsId={userId as string}

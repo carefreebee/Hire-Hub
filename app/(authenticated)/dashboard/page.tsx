@@ -20,24 +20,45 @@ const monthNames = [
 	"December",
 ];
 
+type UsersByMonthAndYear = {
+	[key: string]: {
+		[key: number]: number; // Where key is the year, and the value is an array of 12 numbers (one for each month)
+	};
+};
+
 export default async function DashboardPage() {
 	const applicants = await getAllApplicantForm();
 	const jobRequests = await getAllJobRequest();
 
-	const applicantsByMonth = Array(12).fill(0); // Initialize an array to count applicants for each month
+	const applicantsByMonthAndYear: UsersByMonthAndYear = {};
 
+	// Populate the applicantsByMonthAndYear object
 	applicants.forEach((applicant) => {
 		if (applicant.applied_date) {
 			const appliedDate = new Date(applicant.applied_date);
-			const appliedMonth = appliedDate.getMonth();
-			applicantsByMonth[appliedMonth]++;
+			const year = appliedDate.getFullYear();
+			const month = appliedDate.getMonth();
+
+			// Ensure the year key exists
+			if (!applicantsByMonthAndYear[year]) {
+				applicantsByMonthAndYear[year] = Array(12).fill(0);
+			}
+
+			// Increment the count for the specific month of the year
+			applicantsByMonthAndYear[year][month]++;
 		}
 	});
 
-	const chartData = monthNames.map((month, index) => ({
-		month: month,
-		applicants: applicantsByMonth[index],
-	}));
+	// Convert the data to the format needed for the chart
+	const chartData = Object.keys(applicantsByMonthAndYear).map((year) => {
+		return {
+			year,
+			months: monthNames.map((month, index) => ({
+				month,
+				applicants: applicantsByMonthAndYear[+year][index],
+			})),
+		};
+	});
 
 	function areAllStagesPassed(stages: any) {
 		return Object.values(stages).every((stage: any) => stage.status === "passed");

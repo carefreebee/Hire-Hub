@@ -1,4 +1,4 @@
-import ViewResult from "~/components/pages/applicant/admin/ViewResult";
+import ViewResult from "~/components/pages/admin/ViewResult";
 import { getOfficeById } from "~/Controller/OfficeController";
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { id: string } }) {

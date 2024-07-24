@@ -1,4 +1,3 @@
-import { CardFooter } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import { Button } from "~/components/ui/button";
 import { User } from "~/lib/schema";
 import { AssessedByUserDetails } from "~/types/types";
@@ -6,6 +5,7 @@ import { formattedNameAndRole } from "~/util/formatted-name";
 import { MatchingUser } from "~/util/matching-users";
 import AddEvaluators from "../applicant/Card/AddEvaluators";
 import AssessedBy from "../applicant/Card/AssessedBy";
+import { CardFooter } from "../applicant/Card/CardComponent";
 import CheckboxAssessedBy from "../applicant/Card/CheckboxAssessedBy";
 import { AssessorInfo } from "../applicant/Card/StatusDisplayComponents";
 import SelectMode from "../applicant/initial-interview/SelectMode";
@@ -46,7 +46,7 @@ export async function DisplayAssessedBy({ assessedById }: { assessedById: string
 }
 
 type DisplayFooterProps = {
-	inProgress: string;
+	status: string;
 	applicantId: number;
 	users: Partial<User>[];
 	assessorsName: string | undefined;
@@ -54,12 +54,14 @@ type DisplayFooterProps = {
 };
 
 export function DisplayFooter({
-	inProgress,
+	status,
 	applicantId,
 	users,
 	assessorsName,
 	assessorsRole,
 }: DisplayFooterProps) {
+	const inProgress = status === "in-progress";
+
 	return (
 		<>
 			{inProgress ? (

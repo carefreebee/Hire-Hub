@@ -7,7 +7,10 @@ import {
 	CardHeader,
 	CardTitle,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
-import { LoadingEvaluateTable } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
+import {
+	LoadingCardFooter,
+	LoadingEvaluateTable,
+} from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import EvaluateComponent from "~/components/pages/authenticated/applicant/evaluate/EvaluateComponent";
 import FilterEvaluate from "~/components/pages/authenticated/applicant/evaluate/FilterEvaluate";
 import UpdateButton from "~/components/pages/authenticated/applicant/evaluate/UpdateButton";
@@ -93,11 +96,11 @@ export default function EvaluatePage({ params }: { params: { id: string } }) {
 					</TableBody>
 				</Table>
 
-				<CardFooter className="pt-5">
-					<Suspense fallback={<p>Loading...</p>}>
+				<Suspense fallback={<LoadingCardFooter />}>
+					<CardFooter className="pt-5">
 						<UpdateButton applicantId={Number(params.id)} />
-					</Suspense>
-				</CardFooter>
+					</CardFooter>
+				</Suspense>
 			</CardContent>
 		</Card>
 	);

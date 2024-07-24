@@ -112,8 +112,9 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 								</Suspense>
 							</CardSubContent>
 						</CardContent>
+
 						<DisplayFooter
-							inProgress={applicantStage?.status as string}
+							status={applicantStage?.status as string}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
 							assessorsName={finalAssessor?.name as string | undefined}

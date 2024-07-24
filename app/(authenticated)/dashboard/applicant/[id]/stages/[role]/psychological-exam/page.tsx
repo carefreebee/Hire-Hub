@@ -1,49 +1,39 @@
-import dynamic from "next/dynamic";
-import AddEvaluators from "~/components/pages/authenticated/applicant/Card/AddEvaluators";
-import AssessedBy from "~/components/pages/authenticated/applicant/Card/AssessedBy";
+import { Suspense } from "react";
 import {
 	Card,
 	CardContent,
-	CardFooter,
 	CardHeader,
 	CardSubContent,
 	CardTitle,
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
-import CheckboxAssessedBy from "~/components/pages/authenticated/applicant/Card/CheckboxAssessedBy";
+import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
 import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
-import {
-	AssessorInfo,
-	FinalStatus,
-	Waiting,
-} from "~/components/pages/authenticated/applicant/Card/StatusDisplayComponents";
-import SubmitStagesForm from "~/components/pages/authenticated/applicant/Card/SubmitStagesForm";
-import UploadRatingForm from "~/components/pages/authenticated/applicant/Card/UploadRatingForm";
+import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
-import SelectMode from "~/components/pages/authenticated/applicant/initial-interview/SelectMode";
-import { StageStatus, UploadSuccess } from "~/components/pages/authenticated/stages/Messages";
-import InformationSVG from "~/components/ui/information";
+import {
+	DeptOrOfficeComponent,
+	DeptOrOfficeFooter,
+} from "~/components/pages/authenticated/stages/DeptOrOffice";
+import {
+	DisplayAssessedBy,
+	DisplayFooter,
+	DisplayMode,
+} from "~/components/pages/authenticated/stages/HigherUp";
 import { TypographySmall } from "~/components/ui/typography-small";
-import { getAllRatingFormsFilesById, getRatingFormsById } from "~/Controller/RatingFormsController";
+import { getAllRaitingFormByIdInEachStages } from "~/Controller/RatingFormsController";
 import { getUsersWithoutUserRoles } from "~/Controller/UsersController";
 import { validateRequest } from "~/lib/auth";
-import { ApplicantSelect, User } from "~/lib/schema";
-import { AssessedByUserDetails, ResumeProps } from "~/types/types";
-import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
+import { User } from "~/lib/schema";
+import { RatingFormWithUserData, ResumeProps } from "~/types/types";
 import { GetCurrentStage } from "~/util/get-current-stage";
-import { MatchingUser } from "~/util/matching-users";
-
-const DisplayDateNoSSR = dynamic(
-	() => import("~/components/pages/authenticated/applicant/Card/DisplayDate"),
-	{
-		ssr: false,
-	}
-);
 
 const currentStageName = "Psychological Exam";
 
 export default async function PsychologicalExamPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
+	const isRecruitmentOffier = user?.role === "recruitment_officer";
+
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 	const users = await getUsersWithoutUserRoles();
 
@@ -54,91 +44,17 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 		"psychological_exam"
 	);
 
-	const inProgress = applicantStage?.status === "in-progress";
-	const isPassed = applicantStage?.status === "passed";
-	const isFailed = applicantStage?.status === "failed";
-
-	const getAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
+	const getFirstIndexAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
 	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID
-	const finalAssessor = users.find((user) => user.id === getAssessedBy);
+	const finalAssessor = users.find((user) => user.id === getFirstIndexAssessedBy);
 
-	// GETTING ALL THE ASSESSED BY
-	const assessedByIds = applicantStage?.assessed_by || [];
-
-	// console.log("Initial assessed_by IDs:", assessedByIds);
-	const assessors = await MatchingUser(assessedByIds);
-
-	const documentIds = (applicantStage?.rating_forms_id as number[]) || [];
-	const documentPromises = documentIds.map((id) => getRatingFormsById(id));
-	const documentResults = await Promise.all(documentPromises);
-	const document = documentResults.flat();
-
-	if (user?.role === "recruitment_officer") {
-		return (
-			<>
-				<Card>
-					<CardHeader>
-						<CardTitle>{currentStageName}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<CardSubContent>
-							<CardTopLeftSubContent>
-								<TypographySmall size={"md"}>{currentStageName}</TypographySmall>
-								{inProgress ? (
-									<SelectMode />
-								) : (
-									(isPassed || isFailed) && (
-										<FinalStatus mode={applicantStage?.mode as string} />
-									)
-								)}
-							</CardTopLeftSubContent>
-							<DisplayDateNoSSR date={applicantStage?.date as Date} />
-						</CardSubContent>
-						<CardSubContent>
-							<AssessedBy
-								isThereAssessors={assessedByIds}
-								assessors={assessors as AssessedByUserDetails[]}
-							/>
-						</CardSubContent>
-					</CardContent>
-					{inProgress ? (
-						<CardFooter>
-							<AddEvaluators id={applicant?.id as number} />
-							<div className="flex-1">
-								<CheckboxAssessedBy assessed_by={users as Partial<User>[]} />
-							</div>
-						</CardFooter>
-					) : (
-						<CardFooter className="p-5">
-							<AssessorInfo
-								finalAssessorName={finalAssessor?.name as string}
-								finalAssessorRole={finalAssessor?.role as string}
-							/>
-						</CardFooter>
-					)}
-				</Card>
-				<CommentsAndDocuments
-					stage="psychological_exam"
-					applicantId={params.id as string}
-					evaluatorsId={user?.id as string}
-					resume={applicant?.resume as ResumeProps}
-					document={document}
-				/>
-			</>
-		);
-	}
-
-	// CHECK IF THE BOTH USER AND APPLICANT HAS THE SAME VALUES WHETHER IT IS DEPARTMENT OR OFFICE
-	const { isUserDepartmentAllowed, isUserOfficeAllowed } = checkUserAndApplicantIfValid(
-		applicant as ApplicantSelect,
-		user as User
+	const ratingForm = await getAllRaitingFormByIdInEachStages(
+		Number(params.id),
+		applicantStage?.rating_forms_id as number[]
 	);
-	// CHECK IF THE USER IS ALLOWED TO ASSESSED THE APPLICANT WHETHER IT IS DEPARTMENT OR OFFICE
-	const checkIfUserIsAllowedToAssess = isUserDepartmentAllowed || isUserOfficeAllowed;
+
 	// THESE ARE THE USER's WHO CAN ASSESS TO THE APPLICANT
 	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
-	// GETTING ALL THE RATING FORMS FILES BY ID
-	const ratingForm = await getAllRatingFormsFilesById(Number(params.id));
 
 	// Check if the user has already posted a rating for the current stage
 	const hasUserPostedRating = ratingForm.some(
@@ -152,41 +68,68 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 				<CardHeader>
 					<CardTitle className="flex justify-between">
 						{currentStageName}
-						<DownloadForm file={""} downloadText="Psychological Exam Rating Form">
-							Download Psychological exam Rating Form (download link needs to be
-							updated into psychological_exam-rating-form.xlsx)
-						</DownloadForm>
+						{!isRecruitmentOffier && (
+							<DownloadForm file={""} downloadText="Psychological Exam Rating Form">
+								Download Psychological exam Rating Form (download link needs to be
+								updated into psychological_exam-rating-form.xlsx)
+							</DownloadForm>
+						)}
 					</CardTitle>
 				</CardHeader>
-				{/* CHECKS IF THE USER's DEPARTMENT/OFFICE MATCHES THE APPLICANT's SELECTED_DEPARTMENT/SELECTED_OFFICE */}
-				{applicantStage?.status === "in-progress" && !applicantStage.assessed_by?.length ? (
-					<Waiting />
-				) : assessedByUsers && !hasUserPostedRating ? (
-					<CardContent className="mt-0 flex h-auto flex-col p-5">
-						<InformationSVG />
-						<UploadRatingForm />
-					</CardContent>
-				) : hasUserPostedRating ? (
-					<UploadSuccess />
-				) : (
-					<StageStatus status={applicantStage?.status as string} />
-				)}
-				{applicantStage?.status === "in-progress" && (
-					<CardFooter className="p-5">
-						{/* SHOWS WHAT DEPARTMENT/OFFICE TYPE THE ASSESSOR IS */}
-						<AssessorInfo
-							finalAssessorName={finalAssessor?.name as string}
-							finalAssessorRole={finalAssessor?.role as string}
+				{isRecruitmentOffier ? (
+					<>
+						<CardContent>
+							<CardSubContent>
+								<CardTopLeftSubContent>
+									<TypographySmall size={"md"}>
+										{currentStageName}
+									</TypographySmall>
+									<DisplayMode
+										status={applicantStage?.status as string}
+										mode={applicantStage?.mode}
+									/>
+								</CardTopLeftSubContent>
+
+								<DisplayDate date={applicantStage?.date as Date} />
+							</CardSubContent>
+							<CardSubContent>
+								<TypographySmall size={"md"}>Assessed by:</TypographySmall>
+								<Suspense fallback={<LoadingAssessors />}>
+									<DisplayAssessedBy
+										assessedById={applicantStage?.assessed_by || []}
+									/>
+								</Suspense>
+							</CardSubContent>
+						</CardContent>
+
+						<DisplayFooter
+							status={applicantStage?.status as string}
+							applicantId={Number(params.id)}
+							users={users as Partial<User>[]}
+							assessorsName={finalAssessor?.name as string | undefined}
+							assessorsRole={finalAssessor?.role as string | undefined}
 						/>
-						{/* BELOW IS WHERE THE FORM IS LOCATED SO THAT THE APPLICANT STATUS WILL BE UPDATED */}
-						{assessedByUsers && !hasUserPostedRating && (
-							<SubmitStagesForm
-								id={params.id}
-								evaluatorsId={user?.id as string}
-								recruitment_stage={currentStageName as string}
-							/>
-						)}
-					</CardFooter>
+					</>
+				) : (
+					<>
+						<DeptOrOfficeComponent
+							assessorLength={applicantStage?.assessed_by?.length}
+							assessedByUsers={assessedByUsers as boolean}
+							hasUserPostedRating={hasUserPostedRating as boolean}
+							status={applicantStage?.status as string | undefined}
+						/>
+
+						<DeptOrOfficeFooter
+							status={applicantStage?.status as string | undefined}
+							assessorsName={finalAssessor?.name as string | undefined}
+							assessorsRole={finalAssessor?.role as string | undefined}
+							assessedByUsers={assessedByUsers as boolean}
+							hasUserPostedRating={hasUserPostedRating as boolean}
+							applicantId={params.id as string}
+							userId={user?.id as string}
+							currentStageName={currentStageName}
+						/>
+					</>
 				)}
 			</Card>
 
@@ -195,7 +138,7 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 				applicantId={params.id as string}
 				evaluatorsId={user?.id as string}
 				resume={applicant?.resume as ResumeProps}
-				document={document}
+				document={ratingForm as Partial<RatingFormWithUserData>[]}
 			/>
 		</>
 	);

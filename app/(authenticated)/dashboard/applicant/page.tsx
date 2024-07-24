@@ -4,18 +4,25 @@ import {
 	getAllApplicantForm,
 } from "~/Controller/ApplicantFormController";
 import { validateRequest } from "~/lib/auth";
-import { ApplicantSelect } from "~/lib/schema";
+import { ApplicantSelect, RoleEnumsType } from "~/lib/schema";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
 
 export default async function ApplicantPage() {
 	const { user } = await validateRequest();
 
-	const higherUps = ["guidance_center_staff", "recruitment_officer", "hr_head"];
+	const higherUps: RoleEnumsType[] = [
+		"guidance_center_staff",
+		"recruitment_officer",
+		"hr_head",
+		"vp_acad_affairs",
+		"vp_administration",
+		"univ_president",
+	];
 
 	let applicant: ApplicantSelect[] = [];
 
-	if (higherUps.includes(user?.role as string)) {
+	if (higherUps.includes(user?.role as RoleEnumsType)) {
 		console.log("Fetching all applicant forms");
 		applicant = await getAllApplicantForm();
 	} else {
