@@ -91,8 +91,8 @@ export function Note() {
 			<p className="text-sm font-semibold">
 				Note: Click{" "}
 				<DownloadForm
-					file={"/files/applicant-employment.pdf"}
-					downloadText="Applicant Employment"
+					file={"/files/application-employment.pdf"}
+					downloadText="Application Employment"
 				>
 					<span className="text-[#7F0000]">here</span>
 				</DownloadForm>{" "}

@@ -20,6 +20,7 @@ export default async function layout({ children }: { children: React.ReactNode }
 			<SideNav role={user?.role} />
 			<section className="container px-0">
 				<Navbar
+					avatarUrl={user?.avatarUrl as string}
 					name={user?.name as string}
 					department={user?.selected_department as string}
 					office={user?.selected_office as string}

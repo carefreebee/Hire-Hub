@@ -145,4 +145,31 @@ export class ApplicantStatusRepository {
 			.where(eq(applicant.id, applicantId))
 			.returning();
 	}
+
+	public async updateRecommendationStatus(
+		applicantId: number,
+		assessedBy: string[],
+		stageType: StageType,
+		selectedDate: Date
+	) {
+		const currentApplicant = await this.getCurrentApplicantById(applicantId);
+
+		const updateStage = {
+			...currentApplicant.stages,
+			screening: {
+				...currentApplicant.stages?.screening,
+			},
+			[stageType]: {
+				...currentApplicant.stages?.[stageType],
+				assessed_by: assessedBy,
+				date: new Date(selectedDate),
+			},
+		};
+
+		await db
+			.update(applicant)
+			.set({ stages: updateStage })
+			.where(eq(applicant.id, applicantId))
+			.returning();
+	}
 }

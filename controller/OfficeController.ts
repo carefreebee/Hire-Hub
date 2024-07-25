@@ -10,8 +10,8 @@ export async function getAllOffice() {
 	return await officeService.getAllOffice();
 }
 
-export async function getOfficeById(id: number) {
-	return await officeService.getOfficeById(id);
+export async function getOfficeByCode(code: string) {
+	return await officeService.getOfficeByCode(code);
 }
 
 export async function updateOffice(formData: FormData) {

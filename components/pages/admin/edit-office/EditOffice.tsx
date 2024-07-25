@@ -11,10 +11,11 @@ import { updateOffice } from "~/Controller/OfficeController";
 
 type EditResultProps = {
 	unitId: string;
+	unitCode: string;
 	unitName: string;
 };
 
-export default function EditOffice({ unitId, unitName }: EditResultProps) {
+export default function EditOffice({ unitId, unitCode, unitName }: EditResultProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 
 	async function handleSubmit(): Promise<void> {
@@ -45,6 +46,16 @@ export default function EditOffice({ unitId, unitName }: EditResultProps) {
 			</h4>
 
 			<input type="hidden" name="office_id" value={unitId} readOnly />
+
+			<div className="mx-auto w-[564px]">
+				<Label className="font-semibold text-[#666666]">Office Code</Label>
+				<Input
+					type="text"
+					name="office_code"
+					defaultValue={unitCode}
+					className="border-2"
+				/>
+			</div>
 
 			<div className="mx-auto w-[564px]">
 				<Label className="font-semibold text-[#666666]">Office Name</Label>

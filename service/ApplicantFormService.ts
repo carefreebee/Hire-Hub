@@ -1,7 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/ApplicantForm";
 import { ApplicantFormRepository } from "~/Repository/ApplicantFormRepository";
-import { CommentRepository } from "~/Repository/CommentRepository";
 import { DepartmentRepository } from "~/Repository/DepartmentRepository";
 import { OfficeRepository } from "~/Repository/OfficeRepository";
 import { ApplicantForm, Validator } from "~/Validator/ApplicantForm";
@@ -10,8 +9,7 @@ export class ApplicantFormService {
 	constructor(
 		private readonly applicantRepo: ApplicantFormRepository,
 		private readonly departmentRepo: DepartmentRepository,
-		private readonly officeRepo: OfficeRepository,
-		private readonly commentRepo: CommentRepository
+		private readonly officeRepo: OfficeRepository
 	) {}
 
 	public async getAllApplicantForm() {

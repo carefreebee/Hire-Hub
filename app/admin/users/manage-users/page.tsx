@@ -7,9 +7,9 @@ export default async function ManageUsersPage() {
 	const users = await getUsersByUserRole();
 
 	return (
-		<>
+		<section className="p-8">
 			<TypographyH4 text="Users List" />
 			<DataTable columns={columns} data={users} />
-		</>
+		</section>
 	);
 }

@@ -154,11 +154,13 @@ export const jobRequest = pgTable("jobRequest", {
 
 export const department = pgTable("department", {
 	department_id: serial("department_id").primaryKey(),
+	department_code: text("department_code").notNull().unique(),
 	department_name: text("department_name").notNull().unique(),
 });
 
 export const office = pgTable("office", {
 	office_id: serial("office_id").primaryKey(),
+	office_code: text("office_code").notNull().unique(),
 	office_name: text("office_name").notNull().unique(),
 });
 

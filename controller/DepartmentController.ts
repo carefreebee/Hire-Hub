@@ -10,8 +10,8 @@ export async function getAllDepartment() {
 	return await departmentService.getAllDepartment();
 }
 
-export async function getDepartmentById(id: number) {
-	return await departmentService.getDepartmentById(id);
+export async function getDepartmentByCode(code: string) {
+	return await departmentService.getDepartmentByCode(code);
 }
 
 export async function updateDepartment(formData: FormData) {

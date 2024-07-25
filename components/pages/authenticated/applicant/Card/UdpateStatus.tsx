@@ -1,13 +1,11 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { toast } from "~/components/ui/use-toast";
-import { UpdateScreeningAndInitialInterviewStatus } from "~/Controller/ApplicantStatusController";
-import { CheckPathname } from "~/util/path";
+import { UpdateScreening } from "~/Controller/ApplicantStatusController";
 import { useSelectPassedOrFailed } from "~/util/zustand";
 
 type ApplicantIDFooterProps = {
@@ -18,13 +16,11 @@ type ApplicantIDFooterProps = {
 export default function UpdateStatus({ id, assessorId }: ApplicantIDFooterProps) {
 	const status = useSelectPassedOrFailed((state) => state.status);
 	const formRef = useRef<HTMLFormElement>(null);
-	const pathname = usePathname();
-	const lastSegment = CheckPathname(pathname);
 
 	async function handleSubmit() {
 		const formData = new FormData(formRef.current!);
 		try {
-			await UpdateScreeningAndInitialInterviewStatus(formData);
+			await UpdateScreening(formData);
 			toast({
 				title: "Status Updated!",
 				description: "The status has been updated successfully",
@@ -40,7 +36,6 @@ export default function UpdateStatus({ id, assessorId }: ApplicantIDFooterProps)
 
 	return (
 		<form ref={formRef} onSubmit={(e) => e.preventDefault()} className="ml-auto">
-			<input type="hidden" name="pathname" value={lastSegment} readOnly />
 			<input type="hidden" name="applicant_id" value={id} readOnly />
 			<input type="hidden" name="assessed_by_id" value={assessorId} readOnly />
 			<input type="hidden" name="applicant_status" value={status} readOnly />

@@ -75,7 +75,7 @@ export default function Header({
 						</DropDownContentComponent>
 					</DropdownMenuContent>
 				</DropdownMenu>
-				{role === "hr_head" && (
+				{role === "recruitment_officer" && (
 					<Button
 						variant={"outline"}
 						className="w-full text-blue-700 hover:text-blue-700"

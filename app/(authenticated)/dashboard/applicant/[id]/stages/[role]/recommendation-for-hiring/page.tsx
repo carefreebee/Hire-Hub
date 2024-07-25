@@ -15,11 +15,7 @@ import {
 	Waiting,
 } from "~/components/pages/authenticated/applicant/Card/StatusDisplayComponents";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
-import {
-	DisplayAssessedBy,
-	DisplayFooter,
-	DisplayMode,
-} from "~/components/pages/authenticated/stages/HigherUp";
+import { DisplayAssessedBy, DisplayFooter } from "~/components/pages/authenticated/stages/HigherUp";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRaitingFormByIdInEachStages } from "~/Controller/RatingFormsController";
 import { getUsersWithoutUserRoles } from "~/Controller/UsersController";
@@ -55,14 +51,6 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 		applicantStage?.rating_forms_id as number[]
 	);
 
-	// THESE ARE THE USER's WHO CAN ASSESS TO THE APPLICANT
-	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
-	// Check if the user has already posted a rating for the current stage
-	const hasUserPostedRating = ratingForm.some(
-		(stage) => stage.recruitment_stage === currentStageName && stage.user_id === user?.id
-	);
-	// console.log(hasUserPostedRating); // true if the user has posted a rating, false otherwise
-
 	return (
 		<>
 			<Card>
@@ -77,10 +65,6 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 									<TypographySmall size={"md"}>
 										{currentStageName}
 									</TypographySmall>
-									<DisplayMode
-										status={applicantStage?.status as string}
-										mode={applicantStage?.mode}
-									/>
 								</CardTopLeftSubContent>
 
 								<DisplayDate date={applicantStage?.date as Date} />
@@ -109,6 +93,10 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 						) : user?.role === "univ_president" ? (
 							<CardContent className="mt-0 items-center justify-center font-semibold text-slate-500">
 								Please proceed to the evaluate tab.
+							</CardContent>
+						) : !inProgress ? (
+							<CardContent className="mt-0 items-center justify-center font-semibold text-slate-500">
+								This applicant has not yet reached this stage.
 							</CardContent>
 						) : (
 							<CardContent className="mt-0 items-center justify-center font-semibold text-slate-500">

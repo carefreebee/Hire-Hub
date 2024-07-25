@@ -3,11 +3,11 @@ import { db } from "~/lib/db";
 import { department, DepartmentInsert, office } from "~/lib/schema";
 
 export class DepartmentRepository {
-	public async CreateDepartment(departmentName: string) {
+	public async CreateDepartment(departmentCode: string, departmentName: string) {
 		try {
 			return await db
 				.insert(department)
-				.values({ department_name: departmentName })
+				.values({ department_code: departmentCode, department_name: departmentName })
 				.returning();
 		} catch (error) {
 			console.error("Creating Department failed:", error);
@@ -30,6 +30,15 @@ export class DepartmentRepository {
 		} catch (error) {
 			console.error("Fetching Department by ID failed:", error);
 			throw new Error("Fetching Department by ID failed");
+		}
+	}
+
+	async getDepartmentByCode(code: string) {
+		try {
+			return await db.query.department.findFirst({ where: eq(department.department_code, code) });
+		} catch (error) {
+			console.error("Fetching Department by CODE failed:", error);
+			throw new Error("Fetching Department by CODE failed");
 		}
 	}
 

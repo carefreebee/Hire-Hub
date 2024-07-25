@@ -69,6 +69,8 @@ export default async function DashboardPage() {
 		allStagesPassed: areAllStagesPassed(applicant.stages),
 	}));
 
+	const newHire = results.filter((result) => result.allStagesPassed === true);
+
 	return (
 		<section>
 			<header className="relative h-[94px]">
@@ -87,7 +89,7 @@ export default async function DashboardPage() {
 						count={jobRequests.length}
 						label="Job Requests"
 					/>
-					<DisplayCard svg={<NewHires />} count={results.length} label="New Hires" />
+					<DisplayCard svg={<NewHires />} count={newHire.length} label="New Hires" />
 				</div>
 
 				<Card>

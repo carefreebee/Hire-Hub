@@ -6,10 +6,11 @@ type ViewResultProps = {
 	href: string;
 	title: string;
 	label: string;
+	unitCode: string;
 	unitName: string;
 };
 
-export default function ViewResult({ href, title, label, unitName }: ViewResultProps) {
+export default function ViewResult({ href, title, label, unitCode, unitName }: ViewResultProps) {
 	return (
 		<section className="flex h-screen flex-col">
 			<Previous href={href} text="View all Department" />
@@ -18,6 +19,10 @@ export default function ViewResult({ href, title, label, unitName }: ViewResultP
 					<h4 className="scroll-m-20 text-center text-xl font-bold tracking-tight text-[#7F0000]">
 						{title}
 					</h4>
+					<div className="mx-auto w-[564px]">
+						<Label className="font-semibold text-[#666666]">{label}</Label>
+						<Input value={unitCode} readOnly className="border-2" />
+					</div>
 					<div className="mx-auto w-[564px]">
 						<Label className="font-semibold text-[#666666]">{label}</Label>
 						<Input value={unitName} readOnly className="border-2" />

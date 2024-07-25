@@ -23,10 +23,8 @@ export default async function ApplicantPage() {
 	let applicant: ApplicantSelect[] = [];
 
 	if (higherUps.includes(user?.role as RoleEnumsType)) {
-		console.log("Fetching all applicant forms");
 		applicant = await getAllApplicantForm();
 	} else {
-		console.log("Fetching applicants by department or office");
 		applicant = await getAllApplicantByDeptOrOffice(
 			user?.department_id as number,
 			user?.office_id as number

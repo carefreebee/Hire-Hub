@@ -9,7 +9,8 @@ export class Validator {
 }
 
 const officeSchema = z.object({
+	office_code: z.string().min(2, { message: "Please must have 2 or more characters." }),
 	office_name: z.string().min(5, { message: "Please must have 5 or more characters." }),
 });
 
-type Office = z.infer<typeof officeSchema>;
+export type Office = z.infer<typeof officeSchema>;

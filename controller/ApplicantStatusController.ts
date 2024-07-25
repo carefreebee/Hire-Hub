@@ -6,8 +6,8 @@ export async function UpdateScreeningAndInitialInterviewDate(formData: FormData)
 	return await applicantStatusService.updateDate(formData);
 }
 
-export async function UpdateScreeningAndInitialInterviewStatus(formData: FormData) {
-	return await applicantStatusService.updateStatus(formData);
+export async function UpdateScreening(formData: FormData) {
+	return await applicantStatusService.updateScreeningStatus(formData);
 }
 
 export async function UpdateTeachingDemo(formData: FormData) {

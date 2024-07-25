@@ -1,4 +1,3 @@
-import { MoreHorizontal } from "lucide-react";
 import { Suspense } from "react";
 import {
 	Card,
@@ -20,6 +19,7 @@ import {
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import FilterSvg from "~/components/ui/filter-svg";
 import {
 	Table,
 	TableBody,
@@ -69,7 +69,7 @@ export default function EvaluatePage({ params }: { params: { id: string } }) {
 								<DropdownMenu>
 									<DropdownMenuTrigger asChild>
 										<Button variant="ghost" className="h-8 w-8 p-0">
-											<MoreHorizontal className="h-4 w-4" />
+											<FilterSvg />
 										</Button>
 									</DropdownMenuTrigger>
 									<DropdownMenuContent align="center" className="rounded-xl">

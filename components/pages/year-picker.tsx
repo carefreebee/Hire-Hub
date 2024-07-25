@@ -10,7 +10,7 @@ export function YearPicker({ selectedYear, onYearSelect }: YearPickerProps) {
 		<select
 			value={selectedYear ?? ""}
 			onChange={(e) => onYearSelect(Number(e.target.value))}
-			className="w-52 p-2"
+			className="w-20 p-2"
 		>
 			<option value="" disabled>
 				Select a year

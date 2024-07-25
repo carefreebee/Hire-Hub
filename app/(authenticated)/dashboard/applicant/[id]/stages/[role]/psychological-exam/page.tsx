@@ -8,7 +8,6 @@ import {
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
-import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
 import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import {
@@ -66,15 +65,7 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 		<>
 			<Card>
 				<CardHeader>
-					<CardTitle className="flex justify-between">
-						{currentStageName}
-						{!isRecruitmentOffier && (
-							<DownloadForm file={""} downloadText="Psychological Exam Rating Form">
-								Download Psychological exam Rating Form (download link needs to be
-								updated into psychological_exam-rating-form.xlsx)
-							</DownloadForm>
-						)}
-					</CardTitle>
+					<CardTitle className="flex justify-between">{currentStageName}</CardTitle>
 				</CardHeader>
 				{isRecruitmentOffier ? (
 					<>

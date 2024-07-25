@@ -1,18 +1,19 @@
 import { revalidatePath } from "next/cache";
 import { OfficeRepository } from "~/Repository/OfficeRepository";
-import { Validator } from "~/Validator/Office";
+import { Office, Validator } from "~/Validator/Office";
 
 export class OfficeService {
 	constructor(private readonly officeRepo: OfficeRepository) {}
 
 	public async createOffice(formData: FormData) {
-		const officeName = {
+		const office = {
+			office_code: formData.get("office_code") as string,
 			office_name: formData.get("office_name") as string,
 		};
-		this.validateOffice(officeName);
+		this.validateOffice(office);
 
 		try {
-			await this.officeRepo.CreateOffice(officeName.office_name);
+			await this.officeRepo.CreateOffice(office.office_code, office.office_name);
 			revalidatePath("/admin/units/office");
 		} catch (error) {
 			console.error("Creating Office failed:", error);
@@ -38,12 +39,21 @@ export class OfficeService {
 		}
 	}
 
+	public async getOfficeByCode(code: string) {
+		try {
+			return await this.officeRepo.getOfficeByCode(code);
+		} catch (error) {
+			console.error("Fetching Office by CODE failed:", error);
+			throw new Error("Fetching Office by CODE failed");
+		}
+	}
+
 	public async updateOffice(formData: FormData) {
 		const updateOffice = {
 			office_id: Number(formData.get("office_id")),
+			office_code: formData.get("office_code") as string,
 			office_name: formData.get("office_name") as string,
 		};
-
 		this.validateOffice(updateOffice);
 
 		try {
@@ -67,8 +77,8 @@ export class OfficeService {
 		}
 	}
 
-	private validateOffice({ office_name }: { office_name: string }) {
-		const validate = Validator.validateOffice({ office_name });
+	private validateOffice(office: Office) {
+		const validate = Validator.validateOffice(office);
 
 		if (!validate.success) {
 			throw new Error("Validation failed for inserting office.");

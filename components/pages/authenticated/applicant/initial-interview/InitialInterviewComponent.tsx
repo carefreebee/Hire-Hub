@@ -40,6 +40,8 @@ export default async function InitialInterviewComponent({
 
 	return (
 		<>
+			{inProgress && <p></p>}
+
 			{(isPassed || isFailed) && (
 				<DisplayIfPassed
 					date={applicantStage?.date as Date}
@@ -124,7 +126,7 @@ function UploadForm({ applicantId, userId }: UploadFormProps) {
 				<SubmitStagesForm
 					id={applicantId.toString()}
 					evaluatorsId={userId as string}
-					recruitment_stage={"Intial Interview"}
+					recruitment_stage={"Initial Interview"}
 				/>
 			</CardFooter>
 		</>

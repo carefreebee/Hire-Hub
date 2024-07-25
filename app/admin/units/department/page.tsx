@@ -7,9 +7,9 @@ export default async function RequestPage() {
 	const department = await getAllDepartment();
 
 	return (
-		<>
+		<section className="p-8">
 			<TypographyH4 text="Units" />
 			<DataTable columns={columns} data={department} />
-		</>
+		</section>
 	);
 }

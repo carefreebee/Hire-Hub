@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChangeEvent, useRef, useState } from "react";
+import { ConfirmationModal } from "~/components/ConfirmationModal";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -191,39 +192,7 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 				)}
 			</div>
 			{/* MUST USE THE CONFIRMATION MODAL ALREADY DONE FOR A FLEXIBLE CONFIRMATION POP UP */}
-			<AlertDialog>
-				<AlertDialogTrigger asChild>
-					<Button
-						type="submit"
-						className="mb-10 ml-auto mt-20 w-32 bg-[#7F0000] hover:bg-[#7F0000]"
-					>
-						Update Role
-					</Button>
-				</AlertDialogTrigger>
-				<AlertDialogContent>
-					<AlertDialogHeader className="flex flex-row gap-5">
-						<div className="bg-[rgb(245,245,245)]">
-							<Confirmation />
-						</div>
-						<div>
-							<AlertDialogTitle>Confirm submit form</AlertDialogTitle>
-							<AlertDialogDescription>
-								Are you sure you want to submit the form?
-							</AlertDialogDescription>
-						</div>
-					</AlertDialogHeader>
-					<AlertDialogFooter className="flex gap-4">
-						<AlertDialogCancel className="w-full">No, cancel</AlertDialogCancel>
-						<AlertDialogAction
-							onClick={handleSubmit}
-							className="w-full bg-[#7F0000] hover:bg-[#7F0000]"
-						>
-							<Link href={"/admin/users/manage-users"}>Yes, confirm</Link>
-						</AlertDialogAction>
-					</AlertDialogFooter>
-				</AlertDialogContent>
-			</AlertDialog>
-			{/* <ConfirmationModal
+			<ConfirmationModal
 				mainButton={
 					<Button
 						type="submit"
@@ -232,16 +201,13 @@ export default function UpdateInput({ id, department, office }: ApplicantFormPro
 						Update Role
 					</Button>
 				}
-				descriptionButtonLabel="Are you sure you want to submit the form?"
+				descriptionButtonLabel="Are you sure you want to update the role?"
 				cancelButtonLabel="No, cancel"
 			>
-				<AlertDialogAction
-					onClick={handleSubmit}
-					className="w-full bg-[#7F0000] hover:bg-[#7F0000]"
-				>
-					<Link href={"/admin/users/manage-users"}>Yes, confirm</Link>
+				<AlertDialogAction className="w-full" onClick={handleSubmit}>
+					Yes, submit
 				</AlertDialogAction>
-			</ConfirmationModal> */}
+			</ConfirmationModal>
 		</form>
 	);
 }

@@ -11,13 +11,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { toast } from "~/components/ui/use-toast";
-import { deleteDepartment } from "~/Controller/DepartmentController";
 import { DepartmentSelect } from "~/lib/schema";
 
 export const columns: ColumnDef<DepartmentSelect>[] = [
 	{
-		accessorKey: "department_id",
+		accessorKey: "department_code",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -32,7 +30,7 @@ export const columns: ColumnDef<DepartmentSelect>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">
-					{row.getValue("department_id")}
+					{row.getValue("department_code")}
 				</div>
 			);
 		},
@@ -64,7 +62,7 @@ export const columns: ColumnDef<DepartmentSelect>[] = [
 			return <p className="px-5">Action</p>;
 		},
 		cell: ({ row }) => {
-			const id = row.getValue("department_id");
+			const departmentCode = row.getValue("department_code");
 
 			return (
 				<div className="flex justify-center">
@@ -77,27 +75,15 @@ export const columns: ColumnDef<DepartmentSelect>[] = [
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="center" className="rounded-xl">
 							<DropdownMenuItem asChild>
-								<Link href={`/admin/units/department/view/${id}`}>View</Link>
+								<Link href={`/admin/units/department/view/${departmentCode}`}>
+									View
+								</Link>
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem asChild>
-								<Link href={`/admin/units/department/edit/${id}`}>Edit</Link>
-							</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<Button
-									onClick={async () => {
-										await deleteDepartment(Number(id));
-										toast({
-											title: "Deleted Department",
-											description: "Department has been deleted successfully",
-										});
-									}}
-									variant={"ghost"}
-									className="h-auto p-0 text-[#EC3838] hover:text-[#EC3838]"
-								>
-									Delete
-								</Button>
+								<Link href={`/admin/units/department/edit/${departmentCode}`}>
+									Edit
+								</Link>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

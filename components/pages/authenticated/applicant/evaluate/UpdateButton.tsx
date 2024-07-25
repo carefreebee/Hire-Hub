@@ -35,12 +35,6 @@ export default async function UpdateButton({ applicantId }: { applicantId: numbe
 					<SubmitEvaluateButton id={applicantId.toString()} />
 				)}
 
-			{/* {user?.role === "guidance_center_staff" &&
-				currentInProgress?.assessed_by?.length ===
-					currentInProgress?.rating_forms_id?.length && (
-					<SubmitEvaluateButton id={applicantId.toString()} />
-				)} */}
-
 			{user?.role === "univ_president" && user?.id === finalAssessor?.id && (
 				<SubmitEvaluateButton id={applicantId.toString()} />
 			)}

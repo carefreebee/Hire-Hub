@@ -14,11 +14,13 @@ import { CheckPathname } from "~/util/path";
 
 type DepartmentFormProps = {
 	headTitle: string;
-	label: string;
+	codeLabel: string;
+	inputCode: string;
+	fullLabel: string;
 	inputName: string;
 };
 
-export default function AddUnitComponent({ headTitle, label, inputName }: DepartmentFormProps) {
+export default function AddUnitComponent({ headTitle, codeLabel, inputCode, fullLabel, inputName }: DepartmentFormProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const pathname = usePathname();
 	const lastSegment = CheckPathname(pathname);
@@ -41,7 +43,11 @@ export default function AddUnitComponent({ headTitle, label, inputName }: Depart
 				description: `${lastSegment === "add-department" ? "Department" : "Office"} has been successfully created.`,
 			});
 		} catch (error) {
-			console.error("Error submitting form:", error);
+			toast({
+				variant: "destructive",
+				title: `${lastSegment === "add-department" ? "Department" : "Office"} Error!`,
+				description: `${lastSegment === "add-department" ? "Department" : "Office"} Error.`,
+			});
 		}
 	}
 
@@ -53,7 +59,12 @@ export default function AddUnitComponent({ headTitle, label, inputName }: Depart
 				</h4>
 
 				<div className="mx-auto w-[564px]">
-					<Label className="font-semibold text-[#666666]">{label}</Label>
+					<Label className="font-semibold text-[#666666]">{codeLabel}</Label>
+					<Input type="text" name={inputCode} className="border-2" />
+				</div>
+
+				<div className="mx-auto w-[564px]">
+					<Label className="font-semibold text-[#666666]">{fullLabel}</Label>
 					<Input type="text" name={inputName} className="border-2" />
 				</div>
 

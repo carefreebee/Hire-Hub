@@ -11,13 +11,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { toast } from "~/components/ui/use-toast";
-import { deleteOffice } from "~/Controller/OfficeController";
 import { OfficeSelect } from "~/lib/schema";
 
 export const columns: ColumnDef<OfficeSelect>[] = [
 	{
-		accessorKey: "office_id",
+		accessorKey: "office_code",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -32,7 +30,7 @@ export const columns: ColumnDef<OfficeSelect>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">
-					{row.getValue("office_id")}
+					{row.getValue("office_code")}
 				</div>
 			);
 		},
@@ -64,7 +62,7 @@ export const columns: ColumnDef<OfficeSelect>[] = [
 			return <p className="px-5">Action</p>;
 		},
 		cell: ({ row }) => {
-			const id = row.getValue("office_id");
+			const code = row.getValue("office_code");
 
 			return (
 				<div className="flex justify-center">
@@ -77,27 +75,11 @@ export const columns: ColumnDef<OfficeSelect>[] = [
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="center" className="rounded-xl">
 							<DropdownMenuItem asChild>
-								<Link href={`/admin/units/office/view/${id}`}>View</Link>
+								<Link href={`/admin/units/office/view/${code}`}>View</Link>
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem asChild>
-								<Link href={`/admin/units/office/edit/${id}`}>Edit</Link>
-							</DropdownMenuItem>
-							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<Button
-									onClick={async () => {
-										await deleteOffice(Number(id));
-										toast({
-											title: "Deleted Office",
-											description: "Office has been deleted successfully",
-										});
-									}}
-									variant={"ghost"}
-									className="h-auto p-0 text-[#EC3838] hover:text-[#EC3838]"
-								>
-									Delete
-								</Button>
+								<Link href={`/admin/units/office/edit/${code}`}>Edit</Link>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

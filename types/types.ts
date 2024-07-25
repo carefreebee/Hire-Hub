@@ -31,12 +31,6 @@ export type RadioGroupProps = {
 	SecondRadioGroupItemLabel: string;
 };
 
-export type LinksProps = {
-	href: string;
-	children: React.ReactNode;
-	label?: string;
-};
-
 export type SelectTagProps = {
 	label: string;
 	name?: string;

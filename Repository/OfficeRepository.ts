@@ -3,9 +3,9 @@ import { db } from "~/lib/db";
 import { office, OfficeInsert } from "~/lib/schema";
 
 export class OfficeRepository {
-	public async CreateOffice(officeName: string) {
+	public async CreateOffice(officeCode: string, officeName: string) {
 		try {
-			return await db.insert(office).values({ office_name: officeName }).returning();
+			return await db.insert(office).values({ office_code: officeCode, office_name: officeName }).returning();
 		} catch (error) {
 			console.error("Creating Office failed:", error);
 			throw new Error("Creating Office failed");
@@ -29,6 +29,16 @@ export class OfficeRepository {
 			throw new Error("Fetching Office by ID failed");
 		}
 	}
+
+	async getOfficeByCode(code: string) {
+		try {
+			return await db.query.office.findFirst({ where: eq(office.office_code, code) });
+		} catch (error) {
+			console.error("Fetching Office by CODE failed:", error);
+			throw new Error("Fetching Office by CODE failed");
+		}
+	}
+
 
 	public async GetOfficeIdByName(selected_office: string) {
 		try {

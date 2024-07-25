@@ -45,8 +45,7 @@ export const columns: ColumnDef<ApplicantSelect>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex items-center justify-center gap-2">
-					{row.getValue("first_name")}{" "}
-					{row.getValue("last_name")}
+					{row.getValue("first_name")} {row.getValue("last_name")}
 				</div>
 			);
 		},
@@ -133,6 +132,9 @@ export const columns: ColumnDef<ApplicantSelect>[] = [
 	{
 		id: "actions",
 		accessorKey: "Action",
+		header: () => {
+			return <p className="px-5">Action</p>;
+		},
 		cell: ({ row }) => {
 			const id: number = row.getValue("id");
 			return <IDColumn id={id} />;

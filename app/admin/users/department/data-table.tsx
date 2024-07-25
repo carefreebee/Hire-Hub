@@ -34,7 +34,7 @@ const adminSubNavLinks = [
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
 	const table = useDataTable({ data, columns });
 	const { pageIndex, totalFilteredRows, displayedRows } = usePagination(table);
-	const firstName = table.getColumn("selected_department");
+	const firstName = table.getColumn("id");
 
 	return (
 		<>

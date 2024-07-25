@@ -11,10 +11,11 @@ import { updateDepartment } from "~/Controller/DepartmentController";
 
 type EditResultProps = {
 	unitId: string;
+	unitCode: string;
 	unitName: string;
 };
 
-export default function EditDepartment({ unitId, unitName }: EditResultProps) {
+export default function EditDepartment({ unitId, unitCode, unitName }: EditResultProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 
 	async function handleSubmit(): Promise<void> {
@@ -45,6 +46,16 @@ export default function EditDepartment({ unitId, unitName }: EditResultProps) {
 			</h4>
 
 			<input type="hidden" name="department_id" value={unitId} readOnly />
+
+			<div className="mx-auto w-[564px]">
+				<Label className="font-semibold text-[#666666]">Department Code</Label>
+				<Input
+					type="text"
+					name="department_code"
+					defaultValue={unitCode}
+					className="border-2"
+				/>
+			</div>
 
 			<div className="mx-auto w-[564px]">
 				<Label className="font-semibold text-[#666666]">Department Name</Label>

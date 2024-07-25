@@ -31,7 +31,6 @@ const applicantFormService = new ApplicantFormService(
 	applicantFormRepo,
 	departmentRepo,
 	officeRepo,
-	commentRepo
 );
 const applicantStatusService = new ApplicantStatusService(applicantStatusRepo);
 const userService = new UsersService(userRepo, departmentRepo, officeRepo);

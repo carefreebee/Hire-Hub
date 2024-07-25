@@ -13,7 +13,6 @@ export async function getAllApplicantByDeptOrOffice(
 	return await applicantFormService.getAllApplicantByDeptOrOffice(department_id, office_id);
 }
 
-
 export async function getApplicantFormByID(id: number) {
 	return await applicantFormService.getApplicantFormByID(id);
 }

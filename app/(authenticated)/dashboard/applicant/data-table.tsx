@@ -17,7 +17,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
 	const table = useDataTable({ data, columns });
 	const { pageIndex, totalFilteredRows, displayedRows } = usePagination(table);
-	const searchApplicantName = table.getColumn("first_name");
+	const searchApplicantName = table.getColumn("id");
 
 	return (
 		<div>
