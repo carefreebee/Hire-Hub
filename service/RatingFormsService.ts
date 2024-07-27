@@ -9,23 +9,43 @@ export class RatingFormsService {
 	constructor(private ratingFormsRepo: RatingFormsRepository) {}
 
 	public async getAllRaitingFormById(id: number) {
-		return await this.ratingFormsRepo.getAllRaitingFormById(id);
+		try {
+			return await this.ratingFormsRepo.getAllRaitingFormById(id);
+		} catch (error) {
+			throw new Error("Fetching all rating forms failed");
+		}
 	}
 
 	public async getAllRaitingFormByIdInEachStages(applicantId: number, ratingFormId: number[]) {
-		return await this.ratingFormsRepo.getAllRaitingFormByIdInEachStages(applicantId, ratingFormId);
+		try {
+			return await this.ratingFormsRepo.getAllRaitingFormByIdInEachStages(applicantId, ratingFormId);
+		} catch (error) {
+			throw new Error("Fetching all rating forms failed");
+		}
 	}
 
 	public async getAllRatingFormsFilesById(id: number) {
-		return await this.ratingFormsRepo.getAllRatingFormsFilesById(id);
+		try {
+			return await this.ratingFormsRepo.getAllRatingFormsFilesById(id);
+		} catch (error) {
+			throw new Error("Fetching all rating forms failed");
+		}
 	}
 
 	public async getAllApplicantRatingForms() {
-		return await this.ratingFormsRepo.getAllApplicantRatingForms();
+		try {
+			return await this.ratingFormsRepo.getAllApplicantRatingForms();
+		} catch (error) {
+			throw new Error("Fetching all rating forms failed");
+		}
 	}
 
 	public async getRatingFormsById(id: number) {
-		return await this.ratingFormsRepo.getRatingFormsById(id);
+		try {
+			return await this.ratingFormsRepo.getRatingFormsById(id);
+		} catch (error) {
+			throw new Error("Fetching rating forms by ID failed");
+		}
 	}
 
 	public async updateEvaluateApplicantStatus(formData: FormData) {

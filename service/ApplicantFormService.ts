@@ -13,18 +13,30 @@ export class ApplicantFormService {
 	) {}
 
 	public async getAllApplicantForm() {
-		return await this.applicantRepo.getAllApplicantForm();
+		try {
+			return await this.applicantRepo.getAllApplicantForm();
+		} catch (error) {
+			throw new Error("Fetching all applicant form failed");
+		}
 	}
 
 	public async getAllApplicantByDeptOrOffice(
 		department_id: number | null,
 		office_id: number | null
 	) {
-		return await this.applicantRepo.getAllApplicantByDeptOrOffice(department_id, office_id);
+		try {
+			return await this.applicantRepo.getAllApplicantByDeptOrOffice(department_id, office_id);
+		} catch (error) {
+			throw new Error("Fetching applicant by department or office failed");
+		}
 	}
 
 	public async getApplicantFormByID(id: number) {
-		return await this.applicantRepo.getApplicantFormByID(id);
+		try {
+			return await this.applicantRepo.getApplicantFormByID(id);
+		} catch (error) {
+			throw new Error("Fetching applicant form by ID failed");
+		}
 	}
 
 	public async create(formData: FormData) {
@@ -53,7 +65,6 @@ export class ApplicantFormService {
 
 			revalidatePath("/dashboard/applicant");
 		} catch (error) {
-			console.error("Database insertion failed:", error);
 			throw new Error("Database insertion failed");
 		}
 	}

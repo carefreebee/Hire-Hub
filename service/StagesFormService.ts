@@ -44,26 +44,6 @@ export class StagesFormService {
 		}
 	}
 
-	public async updateInitalInterview(formData: FormData) {
-		await this.updateForm(formData, "initial_interview");
-	}
-
-	public async updateTeachingDemo(formData: FormData) {
-		await this.updateForm(formData, "teaching_demo");
-	}
-
-	public async updatePsychologicalExam(formData: FormData) {
-		await this.updateForm(formData, "psychological_exam");
-	}
-
-	public async updatePanelInterview(formData: FormData) {
-		await this.updateForm(formData, "panel_interview");
-	}
-
-	public async updateRecommendationForHiring(formData: FormData) {
-		await this.updateForm(formData, "recommendation_for_hiring");
-	}
-
 	private validateForm(stagesForm: RatingFormsInsert, stageType: StageType) {
 		const validateData = Validator.validateStagesForm(stagesForm);
 

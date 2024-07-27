@@ -31,16 +31,11 @@ export class ApplicantFormRepository {
 	}
 
 	public async createApplicantForm(applicantFormData: ApplicantInsert) {
-		try {
-			const [createApplicantFormData]: ApplicantInsert[] = await db
-				.insert(applicant)
-				.values(applicantFormData)
-				.returning();
+		const [createApplicantFormData]: ApplicantInsert[] = await db
+			.insert(applicant)
+			.values(applicantFormData)
+			.returning();
 
-			return createApplicantFormData;
-		} catch (error) {
-			console.error("Database insertion failed:", error);
-			throw new Error("Database insertion failed");
-		}
+		return createApplicantFormData;
 	}
 }

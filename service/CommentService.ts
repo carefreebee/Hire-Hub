@@ -8,11 +8,19 @@ export class CommentService {
 	constructor(private readonly commentRepo: CommentRepository) {}
 
 	public async getAllCommentsById(id: number) {
-		return await this.commentRepo.getAllCommentsById(id);
+		try {
+			return await this.commentRepo.getAllCommentsById(id);
+		} catch (error) {
+			throw new Error("Fetching all comments failed");
+		}
 	}
 
 	public async getCommentsByID(id: number, commentId: number[]) {
-		return await this.commentRepo.getCommentsByID(id, commentId);
+		try {
+			return await this.commentRepo.getCommentsByID(id, commentId);
+		} catch (error) {
+			throw new Error("Fetching comments by ID failed");
+		}
 	}
 
 	public async createScreeningComment(formData: FormData) {
@@ -29,27 +37,11 @@ export class CommentService {
 		}
 	}
 
-	public async createInitialInterviewComment(formData: FormData) {
-		await this.createComment(formData, "initial_interview");
-	}
-
-	public async createTeachingDemoComment(formData: FormData) {
-		await this.createComment(formData, "teaching_demo");
-	}
-
 	public async createPsychologicalExamComment(formData: FormData) {
 		await this.createComment(formData, "psychological_exam");
 	}
 
-	public async createPanelInterviewComment(formData: FormData) {
-		await this.createComment(formData, "panel_interview");
-	}
-
-	public async createRecommendationForHiringComment(formData: FormData) {
-		await this.createComment(formData, "recommendation_for_hiring");
-	}
-
-	private async createComment(formData: FormData, commentType: StageType) {
+	public async createComment(formData: FormData, commentType: StageType) {
 		const comment = DataExtractor.extractApplicantScreeningComment(formData);
 		this.validateComment(comment);
 

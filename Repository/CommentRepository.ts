@@ -34,19 +34,14 @@ export class CommentRepository {
 	}
 
 	public async insertAndGetCurrentInsertedComment(comment: CommentsInsert, applicantId: number) {
-		try {
-			const insertingComment = await db.insert(comments).values(comment).returning();
-			const currentApplicant = await getApplicantFormByID(applicantId);
+		const insertingComment = await db.insert(comments).values(comment).returning();
+		const currentApplicant = await getApplicantFormByID(applicantId);
 
-			if (!currentApplicant) {
-				throw new Error("Applicant not found");
-			}
-
-			return { insertingComment, currentApplicant };
-		} catch (error) {
-			console.error("Inserting comment failed:", error);
-			throw new Error("Inserting comment failed");
+		if (!currentApplicant) {
+			throw new Error("Applicant not found");
 		}
+
+		return { insertingComment, currentApplicant };
 	}
 
 	public async updateApplicantScreeningComment(applicantId: number, comment: CommentsInsert) {

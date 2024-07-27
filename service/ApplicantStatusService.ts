@@ -81,7 +81,7 @@ export class ApplicantStatusService {
 		this.updateApplicantStatus(formData, "panel_interview");
 	}
 
-	public async updateApplicantStatus(formData: FormData, stageType: StageType) {
+	private async updateApplicantStatus(formData: FormData, stageType: StageType) {
 		const applicantStage = DataExtractor.extractApplicantStages(formData);
 		this.validateApplicantStatus(applicantStage, stageType);
 

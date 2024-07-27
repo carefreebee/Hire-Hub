@@ -15,21 +15,21 @@ export async function CreateScreeningComment(formData: FormData) {
 }
 
 export async function CreateInitialInterviewComment(formData: FormData) {
-	return await commentService.createInitialInterviewComment(formData);
+	return await commentService.createComment(formData, "initial_interview");
 }
 
 export async function CreateTeachingDemoComment(formData: FormData) {
-	return await commentService.createTeachingDemoComment(formData);
+	return await commentService.createComment(formData, "teaching_demo");
 }
 
 export async function CreatePsychologicalExamComment(formData: FormData) {
-	return await commentService.createPsychologicalExamComment(formData);
+	return await commentService.createComment(formData, "psychological_exam");
 }
 
 export async function CreatePanelInterviewComment(formData: FormData) {
-	return await commentService.createPanelInterviewComment(formData);
+	return await commentService.createComment(formData, "panel_interview");
 }
 
 export async function CreateRecommendationForHiringComment(formData: FormData) {
-	return await commentService.createRecommendationForHiringComment(formData);
+	return await commentService.createComment(formData, "recommendation_for_hiring");
 }
