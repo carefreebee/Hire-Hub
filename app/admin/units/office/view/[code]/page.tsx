@@ -9,7 +9,7 @@ export default async function SuccessAddNewRequestPage({ params }: { params: { c
 			<ViewResult
 				href="/admin/units/office"
 				title="Office Details"
-				label="Office Name"
+				label="Office"
 				unitCode={office?.office_code as string}
 				unitName={office?.office_name as string}
 			/>

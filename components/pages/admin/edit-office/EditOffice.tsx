@@ -42,7 +42,7 @@ export default function EditOffice({ unitId, unitCode, unitName }: EditResultPro
 			className="mx-auto flex h-96 w-[686px] flex-col justify-center gap-8 rounded-xl bg-white py-5 shadow-md"
 		>
 			<h4 className="scroll-m-20 text-center text-xl font-bold tracking-tight text-[#7F0000]">
-				Office Details
+				Edit Office
 			</h4>
 
 			<input type="hidden" name="office_id" value={unitId} readOnly />
@@ -52,7 +52,8 @@ export default function EditOffice({ unitId, unitCode, unitName }: EditResultPro
 				<Input
 					type="text"
 					name="office_code"
-					defaultValue={unitCode}
+					value={unitCode}
+					readOnly
 					className="border-2"
 				/>
 			</div>

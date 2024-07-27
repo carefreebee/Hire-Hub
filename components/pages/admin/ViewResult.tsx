@@ -20,11 +20,11 @@ export default function ViewResult({ href, title, label, unitCode, unitName }: V
 						{title}
 					</h4>
 					<div className="mx-auto w-[564px]">
-						<Label className="font-semibold text-[#666666]">{label}</Label>
+						<Label className="font-semibold text-[#666666]">{label} Code</Label>
 						<Input value={unitCode} readOnly className="border-2" />
 					</div>
 					<div className="mx-auto w-[564px]">
-						<Label className="font-semibold text-[#666666]">{label}</Label>
+						<Label className="font-semibold text-[#666666]">{label} Name</Label>
 						<Input value={unitName} readOnly className="border-2" />
 					</div>
 				</div>
