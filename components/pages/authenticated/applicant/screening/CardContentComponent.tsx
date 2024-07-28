@@ -1,6 +1,8 @@
+import { Button } from "~/components/ui/button";
+import { TypographySmall } from "~/components/ui/typography-small";
 import { validateRequest } from "~/lib/auth";
+import { formattedNameAndRole } from "~/util/formatted-name";
 import { GetCurrentStage } from "~/util/get-current-stage";
-import { ScreeningAndInitial } from "../Card/StatusDisplayComponents";
 import SelectPassedOrFailed from "./SelectPassedOrFailed";
 
 export default async function CardContentComponent({ applicantId }: { applicantId: number }) {
@@ -17,10 +19,21 @@ export default async function CardContentComponent({ applicantId }: { applicantI
 	return (
 		<>
 			{isApplicantInProgress && isRecruitmentOfficer ? (
-				<SelectPassedOrFailed />
+				<div className="flex">
+					<TypographySmall size={"md"}>Status:</TypographySmall> <SelectPassedOrFailed />
+				</div>
 			) : (
 				(isPassed || isFailed) && (
-					<ScreeningAndInitial status={applicantStage?.status as string} />
+					<div className="flex">
+						<TypographySmall size={"md"}>Status:</TypographySmall>{" "}
+						<Button
+							variant={"outline"}
+							disabled
+							className={`${applicantStage.status === "passed" ? "text-green-500" : "text-[#7F0000]"}`}
+						>
+							{formattedNameAndRole(applicantStage?.status as string, "_")}
+						</Button>
+					</div>
 				)
 			)}
 		</>

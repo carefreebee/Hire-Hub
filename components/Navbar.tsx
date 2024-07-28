@@ -44,8 +44,6 @@ export default function Navbar({ avatarUrl, name, role, department, office }: Na
 			<div>
 				<p className="text-sm font-semibold">{formattedNameAndRole(name, "_")}</p>
 				<p className="text-sm">{formattedNameAndRole(role, "_")}</p>
-				<p className="text-sm">{department && formattedNameAndRole(department, "_")}</p>
-				<p className="text-sm">{office && formattedNameAndRole(office, "_")}</p>
 			</div>
 		</nav>
 	);

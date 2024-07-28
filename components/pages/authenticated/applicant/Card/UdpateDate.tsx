@@ -9,6 +9,7 @@ import { Button } from "~/components/ui/button";
 import { Calendar } from "~/components/ui/calendar";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
+import UpdateSvg from "~/components/ui/update-svg";
 import { toast } from "~/components/ui/use-toast";
 import { UpdateScreeningAndInitialInterviewDate } from "~/Controller/ApplicantStatusController";
 import { formattedDateTime } from "~/lib/date-time";
@@ -100,7 +101,7 @@ export default function UpdateDate({ id, date }: ApplicantIDFooterProps) {
 				<ConfirmationModal
 					mainButton={
 						<Button type="submit" variant={"ghost"} className="text-[#0F91D2]">
-							Update
+							<UpdateSvg /> <span className="ml-2">Update</span>
 						</Button>
 					}
 					descriptionButtonLabel="Are you sure you want to update Applicant Status"

@@ -40,8 +40,6 @@ export default async function InitialInterviewComponent({
 
 	return (
 		<>
-			{inProgress && <p></p>}
-
 			{(isPassed || isFailed) && (
 				<DisplayIfPassed
 					date={applicantStage?.date as Date}

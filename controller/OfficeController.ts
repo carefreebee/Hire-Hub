@@ -18,8 +18,8 @@ export async function updateOffice(formData: FormData) {
 	return await officeService.updateOffice(formData);
 }
 
-export async function deleteOffice(id: number) {
-	return await officeService.deleteOffice(id);
+export async function deleteOfficeByCode(code: string) {
+	return await officeService.deleteOfficeByCode(code);
 }
 
 

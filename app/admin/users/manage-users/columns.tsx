@@ -124,7 +124,7 @@ export const columns: ColumnDef<User>[] = [
 			const id = row.getValue("id");
 
 			return (
-				<div className="flex justify-center">
+				<div className="flex items-center justify-center">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" className="h-8 w-8 p-0">

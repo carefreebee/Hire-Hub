@@ -25,3 +25,9 @@ date-> add schedule (must appear automatically)
 ✅ confirmation successful-> applicant redirected to the homepage
 ✅ new hires and applicant same value
 ✅ recommendation for hiring -> remove online/in-person
+
+
+
+user?.id
+applicant?.id
+comment?.id

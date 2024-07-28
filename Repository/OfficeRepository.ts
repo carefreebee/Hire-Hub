@@ -37,7 +37,7 @@ export class OfficeRepository {
 			.where(eq(office.office_id, office_id as number));
 	}
 
-	public async DeleteOffice(id: number) {
-		return await db.delete(office).where(eq(office.office_id, id));
+	public async DeleteOfficeByCode(code: string) {
+		return await db.delete(office).where(eq(office.office_code, code));
 	}
 }

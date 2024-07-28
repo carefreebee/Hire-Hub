@@ -49,7 +49,7 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 
 			toast({
 				title: "Applicant form submitted",
-				description: "Please wait at least 5 days",
+				description: "Thank you for submitting your application.",
 			});
 		} catch (error) {
 			console.error("Error", { error });
@@ -232,32 +232,32 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 
 						{/* RESUME INPUT */}
 						<input
-							type="text"
+							type="hidden"
 							name="resume_name"
-							// defaultValue={uploadFiles[0]?.name}
-							// readOnly
+							defaultValue={uploadFiles[0]?.name}
+							readOnly
 							className="text-black"
 						/>
 						<input
-							type="text"
+							type="hidden"
 							name="resume_url"
-							// defaultValue={uploadFiles[0]?.url}
-							// readOnly
+							defaultValue={uploadFiles[0]?.url}
+							readOnly
 							className="text-black"
 						/>
 
 						<input
-							type="text"
+							type="hidden"
 							name="letter_name"
-							// defaultValue={uploadFiles[1]?.name}
-							// readOnly
+							defaultValue={uploadFiles[1]?.name}
+							readOnly
 							className="text-black"
 						/>
 						<input
-							type="text"
+							type="hidden"
 							name="letter_url"
-							// defaultValue={uploadFiles[1]?.url}
-							// readOnly
+							defaultValue={uploadFiles[1]?.url}
+							readOnly
 							className="text-black"
 						/>
 

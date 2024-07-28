@@ -18,6 +18,6 @@ export async function updateDepartment(formData: FormData) {
 	return await departmentService.updateDepartment(formData);
 }
 
-export async function deleteDepartment(id: number) {
-	return await departmentService.deleteDepartment(id);
+export async function deleteDepartmentByCode(departmentCode: string) {
+	return await departmentService.deleteDepartmentByCode(departmentCode);
 }

@@ -61,7 +61,7 @@ export default function SubmitStagesForm({
 			toast({
 				variant: "destructive",
 				title: "Update Error!",
-				description: "Please don't forget to add the rating form.",
+				description: "Please don't forget to add/upload the rating form first.",
 			});
 		}
 	}
@@ -72,7 +72,7 @@ export default function SubmitStagesForm({
 			<input type="hidden" name="user_id" value={evaluatorsId} readOnly />
 			<input type="hidden" name="recruitment_stage" value={recruitment_stage} readOnly />
 			{/* INPUT BELOW THE TYPE MUST BE HIDDEN, DEFAULTVALUE SHOULD BE VALUE. AND SET INTO READONLY */}
-			<Input type="text" name="rate" defaultValue={file as string} className="text-black" />
+			<Input type="hidden" name="rate" defaultValue={file as string} className="text-black" />
 			<ConfirmationModal
 				mainButton={
 					<Button variant={"outline"} className="text-[#0F91D2] hover:text-[#0F91D2]">

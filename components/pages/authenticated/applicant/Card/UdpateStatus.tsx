@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
+import UpdateSvg from "~/components/ui/update-svg";
 import { toast } from "~/components/ui/use-toast";
 import { UpdateScreening } from "~/Controller/ApplicantStatusController";
 import { useSelectPassedOrFailed } from "~/util/zustand";
@@ -42,7 +43,7 @@ export default function UpdateStatus({ id, assessorId }: ApplicantIDFooterProps)
 			<ConfirmationModal
 				mainButton={
 					<Button type="submit" variant={"ghost"} className="text-[#0F91D2]">
-						Update
+						<UpdateSvg /> <span className="ml-2">Update</span>
 					</Button>
 				}
 				descriptionButtonLabel="Are you sure you want to update Applicant Status"

@@ -66,9 +66,9 @@ export class OfficeService {
 		}
 	}
 
-	public async deleteOffice(id: number) {
+	public async deleteOfficeByCode(code: string) {
 		try {
-			await this.officeRepo.DeleteOffice(id);
+			await this.officeRepo.DeleteOfficeByCode(code);
 
 			revalidatePath("/admin/units/office");
 		} catch (error) {

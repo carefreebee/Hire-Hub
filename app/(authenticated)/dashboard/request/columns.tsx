@@ -11,9 +11,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { toast } from "~/components/ui/use-toast";
 import { FullTimeType, PartTimeType, SelectedPartTimeType } from "~/constant/constant";
-import { handleDeleteJobRequest } from "~/Controller/JobRequestController";
 import { formatDate } from "~/lib/date-time";
 import { JobRequestSelect } from "~/lib/schema";
 
@@ -32,11 +30,7 @@ export const columns: ColumnDef<JobRequestSelect>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			return (
-				<div className="flex items-center justify-center gap-2">
-					{row.index + 1}
-				</div>
-			);
+			return <div className="flex items-center justify-center gap-2">{row.index + 1}</div>;
 		},
 	},
 	{
@@ -140,7 +134,7 @@ export const columns: ColumnDef<JobRequestSelect>[] = [
 			const id = row.getValue("request_id");
 
 			return (
-				<div className="flex justify-center">
+				<div className="flex items-center justify-center">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" className="h-8 w-8 p-0">
@@ -150,28 +144,15 @@ export const columns: ColumnDef<JobRequestSelect>[] = [
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="center" className="rounded-xl">
 							<DropdownMenuItem asChild>
-								<Link href={`/dashboard/request/result/${id}`}>View</Link>
+								<Link href={`/dashboard/request/view/${id}`}>View</Link>
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
 							<DropdownMenuItem asChild>
 								<Link href={`/dashboard/request/edit/${id}`}>Edit</Link>
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem>
-								<Button
-									onClick={async () => {
-										await handleDeleteJobRequest(Number(id));
-										toast({
-											title: "Deleted Job Request",
-											description:
-												"Job Request has been deleted successfully",
-										});
-									}}
-									variant={"ghost"}
-									className="h-auto p-0 text-[#EC3838] hover:text-[#EC3838]"
-								>
-									Delete
-								</Button>
+							<DropdownMenuItem asChild>
+								<Link href={`/dashboard/request/delete/${id}`}>Delete</Link>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

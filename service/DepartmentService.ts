@@ -69,9 +69,9 @@ export class DepartmentService {
 		}
 	}
 
-	public async deleteDepartment(id: number) {
+	public async deleteDepartmentByCode(departmentCode: string) {
 		try {
-			await this.departmentRepo.DeleteDepartment(id);
+			await this.departmentRepo.DeleteDepartmentByCode(departmentCode);
 
 			revalidatePath("/admin/units/department");
 		} catch (error) {

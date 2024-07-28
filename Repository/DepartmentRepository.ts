@@ -66,7 +66,7 @@ export class DepartmentRepository {
 			.where(eq(department.department_id, department_id));
 	}
 
-	public async DeleteDepartment(id: number) {
-		return await db.delete(department).where(eq(department.department_id, id));
+	public async DeleteDepartmentByCode(departmentCode: string) {
+		return await db.delete(department).where(eq(department.department_code, departmentCode));
 	}
 }

@@ -44,8 +44,8 @@ export default function DeleteJobRequest({ id }: { id: number }) {
 			confirmation popup conflicts like if the `delete button` was clicked while the dropdown
 			was shown well it will of course show the confirmation but at the same time the dropdown
 			will also close and if the dropdown closes the confirmation will also close. *Remember
-			this is BASED on my assumption
-		*</>
+			this is BASED on my assumption *
+		</>
 		// <div className="flex justify-center">
 		// 	<DropdownMenu>
 		// 		<DropdownMenuTrigger asChild>
@@ -56,7 +56,7 @@ export default function DeleteJobRequest({ id }: { id: number }) {
 		// 		</DropdownMenuTrigger>
 		// 		<DropdownMenuContent align="center" className="rounded-xl">
 		// 			<DropdownMenuItem asChild>
-		// 				<Link href={`/dashboard/request/result/${id}`}>View</Link>
+		// 				<Link href={`/dashboard/request/view/${id}`}>View</Link>
 		// 			</DropdownMenuItem>
 		// 			<DropdownMenuSeparator />
 		// 			<DropdownMenuItem asChild>

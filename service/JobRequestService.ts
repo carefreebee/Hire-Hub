@@ -108,7 +108,7 @@ export class JobRequestService {
 				.where(eq(jobRequest.request_id, id));
 
 			console.log("Update successful:", updatedJobRequestData);
-			revalidatePath(`/dashboard/request/result/${id}`);
+			revalidatePath(`/dashboard/request/view/${id}`);
 		} catch (error) {
 			console.error("Update failed:", error);
 			throw new Error("Update failed");

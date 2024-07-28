@@ -133,11 +133,15 @@ export const columns: ColumnDef<ApplicantSelect>[] = [
 		id: "actions",
 		accessorKey: "Action",
 		header: () => {
-			return <p className="px-5">Action</p>;
+			return <div className="px-5">Action</div>;
 		},
 		cell: ({ row }) => {
 			const id: number = row.getValue("id");
-			return <IDColumn id={id} />;
+			return (
+				<div className="flex items-center justify-center">
+					<IDColumn id={id} />
+				</div>
+			);
 		},
 	},
 ];
