@@ -123,7 +123,7 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 					<section className="flex flex-1 flex-col gap-5">
 						<div className="h-[66px]">
 							<Label className="font-semibold">
-								Choose the type you are applying for
+								Select the type you are applying for:
 							</Label>
 							<div className="mt-3 font-semibold">
 								<RadioGroup
@@ -160,7 +160,7 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 
 						<div className="flex h-[66px] flex-col gap-3">
 							<Label className="font-semibold">
-								Choose the college/ department you are applying for:
+								Select the department/office you are applying for:
 							</Label>
 							{selectedPosition === "teaching_staff" ? (
 								<Select name="selected_department" required>
