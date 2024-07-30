@@ -75,10 +75,10 @@ export default function AddUnitComponent({ headTitle, codeLabel, inputCode, full
 								type="submit"
 								className="bg-[#7F0000] hover:scale-95 hover:bg-[#7F0000]"
 							>
-								Submit Request Form
+								Submit
 							</Button>
 						}
-						descriptionButtonLabel="Are you sure you want to submit the form?"
+						descriptionButtonLabel="Are you sure you want to add?"
 						cancelButtonLabel="No, cancel"
 					>
 						<AlertDialogAction className="w-full" onClick={handleSubmit}>
