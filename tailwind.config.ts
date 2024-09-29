@@ -23,6 +23,8 @@ export default withUt({
 				sans: ["var(--font-sans)", ...fontFamily.sans],
 			},
 			colors: {
+				gray: "#F1F2F4",
+				darkGray: "#767F8C",
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { validateRequest } from "~/lib/auth";
 import { RoleEnumsType } from "~/lib/schema";
 import { authorizedRoles } from "~/util/filter-roles";
+import Image from "next/image";
 
 interface FeatureCardProps {
 	iconSrc: string;
@@ -30,7 +31,7 @@ export default async function Home() {
 			{/* navigation placeholder */}
 			<section className="h-20 w-full bg-gray-200"></section>
 			<section
-				className="xl:px-18 md:16 w-full sm:h-[50vh] sm:px-10 md:h-[60vh] lg:h-[65vh] lg:px-16 xl:h-[80vh] 2xl:px-20"
+				className="xl:px-18 md:16 w-full p-10 sm:h-[50vh] sm:px-10 md:h-[60vh] lg:h-[65vh] lg:px-16 xl:h-[80vh] 2xl:px-20"
 				style={{
 					backgroundImage: `url(${"images/bgHeader.png"})`,
 					backgroundSize: "cover",
@@ -42,7 +43,7 @@ export default async function Home() {
 				<div className="flex h-full flex-col justify-end text-white sm:gap-y-1 sm:pb-6 md:gap-y-1.5 md:pb-8 lg:w-full lg:gap-y-2.5 lg:pb-8 xl:w-10/12 xl:gap-y-4 xl:pb-12 2xl:pb-20">
 					<h1 className="font-bold sm:text-5xl md:text-6xl xl:text-7xl 2xl:text-8xl">
 						Elevate your Career <br /> with{" "}
-						<span className="font-black text-[#f8c400]">CIT-U!</span>
+						<span className="font-black text-[#F1C543]">CIT-U!</span>
 					</h1>
 					<div className="sm:w-9/12 md:w-10/12 lg:w-10/12 xl:w-10/12 2xl:w-8/12">
 						<p className="xl-font-medium sm:text-xs lg:text-base xl:text-lg 2xl:text-xl">
@@ -53,8 +54,8 @@ export default async function Home() {
 					</div>
 					<div className="sm:w-1/5 md:w-1/5 xl:w-1/4">
 						<Link href="/apply-now">
-							<div className="w-full bg-[#f8c400] text-center text-white hover:scale-95 sm:rounded-lg sm:p-1 sm:px-5 sm:text-xs sm:font-semibold md:rounded-lg md:p-1.5 md:px-5 md:text-sm md:font-bold lg:rounded-xl lg:p-2 lg:px-10 lg:text-base xl:p-3 xl:text-xl">
-								Apply Now
+							<div className="w-full bg-[#F1C543] text-center text-white hover:scale-95 sm:rounded-lg sm:p-1 sm:px-5 sm:text-xs sm:font-semibold md:rounded-lg md:p-1.5 md:px-5 md:text-sm md:font-bold lg:rounded-xl lg:p-2 lg:px-10 lg:text-base xl:p-3 xl:text-xl">
+								Browse Jobs
 							</div>
 						</Link>
 					</div>
@@ -82,7 +83,78 @@ export default async function Home() {
 				/>
 			</section>
 
-			<section className="flex w-full flex-col items-center justify-center text-center text-black sm:mb-10 sm:h-[350px] sm:gap-y-1.5 md:mb-12 md:h-[400px] md:gap-y-2 lg:mb-14 lg:h-[500px] xl:mb-12 xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
+			<section className="bg-gray my-10 flex w-full flex-col items-center justify-center p-10 sm:mb-10 sm:h-[350px] sm:gap-y-1.5 md:mb-12 md:h-[400px] md:gap-y-2 lg:mb-14 lg:h-[500px] xl:mb-12 xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
+				<div>
+					<h1 className="my-5 font-medium sm:text-4xl">How Hirehub works</h1>
+				</div>
+				<div className="flex-rows flex w-full grid-rows-4">
+					<div className="min-h-224 m-5 basis-1/4 flex-col justify-center text-center">
+						<Image
+							src="/images/randomphotos/hh-wrk/icon.png"
+							alt="icon"
+							width={72}
+							height={72}
+						/>
+						<h2 className="text-l mt-8 font-bold">Find suitable job</h2>
+						<p className="text-darkGray my-5 text-sm">
+							Browse and discover job opportunities that match your interests and
+							skills.
+						</p>
+					</div>
+
+					<div className="min-h-224 items- m-5 basis-1/4 flex-col place-content-center text-center align-middle">
+						<Image
+							src="/images/randomphotos/hh-wrk/cv.png"
+							alt="icon"
+							width={72}
+							height={72}
+						/>
+						<h2 className="text-l mt-8 font-bold">Fill-in personal information</h2>
+						<p className="text-darkGray my-5 text-sm">
+							Browse and discover job opportunities that match your interests and
+							skills.
+						</p>
+					</div>
+
+					<div className="min-h-224 items- m-5 basis-1/4 flex-col place-content-center text-center align-middle">
+						<Image
+							src="/images/randomphotos/hh-wrk/icon-1.png"
+							alt="icon"
+							width={72}
+							height={72}
+						/>
+						<h2 className="text-l mt-8 font-bold">Upload CV/Resume & Letter</h2>
+						<p className="text-darkGray my-5 text-sm">
+							Browse and discover job opportunities that match your interests and
+							skills.
+						</p>
+					</div>
+
+					<div className="min-h-224 items- m-5 basis-1/4 flex-col place-content-center text-center align-middle">
+						<Image
+							src="/images/randomphotos/hh-wrk/icon-2.png"
+							alt="icon"
+							width={72}
+							height={72}
+						/>
+						<h2 className="text-l mt-8 font-bold">Apply job</h2>
+						<p className="text-darkGray my-5 text-sm">
+							Browse and discover job opportunities that match your interests and
+							skills.
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<section className="flex-col-2 flex w-full items-center justify-center text-center text-black sm:mb-10 sm:h-[350px] sm:gap-y-1.5 md:mb-12 md:h-[400px] md:gap-y-2 lg:mb-14 lg:h-[500px] xl:mb-12 xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
+				<Image src="/images/Illustration.png" alt="icon" width={309} height={240} />
+				<div className="flex-rows text-left">
+					<h1 className="my-3 text-4xl font-bold">Careers in CIT-U</h1>
+					<p>Browse for a job that matches your interests and skills.</p>
+				</div>
+			</section>
+
+			<section className="bg-gray flex w-full flex-col items-center justify-center text-center text-black sm:h-[350px] sm:gap-y-1.5 md:h-[400px] md:gap-y-2 lg:h-[500px] xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
 				<div className="flex flex-col gap-y-1">
 					<h1 className="font-bold sm:text-2xl md:text-4xl xl:text-3xl 2xl:text-4xl">
 						Have a question?
@@ -122,11 +194,10 @@ export default async function Home() {
 					</a>
 				</div>
 			</section>
-
-			<section className="flex h-fit w-full flex-row bg-slate-300">
-				<ImageGrid images={["1", "8", "7", "2"]} />
-				<ImageGrid images={["3", "9", "11", "10"]} />
-				<ImageGrid images={["5", "14", "12", "6"]} />
+			<section className="w-full bg-black text-center">
+				<div>
+					<p className="py-10 text-sm text-white">&copy; 2024 Hirehub</p>
+				</div>
 			</section>
 		</>
 	);
