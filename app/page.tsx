@@ -4,6 +4,8 @@ import { validateRequest } from "~/lib/auth";
 import { RoleEnumsType } from "~/lib/schema";
 import { authorizedRoles } from "~/util/filter-roles";
 import Image from "next/image";
+import Footer from "~/components/Footer";
+import JobListing from "~/components/JobListing";
 
 interface FeatureCardProps {
 	iconSrc: string;
@@ -29,7 +31,7 @@ export default async function Home() {
 	return (
 		<>
 			{/* navigation placeholder */}
-			<section className="h-20 w-full bg-gray-200"></section>
+			<section className="bg-gray-200 h-20 w-full"></section>
 			<section
 				className="xl:px-18 md:16 w-full p-10 sm:h-[50vh] sm:px-10 md:h-[60vh] lg:h-[65vh] lg:px-16 xl:h-[80vh] 2xl:px-20"
 				style={{
@@ -53,7 +55,7 @@ export default async function Home() {
 						</p>
 					</div>
 					<div className="sm:w-1/5 md:w-1/5 xl:w-1/4">
-						<Link href="/apply-now">
+						<Link href="/apply-now/personal-information">
 							<div className="w-full bg-[#F1C543] text-center text-white hover:scale-95 sm:rounded-lg sm:p-1 sm:px-5 sm:text-xs sm:font-semibold md:rounded-lg md:p-1.5 md:px-5 md:text-sm md:font-bold lg:rounded-xl lg:p-2 lg:px-10 lg:text-base xl:p-3 xl:text-xl">
 								Browse Jobs
 							</div>
@@ -62,7 +64,7 @@ export default async function Home() {
 				</div>
 			</section>
 
-			<section className="flex w-full justify-center sm:h-fit sm:flex-col sm:gap-y-8 sm:p-10 md:h-[280px] md:flex-row md:gap-x-8 md:px-14 lg:h-[310px] lg:gap-x-10 lg:px-20 xl:h-72 xl:px-28 2xl:h-[340px] 2xl:px-32">
+			<section className="mx-16 my-20 grid grid-cols-3 gap-20">
 				<FeatureCard
 					iconSrc="/images/icons/career.png"
 					altText="career"
@@ -83,70 +85,52 @@ export default async function Home() {
 				/>
 			</section>
 
-			<section className="bg-gray my-10 flex w-full flex-col items-center justify-center p-10 sm:mb-10 sm:h-[350px] sm:gap-y-1.5 md:mb-12 md:h-[400px] md:gap-y-2 lg:mb-14 lg:h-[500px] xl:mb-12 xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
-				<div>
-					<h1 className="my-5 font-medium sm:text-4xl">How Hirehub works</h1>
+			<section className="my-10 flex w-full flex-col items-center justify-center bg-gray p-10 sm:mb-10 sm:h-[350px] sm:gap-y-1.5 md:mb-12 md:h-[400px] md:gap-y-2 lg:mb-14 lg:h-[500px] xl:mb-12 xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
+				<div className="flex w-full items-center justify-center text-center">
+					<h1 className="my-10 flex font-medium sm:text-4xl">
+						How&nbsp;<p className="font-bold text-jobdetails">HIREHUB</p>&nbsp;works
+					</h1>
 				</div>
-				<div className="flex-rows flex w-full grid-rows-4">
-					<div className="min-h-224 m-5 basis-1/4 flex-col justify-center text-center">
-						<Image
-							src="/images/randomphotos/hh-wrk/icon.png"
-							alt="icon"
-							width={72}
-							height={72}
-						/>
-						<h2 className="text-l mt-8 font-bold">Find suitable job</h2>
-						<p className="text-darkGray my-5 text-sm">
+				<div>
+					<img
+						src="/images/randomphotos/hh-wrk/hh-wrk.png"
+						alt="hh-wrk"
+						className="h-auto w-[1020px]"
+					/>
+				</div>
+				<div className="grid w-full grid-cols-4 justify-center text-center">
+					<div className="flex flex-col content-center justify-center">
+						<h2 className="text-l font-bold">Find suitable job</h2>
+						<p className="my-5 text-sm text-darkGray">
 							Browse and discover job opportunities that match your interests and
 							skills.
 						</p>
 					</div>
 
 					<div className="min-h-224 items- m-5 basis-1/4 flex-col place-content-center text-center align-middle">
-						<Image
-							src="/images/randomphotos/hh-wrk/cv.png"
-							alt="icon"
-							width={72}
-							height={72}
-						/>
-						<h2 className="text-l mt-8 font-bold">Fill-in personal information</h2>
-						<p className="text-darkGray my-5 text-sm">
-							Browse and discover job opportunities that match your interests and
-							skills.
+						<h2 className="text-l font-bold">Fill-in personal information</h2>
+						<p className="my-5 text-sm text-darkGray">
+							Provide your personal details to complete your profile.
 						</p>
 					</div>
 
 					<div className="min-h-224 items- m-5 basis-1/4 flex-col place-content-center text-center align-middle">
-						<Image
-							src="/images/randomphotos/hh-wrk/icon-1.png"
-							alt="icon"
-							width={72}
-							height={72}
-						/>
-						<h2 className="text-l mt-8 font-bold">Upload CV/Resume & Letter</h2>
-						<p className="text-darkGray my-5 text-sm">
-							Browse and discover job opportunities that match your interests and
-							skills.
+						<h2 className="text-l font-bold">Upload CV/Resume & Letter</h2>
+						<p className="my-5 text-sm text-darkGray">
+							Attach your CV and cover letter to support your application.
 						</p>
 					</div>
 
 					<div className="min-h-224 items- m-5 basis-1/4 flex-col place-content-center text-center align-middle">
-						<Image
-							src="/images/randomphotos/hh-wrk/icon-2.png"
-							alt="icon"
-							width={72}
-							height={72}
-						/>
-						<h2 className="text-l mt-8 font-bold">Apply job</h2>
-						<p className="text-darkGray my-5 text-sm">
-							Browse and discover job opportunities that match your interests and
-							skills.
+						<h2 className="text-l font-bold">Apply job</h2>
+						<p className="my-5 text-sm text-darkGray">
+							Submit your application for the desired position.
 						</p>
 					</div>
 				</div>
 			</section>
 
-			<section className="flex-col-2 flex w-full items-center justify-center text-center text-black sm:mb-10 sm:h-[350px] sm:gap-y-1.5 md:mb-12 md:h-[400px] md:gap-y-2 lg:mb-14 lg:h-[500px] xl:mb-12 xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
+			<section className="flex-col-2 flex w-full items-center justify-center text-center text-black sm:h-[350px] sm:gap-y-1.5 md:h-[400px] md:gap-y-2 lg:h-[500px] xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
 				<Image src="/images/Illustration.png" alt="icon" width={309} height={240} />
 				<div className="flex-rows text-left">
 					<h1 className="my-3 text-4xl font-bold">Careers in CIT-U</h1>
@@ -154,7 +138,11 @@ export default async function Home() {
 				</div>
 			</section>
 
-			<section className="bg-gray flex w-full flex-col items-center justify-center text-center text-black sm:h-[350px] sm:gap-y-1.5 md:h-[400px] md:gap-y-2 lg:h-[500px] xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
+			<section className="flex-col-2 mb-10 flex w-full items-center justify-center">
+				<JobListing />
+			</section>
+
+			<section className="flex w-full flex-col items-center justify-center bg-gray text-center text-black sm:h-[350px] sm:gap-y-1.5 md:h-[400px] md:gap-y-2 lg:h-[500px] xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
 				<div className="flex flex-col gap-y-1">
 					<h1 className="font-bold sm:text-2xl md:text-4xl xl:text-3xl 2xl:text-4xl">
 						Have a question?
@@ -194,68 +182,27 @@ export default async function Home() {
 					</a>
 				</div>
 			</section>
-			<section className="w-full bg-black text-center">
-				<div>
-					<p className="py-10 text-sm text-white">&copy; 2024 Hirehub</p>
-				</div>
-			</section>
+			<Footer />
 		</>
 	);
 }
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ iconSrc, altText, title, description }) => {
 	return (
-		<div className="flex h-full items-center justify-center sm:w-full md:w-1/3 lg:w-1/3">
-			<div className="flex flex-col justify-center rounded-3xl border border-gray-300 text-black shadow-lg drop-shadow-lg sm:h-56 sm:gap-y-2 sm:p-6 md:h-48 md:gap-y-2 md:p-4 md:py-3 lg:h-56 lg:gap-y-2 lg:p-6 xl:h-52 xl:gap-y-2 xl:p-6 2xl:h-56 2xl:gap-y-2.5 2xl:p-8">
+		<div className="inline-block items-center justify-center">
+			<div className="border-gray-300 flex h-96 w-auto flex-col items-center justify-center rounded-3xl border px-7 text-black shadow-lg drop-shadow-lg">
 				<img
 					src={iconSrc}
 					alt={altText}
-					className="sm:h-16 sm:w-16 md:h-10 md:w-10 lg:h-12 lg:w-12 xl:h-12 xl:w-12 2xl:h-14 2xl:w-14"
+					className="object-contain sm:h-16 sm:w-16 md:h-10 md:w-10 lg:h-12 lg:w-12 xl:h-12 xl:w-12 2xl:h-14 2xl:w-14"
 				/>
-				<div className="flex flex-col gap-y-1">
+				<div className="mt-4 flex w-full flex-col justify-center gap-y-1 text-center">
 					<h1 className="font-bold sm:text-2xl md:text-base lg:text-lg 2xl:text-xl">
 						{title}
 					</h1>
-					<p className="sm:text-lg md:text-xs lg:text-sm 2xl:text-sm">{description}</p>
-				</div>
-			</div>
-		</div>
-	);
-};
-
-const ImageGrid: React.FC<ImageGridProps> = ({ images }) => {
-	return (
-		<div className="flex h-full w-1/3 flex-row">
-			<div className="flex h-full w-1/2 flex-col">
-				<div className="h-1/2 w-full">
-					<img
-						src={`/images/randomphotos/${images[0]}.jpg`}
-						alt=""
-						className="h-full w-full"
-					/>
-				</div>
-				<div className="h-1/2 w-full">
-					<img
-						src={`/images/randomphotos/${images[1]}.jpg`}
-						alt=""
-						className="h-full w-full"
-					/>
-				</div>
-			</div>
-			<div className="flex h-full w-1/2 flex-col">
-				<div className="h-1/2 w-full">
-					<img
-						src={`/images/randomphotos/${images[2]}.jpg`}
-						alt=""
-						className="h-full w-full"
-					/>
-				</div>
-				<div className="h-1/2 w-full">
-					<img
-						src={`/images/randomphotos/${images[3]}.jpg`}
-						alt=""
-						className="h-full w-full"
-					/>
+					<p className="mt-4 sm:text-lg md:text-xs lg:text-sm 2xl:text-sm">
+						{description}
+					</p>
 				</div>
 			</div>
 		</div>

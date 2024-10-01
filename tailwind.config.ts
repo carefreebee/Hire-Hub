@@ -1,3 +1,4 @@
+import { nextui } from "@nextui-org/theme";
 import { fontFamily } from "tailwindcss/defaultTheme";
 import { withUt } from "uploadthing/tw";
 
@@ -8,6 +9,7 @@ export default withUt({
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+		"./node_modules/@nextui-org/theme/dist/components/[object Object].js",
 	],
 	prefix: "",
 	theme: {
@@ -23,6 +25,12 @@ export default withUt({
 				sans: ["var(--font-sans)", ...fontFamily.sans],
 			},
 			colors: {
+				jobdetails: "#7F0000",
+				customgray: "#767F8C",
+				customgreen: "#0BA02C",
+				customlightgreen: "#E7F6EA",
+				customorange: "#FFCB78",
+				lightorange: "#FFF6E6",
 				gray: "#F1F2F4",
 				darkGray: "#767F8C",
 				border: "hsl(var(--border))",
@@ -80,5 +88,4 @@ export default withUt({
 			},
 		},
 	},
-	plugins: [require("tailwindcss-animate")],
 });

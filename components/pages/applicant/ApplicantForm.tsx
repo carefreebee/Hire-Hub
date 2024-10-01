@@ -22,6 +22,7 @@ import { DepartmentSelect, OfficeSelect } from "~/lib/schema";
 import { ConfirmationPopup } from "./ConfirmationPopUp";
 import { FormContainer, Note, RadioGroupContainer } from "./FormContainer";
 import { MultiUploader } from "./MultipleUploader";
+import { Input } from "~/components/ui/input";
 
 type ApplicantFormProps = {
 	department: DepartmentSelect[];
@@ -90,12 +91,12 @@ export default function ApplicantForm({ department, office }: ApplicantFormProps
 			>
 				<section className="flex gap-10">
 					<section className="flex flex-1 flex-col gap-5">
-						<FormContainer
-							label="First Name"
+						<Input
 							type="text"
 							name="first_name"
 							minLength={2}
 							maxLength={100}
+							placeholder="First Name"
 						/>
 						<FormContainer
 							label="Last Name"
