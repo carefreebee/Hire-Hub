@@ -5,6 +5,7 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/components/ui/card";
 import { getAllJobRequest } from "~/controller/JobRequestController";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type JobRequest = {
 	department_id: number | null;
@@ -109,7 +110,11 @@ export default function JobListing() {
 								) : (
 									<p className="text-customgray">Date Posted: --- --- ---</p>
 								)}
-								<p className="font-bold text-jobdetails">View Job Details -&gt;</p>
+								<Link href={`jobs/${job.request_id}`} className="hover:underline">
+									<p className="font-bold text-jobdetails">
+										View Job Details -&gt;
+									</p>
+								</Link>
 							</CardFooter>
 						</Card>
 					))}

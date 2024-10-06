@@ -6,6 +6,8 @@ import { authorizedRoles } from "~/util/filter-roles";
 import Image from "next/image";
 import Footer from "~/components/Footer";
 import JobListing from "~/components/JobListing";
+import BrowseJobsButton from "~/components/BrowseJobsButton";
+import JoblListingHeader from "~/components/JobListingHeader";
 
 interface FeatureCardProps {
 	iconSrc: string;
@@ -31,7 +33,7 @@ export default async function Home() {
 	return (
 		<>
 			{/* navigation placeholder */}
-			<section className="bg-gray-200 h-20 w-full"></section>
+			<JoblListingHeader />
 			<section
 				className="xl:px-18 md:16 w-full p-10 sm:h-[50vh] sm:px-10 md:h-[60vh] lg:h-[65vh] lg:px-16 xl:h-[80vh] 2xl:px-20"
 				style={{
@@ -54,13 +56,7 @@ export default async function Home() {
 							mission of providing quality education.
 						</p>
 					</div>
-					<div className="sm:w-1/5 md:w-1/5 xl:w-1/4">
-						<Link href="/apply-now/personal-information">
-							<div className="w-full bg-[#F1C543] text-center text-white hover:scale-95 sm:rounded-lg sm:p-1 sm:px-5 sm:text-xs sm:font-semibold md:rounded-lg md:p-1.5 md:px-5 md:text-sm md:font-bold lg:rounded-xl lg:p-2 lg:px-10 lg:text-base xl:p-3 xl:text-xl">
-								Browse Jobs
-							</div>
-						</Link>
-					</div>
+					<BrowseJobsButton />
 				</div>
 			</section>
 
@@ -130,7 +126,10 @@ export default async function Home() {
 				</div>
 			</section>
 
-			<section className="flex-col-2 flex w-full items-center justify-center text-center text-black sm:h-[350px] sm:gap-y-1.5 md:h-[400px] md:gap-y-2 lg:h-[500px] xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3">
+			<section
+				id="joblisting"
+				className="flex-col-2 flex w-full items-center justify-center text-center text-black sm:h-[350px] sm:gap-y-1.5 md:h-[400px] md:gap-y-2 lg:h-[500px] xl:h-[550px] xl:gap-y-2.5 2xl:gap-y-3"
+			>
 				<Image src="/images/Illustration.png" alt="icon" width={309} height={240} />
 				<div className="flex-rows text-left">
 					<h1 className="my-3 text-4xl font-bold">Careers in CIT-U</h1>
