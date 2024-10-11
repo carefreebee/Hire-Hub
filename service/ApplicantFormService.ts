@@ -61,6 +61,16 @@ export class ApplicantFormService {
 					letter_name: applicantFormData.letter_name,
 					letter_url: applicantFormData.letter_url,
 				},
+				gender: "male",
+				birthday: "",
+				address: "",
+				province: "",
+				city: "",
+				baranggay: "",
+				civil_stats: "single",
+				educational_attainment: "doctorate",
+				degree: "",
+				job_experience: "entry_level",
 			});
 
 			revalidatePath("/dashboard/applicant");

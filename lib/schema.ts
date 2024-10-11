@@ -1,5 +1,6 @@
 import {
 	bigint,
+	date,
 	integer,
 	jsonb,
 	pgEnum,
@@ -23,6 +24,18 @@ export const roleEnums = pgEnum("role", [
 	"vp_administration",
 	"univ_president",
 ]);
+export const genderEnums = pgEnum("genderType", ["male", "female", "prefer_not_to_say"]);
+export const civilStatusEnums = pgEnum("civilStatus", ["single", "married", "widowed"]);
+export const highestEducationalAttainmentEnums = pgEnum("highestEducationAttainment", [
+	"doctorate",
+	"masteral",
+	"bachelors",
+]);
+export const jobExperienceEnums = pgEnum("jobExperience", [
+	"entry_level",
+	"experienced",
+	"advanced",
+]);
 export const communicationEnums = pgEnum("communicationType", ["email", "phone_number"]);
 export const positionEnums = pgEnum("positionType", ["teaching_staff", "non-teaching_staff"]);
 export const statusEnums = pgEnum("statusEnums", [
@@ -33,6 +46,50 @@ export const statusEnums = pgEnum("statusEnums", [
 	"Panel InterView",
 	"Recommendation for Hiring",
 ]);
+
+export const applicant = pgTable("applicant", {
+	id: serial("id").primaryKey(),
+	first_name: text("first_name"),
+	last_name: text("last_name"),
+	email: text("email").unique().notNull(),
+	gender: genderEnums("genderType").notNull(),
+	birthday: date("birthdate").notNull(),
+	address: text("address").notNull(),
+	province: text("province").notNull(),
+	city: text("city").notNull(),
+	baranggay: text("baranggay").notNull(),
+	civil_stats: civilStatusEnums("civilStatus").notNull(),
+	educational_attainment: highestEducationalAttainmentEnums(
+		"highestEducationalAttainment"
+	).notNull(),
+	degree: text("degree").notNull(),
+	job_experience: jobExperienceEnums("jobExperience").notNull(),
+	skills: text("skills"),
+	contact_number: bigint("contact_number", { mode: "number" }),
+	resume: jsonb("resume").default({
+		resume_name: "",
+		resume_url: "",
+		letter_name: "",
+		letter_url: "",
+	}),
+	communication_type: communicationEnums("communicationType").notNull(),
+	positionType: positionEnums("positionType").notNull(),
+	position_applied: text("position_applied").notNull(),
+	department_id: integer("department_id").references(() => department.department_id, {
+		onDelete: "cascade",
+	}),
+	office_id: integer("office_id").references(() => office.office_id, { onDelete: "cascade" }),
+	selected_department: text("selected_department"),
+	selected_office: text("selected_office"),
+	applied_date: timestamp("applied_date").defaultNow(),
+	stages: jsonb("stages")
+		.$type<ApplicantStages>()
+		.default({
+			screening: {
+				status: "in-progress",
+			},
+		}),
+});
 
 export const users = pgTable("users", {
 	id: text("id").primaryKey(),
@@ -87,37 +144,6 @@ interface ApplicantStages {
 	panel_interview?: StageStatus;
 	recommendation_for_hiring?: StageStatus;
 }
-
-export const applicant = pgTable("applicant", {
-	id: serial("id").primaryKey(),
-	first_name: text("first_name"),
-	last_name: text("last_name"),
-	email: text("email").unique().notNull(),
-	contact_number: bigint("contact_number", { mode: "number" }),
-	resume: jsonb("resume").default({
-		resume_name: "",
-		resume_url: "",
-		letter_name: "",
-		letter_url: "",
-	}),
-	communication_type: communicationEnums("communicationType").notNull(),
-	positionType: positionEnums("positionType").notNull(),
-	position_applied: text("position_applied").notNull(),
-	department_id: integer("department_id").references(() => department.department_id, {
-		onDelete: "cascade",
-	}),
-	office_id: integer("office_id").references(() => office.office_id, { onDelete: "cascade" }),
-	selected_department: text("selected_department"),
-	selected_office: text("selected_office"),
-	applied_date: timestamp("applied_date").defaultNow(),
-	stages: jsonb("stages")
-		.$type<ApplicantStages>()
-		.default({
-			screening: {
-				status: "in-progress",
-			},
-		}),
-});
 
 export const ratingForms = pgTable("rating_forms", {
 	rating_id: serial("rating_id").primaryKey(),

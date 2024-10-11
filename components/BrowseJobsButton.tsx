@@ -1,8 +1,7 @@
 "use client";
 
 export default function BrowseJobsButton() {
-	const goToCareers = (e: Event) => {
-		e.preventDefault();
+	const goToCareers = () => {
 		const careerSection = document.getElementById("joblisting");
 		if (careerSection) {
 			careerSection.scrollIntoView({ behavior: "smooth" });

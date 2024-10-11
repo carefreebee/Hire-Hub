@@ -144,7 +144,7 @@ export default function Page({ children, params }: LayoutProps) {
 							asChild
 							className="mt-20 w-40 bg-jobdetails text-white hover:scale-95 hover:bg-[#5e1e1e]"
 						>
-							<Link href={`/apply-now/personal-information`}>Apply Now</Link>
+							<Link href={`/apply-now/${job.request_id}`}>Apply Now</Link>
 						</Button>
 					</div>
 				) : (

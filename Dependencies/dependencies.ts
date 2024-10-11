@@ -7,15 +7,15 @@ import { OfficeRepository } from "~/Repository/OfficeRepository";
 import { RatingFormsRepository } from "~/Repository/RatingFormsRepository";
 import { StagesFormRepository } from "~/Repository/StagesFormRepository";
 import { UserRepository } from "~/Repository/UsersRepository";
-import { ApplicantFormService } from "~/Service/ApplicantFormService";
-import { ApplicantStatusService } from "~/Service/ApplicantStatusService";
-import { CommentService } from "~/Service/CommentService";
-import { DepartmentService } from "~/Service/DepartmentService";
-import { JobRequestService } from "~/Service/JobRequestService";
-import { OfficeService } from "~/Service/OfficeService";
-import { RatingFormsService } from "~/Service/RatingFormsService";
-import { StagesFormService } from "~/Service/StagesFormService";
-import { UsersService } from "~/Service/UsersService";
+import { ApplicantFormService } from "~/service/ApplicantFormService";
+import { ApplicantStatusService } from "~/service/ApplicantStatusService";
+import { CommentService } from "~/service/CommentService";
+import { DepartmentService } from "~/service/DepartmentService";
+import { JobRequestService } from "~/service/JobRequestService";
+import { OfficeService } from "~/service/OfficeService";
+import { RatingFormsService } from "~/service/RatingFormsService";
+import { StagesFormService } from "~/service/StagesFormService";
+import { UsersService } from "~/service/UsersService";
 
 const applicantFormRepo = new ApplicantFormRepository();
 const applicantStatusRepo = new ApplicantStatusRepository();
@@ -30,7 +30,7 @@ const commentRepo = new CommentRepository();
 const applicantFormService = new ApplicantFormService(
 	applicantFormRepo,
 	departmentRepo,
-	officeRepo,
+	officeRepo
 );
 const applicantStatusService = new ApplicantStatusService(applicantStatusRepo);
 const userService = new UsersService(userRepo, departmentRepo, officeRepo);
@@ -45,9 +45,10 @@ export {
 	applicantFormService,
 	applicantStatusService,
 	commentService,
-	departmentService, jobRequestService, officeService,
+	departmentService,
+	jobRequestService,
+	officeService,
 	ratingFormsService,
 	stagesFormService,
-	userService
+	userService,
 };
-
