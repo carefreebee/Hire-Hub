@@ -1,3 +1,5 @@
+"use client";
+
 export default function GeneralHeader() {
 	return (
 		<div className="h-20 w-full content-center bg-gray">

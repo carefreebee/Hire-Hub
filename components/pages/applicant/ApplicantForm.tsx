@@ -202,31 +202,7 @@ export default function ApplicantForm({ params }: ApplicantFormProps) {
 						maxLength={500}
 					/>
 				</section>
-				<div className="flex items-center justify-end">
-					<ConfirmationModal
-						mainButton={
-							<Button
-								type="button"
-								className="w-36 bg-[#7F0000] hover:scale-95 hover:bg-[#5e1e1e]"
-							>
-								Next -&gt;
-							</Button>
-						}
-						descriptionButtonLabel="Are you sure you want to submit the form?"
-						cancelButtonLabel="No, cancel"
-					>
-						<AlertDialogAction className="w-full" onClick={handleSubmit}>
-							Yes, submit
-						</AlertDialogAction>
-					</ConfirmationModal>
-				</div>
 			</form>
-			{submitted && (
-				<ConfirmationPopup
-					message="Submitted Successfully."
-					onConfirm={() => router.push("/")}
-				/>
-			)}
 		</div>
 	);
 }
