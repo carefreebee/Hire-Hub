@@ -119,7 +119,9 @@ export const oauthAccounts = pgTable("oauth_accounts", {
 	providerUserId: text("provider_user_id"),
 	userId: text("user_id")
 		.notNull()
-		.references(() => users.id),
+		.references(() => users.id, {
+			onDelete: "cascade",
+		}),
 });
 
 export const sessions = pgTable("sessions", {

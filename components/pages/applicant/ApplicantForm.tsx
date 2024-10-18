@@ -23,6 +23,7 @@ interface ChildFormProps {
 
 const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 	const formRef = useRef<HTMLFormElement>(null);
+	const [formData, setFormData] = useState<FormData>(new FormData());
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -47,6 +48,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 						type="text"
 						minLength={2}
 						maxLength={100}
+						required
 					/>
 					<Input
 						placeholder="Last Name"
@@ -54,6 +56,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 						type="text"
 						minLength={2}
 						maxLength={100}
+						required
 					/>
 					<Input
 						placeholder="Mobile Number"
@@ -61,6 +64,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 						type="text"
 						minLength={2}
 						maxLength={100}
+						required
 					/>
 					<Input
 						placeholder="Email Address"
@@ -68,6 +72,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 						type="email"
 						minLength={2}
 						maxLength={100}
+						required
 					/>
 					<div className="grid grid-cols-3 align-middle text-[#A2A1A8]">
 						<p>Birthdate:</p>
@@ -79,9 +84,10 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 							minLength={2}
 							maxLength={100}
 							className="col-span-2 justify-end text-[#000] placeholder-[#A2A1A8]"
+							required
 						/>
 					</div>
-					<Select name="civilStatus">
+					<Select name="civilStatus" required>
 						<SelectTrigger>
 							<SelectValue placeholder="Civil Status" />
 						</SelectTrigger>
@@ -91,7 +97,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 							<SelectItem value="widowed">Widowed</SelectItem>
 						</SelectContent>
 					</Select>
-					<Select name="genderType">
+					<Select name="genderType" required>
 						<SelectTrigger>
 							<SelectValue placeholder="Gender" />
 						</SelectTrigger>
@@ -101,7 +107,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 							<SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
 						</SelectContent>
 					</Select>
-					<Select name="communicationType">
+					<Select name="communicationType" required>
 						<SelectTrigger>
 							<SelectValue placeholder="Preferred Mode of Communication" />
 						</SelectTrigger>
@@ -117,6 +123,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 						minLength={2}
 						maxLength={500}
 						className="col-span-2"
+						required
 					/>
 					<div className="col-span-2 grid grid-cols-3 gap-4">
 						<Input
@@ -125,6 +132,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 							type="text"
 							minLength={2}
 							maxLength={500}
+							required
 						/>
 						<Input
 							placeholder="City"
@@ -132,6 +140,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 							type="text"
 							minLength={2}
 							maxLength={500}
+							required
 						/>
 						<Input
 							placeholder="Baranggay"
@@ -139,9 +148,10 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 							type="text"
 							minLength={2}
 							maxLength={500}
+							required
 						/>
 					</div>
-					<Select name="highestEducationalAttainment">
+					<Select name="highestEducationalAttainment" required>
 						<SelectTrigger>
 							<SelectValue placeholder="Highest Educational Attainment" />
 						</SelectTrigger>
@@ -157,8 +167,9 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 						type="text"
 						minLength={2}
 						maxLength={500}
+						required
 					/>
-					<Select name="jobExperience">
+					<Select name="jobExperience" required>
 						<SelectTrigger>
 							<SelectValue placeholder="Job Experience" />
 						</SelectTrigger>
@@ -176,6 +187,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 						type="text"
 						minLength={2}
 						maxLength={500}
+						required
 					/>
 					<section className="col-span-2 mt-16 flex w-full justify-end">
 						<Button

@@ -86,7 +86,7 @@ const DocumentForm: React.FC<ChildFormProps> = (props) => {
 			<section className="mt-10 flex w-full justify-end">
 				<Button
 					type="button"
-					onClick={() => {
+					onClick={(e) => {
 						props.setCurrent("personal");
 					}}
 					variant="outline"

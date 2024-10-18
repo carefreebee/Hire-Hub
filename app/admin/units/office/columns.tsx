@@ -1,8 +1,10 @@
 "use client";
 
+import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
+import { ConfirmationDeletionModal } from "~/components/ConfirmationDeletionModal";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -11,6 +13,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { deleteOfficeByCode } from "~/controller/OfficeController";
 import { OfficeSelect } from "~/lib/schema";
 
 export const columns: ColumnDef<OfficeSelect>[] = [
@@ -62,8 +65,12 @@ export const columns: ColumnDef<OfficeSelect>[] = [
 			return <p className="px-5">Action</p>;
 		},
 		cell: ({ row }) => {
-			const code = row.getValue("office_code");
+			const code: string = row.getValue("office_code");
 
+			const handleClickDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+				e.preventDefault;
+				deleteOfficeByCode(code);
+			};
 			return (
 				<div className="flex justify-center">
 					<DropdownMenu>
@@ -80,6 +87,28 @@ export const columns: ColumnDef<OfficeSelect>[] = [
 							<DropdownMenuSeparator />
 							<DropdownMenuItem asChild>
 								<Link href={`/admin/units/office/edit/${code}`}>Edit</Link>
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem asChild>
+								<ConfirmationDeletionModal
+									mainButton={
+										<Button
+											type="button"
+											className="w-full bg-transparent text-red-600 hover:bg-[#f1f5f9]"
+										>
+											Delete
+										</Button>
+									}
+									descriptionButtonLabel="Are you sure you want to delete this department?"
+									cancelButtonLabel="No, cancel"
+								>
+									<AlertDialogAction
+										className="w-full"
+										onClick={handleClickDelete}
+									>
+										Delete
+									</AlertDialogAction>
+								</ConfirmationDeletionModal>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>

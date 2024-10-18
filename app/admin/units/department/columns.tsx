@@ -1,8 +1,11 @@
 "use client";
 
+import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
+import { ConfirmationDeletionModal } from "~/components/ConfirmationDeletionModal";
+import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -11,6 +14,8 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { deleteDepartmentByCode } from "~/controller/DepartmentController";
+import { handleDeleteJobRequest } from "~/controller/JobRequestController";
 import { DepartmentSelect } from "~/lib/schema";
 
 export const columns: ColumnDef<DepartmentSelect>[] = [
@@ -62,7 +67,12 @@ export const columns: ColumnDef<DepartmentSelect>[] = [
 			return <p className="px-5">Action</p>;
 		},
 		cell: ({ row }) => {
-			const departmentCode = row.getValue("department_code");
+			const departmentCode: string = row.getValue("department_code");
+
+			const handleClickDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+				e.preventDefault;
+				deleteDepartmentByCode(departmentCode);
+			};
 
 			return (
 				<div className="flex items-center justify-center">
@@ -84,6 +94,28 @@ export const columns: ColumnDef<DepartmentSelect>[] = [
 								<Link href={`/admin/units/department/edit/${departmentCode}`}>
 									Edit
 								</Link>
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem asChild>
+								<ConfirmationDeletionModal
+									mainButton={
+										<Button
+											type="button"
+											className="w-full bg-transparent text-red-600 hover:bg-[#f1f5f9]"
+										>
+											Delete
+										</Button>
+									}
+									descriptionButtonLabel="Are you sure you want to delete this department?"
+									cancelButtonLabel="No, cancel"
+								>
+									<AlertDialogAction
+										className="w-full"
+										onClick={handleClickDelete}
+									>
+										Delete
+									</AlertDialogAction>
+								</ConfirmationDeletionModal>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
