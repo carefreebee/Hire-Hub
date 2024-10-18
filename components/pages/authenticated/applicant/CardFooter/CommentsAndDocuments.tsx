@@ -43,25 +43,6 @@ export default function CommentsAndDocuments({
 					<CommentForm applicantId={applicantId} evaluatorsId={evaluatorsId} />
 				</CardContent>
 			</Card>
-			<Card className="my-0 flex-1">
-				<CardHeader>
-					<div className="flex items-center justify-between">
-						<CardTitle>Documents</CardTitle>
-					</div>
-				</CardHeader>
-				<CardContent className="mt-0 flex-wrap gap-3 p-5">
-					<ApplicantDocumentDisplay url={resume_url} name={resume_name} />
-					<ApplicantDocumentDisplay url={letter_url} name={letter_name} />
-
-					<Suspense fallback={<>Loading...</>}>
-						<RatingFormDisplay
-							applicantId={applicantId}
-							ratingFormId={ratingFormId as number[]}
-							document={document as Partial<RatingFormWithUserData>[]}
-						/>
-					</Suspense>
-				</CardContent>
-			</Card>
 		</section>
 	);
 }

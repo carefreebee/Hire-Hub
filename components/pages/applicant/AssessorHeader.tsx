@@ -8,7 +8,6 @@ import { getApplicantData } from "~/hooks/useApplicantStages";
 import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect } from "~/lib/schema";
 import { StageType } from "~/types/types";
-import { filterStagesByOffice } from "~/util/filter-applicant-status";
 import { TypographySmall } from "../../ui/typography-small";
 
 const STAGES = [
@@ -19,7 +18,7 @@ const STAGES = [
 	{
 		link: "recommendation-for-hiring",
 		type: "recommendation_for_hiring",
-		name: "Recommendation for Hiring",
+		name: "Recommendation",
 	},
 ];
 
@@ -35,7 +34,7 @@ export default async function AssessorHeader({ id }: { id: string }) {
 	}
 
 	return (
-		<header>
+		<header className="w-80%">
 			<section className="flex">
 				<div className="my-5 flex flex-1 items-center gap-2">
 					<div>
@@ -61,7 +60,7 @@ export default async function AssessorHeader({ id }: { id: string }) {
 							variant={"outline"}
 							className="font-medium shadow-md"
 						>
-							{applicant?.positionType === SelectedCategoryTeachingStaff
+							{applicant!.positionType === SelectedCategoryTeachingStaff
 								? TeachingStaff
 								: NonTeachingStaff}
 						</TypographySmall>
@@ -70,17 +69,11 @@ export default async function AssessorHeader({ id }: { id: string }) {
 			</section>
 
 			<div>
-				<ul className="flex justify-between rounded-lg border shadow-md">
-					<Link
-						href={`/dashboard/applicant/${id}/stages/${user?.role}/evaluate`}
-						className="px-3 py-2 text-sm font-medium"
-					>
-						Evaluate
-					</Link>
+				<ul className="flex w-full justify-between rounded-lg border shadow-md">
 					{user?.role === "recruitment_officer" && (
 						<Link
 							href={`/dashboard/applicant/${id}/stages/recruitment_officer/screening`}
-							className={`${screeningStatus} px-3 py-2 text-sm font-medium`}
+							className={`${screeningStatus} px-2 py-2 text-sm font-medium`}
 						>
 							Screening
 						</Link>
@@ -116,7 +109,7 @@ function Stages({ id, role, stageLink, stageType, applicant, name }: StagesProps
 	return (
 		<Link
 			href={`/dashboard/applicant/${id}/stages/${role}/${stageLink}`}
-			className={`${statusClass} px-3 py-2 text-sm font-medium`}
+			className={`${statusClass} flex px-2 py-2 text-sm font-medium`}
 		>
 			{name}
 		</Link>

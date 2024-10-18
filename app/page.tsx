@@ -32,7 +32,6 @@ export default async function Home() {
 
 	return (
 		<>
-			{/* navigation placeholder */}
 			<JoblListingHeader />
 			<section
 				className="xl:px-18 md:16 w-full p-10 sm:h-[50vh] sm:px-10 md:h-[60vh] lg:h-[65vh] lg:px-16 xl:h-[80vh] 2xl:px-20"

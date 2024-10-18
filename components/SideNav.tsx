@@ -41,6 +41,15 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 						notActiveChildren={<WhiteJobRequestSvg />}
 					/>
 				)}
+
+				{role === "recruitment_officer" && (
+					<Links
+						href="/dashboard/request"
+						label="Request"
+						activeChildren={<JobRequestSVG />}
+						notActiveChildren={<WhiteJobRequestSvg />}
+					/>
+				)}
 				<div className="flex w-[96%] justify-start gap-4 rounded-xl py-3 pl-10 font-medium hover:bg-[#7F0000] hover:text-white">
 					<LogoutSVG />
 					<LogoutButton />

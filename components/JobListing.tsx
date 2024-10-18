@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "~/componen
 import { getAllJobRequest } from "~/controller/JobRequestController";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Skeleton } from "./ui/skeleton";
 
 type JobRequest = {
 	department_id: number | null;
@@ -23,6 +24,7 @@ type JobRequest = {
 
 export default function JobListing() {
 	const [jobRequests, setJobRequests] = useState<JobRequest[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchJobRequests = async () => {
@@ -30,6 +32,7 @@ export default function JobListing() {
 			setJobRequests(response);
 		};
 
+		setTimeout(setIsLoading, 2000);
 		fetchJobRequests();
 	}, []);
 
@@ -68,57 +71,80 @@ export default function JobListing() {
 		return monthNames[month];
 	};
 
+	const checkJobReqSize = () => {
+		return jobRequests.length > 4 ? 1 : 0;
+	};
+
 	return (
 		<>
-			<ScrollArea className="h-auto max-h-[1052] w-[1200px] rounded-md p-4">
-				<div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-					{jobRequests.map((job) => (
-						<Card className="mb-5 h-auto max-w-[600px] bg-gradient-to-r from-lightorange to-white">
-							<CardHeader>
-								<CardTitle>{job.requested_position}</CardTitle>
-								<div className="inline-block h-auto w-auto grid-cols-2">
-									{isTeachingStaff(job.requested_category) ? (
-										<div className="mr-2 inline-block h-auto w-auto rounded-sm bg-customorange px-4 py-1 font-bold text-white">
-											TEACHING STAFF
-										</div>
-									) : (
-										<div className="mr-2 inline-block h-auto w-auto rounded-sm bg-customorange px-4 py-1 font-bold text-white">
-											NON TEACHING STAFF
-										</div>
-									)}
-									{isFullTime(job.requested_type) ? (
-										<div className="inline-block h-auto w-auto rounded-sm bg-customlightgreen px-4 py-1 font-bold text-customgreen">
-											FULL-TIME
-										</div>
-									) : (
-										<div className="inline-block h-auto w-auto rounded-sm bg-customlightgreen px-4 py-1 font-bold text-customgreen">
-											PART-TIME
-										</div>
-									)}
-								</div>
-							</CardHeader>
-							<CardContent className="h-10">
-								<p className="font-bold text-black">{job.requested_department}</p>
-							</CardContent>
-							<CardFooter className="mb-3 flex h-1 w-full justify-between">
-								{job.requested_date ? (
-									<p className="text-customgray">
-										Date Posted: {job.requested_date.getDate()}{" "}
-										{formatMonth(job.requested_date.getMonth())}{" "}
-										{job.requested_date.getFullYear()}
+			<ScrollArea
+				style={{
+					height: checkJobReqSize() ? "75rem" : "30rem",
+				}}
+				className="w-[90%] rounded-md p-4"
+			>
+				{isLoading ? (
+					<div className="grid grid-cols-2 gap-8 sm:grid-cols-2">
+						<Skeleton className="h-40 w-[35rem]" />
+						<Skeleton className="h-40 w-[35rem]" />
+						<Skeleton className="h-40 w-[35rem]" />
+						<Skeleton className="h-40 w-[35rem]" />
+					</div>
+				) : (
+					<div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+						{jobRequests.map((job) => (
+							<Card className="mb-5 h-auto max-w-[600px] bg-gradient-to-r from-lightorange to-white">
+								<CardHeader>
+									<CardTitle>{job.requested_position}</CardTitle>
+									<div className="inline-block h-auto w-auto grid-cols-2">
+										{isTeachingStaff(job.requested_category) ? (
+											<div className="mr-2 inline-block h-auto w-auto rounded-sm bg-customorange px-4 py-1 font-bold text-white">
+												TEACHING STAFF
+											</div>
+										) : (
+											<div className="mr-2 inline-block h-auto w-auto rounded-sm bg-customorange px-4 py-1 font-bold text-white">
+												NON TEACHING STAFF
+											</div>
+										)}
+										{isFullTime(job.requested_type) ? (
+											<div className="inline-block h-auto w-auto rounded-sm bg-customlightgreen px-4 py-1 font-bold text-customgreen">
+												FULL-TIME
+											</div>
+										) : (
+											<div className="inline-block h-auto w-auto rounded-sm bg-customlightgreen px-4 py-1 font-bold text-customgreen">
+												PART-TIME
+											</div>
+										)}
+									</div>
+								</CardHeader>
+								<CardContent className="h-10">
+									<p className="font-bold text-black">
+										{job.requested_department}
 									</p>
-								) : (
-									<p className="text-customgray">Date Posted: --- --- ---</p>
-								)}
-								<Link href={`jobs/${job.request_id}`} className="hover:underline">
-									<p className="font-bold text-jobdetails">
-										View Job Details -&gt;
-									</p>
-								</Link>
-							</CardFooter>
-						</Card>
-					))}
-				</div>
+								</CardContent>
+								<CardFooter className="mb-3 flex h-1 w-full justify-between">
+									{job.requested_date ? (
+										<p className="text-customgray">
+											Date Posted: {job.requested_date.getDate()}{" "}
+											{formatMonth(job.requested_date.getMonth())}{" "}
+											{job.requested_date.getFullYear()}
+										</p>
+									) : (
+										<p className="text-customgray">Date Posted: --- --- ---</p>
+									)}
+									<Link
+										href={`jobs/${job.request_id}`}
+										className="hover:underline"
+									>
+										<p className="font-bold text-jobdetails">
+											View Job Details -&gt;
+										</p>
+									</Link>
+								</CardFooter>
+							</Card>
+						))}
+					</div>
+				)}
 			</ScrollArea>
 		</>
 	);

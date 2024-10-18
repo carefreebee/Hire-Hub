@@ -1,11 +1,19 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, Dispatch, SetStateAction } from "react";
 import { useDropzone } from "@uploadthing/react";
 import { toast } from "~/components/ui/use-toast";
 import { Button } from "~/components/ui/button";
 import { useUploadThing } from "~/util/uploadthing";
 
-export default function CVupload() {
+interface ChildFormProps {
+	setApplicationFile: Dispatch<SetStateAction<File | null>>;
+}
+
+const Aupload: React.FC<ChildFormProps> = (props) => {
 	const [file, setFile] = useState<File | null>(null);
+
+	useEffect(() => {
+		props.setApplicationFile(file);
+	});
 
 	const onDrop = useCallback((acceptedFiles: File[]) => {
 		if (acceptedFiles.length > 0) {
@@ -13,38 +21,16 @@ export default function CVupload() {
 		}
 	}, []);
 
-	const { startUpload, routeConfig } = useUploadThing("applicantUpload", {
-		onClientUploadComplete: (res) => {
-			toast({
-				title: "File uploaded successfully!",
-				description: "Your application letter has been uploaded successfully.",
-			});
-		},
-		onUploadError: () => {
-			toast({
-				title: "Error occurred while uploading",
-				description: "An error occurred while uploading the file. Please try again.",
-			});
-		},
-		onUploadBegin: () => {
-			toast({
-				title: "Upload has begun",
-				description:
-					"Your file is being uploaded. Please wait for the process to complete.",
-			});
-		},
-	});
-
-	const fileTypes = routeConfig ? Object.keys(routeConfig) : ["application/pdf"];
 	const { getRootProps, getInputProps } = useDropzone({
 		onDrop,
 		accept: { "application/pdf": [".pdf"] },
+		multiple: false,
 	});
 
 	const handleCancel = () => {
 		setFile(null);
 		toast({
-			title: "File cleared",
+			title: "Application letter cleared",
 			description: "Your selected file has been cleared.",
 		});
 	};
@@ -57,7 +43,7 @@ export default function CVupload() {
 
 			<div
 				{...getRootProps()}
-				className="flex h-40 w-full flex-col items-center justify-center rounded-xl border-2 border-dotted border-[#666666]"
+				className="flex h-40 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dotted border-[#666666]"
 			>
 				<input {...getInputProps()} />
 				<div className="mb-2">
@@ -94,28 +80,16 @@ export default function CVupload() {
 						/>
 					</svg>
 				</div>
-				<p className="text-black">Select a file or drag and drop here</p>
+				{file ? (
+					<div className="flex">
+						<p className="text-black"> {file.name} </p>
+					</div>
+				) : (
+					<p className="text-black">Select a file or drag and drop here</p>
+				)}
 			</div>
-
-			{file ? (
-				<div className="mt-4 flex space-x-4">
-					<Button
-						type="button"
-						variant={"outline"}
-						className="rounded bg-blue-500 p-2 text-white"
-						onClick={() => startUpload([file])}
-					>
-						Upload {file.name}
-					</Button>
-					<Button onClick={handleCancel} variant="outline">
-						Cancel
-					</Button>
-				</div>
-			) : (
-				<Button variant="outline" className="mt-4 text-black" disabled>
-					Upload file
-				</Button>
-			)}
 		</div>
 	);
-}
+};
+
+export default Aupload;

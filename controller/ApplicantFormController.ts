@@ -17,6 +17,6 @@ export async function getApplicantFormByID(id: number) {
 	return await applicantFormService.getApplicantFormByID(id);
 }
 
-export async function CreateApplicantForm(formData: FormData) {
-	return await applicantFormService.create(formData);
+export async function CreateApplicantForm(formData: FormData, jobId: number) {
+	return await applicantFormService.create(formData, jobId);
 }

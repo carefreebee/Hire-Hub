@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
@@ -10,61 +10,37 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import {
 	Select,
 	SelectContent,
-	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from "~/components/ui/select";
-import { toast } from "~/components/ui/use-toast";
-import { CreateApplicantForm } from "~/Controller/ApplicantFormController";
-import { DepartmentSelect, OfficeSelect } from "~/lib/schema";
-import { ConfirmationPopup } from "./ConfirmationPopUp";
-import { FormContainer, Note, RadioGroupContainer } from "./FormContainer";
-import { MultiUploader } from "./MultipleUploader";
 import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
 
-type ApplicantFormProps = {
-	params: { id: number };
-};
+interface ChildFormProps {
+	setCurrent: Dispatch<SetStateAction<string>>;
+	setFormData: Dispatch<SetStateAction<FormData>>;
+}
 
-export default function ApplicantForm({ params }: ApplicantFormProps) {
+const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 	const formRef = useRef<HTMLFormElement>(null);
-	const router = useRouter();
-	const [submitted, setSubmitted] = useState(false);
 
-	async function handleSubmit(): Promise<void> {
-		const formData = new FormData(formRef.current!);
-		try {
-			await CreateApplicantForm(formData);
-			if (formRef.current) {
-				formRef.current.reset();
-			}
-			setSubmitted(true);
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (formRef.current) {
+			const formData = new FormData(formRef.current);
 
-			toast({
-				title: "Applicant form submitted",
-				description: "Thank you for submitting your application.",
+			formData.forEach((value, key) => {
+				console.log(key, value);
 			});
-		} catch (error) {
-			console.error("Error", { error });
-			toast({
-				variant: "destructive",
-				title: "Error submitting form",
-				description: "Please fill up the form correctly.",
-			});
+			props.setCurrent("document");
+			props.setFormData(formData);
 		}
-	}
+	};
 
 	return (
 		<div>
-			<form
-				ref={formRef}
-				onSubmit={(e) => e.preventDefault()}
-				className="space-y-8 text-[#A2A1A8]"
-			>
-				<section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+			<form ref={formRef} onSubmit={handleSubmit} className="space-y-8">
+				<section className="grid grid-cols-1 gap-4 text-[#A2A1A8] sm:grid-cols-2">
 					<Input
 						placeholder="First Name"
 						name="first_name"
@@ -93,7 +69,7 @@ export default function ApplicantForm({ params }: ApplicantFormProps) {
 						minLength={2}
 						maxLength={100}
 					/>
-					<div className="grid grid-cols-3 align-middle">
+					<div className="grid grid-cols-3 align-middle text-[#A2A1A8]">
 						<p>Birthdate:</p>
 						<Input
 							placeholder="Date of Birth"
@@ -102,10 +78,10 @@ export default function ApplicantForm({ params }: ApplicantFormProps) {
 							type="date"
 							minLength={2}
 							maxLength={100}
-							className="col-span-2 justify-end text-[#A2A1A8]"
+							className="col-span-2 justify-end text-[#000] placeholder-[#A2A1A8]"
 						/>
 					</div>
-					<Select>
+					<Select name="civilStatus">
 						<SelectTrigger>
 							<SelectValue placeholder="Civil Status" />
 						</SelectTrigger>
@@ -115,17 +91,17 @@ export default function ApplicantForm({ params }: ApplicantFormProps) {
 							<SelectItem value="widowed">Widowed</SelectItem>
 						</SelectContent>
 					</Select>
-					<Select>
+					<Select name="genderType">
 						<SelectTrigger>
 							<SelectValue placeholder="Gender" />
 						</SelectTrigger>
 						<SelectContent>
 							<SelectItem value="male">Male</SelectItem>
 							<SelectItem value="female">Female</SelectItem>
-							<SelectItem value="nosay">Prefer not to say</SelectItem>
+							<SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
 						</SelectContent>
 					</Select>
-					<Select>
+					<Select name="communicationType">
 						<SelectTrigger>
 							<SelectValue placeholder="Preferred Mode of Communication" />
 						</SelectTrigger>
@@ -159,13 +135,13 @@ export default function ApplicantForm({ params }: ApplicantFormProps) {
 						/>
 						<Input
 							placeholder="Baranggay"
-							name="brgy"
+							name="baranggay"
 							type="text"
 							minLength={2}
 							maxLength={500}
 						/>
 					</div>
-					<Select>
+					<Select name="highestEducationalAttainment">
 						<SelectTrigger>
 							<SelectValue placeholder="Highest Educational Attainment" />
 						</SelectTrigger>
@@ -182,27 +158,37 @@ export default function ApplicantForm({ params }: ApplicantFormProps) {
 						minLength={2}
 						maxLength={500}
 					/>
-					<Select>
+					<Select name="jobExperience">
 						<SelectTrigger>
 							<SelectValue placeholder="Job Experience" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="entry">Entry level/No experience</SelectItem>
-							<SelectItem value="masteral">
+							<SelectItem value="entry_level">Entry level/No experience</SelectItem>
+							<SelectItem value="experienced">
 								Experienced Employee (2-4 years)
 							</SelectItem>
-							<SelectItem value="bachelors">Advanced Employee (5+ years)</SelectItem>
+							<SelectItem value="advanced">Advanced Employee (5+ years)</SelectItem>
 						</SelectContent>
 					</Select>
 					<Input
 						placeholder="Skills"
-						name="degree"
+						name="skills"
 						type="text"
 						minLength={2}
 						maxLength={500}
 					/>
+					<section className="col-span-2 mt-16 flex w-full justify-end">
+						<Button
+							type="submit"
+							className="w-36 bg-[#7F0000] hover:scale-95 hover:bg-[#5e1e1e]"
+						>
+							Next -&gt;
+						</Button>
+					</section>
 				</section>
 			</form>
 		</div>
 	);
-}
+};
+
+export default ApplicantForm;

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Footer from "~/components/Footer";
 import JoblListingHeader from "~/components/JobListingHeader";
 import { Button } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
 import { getJobRequestByID } from "~/controller/JobRequestController";
 
 type LayoutProps = {
@@ -47,6 +48,7 @@ const formatMonth = (month: number) => {
 
 export default function Page({ children, params }: LayoutProps) {
 	const [job, setJob] = useState<Job>();
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		const fetchJob = async () => {
@@ -77,7 +79,7 @@ export default function Page({ children, params }: LayoutProps) {
 		<>
 			<div className="h-screen w-full flex-col">
 				<JoblListingHeader />
-				{job ? (
+				{job && isLoading ? (
 					<div className="mb-20 ml-24 mt-12">
 						<section className="grid grid-cols-2">
 							<div>
@@ -148,8 +150,14 @@ export default function Page({ children, params }: LayoutProps) {
 						</Button>
 					</div>
 				) : (
-					<div className="">
-						<p>Job Not Found!</p>
+					<div className="ml-24 mt-16 flex flex-col">
+						<Skeleton className="mb-2 ml-5 h-10 w-96" />
+						<Skeleton className="mb-10 ml-5 h-10 w-[30rem]" />
+						<Skeleton className="mb-2 ml-5 h-10 w-[30rem]" />
+						<Skeleton className="mb-2 ml-5 h-10 w-[50rem]" />
+						<Skeleton className="mb-2 ml-5 h-10 w-[50rem]" />
+						<Skeleton className="mb-2 ml-5 h-10 w-[50rem]" />
+						<Skeleton className="mb-2 ml-5 h-10 w-[50rem]" />
 					</div>
 				)}
 			</div>

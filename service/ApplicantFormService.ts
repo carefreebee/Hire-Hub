@@ -2,6 +2,7 @@ import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/ApplicantForm";
 import { ApplicantFormRepository } from "~/Repository/ApplicantFormRepository";
 import { DepartmentRepository } from "~/Repository/DepartmentRepository";
+import { JobRequestRepository } from "~/Repository/JobRequestRepository";
 import { OfficeRepository } from "~/Repository/OfficeRepository";
 import { ApplicantForm, Validator } from "~/Validator/ApplicantForm";
 
@@ -9,7 +10,8 @@ export class ApplicantFormService {
 	constructor(
 		private readonly applicantRepo: ApplicantFormRepository,
 		private readonly departmentRepo: DepartmentRepository,
-		private readonly officeRepo: OfficeRepository
+		private readonly officeRepo: OfficeRepository,
+		private readonly jobRequestRepo: JobRequestRepository
 	) {}
 
 	public async getAllApplicantForm() {
@@ -39,42 +41,34 @@ export class ApplicantFormService {
 		}
 	}
 
-	public async create(formData: FormData) {
+	public async create(formData: FormData, jobId: number) {
 		const applicantFormData = DataExtractor.extractApplicantFormData(formData);
+		console.log("Applicant form data:", applicantFormData);
 		this.validateApplicantFormData(applicantFormData);
 
-		const departmentId = await this.departmentRepo.getDepartmentById(
-			applicantFormData.department_id
-		);
-		const officeId = await this.officeRepo.getOfficeById(applicantFormData.office_id);
-		console.log("Applicant form data:", applicantFormData);
+		const job = await this.jobRequestRepo.getJobRequestByID(jobId);
 
 		try {
 			await this.applicantRepo.createApplicantForm({
 				...applicantFormData,
 				contact_number: Number(applicantFormData.contact_number),
-				department_id: departmentId?.department_id,
-				office_id: officeId?.office_id,
+				department_id: job?.department_id,
+				office_id: job?.office_id,
+				selected_department: job?.requested_department,
+				selected_office: job?.requested_office,
+				position_applied: job?.requested_position!,
+				positionType: job?.requested_category!,
 				resume: {
 					resume_name: applicantFormData.resume_name,
 					resume_url: applicantFormData.resume_url,
 					letter_name: applicantFormData.letter_name,
 					letter_url: applicantFormData.letter_url,
 				},
-				gender: "male",
-				birthday: "",
-				address: "",
-				province: "",
-				city: "",
-				baranggay: "",
-				civil_stats: "single",
-				educational_attainment: "doctorate",
-				degree: "",
-				job_experience: "entry_level",
 			});
-
+			console.log("Applicant Final form data:", applicantFormData);
 			revalidatePath("/dashboard/applicant");
 		} catch (error) {
+			console.error("Error insertion", error);
 			throw new Error("Database insertion failed");
 		}
 	}
@@ -82,7 +76,7 @@ export class ApplicantFormService {
 	private validateApplicantFormData(applicantFormData: ApplicantForm): void {
 		const validateData = Validator.validateApplicantFormData(applicantFormData);
 		if (!validateData.success) {
-			console.error("Validation failed:", validateData.error.format);
+			console.error("Validation failed:", validateData.error);
 			throw new Error("Validation failed");
 		}
 	}

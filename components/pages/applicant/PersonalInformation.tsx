@@ -1,25 +1,18 @@
 "use client";
+import { useState } from "react";
+import PersonalInfo from "./Information/Personal";
+import DocumentInfo from "./Information/Documents";
+import { ApplicantForm } from "~/Validator/ApplicantForm";
+import { ApplicantFormType } from "~/types/types";
 
-import { useEffect, useRef, useState } from "react";
-import DocumentForm from "./DocumentForm";
-import ApplicantForm from "./ApplicantForm";
-import { CreateApplicantForm } from "~/Controller/ApplicantFormController";
+interface UserInformationProps {
+	applicant: ApplicantFormType;
+}
 
-type ApplicationProps = {
-	params: { id: number };
-};
-
-export default function Application({ params }: ApplicationProps) {
+export default function UserInformation({ applicant }: UserInformationProps) {
 	const [current, setCurrent] = useState("personal");
-	const [formData, setFormData] = useState<FormData>(new FormData());
-
-	const handleSubmit = () => {
-		console.log("UPLOADING....");
-		CreateApplicantForm(formData, params.id);
-	};
-
 	return (
-		<div>
+		<div className="w-full">
 			<section>
 				<div
 					style={{
@@ -97,19 +90,14 @@ export default function Application({ params }: ApplicationProps) {
 					</div>
 				</div>
 			</section>
-
 			<section className="mt-10">
 				{current === "personal" ? (
 					<div>
-						<ApplicantForm setCurrent={setCurrent} setFormData={setFormData} />
+						<PersonalInfo applicant={applicant} />
 					</div>
 				) : (
 					<div>
-						<DocumentForm
-							formData={formData}
-							setCurrent={setCurrent}
-							handleSubmit={handleSubmit}
-						/>
+						<DocumentInfo applicant={applicant} />
 					</div>
 				)}
 			</section>

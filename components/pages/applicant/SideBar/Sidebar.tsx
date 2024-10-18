@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Dispatch, Fragment, SetStateAction } from "react";
 import { STATUS } from "~/constant/constant";
 import { getApplicantData } from "~/hooks/useApplicantStages";
 import { validateRequest } from "~/lib/auth";
@@ -8,7 +8,11 @@ import CheckedStatus from "./CheckStatus";
 import DisplayInitialInterview from "./InitialInterview";
 import OtherStages from "./OtherStages";
 
-export default async function Sidebar({ id }: { id: string }) {
+interface SideBarProps {
+	id: string;
+}
+
+export default async function Sidebar({ id }: SideBarProps) {
 	const { user } = await validateRequest();
 	const { applicant, stages } = await getApplicantData(Number(id));
 	const initialInterview = applicant?.stages?.initial_interview?.status;
@@ -27,11 +31,7 @@ export default async function Sidebar({ id }: { id: string }) {
 				id={id}
 				role={user?.role as RoleEnumsType}
 				fullName={fullName}
-				email={applicant?.email!}
-				positionType={applicant?.positionType!}
-				positionApplied={applicant?.position_applied!}
-				contactNumber={applicant?.contact_number!}
-				communicationType={applicant?.communication_type!}
+				applicant={applicant!}
 			/>
 			<div className="mb-5">
 				<h2 className="my-8 bg-[#EEEEEE] text-center font-semibold text-slate-500">

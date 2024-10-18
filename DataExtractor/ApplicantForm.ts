@@ -1,4 +1,11 @@
-import { SelectCategory, SelectCommunicationMode } from "~/types/types";
+import {
+	SelectCategory,
+	SelectCivilStatus,
+	SelectCommunicationMode,
+	SelectExperience,
+	SelectGender,
+	SelectHighest,
+} from "~/types/types";
 
 export class DataExtractor {
 	static extractApplicantFormData(formData: FormData) {
@@ -6,14 +13,19 @@ export class DataExtractor {
 			first_name: formData.get("first_name") as string,
 			last_name: formData.get("last_name") as string,
 			email: formData.get("email") as string,
+			gender: formData.get("genderType") as SelectGender,
+			address: formData.get("address") as string,
+			province: formData.get("province") as string,
+			city: formData.get("city") as string,
+			baranggay: formData.get("baranggay") as string,
+			civil_stats: formData.get("civilStatus") as SelectCivilStatus,
+			educational_attainment: formData.get("highestEducationalAttainment") as SelectHighest,
+			degree: formData.get("degree") as string,
+			job_experience: formData.get("jobExperience") as SelectExperience,
+			skills: formData.get("skills") as string,
 			contact_number: formData.get("contact_number") as string,
-			communication_type: formData.get("communication_type") as SelectCommunicationMode,
-			positionType: formData.get("positionType") as SelectCategory,
-			position_applied: formData.get("position_applied") as string,
-			department_id: Number(formData.get("department_id")),
-			selected_department: formData.get("selected_department") as string,
-			office_id: Number(formData.get("office_id")),
-			selected_office: formData.get("selected_office") as string,
+			communication_type: formData.get("communicationType") as SelectCommunicationMode,
+			birthdate: formData.get("birth_date") as string,
 			resume_name: formData.get("resume_name") as string,
 			resume_url: formData.get("resume_url") as string,
 			letter_name: formData.get("letter_name") as string,

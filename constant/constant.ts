@@ -1,3 +1,5 @@
+import { ApplicantStages } from "~/types/types";
+
 export const HR_HEAD = "HR Head";
 export const RECRUITMENT_STAFF = "Recruitment Officer";
 export const REQUESTER_STAFF = "Requester Staff";
@@ -21,5 +23,3 @@ export const PartTimeType = "Part Time";
 export const FullTimeType = "Full Time";
 
 export type STATUS = "in-progress" | "passed" | "failed";
-
-

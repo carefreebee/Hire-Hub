@@ -1,35 +1,18 @@
 import Link from "next/link";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { formattedName, formattedNameAndRole } from "~/util/formatted-name";
+import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
+import { DropdownMenuLabel } from "~/components/ui/dropdown-menu";
+import { ApplicantFormType } from "~/types/types";
+import UserInformation from "../pages/applicant/PersonalInformation";
 import { Button } from "../ui/button";
 
 type HeaderProps = {
 	id: string;
 	role: string;
 	fullName: string;
-	email: string;
-	positionType: string;
-	positionApplied: string;
-	contactNumber: number;
-	communicationType: string;
+	applicant: ApplicantFormType;
 };
 
-export default function Header({
-	id,
-	role,
-	fullName,
-	email,
-	positionType,
-	positionApplied,
-	contactNumber,
-	communicationType,
-}: HeaderProps) {
+export default function Header({ id, role, fullName, applicant }: HeaderProps) {
 	return (
 		<header className="flex flex-col gap-3">
 			<div className="flex items-center gap-5">
@@ -42,45 +25,25 @@ export default function Header({
 				</div>
 			</div>
 
-			<p className="my-5 border border-gray-200"></p>
+			<p className="border-gray-200 my-5 border"></p>
 
-			<div className="flex w-full flex-col items-center justify-center">
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="outline" className="relative mb-3 w-full shadow-md">
-							Applicant Information
+			<div className="grid w-full grid-cols-2 items-center justify-center gap-3">
+				<Dialog>
+					<DialogTrigger asChild>
+						<Button
+							variant="outline"
+							className="relative w-full text-[#0F91D2] hover:text-blue-700"
+						>
+							View Info
 						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent className="w-[253px]">
-						<DropDownContentComponent label="Applied As">
-							{formattedNameAndRole(positionType, "_")}
-						</DropDownContentComponent>
-						<DropdownMenuSeparator />
-
-						<DropDownContentComponent label="Position Applied">
-							{positionApplied}
-						</DropDownContentComponent>
-						<DropdownMenuSeparator />
-
-						<DropDownContentComponent label="Email">{email}</DropDownContentComponent>
-						<DropdownMenuSeparator />
-
-						<DropDownContentComponent label="Contact Number">
-							{contactNumber}
-						</DropDownContentComponent>
-						<DropdownMenuSeparator />
-
-						<DropDownContentComponent label="Preferred Mode">
-							{formattedName(communicationType)}
-						</DropDownContentComponent>
-					</DropdownMenuContent>
-				</DropdownMenu>
+					</DialogTrigger>
+					<DialogContent className="w-full">
+						<UserInformation applicant={applicant} />
+					</DialogContent>
+				</Dialog>
 				{role === "recruitment_officer" && (
-					<Button
-						variant={"outline"}
-						className="w-full text-blue-700 hover:text-blue-700"
-					>
-						<Link href={`mailto:${email}`}>Send Email</Link>
+					<Button variant={"outline"} className="text-[#0F91D2] hover:text-blue-700">
+						<Link href={`mailto:${applicant?.email}`}>Send Email</Link>
 					</Button>
 				)}
 			</div>

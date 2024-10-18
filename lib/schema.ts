@@ -37,7 +37,6 @@ export const jobExperienceEnums = pgEnum("jobExperience", [
 	"advanced",
 ]);
 export const communicationEnums = pgEnum("communicationType", ["email", "phone_number"]);
-export const positionEnums = pgEnum("positionType", ["teaching_staff", "non-teaching_staff"]);
 export const statusEnums = pgEnum("statusEnums", [
 	"Screening",
 	"Initial Interview",
@@ -53,7 +52,7 @@ export const applicant = pgTable("applicant", {
 	last_name: text("last_name"),
 	email: text("email").unique().notNull(),
 	gender: genderEnums("genderType").notNull(),
-	birthday: date("birthdate").notNull(),
+	birthdate: date("birthdate").notNull(),
 	address: text("address").notNull(),
 	province: text("province").notNull(),
 	city: text("city").notNull(),
@@ -66,14 +65,21 @@ export const applicant = pgTable("applicant", {
 	job_experience: jobExperienceEnums("jobExperience").notNull(),
 	skills: text("skills"),
 	contact_number: bigint("contact_number", { mode: "number" }),
-	resume: jsonb("resume").default({
-		resume_name: "",
-		resume_url: "",
-		letter_name: "",
-		letter_url: "",
-	}),
+	resume: jsonb("resume")
+		.$type<{
+			resume_name: string;
+			resume_url: string;
+			letter_name: string;
+			letter_url: string;
+		}>()
+		.default({
+			resume_name: "",
+			resume_url: "",
+			letter_name: "",
+			letter_url: "",
+		}),
 	communication_type: communicationEnums("communicationType").notNull(),
-	positionType: positionEnums("positionType").notNull(),
+	positionType: text("positionType").notNull(),
 	position_applied: text("position_applied").notNull(),
 	department_id: integer("department_id").references(() => department.department_id, {
 		onDelete: "cascade",
@@ -162,6 +168,10 @@ export const comments = pgTable("comments", {
 	commented_at: timestamp("commented_at").defaultNow(),
 });
 
+export const jobStatusEnums = pgEnum("jobStatus", ["pending", "approved", "denied"]);
+
+export const jobOpeningEnums = pgEnum("jobOpening", ["open", "closed"]);
+
 export const jobRequest = pgTable("jobRequest", {
 	request_id: serial("request_id").primaryKey(),
 	requested_position: text("requested_position").notNull(),
@@ -175,6 +185,8 @@ export const jobRequest = pgTable("jobRequest", {
 	department_id: integer("department_id").references(() => department.department_id, {
 		onDelete: "cascade",
 	}),
+	job_status: jobStatusEnums("jobStatus").notNull().default("pending"),
+	job_opening: jobOpeningEnums("jobOpening").notNull().default("open"),
 	office_id: integer("office_id").references(() => office.office_id, { onDelete: "cascade" }),
 });
 
