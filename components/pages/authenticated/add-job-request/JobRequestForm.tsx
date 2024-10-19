@@ -53,78 +53,100 @@ export default function JobRequestForm({
 
 	return (
 		<form ref={formRef} onSubmit={(e) => e.preventDefault()}>
-			<div className="mx-auto flex w-[686px] flex-col justify-center gap-8 rounded-xl bg-white py-5 shadow-md">
-				<h4 className="scroll-m-20 text-center text-xl font-bold tracking-tight text-[#7F0000]">
+			<div className="mx-auto flex w-[59rem] flex-col justify-center gap-8 rounded-xl bg-white p-8 py-5 shadow-md">
+				<h4 className="mt-10 scroll-m-20 text-center text-xl font-bold tracking-tight text-[#7F0000]">
 					Personnel Request Form
 				</h4>
-				<div className="mx-auto w-[564px]">
-					<LabelTag label="Requested Position" />
-					<Input type="text" name="requested_position" className="border-2" />
-				</div>
+				<div className="grid grid-cols-2 gap-5">
+					<div>
+						<LabelTag label="Requested Position" />
+						<Input type="text" name="requested_position" className="border-2" />
+					</div>
+					<div>
+						<LabelTag label="Qualification Standards: Educational Background" />
+						<Input
+							placeholder="List minimum educational background..."
+							type="text"
+							name="minimum_qualifications"
+							className="border-2"
+						/>
+					</div>
+					<div className="w-[20rem]">
+						<SelectTag
+							name="requested_category"
+							label="Category"
+							placeholder="Choose a category..."
+						>
+							<SelectGroup>
+								<SelectItem value="teaching_staff">Teaching Staff</SelectItem>
+								<SelectItem value="non-teaching_staff">
+									Non Teaching Staff
+								</SelectItem>
+							</SelectGroup>
+						</SelectTag>
+					</div>
+					<div>
+						<LabelTag label="Qualification Standards: Experience" />
+						<Input
+							placeholder="List minimum years of experience..."
+							type="text"
+							name="minimum_experience"
+							className="border-2"
+						/>
+					</div>
 
-				<SelectTag
-					name="requested_category"
-					label="Category"
-					placeholder="Choose a category..."
-				>
-					<SelectGroup>
-						<SelectItem value="teaching_staff">Teaching Staff</SelectItem>
-						<SelectItem value="non-teaching_staff">Non Teaching Staff</SelectItem>
-					</SelectGroup>
-				</SelectTag>
+					<div>
+						{selectedDepartment !== null && (
+							<>
+								<LabelTag label="Requested Department" />
+								<Input
+									type="text"
+									name="requested_department"
+									value={selectedDepartment}
+									readOnly
+									className="border-2"
+								/>
+								<Input type="hidden" name="department_id" value={departmentId} />
+							</>
+						)}
+						{selectedOffice !== null && (
+							<>
+								<LabelTag label="Requested Office" />
+								<Input
+									type="text"
+									name="requested_office"
+									value={selectedOffice}
+									readOnly
+									className="border-2"
+								/>
+								<Input type="hidden" name="office_id" value={officeId} />
+							</>
+						)}
+					</div>
 
-				<div className="mx-auto w-[564px]">
-					{selectedDepartment !== null && (
-						<>
-							<LabelTag label="Requested Department" />
-							<Input
-								type="text"
-								name="requested_department"
-								value={selectedDepartment}
-								readOnly
-								className="border-2"
-							/>
-							<Input type="hidden" name="department_id" value={departmentId} />
-						</>
-					)}
-					{selectedOffice !== null && (
-						<>
-							<LabelTag label="Requested Office" />
-							<Input
-								type="text"
-								name="requested_office"
-								value={selectedOffice}
-								readOnly
-								className="border-2"
-							/>
-							<Input type="hidden" name="office_id" value={officeId} />
-						</>
-					)}
-				</div>
+					<SelectTag name="requested_type" label="Type" placeholder="Select a type...">
+						<SelectGroup>
+							<SelectItem value="full_time">Full Time</SelectItem>
+							<SelectItem value="part_time">Part Time</SelectItem>
+						</SelectGroup>
+					</SelectTag>
+					<div>
+						<LabelTag label="Description" />
+						<Textarea
+							name="requested_description"
+							placeholder="Add Job Description."
+							className="border-2"
+						/>
+					</div>
 
-				<SelectTag name="requested_type" label="Type" placeholder="Select a type...">
-					<SelectGroup>
-						<SelectItem value="full_time">Full Time</SelectItem>
-						<SelectItem value="part_time">Part Time</SelectItem>
-					</SelectGroup>
-				</SelectTag>
-
-				<div className="mx-auto grid w-[564px] gap-1.5">
-					<LabelTag label="Description" />
-					<Textarea
-						name="requested_description"
-						placeholder="Add Job Description."
-						className="border-2"
-					/>
-				</div>
-
-				<div className="mx-auto grid w-[564px] gap-1.5">
-					<LabelTag label="Qualification" />
-					<Textarea
-						name="requested_qualification"
-						placeholder="Add Job Qualification."
-						className="border-2"
-					/>
+					<div>
+						<LabelTag label="Qualification" />
+						<Textarea
+							name="requested_qualification"
+							placeholder="Add Job Qualification."
+							className="border-2"
+						/>
+					</div>
 				</div>
 				<div className="flex justify-center">
 					<ConfirmationModal

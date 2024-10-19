@@ -14,7 +14,7 @@ export default async function CardContentComponent({ applicantId }: { applicantI
 	const isFailed = applicantStage?.status === "failed";
 
 	const isApplicantInProgress = applicantStage?.status === "in-progress";
-	const isRecruitmentOfficer = user?.role === "recruitment_officer";
+	const isRecruitmentOfficer = user?.role === "dean" || "department_chair";
 
 	return (
 		<>

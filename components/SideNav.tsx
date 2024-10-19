@@ -11,6 +11,12 @@ import LogoutSVG from "./ui/logout-svg";
 import WhiteApplicantSvg from "./ui/white-applicant-svg";
 import WhiteDashboardSvg from "./ui/white-dashboard-svg";
 import WhiteJobRequestSvg from "./ui/white-job-request-svg";
+import ScheduleSVG from "./ui/schedule";
+import ScheduleSVGWhite from "./ui/schedule-white";
+import EvaluateSVG from "./ui/evalute-icon";
+import EvaluateSVGWhite from "./ui/evalute-icon-white";
+import ApprovalsSVGWhite from "./ui/approvals-icon-white";
+import ApprovalsSVG from "./ui/approvals-icon";
 
 export default function SideNav({ role }: { role: RoleEnumsType }) {
 	return (
@@ -50,6 +56,62 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 						notActiveChildren={<WhiteJobRequestSvg />}
 					/>
 				)}
+				{role === "hr_head" && (
+					<Links
+						href="/dashboard/approvals"
+						label="Approvals"
+						activeChildren={<ApprovalsSVG />}
+						notActiveChildren={<ApprovalsSVGWhite />}
+					/>
+				)}
+				{role === "hr_head" && (
+					<Links
+						href="/dashboard/evaluate"
+						label="Evaluate"
+						activeChildren={<EvaluateSVG />}
+						notActiveChildren={<EvaluateSVGWhite />}
+					/>
+				)}
+				{role === "vp_administration" && (
+					<Links
+						href="/dashboard/evaluate"
+						label="Evaluate"
+						activeChildren={<EvaluateSVG />}
+						notActiveChildren={<EvaluateSVGWhite />}
+					/>
+				)}
+				{role === "vp_acad_affairs" && (
+					<Links
+						href="/dashboard/evaluate"
+						label="Evaluate"
+						activeChildren={<EvaluateSVG />}
+						notActiveChildren={<EvaluateSVGWhite />}
+					/>
+				)}
+				{role === "dean" && (
+					<Links
+						href="/dashboard/request"
+						label="Request"
+						activeChildren={<JobRequestSVG />}
+						notActiveChildren={<WhiteJobRequestSvg />}
+					/>
+				)}
+				{role === "dean" && (
+					<Links
+						href="/dashboard/evaluate"
+						label="Evaluate"
+						activeChildren={<EvaluateSVG />}
+						notActiveChildren={<EvaluateSVGWhite />}
+					/>
+				)}
+				{role === "department_chair" && (
+					<Links
+						href="/dashboard/evaluate"
+						label="Evaluate"
+						activeChildren={<EvaluateSVG />}
+						notActiveChildren={<EvaluateSVGWhite />}
+					/>
+				)}
 				<div className="flex w-[96%] justify-start gap-4 rounded-xl py-3 pl-10 font-medium hover:bg-[#7F0000] hover:text-white">
 					<LogoutSVG />
 					<LogoutButton />
@@ -74,8 +136,18 @@ export function Links({ href, activeChildren, notActiveChildren, label }: LinksP
 		pathname.startsWith("/dashboard/applicant") === href.startsWith("/dashboard/applicant");
 	const isUserAtRequest =
 		pathname.startsWith("/dashboard/request") === href.startsWith("/dashboard/request");
+	const isUserAtApprovals =
+		pathname.startsWith("/dashboard/approvals") === href.startsWith("/dashboard/approvals");
+	const isUserAtEvaluate =
+		pathname.startsWith("/dashboard/evaluate") === href.startsWith("/dashboard/evaluate");
 
-	const isActive = isAdminAtUsers && isAdminAtUnits && isUserAtApplicant && isUserAtRequest;
+	const isActive =
+		isAdminAtUsers &&
+		isAdminAtUnits &&
+		isUserAtApplicant &&
+		isUserAtRequest &&
+		isUserAtApprovals &&
+		isUserAtEvaluate;
 
 	return (
 		<Link

@@ -8,7 +8,7 @@ import { getApplicantData } from "~/hooks/useApplicantStages";
 import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect } from "~/lib/schema";
 import { StageType } from "~/types/types";
-import { TypographySmall } from "../../ui/typography-small";
+import { TypographySmall } from "../../../ui/typography-small";
 
 const STAGES = [
 	{ link: "initial-interview", type: "initial_interview", name: "Initial Interview" },
@@ -32,6 +32,11 @@ export default async function AssessorHeader({ id }: { id: string }) {
 	if (applicant?.office_id !== null && applicant?.selected_office !== null) {
 		filteredStages = STAGES.filter((stage) => stage.name !== "Teaching Demo");
 	}
+
+	const isRole = () =>
+		user?.role === "dean" ||
+		user?.role === "department_chair" ||
+		user?.role === "recruitment_officer";
 
 	return (
 		<header className="w-80%">
@@ -70,9 +75,9 @@ export default async function AssessorHeader({ id }: { id: string }) {
 
 			<div>
 				<ul className="flex w-full justify-between rounded-lg border shadow-md">
-					{user?.role === "recruitment_officer" && (
+					{isRole() && (
 						<Link
-							href={`/dashboard/applicant/${id}/stages/recruitment_officer/screening`}
+							href={`/dashboard/applicant/${id}/stages/${user?.role}/screening`}
 							className={`${screeningStatus} px-2 py-2 text-sm font-medium`}
 						>
 							Screening

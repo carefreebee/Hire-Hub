@@ -14,7 +14,7 @@ export default async function CardFooterComponent({ applicantId }: { applicantId
 
 	const isPassed = applicantStage?.status === "passed";
 	const isFailed = applicantStage?.status === "failed";
-	const isRecruitmentOfficer = user?.role === "recruitment_officer";
+	const isRecruitmentOfficer = user?.role === "dean" || "department_chair";
 
 	return (
 		<>

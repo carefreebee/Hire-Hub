@@ -1,6 +1,6 @@
-import { useRouter } from "next/router";
 import Previous from "~/components/pages/Previous";
 import AssessorHeader from "~/components/pages/authenticated/evaluate/AssessorHeader";
+import EvaluatorHeader from "~/components/pages/applicant/EvaluatorHeader";
 import Sidebar from "~/components/pages/applicant/SideBar/Sidebar";
 
 type LayoutProps = {
@@ -15,7 +15,7 @@ export default function Layout({ children, params }: LayoutProps) {
 			<div className="flex gap-5">
 				<Sidebar id={params.id} />
 				<section className="w-[46rem]">
-					<AssessorHeader id={params.id} />
+					<EvaluatorHeader id={params.id} />
 					{children}
 				</section>
 			</div>

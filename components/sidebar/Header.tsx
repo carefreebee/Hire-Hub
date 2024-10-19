@@ -27,26 +27,43 @@ export default function Header({ id, role, fullName, applicant }: HeaderProps) {
 
 			<p className="border-gray-200 my-5 border"></p>
 
-			<div className="grid w-full grid-cols-2 items-center justify-center gap-3">
-				<Dialog>
-					<DialogTrigger asChild>
-						<Button
-							variant="outline"
-							className="relative w-full text-[#0F91D2] hover:text-blue-700"
-						>
-							View Info
-						</Button>
-					</DialogTrigger>
-					<DialogContent className="w-full">
-						<UserInformation applicant={applicant} />
-					</DialogContent>
-				</Dialog>
-				{role === "recruitment_officer" && (
+			{role === "recruitment_officer" ? (
+				<div className="grid w-full grid-cols-2 items-center justify-center gap-3">
+					<Dialog>
+						<DialogTrigger asChild>
+							<Button
+								variant="outline"
+								className="relative w-full text-[#0F91D2] hover:text-blue-700"
+							>
+								View Info
+							</Button>
+						</DialogTrigger>
+						<DialogContent className="w-full">
+							<UserInformation applicant={applicant} />
+						</DialogContent>
+					</Dialog>
+
 					<Button variant={"outline"} className="text-[#0F91D2] hover:text-blue-700">
 						<Link href={`mailto:${applicant?.email}`}>Send Email</Link>
 					</Button>
-				)}
-			</div>
+				</div>
+			) : (
+				<div className="grid w-full grid-cols-1 items-center justify-center gap-3">
+					<Dialog>
+						<DialogTrigger asChild>
+							<Button
+								variant="outline"
+								className="relative w-full text-[#0F91D2] hover:text-blue-700"
+							>
+								View Info
+							</Button>
+						</DialogTrigger>
+						<DialogContent className="w-full">
+							<UserInformation applicant={applicant} />
+						</DialogContent>
+					</Dialog>
+				</div>
+			)}
 		</header>
 	);
 }
