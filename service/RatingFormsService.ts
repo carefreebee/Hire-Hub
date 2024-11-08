@@ -2,7 +2,7 @@ import { revalidatePath } from "next/cache";
 import { getApplicantFormByID } from "~/Controller/ApplicantFormController";
 import { DataExtractor } from "~/DataExtractor/RatingForms";
 import { ApplicantSelect } from "~/lib/schema";
-import { RatingFormsRepository } from "~/Repository/RatingFormsRepository";
+import { RatingFormsRepository } from "~/repository/RatingFormsRepository";
 import { StageType } from "~/types/types";
 
 export class RatingFormsService {
@@ -18,7 +18,10 @@ export class RatingFormsService {
 
 	public async getAllRaitingFormByIdInEachStages(applicantId: number, ratingFormId: number[]) {
 		try {
-			return await this.ratingFormsRepo.getAllRaitingFormByIdInEachStages(applicantId, ratingFormId);
+			return await this.ratingFormsRepo.getAllRaitingFormByIdInEachStages(
+				applicantId,
+				ratingFormId
+			);
 		} catch (error) {
 			throw new Error("Fetching all rating forms failed");
 		}

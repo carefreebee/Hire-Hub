@@ -33,6 +33,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 			formData.forEach((value, key) => {
 				console.log(key, value);
 			});
+			setFormData(formData);
 			props.setCurrent("document");
 			props.setFormData(formData);
 		}
@@ -113,7 +114,7 @@ const ApplicantForm: React.FC<ChildFormProps> = (props) => {
 						</SelectTrigger>
 						<SelectContent>
 							<SelectItem value="email">Email</SelectItem>
-							<SelectItem value="phone">Phone</SelectItem>
+							<SelectItem value="phone_number">Phone</SelectItem>
 						</SelectContent>
 					</Select>
 					<Input

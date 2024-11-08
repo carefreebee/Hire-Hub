@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/JobRequest";
-import { JobRequestRepository } from "~/Repository/JobRequestRepository";
+import { JobRequestRepository } from "~/repository/JobRequestRepository";
 import { EditJobRequest, JobRequest, Validator } from "~/Validator/JobRequest";
 import { db } from "~/lib/db";
 import { jobRequest, JobRequestSelect } from "~/lib/schema";

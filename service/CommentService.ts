@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/DataExtractor/Comment";
-import { CommentRepository } from "~/Repository/CommentRepository";
+import { CommentRepository } from "~/repository/CommentRepository";
 import { StageType } from "~/types/types";
 import { CommentType, Validator } from "~/Validator/Comment";
 
