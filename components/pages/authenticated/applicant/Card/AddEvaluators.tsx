@@ -15,7 +15,7 @@ import {
 	UpdatePsychologicalExam,
 	UpdateRecommendationForHiring,
 	UpdateTeachingDemo,
-} from "~/Controller/ApplicantStatusController";
+} from "~/controller/ApplicantStatusController";
 import { formattedDateTime } from "~/lib/date-time";
 import { CheckPathname } from "~/util/path";
 import { useSelectedAssessedBy, useSelectedDateAndTime, useSelectedMode } from "~/util/zustand";

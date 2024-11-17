@@ -3,9 +3,9 @@ import UpdateInput from "~/components/pages/admin/users/manage-users/update-inpu
 import ArrowLeft from "~/components/ui/arrow-left";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { getAllDepartment } from "~/Controller/DepartmentController";
-import { getAllOffice } from "~/Controller/OfficeController";
-import { getUserByID } from "~/Controller/UsersController";
+import { getAllDepartment } from "~/controller/DepartmentController";
+import { getAllOffice } from "~/controller/OfficeController";
+import { getUserByID } from "~/controller/UsersController";
 
 export default async function DepartmentUserIDPage({ params }: { params: { id: string } }) {
 	const user = await getUserByID(params.id);

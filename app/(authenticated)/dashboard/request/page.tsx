@@ -1,5 +1,5 @@
 import TypographyH4 from "~/components/ui/typography-h4";
-import { getJobRequest, getJobReqByDeptOrOffice, getAllJobRequest } from "~/Controller/JobRequestController";
+import { getJobReqByDeptOrOffice } from "~/controller/JobRequestController";
 import { validateRequest } from "~/lib/auth";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
