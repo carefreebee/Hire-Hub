@@ -1,4 +1,4 @@
-import { getAllCommentsByID } from "~/Controller/CommentController";
+import { getAllCommentsByID } from "~/controller/CommentController";
 import { StageType } from "~/types/types";
 import { formattedName, formattedNameAndRole } from "~/util/formatted-name";
 import { GetCurrentStage } from "~/util/get-current-stage";

@@ -8,8 +8,8 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { toast } from "~/components/ui/use-toast";
-import { createDepartment } from "~/Controller/DepartmentController";
-import { createOffice } from "~/Controller/OfficeController";
+import { createDepartment } from "~/controller/DepartmentController";
+import { createOffice } from "~/controller/OfficeController";
 import { CheckPathname } from "~/util/path";
 
 type DepartmentFormProps = {
@@ -20,7 +20,13 @@ type DepartmentFormProps = {
 	inputName: string;
 };
 
-export default function AddUnitComponent({ headTitle, codeLabel, inputCode, fullLabel, inputName }: DepartmentFormProps) {
+export default function AddUnitComponent({
+	headTitle,
+	codeLabel,
+	inputCode,
+	fullLabel,
+	inputName,
+}: DepartmentFormProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const pathname = usePathname();
 	const lastSegment = CheckPathname(pathname);

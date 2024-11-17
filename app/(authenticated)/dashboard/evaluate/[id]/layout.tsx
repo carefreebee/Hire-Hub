@@ -1,5 +1,4 @@
 import Previous from "~/components/pages/Previous";
-import AssessorHeader from "~/components/pages/authenticated/evaluate/AssessorHeader";
 import EvaluatorHeader from "~/components/pages/applicant/EvaluatorHeader";
 import Sidebar from "~/components/pages/applicant/SideBar/Sidebar";
 

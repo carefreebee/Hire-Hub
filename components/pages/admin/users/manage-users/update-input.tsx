@@ -28,7 +28,7 @@ import {
 	SelectValue,
 } from "~/components/ui/select";
 import { toast } from "~/components/ui/use-toast";
-import { UpdateUserRole } from "~/Controller/UsersController";
+import { UpdateUserRole } from "~/controller/UsersController";
 import { DepartmentSelect, OfficeSelect, roleEnums, RoleEnumsType } from "~/lib/schema";
 import { rolesWithoutDeptAndOffice } from "~/types/types";
 import { formattedNameAndRole } from "~/util/formatted-name";

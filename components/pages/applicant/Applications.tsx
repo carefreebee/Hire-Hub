@@ -97,7 +97,6 @@ export default function Application({ params }: ApplicationProps) {
 					</div>
 				</div>
 			</section>
-
 			<section className="mt-10">
 				{current === "personal" ? (
 					<div>

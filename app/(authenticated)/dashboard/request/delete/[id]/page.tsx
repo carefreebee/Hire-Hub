@@ -1,6 +1,6 @@
 import DeleteJobrequestForm from "~/components/pages/authenticated/delete-job-request/DeleteJobRequestForm";
 import Previous from "~/components/pages/Previous";
-import { getJobRequestByID } from "~/Controller/JobRequestController";
+import { getJobRequestByID } from "~/controller/JobRequestController";
 import { JobRequestSelect } from "~/lib/schema";
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { id: string } }) {

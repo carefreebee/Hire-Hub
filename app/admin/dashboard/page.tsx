@@ -6,7 +6,7 @@ import {
 	getAllUsersFromDepartment,
 	getAllUsersFromOffice,
 	getUsersByUserRole,
-} from "~/Controller/UsersController";
+} from "~/controller/UsersController";
 import Banner from "~/public/images/banner.png";
 
 const monthNames = [

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import React from "react";
 import { useEffect, useState } from "react";
 import Footer from "~/components/Footer";
 import JoblListingHeader from "~/components/JobListingHeader";
@@ -46,7 +47,7 @@ const formatMonth = (month: number) => {
 	return monthNames[month];
 };
 
-export default function Page({ children, params }: LayoutProps) {
+export default function Page({ params }: LayoutProps) {
 	const [job, setJob] = useState<Job>();
 	const [isLoading, setIsLoading] = useState(true);
 

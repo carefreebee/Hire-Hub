@@ -3,7 +3,7 @@ import UpdateInput from "~/components/pages/admin/users/manage-users/update-inpu
 import ArrowLeft from "~/components/ui/arrow-left";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
-import { getDeptAndOffice, getUserByID } from "~/Controller/UsersController";
+import { getDeptAndOffice, getUserByID } from "~/controller/UsersController";
 
 function UserIDContainer({ children }: { children: React.ReactNode }) {
 	return <div className="grid w-full items-center gap-1.5">{children}</div>;

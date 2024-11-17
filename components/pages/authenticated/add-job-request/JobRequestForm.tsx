@@ -16,7 +16,7 @@ import {
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
-import { handleSubmitJobRequest } from "~/Controller/JobRequestController";
+import { handleSubmitJobRequest } from "~/controller/JobRequestController";
 import { SelectTagProps } from "~/types/types";
 
 type JobRequestFormProps = {

@@ -14,7 +14,7 @@ import UploadRatingForm from "~/components/pages/authenticated/applicant/Card/Up
 import { UploadSuccess } from "~/components/pages/authenticated/stages/Messages";
 import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
-import { getAllRatingFormsFilesById } from "~/Controller/RatingFormsController";
+import { getAllRatingFormsFilesById } from "~/controller/RatingFormsController";
 import { User } from "~/lib/schema";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import DisplayDate from "../Card/DisplayDate";

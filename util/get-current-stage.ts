@@ -1,4 +1,4 @@
-import { getApplicantFormByID } from "~/Controller/ApplicantFormController";
+import { getApplicantFormByID } from "~/controller/ApplicantFormController";
 import { StageType } from "~/types/types";
 
 // GETTING THE APPLICANT BY ID

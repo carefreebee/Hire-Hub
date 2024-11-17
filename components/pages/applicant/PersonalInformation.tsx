@@ -2,7 +2,7 @@
 import { useState } from "react";
 import PersonalInfo from "./Information/Personal";
 import DocumentInfo from "./Information/Documents";
-import { ApplicantForm } from "~/Validator/ApplicantForm";
+import { ApplicantForm } from "~/validator/ApplicantForm";
 import { ApplicantFormType } from "~/types/types";
 
 interface UserInformationProps {

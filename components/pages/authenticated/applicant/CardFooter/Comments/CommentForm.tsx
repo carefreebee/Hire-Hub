@@ -14,7 +14,7 @@ import {
 	CreateRecommendationForHiringComment,
 	CreateScreeningComment,
 	CreateTeachingDemoComment,
-} from "~/Controller/CommentController";
+} from "~/controller/CommentController";
 import { CheckPathname } from "~/util/path";
 
 type CommentFormProps = {

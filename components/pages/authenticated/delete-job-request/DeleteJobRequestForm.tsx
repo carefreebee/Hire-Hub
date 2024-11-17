@@ -13,7 +13,7 @@ import {
 	SelectedCategoryTeachingStaff,
 	TeachingStaff,
 } from "~/constant/constant";
-import { handleDeleteJobRequest } from "~/Controller/JobRequestController";
+import { handleDeleteJobRequest } from "~/controller/JobRequestController";
 import { JobRequestSelect } from "~/lib/schema";
 import { formattedNameAndRole } from "~/util/formatted-name";
 

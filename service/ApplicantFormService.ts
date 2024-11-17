@@ -1,10 +1,10 @@
 import { revalidatePath } from "next/cache";
-import { DataExtractor } from "~/DataExtractor/ApplicantForm";
+import { DataExtractor } from "~/extractors/ApplicantForm";
 import { ApplicantFormRepository } from "~/repository/ApplicantFormRepository";
 import { DepartmentRepository } from "~/repository/DepartmentRepository";
 import { JobRequestRepository } from "~/repository/JobRequestRepository";
 import { OfficeRepository } from "~/repository/OfficeRepository";
-import { ApplicantForm, Validator } from "~/Validator/ApplicantForm";
+import { ApplicantForm, Validator } from "~/validator/ApplicantForm";
 
 export class ApplicantFormService {
 	constructor(

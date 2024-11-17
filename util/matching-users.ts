@@ -1,4 +1,4 @@
-import { getUsersByUserID } from "~/Controller/UsersController";
+import { getUsersByUserID } from "~/controller/UsersController";
 import { User } from "~/lib/schema";
 
 // GETTING THE USERS WHO WILL ASSESS THE APPLICANT

@@ -1,6 +1,6 @@
 "use server";
 
-import { applicantStatusService } from "~/Dependencies/dependencies";
+import { applicantStatusService } from "~/dependencies/dependencies";
 
 export async function UpdateScreeningAndInitialInterviewDate(formData: FormData) {
 	return await applicantStatusService.updateDate(formData);

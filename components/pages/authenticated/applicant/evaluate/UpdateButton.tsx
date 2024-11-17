@@ -1,4 +1,4 @@
-import { getUsersWithoutUserRoles } from "~/Controller/UsersController";
+import { getUsersWithoutUserRoles } from "~/controller/UsersController";
 import { getApplicantData } from "~/hooks/useApplicantStages";
 import { validateRequest } from "~/lib/auth";
 import { AssessorInfo } from "../Card/StatusDisplayComponents";

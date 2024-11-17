@@ -1,6 +1,6 @@
 import EditOffice from "~/components/pages/admin/edit-office/EditOffice";
 import Previous from "~/components/pages/Previous";
-import { getOfficeByCode } from "~/Controller/OfficeController";
+import { getOfficeByCode } from "~/controller/OfficeController";
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { code: string } }) {
 	const office = await getOfficeByCode(params.code);

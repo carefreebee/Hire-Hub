@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { Button } from "~/components/ui/button";
-import { getAllRaitingFormByIdInEachStages } from "~/Controller/RatingFormsController";
+import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";
 import { RatingFormWithUserData, ResumeProps, StageType } from "~/types/types";
 import { formattedNameAndRole } from "~/util/formatted-name";
 import { Card, CardContent, CardHeader, CardTitle } from "../Card/CardComponent";

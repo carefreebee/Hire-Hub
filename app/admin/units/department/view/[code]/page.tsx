@@ -1,5 +1,5 @@
 import ViewResult from "~/components/pages/admin/ViewResult";
-import { getDepartmentByCode } from "~/Controller/DepartmentController";
+import { getDepartmentByCode } from "~/controller/DepartmentController";
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { code: string } }) {
 	const department = await getDepartmentByCode(params.code);

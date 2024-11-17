@@ -1,5 +1,5 @@
 import { eq, inArray } from "drizzle-orm";
-import { getApplicantFormByID } from "~/Controller/ApplicantFormController";
+import { getApplicantFormByID } from "~/controller/ApplicantFormController";
 import { db } from "~/lib/db";
 import { CommentsInsert, applicant, comments, users } from "~/lib/schema";
 import { StageType } from "~/types/types";

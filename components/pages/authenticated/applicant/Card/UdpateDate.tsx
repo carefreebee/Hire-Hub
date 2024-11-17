@@ -11,7 +11,7 @@ import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import UpdateSvg from "~/components/ui/update-svg";
 import { toast } from "~/components/ui/use-toast";
-import { UpdateScreeningAndInitialInterviewDate } from "~/Controller/ApplicantStatusController";
+import { UpdateScreeningAndInitialInterviewDate } from "~/controller/ApplicantStatusController";
 import { formattedDateTime } from "~/lib/date-time";
 import { CheckPathname } from "~/util/path";
 import { useSelectedDateAndTime } from "~/util/zustand";

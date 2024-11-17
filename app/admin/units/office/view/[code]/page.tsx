@@ -1,5 +1,5 @@
 import ViewResult from "~/components/pages/admin/ViewResult";
-import { getOfficeByCode } from "~/Controller/OfficeController";
+import { getOfficeByCode } from "~/controller/OfficeController";
 
 export default async function SuccessAddNewRequestPage({ params }: { params: { code: string } }) {
 	const office = await getOfficeByCode(params.code);

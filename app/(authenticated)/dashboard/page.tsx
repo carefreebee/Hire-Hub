@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Card } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import { Chart } from "~/components/pages/authenticated/dashboard/Chart";
 import { getAllApplicantForm } from "~/Controller/ApplicantFormController";
-import { getAllJobRequest } from "~/Controller/JobRequestController";
+import { getAllJobRequest } from "~/controller/JobRequestController";
 import Banner from "~/public/images/banner.png";
 
 const monthNames = [

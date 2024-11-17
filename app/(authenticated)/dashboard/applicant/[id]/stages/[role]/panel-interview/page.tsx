@@ -21,8 +21,8 @@ import {
 	DisplayMode,
 } from "~/components/pages/authenticated/stages/HigherUp";
 import { TypographySmall } from "~/components/ui/typography-small";
-import { getAllRaitingFormByIdInEachStages } from "~/Controller/RatingFormsController";
-import { getUsersWithoutUserRoles } from "~/Controller/UsersController";
+import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";
+import { getUsersWithoutUserRoles } from "~/controller/UsersController";
 import { validateRequest } from "~/lib/auth";
 import { User } from "~/lib/schema";
 import { RatingFormWithUserData, ResumeProps } from "~/types/types";

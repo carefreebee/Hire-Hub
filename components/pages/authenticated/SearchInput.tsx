@@ -1,7 +1,6 @@
 import { Column } from "@tanstack/react-table";
 import { Input } from "~/components/ui/input";
 import SearchIcon from "~/components/ui/search-icon";
-import SearchSvg from "~/components/ui/search-svg";
 
 interface SearchInputProps {
 	placeholder: string;

@@ -6,14 +6,13 @@ import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import UpdateSvg from "~/components/ui/update-svg";
 import { toast } from "~/components/ui/use-toast";
-import { UpdateScreening } from "~/Controller/ApplicantStatusController";
+import { UpdateScreening } from "~/controller/ApplicantStatusController";
 import { useSelectPassedOrFailed } from "~/util/zustand";
 
 type ApplicantIDFooterProps = {
 	id: number;
 	assessorId: string;
 };
-
 export default function UpdateStatus({ id, assessorId }: ApplicantIDFooterProps) {
 	const status = useSelectPassedOrFailed((state) => state.status);
 	const formRef = useRef<HTMLFormElement>(null);

@@ -1,4 +1,4 @@
-import { getAllRaitingFormById } from "~/Controller/RatingFormsController";
+import { getAllRaitingFormById } from "~/controller/RatingFormsController";
 import {
 	Card,
 	CardContent,

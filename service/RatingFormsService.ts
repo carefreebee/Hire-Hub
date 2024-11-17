@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
-import { getApplicantFormByID } from "~/Controller/ApplicantFormController";
-import { DataExtractor } from "~/DataExtractor/RatingForms";
+import { getApplicantFormByID } from "~/controller/ApplicantFormController";
+import { DataExtractor } from "~/extractors/RatingForms";
 import { ApplicantSelect } from "~/lib/schema";
 import { RatingFormsRepository } from "~/repository/RatingFormsRepository";
 import { StageType } from "~/types/types";

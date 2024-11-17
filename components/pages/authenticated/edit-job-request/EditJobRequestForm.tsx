@@ -20,7 +20,7 @@ import {
 	SelectedCategoryTeachingStaff,
 	TeachingStaff,
 } from "~/constant/constant";
-import { handleEditJobRequest } from "~/Controller/JobRequestController";
+import { handleEditJobRequest } from "~/controller/JobRequestController";
 import { JobRequestSelect } from "~/lib/schema";
 
 type EditJobrequestFormProps = {
