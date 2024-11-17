@@ -1,6 +1,6 @@
 "use server";
 
-import { officeService } from "~/Dependencies/dependencies";
+import { officeService } from "~/dependencies/dependencies";
 
 export async function createOffice(formData: FormData) {
 	return await officeService.createOffice(formData);

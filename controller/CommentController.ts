@@ -1,6 +1,6 @@
 "use server";
 
-import { commentService } from "~/Dependencies/dependencies";
+import { commentService } from "~/dependencies/dependencies";
 
 export async function getApplicantCommentByID(id: number) {
 	return await commentService.getAllCommentsById(id);

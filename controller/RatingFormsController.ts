@@ -1,6 +1,6 @@
 "use server";
 
-import { ratingFormsService } from "~/Dependencies/dependencies";
+import { ratingFormsService } from "~/dependencies/dependencies";
 
 export async function getAllRaitingFormById(id: number) {
 	return await ratingFormsService.getAllRaitingFormById(id);

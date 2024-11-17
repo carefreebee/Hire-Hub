@@ -1,6 +1,6 @@
 "use server";
 
-import { applicantFormService } from "~/Dependencies/dependencies";
+import { applicantFormService } from "~/dependencies/dependencies";
 
 export async function getAllApplicantForm() {
 	return await applicantFormService.getAllApplicantForm();
