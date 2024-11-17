@@ -1,6 +1,6 @@
 "use server";
 
-import { stagesFormService } from "~/dependencies/dependencies";
+import { stagesFormService } from "~/Dependencies/dependencies";
 
 export async function UpdateInitalInterview(formData: FormData) {
 	return await stagesFormService.updateForm(formData, "initial_interview");

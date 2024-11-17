@@ -1,6 +1,6 @@
 "use server";
 
-import { userService } from "~/dependencies/dependencies";
+import { userService } from "~/Dependencies/dependencies";
 
 export async function getAllUsers() {
 	return await userService.getAllUsers();
