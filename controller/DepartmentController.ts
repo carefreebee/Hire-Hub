@@ -1,6 +1,6 @@
 "use server";
 
-import { departmentService } from "~/dependencies/dependencies";
+import { departmentService } from "~/Dependencies/dependencies";
 
 export async function createDepartment(formData: FormData) {
 	return await departmentService.createDepartment(formData);

@@ -13,7 +13,7 @@ import {
 	UpdatePsychologicalExam,
 	UpdateRecommendationForHiring,
 	UpdateTeachingDemo,
-} from "~/Controller/StagesFormController";
+} from "~/controller/StagesFormController";
 import { CheckPathname } from "~/util/path";
 import { useUploadDropZone } from "~/util/zustand";
 

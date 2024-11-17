@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import DocumentForm from "./DocumentForm";
 import ApplicantForm from "./ApplicantForm";
-import { CreateApplicantForm } from "~/Controller/ApplicantFormController";
+import { CreateApplicantForm } from "~/controller/ApplicantFormController";
 
 type ApplicationProps = {
 	params: { id: number };

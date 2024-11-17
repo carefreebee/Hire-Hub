@@ -5,7 +5,7 @@ import { DataTable } from "./data-table";
 import {
 	getAllApplicantForm,
 	getAllApplicantByDeptOrOffice,
-} from "~/Controller/ApplicantFormController";
+} from "~/controller/ApplicantFormController";
 import { RoleEnumsType, ApplicantSelect, jobRequest } from "~/lib/schema";
 
 export default async function RequestPage() {

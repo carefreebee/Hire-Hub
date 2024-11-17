@@ -10,7 +10,7 @@ import {
 	SelectedPartTimeType,
 	TeachingStaff,
 } from "~/constant/constant";
-import { getJobRequestByID } from "~/Controller/JobRequestController";
+import { getJobRequestByID } from "~/controller/JobRequestController";
 
 function LabelTag({ label }: { label: string }) {
 	return <Label className="font-semibold text-[#666666]">{label}</Label>;

@@ -10,7 +10,6 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { getJobRequestByID } from "~/controller/JobRequestController";
 
 type LayoutProps = {
-	children: React.ReactNode;
 	params: { id: number };
 };
 

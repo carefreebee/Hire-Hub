@@ -2,7 +2,7 @@ import TypographyH4 from "~/components/ui/typography-h4";
 import {
 	getAllApplicantByDeptOrOffice,
 	getAllApplicantForm,
-} from "~/Controller/ApplicantFormController";
+} from "~/controller/ApplicantFormController";
 import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect, RoleEnumsType } from "~/lib/schema";
 import { columns } from "./columns";

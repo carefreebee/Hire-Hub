@@ -1,6 +1,6 @@
 "use server";
 
-import { jobRequestService } from "~/dependencies/dependencies";
+import { jobRequestService } from "~/Dependencies/dependencies";
 
 // @Controller("/job-request")
 export async function getAllJobRequest() {
