@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+import path from "path";
+
 const nextConfig = {
 	images: {
 		remotePatterns: [
@@ -7,6 +9,10 @@ const nextConfig = {
 				hostname: "**",
 			},
 		],
+	},
+	webpack(config) {
+		config.resolve.alias["~"] = path.resolve();
+		return config;
 	},
 };
 
