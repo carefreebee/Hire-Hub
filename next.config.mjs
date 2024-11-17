@@ -1,7 +1,5 @@
-/** @type {import('next').NextConfig} */
 import path from "path";
-const currentDir = path.dirname(new URL(import.meta.url).pathname);
-
+/** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
 		remotePatterns: [
@@ -12,7 +10,7 @@ const nextConfig = {
 		],
 	},
 	webpack(config) {
-		config.resolve.alias["~"] = path.resolve(currentDir);
+		config.resolve.alias["~"] = path.resolve(".");
 		return config;
 	},
 };
