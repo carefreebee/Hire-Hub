@@ -3,7 +3,7 @@ import { getApplicantFormByID } from "~/controller/ApplicantFormController";
 import { DataExtractor } from "~/extractors/ApplicantStatus";
 import { ApplicantStatusRepository } from "~/Repository/ApplicantStatusRepository";
 import { StageType } from "~/types/types";
-import { ApplicantStages, RecommendationStage, Validator } from "~/validator/ApplicantStatus";
+import { ApplicantStages, RecommendationStage, Validator } from "~/Validator/ApplicantStatus";
 
 export class ApplicantStatusService {
 	constructor(private readonly applicantStatusRepo: ApplicantStatusRepository) {}

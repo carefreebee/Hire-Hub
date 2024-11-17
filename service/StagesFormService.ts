@@ -4,7 +4,7 @@ import { DataExtractor } from "~/extractors/StagesForm";
 import { RatingFormsInsert } from "~/lib/schema";
 import { StagesFormRepository } from "~/Repository/StagesFormRepository";
 import { StageType } from "~/types/types";
-import { Validator } from "~/validator/StagesForm";
+import { Validator } from "~/Validator/StagesForm";
 
 export class StagesFormService {
 	constructor(private readonly stagesFormRepo: StagesFormRepository) {}

@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { OfficeRepository } from "~/Repository/OfficeRepository";
-import { Office, Validator } from "~/validator/Office";
+import { Office, Validator } from "~/Validator/Office";
 
 export class OfficeService {
 	constructor(private readonly officeRepo: OfficeRepository) {}

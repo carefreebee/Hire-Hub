@@ -3,7 +3,7 @@ import { DataExtractor } from "~/extractors/UserRole";
 import { DepartmentRepository } from "~/Repository/DepartmentRepository";
 import { OfficeRepository } from "~/Repository/OfficeRepository";
 import { UserRepository } from "~/Repository/UsersRepository";
-import { UserRoleData, Validator } from "~/validator/Users";
+import { UserRoleData, Validator } from "~/Validator/Users";
 import { RoleEnumsType } from "~/lib/schema";
 import { rolesWithoutDeptAndOffice } from "~/types/types";
 

@@ -1,7 +1,7 @@
 import { and, eq, isNotNull, ne } from "drizzle-orm";
 import { db } from "~/lib/db";
 import { RoleEnumsType, users } from "~/lib/schema";
-import { UserRoleData } from "~/validator/Users";
+import { UserRoleData } from "~/Validator/Users";
 
 export class UserRepository {
 	// HELPER FUNCTION

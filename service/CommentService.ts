@@ -2,7 +2,7 @@ import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/extractors/Comment";
 import { CommentRepository } from "~/Repository/CommentRepository";
 import { StageType } from "~/types/types";
-import { CommentType, Validator } from "~/validator/Comment";
+import { CommentType, Validator } from "~/Validator/Comment";
 
 export class CommentService {
 	constructor(private readonly commentRepo: CommentRepository) {}

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "~/lib/db";
 import { jobRequest } from "~/lib/schema";
-import { JobRequest } from "~/validator/JobRequest";
+import { JobRequest } from "~/Validator/JobRequest";
 
 export class JobRequestRepository {
 	public async getAllJobRequest() {

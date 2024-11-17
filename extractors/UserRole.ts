@@ -1,5 +1,5 @@
 import { RoleEnumsType } from "~/lib/schema";
-import { UserRoleData } from "~/validator/Users";
+import { UserRoleData } from "~/Validator/Users";
 
 export class DataExtractor {
 	static extractUserRole(formData: FormData): UserRoleData {

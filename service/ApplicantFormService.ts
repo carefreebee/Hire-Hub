@@ -4,7 +4,7 @@ import { ApplicantFormRepository } from "~/Repository/ApplicantFormRepository";
 import { DepartmentRepository } from "~/Repository/DepartmentRepository";
 import { JobRequestRepository } from "~/Repository/JobRequestRepository";
 import { OfficeRepository } from "~/Repository/OfficeRepository";
-import { ApplicantForm, Validator } from "~/validator/ApplicantForm";
+import { ApplicantForm, Validator } from "~/Validator/ApplicantForm";
 
 export class ApplicantFormService {
 	constructor(
