@@ -2,7 +2,7 @@ import { revalidatePath } from "next/cache";
 import { getApplicantFormByID } from "~/controller/ApplicantFormController";
 import { DataExtractor } from "~/extractors/RatingForms";
 import { ApplicantSelect } from "~/lib/schema";
-import { RatingFormsRepository } from "~/repository/RatingFormsRepository";
+import { RatingFormsRepository } from "~/Repository/RatingFormsRepository";
 import { StageType } from "~/types/types";
 
 export class RatingFormsService {

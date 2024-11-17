@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { getApplicantFormByID } from "~/controller/ApplicantFormController";
 import { DataExtractor } from "~/extractors/ApplicantStatus";
-import { ApplicantStatusRepository } from "~/repository/ApplicantStatusRepository";
+import { ApplicantStatusRepository } from "~/Repository/ApplicantStatusRepository";
 import { StageType } from "~/types/types";
 import { ApplicantStages, RecommendationStage, Validator } from "~/validator/ApplicantStatus";
 

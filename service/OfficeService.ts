@@ -1,5 +1,5 @@
 import { revalidatePath } from "next/cache";
-import { OfficeRepository } from "~/repository/OfficeRepository";
+import { OfficeRepository } from "~/Repository/OfficeRepository";
 import { Office, Validator } from "~/validator/Office";
 
 export class OfficeService {

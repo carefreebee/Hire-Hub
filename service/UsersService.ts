@@ -1,8 +1,8 @@
 import { revalidatePath } from "next/cache";
 import { DataExtractor } from "~/extractors/UserRole";
-import { DepartmentRepository } from "~/repository/DepartmentRepository";
-import { OfficeRepository } from "~/repository/OfficeRepository";
-import { UserRepository } from "~/repository/UsersRepository";
+import { DepartmentRepository } from "~/Repository/DepartmentRepository";
+import { OfficeRepository } from "~/Repository/OfficeRepository";
+import { UserRepository } from "~/Repository/UsersRepository";
 import { UserRoleData, Validator } from "~/validator/Users";
 import { RoleEnumsType } from "~/lib/schema";
 import { rolesWithoutDeptAndOffice } from "~/types/types";

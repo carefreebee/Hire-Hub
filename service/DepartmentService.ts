@@ -1,5 +1,5 @@
 import { revalidatePath } from "next/cache";
-import { DepartmentRepository } from "~/repository/DepartmentRepository";
+import { DepartmentRepository } from "~/Repository/DepartmentRepository";
 import { Department, Validator } from "~/validator/Department";
 
 export class DepartmentService {
