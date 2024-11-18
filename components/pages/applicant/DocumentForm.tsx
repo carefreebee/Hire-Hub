@@ -1,9 +1,17 @@
-import CVupload from "./UploadComp/CVupload";
-import Aupload from "./UploadComp/Aupload";
-import React, { Dispatch, MouseEventHandler, SetStateAction, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "~/components/ui/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from "~/components/ui/dialog";
 import { toast } from "~/components/ui/use-toast";
 import { useUploadThing } from "~/util/uploadthing";
+import Aupload from "./UploadComp/Aupload";
+import CVupload from "./UploadComp/CVupload";
 
 interface ChildFormProps {
 	formData: FormData;
@@ -14,6 +22,9 @@ interface ChildFormProps {
 const DocumentForm: React.FC<ChildFormProps> = (props) => {
 	const [resumeFile, setResumeFile] = useState<File | null>(null);
 	const [applicationFile, setApplicationFile] = useState<File | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [dialogVisible, setDialogVisible] = useState(false);
+	const router = useRouter();
 
 	const { startUpload } = useUploadThing("applicantUpload", {
 		onClientUploadComplete: (res) => {
@@ -68,37 +79,69 @@ const DocumentForm: React.FC<ChildFormProps> = (props) => {
 			});
 			return;
 		}
+		setLoading(true);
 		await startUpload([resumeFile]);
 		await startUpload([applicationFile]);
+		setLoading(false);
+		setDialogVisible(true);
+	};
+
+	const dialogClose = () => {
+		setDialogVisible(false);
+		router.push("/");
 	};
 	return (
-		<form onSubmit={handleSubmit}>
-			<div className="mb-8">
-				<h1 className="font-medium text-black">
-					Attach your CV/Resume and Application Letter
-				</h1>
-			</div>
+		<>
+			<form onSubmit={handleSubmit}>
+				<div className="mb-8">
+					<h1 className="font-medium text-black">
+						Attach your CV/Resume and Application Letter
+					</h1>
+				</div>
 
-			<div className="grid grid-cols-2 gap-5">
-				<CVupload setResumeFile={setResumeFile} />
-				<Aupload setApplicationFile={setApplicationFile} />
-			</div>
-			<section className="mt-10 flex w-full justify-end">
-				<Button
-					type="button"
-					onClick={(e) => {
-						props.setCurrent("personal");
-					}}
-					variant="outline"
-					className="mr-3 border-2 border-[#666666] text-black hover:scale-95"
-				>
-					Back
-				</Button>
-				<Button type="submit" className="bg-jobdetails hover:scale-95 hover:bg-[#5e1e1e]">
-					Submit
-				</Button>
-			</section>
-		</form>
+				<div className="grid grid-cols-2 gap-5">
+					<CVupload setResumeFile={setResumeFile} />
+					<Aupload setApplicationFile={setApplicationFile} />
+				</div>
+				<section className="mt-10 flex w-full justify-end">
+					<Button
+						type="button"
+						onClick={(e) => {
+							props.setCurrent("personal");
+						}}
+						variant="outline"
+						className="mr-3 border-2 border-[#666666] text-black hover:scale-95"
+					>
+						Back
+					</Button>
+					<Button
+						type="submit"
+						className="bg-jobdetails hover:scale-95 hover:bg-[#5e1e1e]"
+						disabled={loading}
+					>
+						{loading ? "Submitting..." : "Submit"}
+					</Button>
+				</section>
+			</form>
+
+			{dialogVisible && (
+				<Dialog open={dialogVisible} onOpenChange={dialogClose}>
+					<DialogContent className="sm:max-h-[100px] sm:max-w-[425px]">
+						<DialogHeader>
+							<DialogTitle>
+								<div className="flex">
+									<div></div>
+									Sucessfully Submitted!
+								</div>
+							</DialogTitle>
+							<DialogDescription>
+								Application Form has been successfully submitted.
+							</DialogDescription>
+						</DialogHeader>
+					</DialogContent>
+				</Dialog>
+			)}
+		</>
 	);
 };
 
