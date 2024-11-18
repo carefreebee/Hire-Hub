@@ -138,7 +138,7 @@ export const columns: ColumnDef<JobRequestSelect>[] = [
 			return <div className="px-5">Action</div>;
 		},
 		cell: ({ row }) => {
-			const id: number = row.getValue("id");
+			const id: number = row.getValue("request_id");
 			return (
 				<div className="flex items-center justify-center">
 					<IDColumn id={id} />
