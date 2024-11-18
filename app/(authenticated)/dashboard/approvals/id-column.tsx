@@ -14,22 +14,10 @@ import { useCurrentRole } from "~/util/zustand";
 export default function IDColumn({ id }: { id: number }) {
 	const currentRole = useCurrentRole((state) => state.currentRole);
 
-	const CHAIRLINK = `/dashboard/evaluate/${id}/${currentRole}/initial-interview`;
-	const FACULTYLINK = `/dashboard/evaluate/${id}/${currentRole}/teaching-demo`;
-	const VPLINK = `/dashboard/evaluate/${id}/${currentRole}/panel-interview`;
+	const HRUNIVLINK = `/dashboard/approvals/${id}/${currentRole}`;
 
-	const isDeanOrChair = () => {
-		return currentRole === "dean" || currentRole === "department_chair" ? true : false;
-	};
-
-	const isFaculty = () => {
-		return currentRole === "faculty" ? true : false;
-	};
-
-	const isVP = () => {
-		return currentRole === "vp_acad_affairs" || currentRole === "vp_administration"
-			? true
-			: false;
+	const isHRorPres = () => {
+		return currentRole === "hr_head" || currentRole === "univ_president" ? true : false;
 	};
 
 	return (
@@ -42,19 +30,7 @@ export default function IDColumn({ id }: { id: number }) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="center" className="rounded-xl">
 				<DropdownMenuItem>
-					<Link
-						href={
-							isDeanOrChair()
-								? CHAIRLINK
-								: isFaculty()
-									? FACULTYLINK
-									: isVP()
-										? VPLINK
-										: "/dashboard/evaluate"
-						}
-					>
-						Evaluate
-					</Link>
+					<Link href={isHRorPres() ? HRUNIVLINK : "/dashboard/approvals"}>Authorize</Link>
 				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
