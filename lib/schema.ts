@@ -190,6 +190,7 @@ export const jobRequest = pgTable("jobRequest", {
 	job_status: jobStatusEnums("jobStatus").notNull().default("pending"),
 	job_opening: jobOpeningEnums("jobOpening").notNull().default("open"),
 	office_id: integer("office_id").references(() => office.office_id, { onDelete: "cascade" }),
+	updated_by: text("updated_by").references(() => users.id, { onDelete: "set null" }),
 });
 
 export const department = pgTable("department", {

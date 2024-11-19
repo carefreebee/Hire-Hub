@@ -33,3 +33,11 @@ export async function handleEditJobRequest(formData: FormData) {
 export async function handleDeleteJobRequest(id: number) {
 	return await jobRequestService.delete(id);
 }
+
+export async function handleApproveJobRequest(formData: FormData) {
+	return await jobRequestService.approve(formData);
+}
+
+export async function handleDeclineJobRequest(formData: FormData) {
+	return await jobRequestService.decline(formData);
+}

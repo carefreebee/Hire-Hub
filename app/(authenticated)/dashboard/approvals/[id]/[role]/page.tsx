@@ -2,23 +2,127 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getCurrentUser } from "~/actions/actions";
 import Previous from "~/components/pages/Previous";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
+
 import { Button } from "~/components/ui/button";
+import Confirmation from "~/components/ui/confirmation";
 import { TypographySmall } from "~/components/ui/typography-small";
-import { getJobRequestByID } from "~/controller/JobRequestController";
-import { JobRequestSelect } from "~/lib/schema";
+import { toast } from "~/components/ui/use-toast";
+import {
+	getJobRequestByID,
+	handleApproveJobRequest,
+	handleDeclineJobRequest,
+} from "~/controller/JobRequestController";
+import { getUserByID } from "~/controller/UsersController";
+import { JobRequestSelect, User } from "~/lib/schema";
+
+type ConfirmationModalProps = {
+	mainButton: React.ReactNode;
+	descriptionButtonLabel: string;
+	cancelButtonLabel: string;
+	children: React.ReactNode;
+	title: string;
+};
+
+export function ConfirmationModal({
+	mainButton,
+	descriptionButtonLabel,
+	cancelButtonLabel,
+	children,
+	title,
+}: ConfirmationModalProps) {
+	return (
+		<AlertDialog>
+			<AlertDialogTrigger asChild>{mainButton}</AlertDialogTrigger>
+			<AlertDialogContent>
+				<AlertDialogHeader className="flex flex-row gap-5">
+					<div className="bg-[#F5F5F5]">
+						<Confirmation />
+					</div>
+					<div>
+						<AlertDialogTitle>{title}</AlertDialogTitle>
+						<AlertDialogDescription>
+							<div className="flex flex-col">
+								{descriptionButtonLabel}
+								<div>This action cannot be undone</div>
+							</div>
+						</AlertDialogDescription>
+					</div>
+				</AlertDialogHeader>
+				<AlertDialogFooter className="flex gap-4">
+					<AlertDialogCancel className="w-full">{cancelButtonLabel}</AlertDialogCancel>
+					{children}
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
+	);
+}
 
 export default function ApprovalPage() {
 	const { id: request_id } = useParams();
 	const [job, setJob] = useState<JobRequestSelect>();
+	const [user, setCurrentUser] = useState<User | null>();
+	const [updatedByUser, setUpdatedByUser] = useState<User | null>();
+
+	async function fetchCurrentUser() {
+		const user = await getCurrentUser();
+		setCurrentUser(user);
+	}
 
 	async function fetchApprovalbyId() {
 		const job = await getJobRequestByID(Number(request_id));
 		setJob(job);
+
+		if (job?.updated_by) {
+			const updatedByUser = await getUserByID(job.updated_by);
+			setUpdatedByUser(updatedByUser);
+		}
+	}
+
+	async function confirmApproval() {
+		if (job && user) {
+			const formData = new FormData();
+			formData.append("request_id", job.request_id.toString());
+			formData.append("job_status", "approved");
+			formData.append("updated_by", user.id);
+
+			await handleApproveJobRequest(formData);
+			toast({
+				title: "Job Approved",
+				description: "The job request has been approved successfully.",
+			});
+		}
+	}
+
+	async function declineApproval() {
+		if (job) {
+			const formData = new FormData();
+			formData.append("request_id", job.request_id.toString());
+			formData.append("job_status", "denied");
+
+			await handleDeclineJobRequest(formData);
+			toast({
+				title: "Job Declined",
+				description: "The job request has been declined successfully.",
+			});
+		}
 	}
 
 	useEffect(() => {
 		fetchApprovalbyId();
+		fetchCurrentUser();
 	}, []);
 
 	return (
@@ -133,14 +237,83 @@ export default function ApprovalPage() {
 
 						<div className="flex w-full items-center justify-center">
 							<div className="flex w-[90%] items-center justify-between">
-								<div>Requested By: </div>
+								<div className="flex items-center justify-center font-bold">
+									Requested By:{" "}
+									<div className="bg-orange-100 p-1">
+										{job?.requested_department}
+										{job?.requested_department ? " | Department" : ""}
+										{job?.requested_office}
+										{job?.requested_office ? " | Office" : ""}
+									</div>
+								</div>
 								<div className="flex items-center justify-center gap-2">
-									<Button className="font-bold text-green-500" variant="outline">
-										Approve
-									</Button>
-									<Button className="font-bold text-red-500" variant="outline">
-										Decline
-									</Button>
+									Status:
+									{job?.job_status === "approved" ||
+									job?.job_status === "denied" ? (
+										<div className="flex gap-2 bg-orange-100 p-1 font-semibold">
+											<div
+												className={
+													job?.job_status === "approved"
+														? "text-green-500"
+														: "text-red-500"
+												}
+											>
+												{job?.job_status === "approved"
+													? "Approved"
+													: "Rejected"}
+											</div>
+											by{" "}
+											{updatedByUser?.firstName +
+												" " +
+												updatedByUser?.lastName +
+												" | " +
+												updatedByUser?.role}
+										</div>
+									) : (
+										<div className="flex gap-2">
+											<ConfirmationModal
+												mainButton={
+													<Button
+														className="font-bold text-green-500"
+														variant="outline"
+													>
+														Approve
+													</Button>
+												}
+												descriptionButtonLabel="Are you sure you want to approve this job request?"
+												cancelButtonLabel="No, cancel"
+												title="Confirm Approval"
+											>
+												<AlertDialogAction
+													className="w-full bg-red-900"
+													onClick={confirmApproval}
+												>
+													Yes, confirm
+												</AlertDialogAction>
+											</ConfirmationModal>
+
+											<ConfirmationModal
+												mainButton={
+													<Button
+														className="font-bold text-red-500"
+														variant="outline"
+													>
+														Decline
+													</Button>
+												}
+												descriptionButtonLabel="Are you sure you want to reject this job request?"
+												cancelButtonLabel="No, cancel"
+												title="Confirm Rejection"
+											>
+												<AlertDialogAction
+													className="w-full bg-red-900"
+													onClick={declineApproval}
+												>
+													Yes, decline
+												</AlertDialogAction>
+											</ConfirmationModal>
+										</div>
+									)}
 								</div>
 							</div>
 						</div>
