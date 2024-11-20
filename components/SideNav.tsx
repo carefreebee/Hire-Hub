@@ -25,6 +25,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 				HireHub
 			</p>
 			<ul className="mt-5 flex w-full flex-col items-center justify-center gap-8 text-sm font-semibold">
+				{/* Recruitment Officer Specific */}
 				{role === "recruitment_officer" && (
 					<Links
 						href="/dashboard"
@@ -33,13 +34,17 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 						notActiveChildren={<WhiteDashboardSvg />}
 					/>
 				)}
+
+				{/* Common Applicant Tab */}
 				<Links
 					href="/dashboard/applicant"
 					label="Applicant"
 					activeChildren={<ApplicantSVG />}
 					notActiveChildren={<WhiteApplicantSvg />}
 				/>
-				{role === "requester_staff" && (
+
+				{/* Role-Specific Links */}
+				{["recruitment_officer", "requester_staff", "dean"].includes(role) && (
 					<Links
 						href="/dashboard/request"
 						label="Request"
@@ -48,14 +53,21 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 					/>
 				)}
 
-				{role === "recruitment_officer" && (
+				{[
+					"hr_head",
+					"vp_administration",
+					"vp_acad_affairs",
+					"dean",
+					"department_chair",
+				].includes(role) && (
 					<Links
-						href="/dashboard/request"
-						label="Request"
-						activeChildren={<JobRequestSVG />}
-						notActiveChildren={<WhiteJobRequestSvg />}
+						href="/dashboard/evaluate"
+						label="Evaluate"
+						activeChildren={<EvaluateSVG />}
+						notActiveChildren={<EvaluateSVGWhite />}
 					/>
 				)}
+
 				{role === "hr_head" && (
 					<Links
 						href="/dashboard/approvals"
@@ -64,54 +76,18 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 						notActiveChildren={<ApprovalsSVGWhite />}
 					/>
 				)}
-				{role === "hr_head" && (
+
+				{/* Schedule Tab for Specific Roles */}
+				{["dean", "recruitment_officer", "hr_head"].includes(role) && (
 					<Links
-						href="/dashboard/evaluate"
-						label="Evaluate"
-						activeChildren={<EvaluateSVG />}
-						notActiveChildren={<EvaluateSVGWhite />}
+						href="/dashboard/schedule"
+						label="Schedule"
+						activeChildren={<ScheduleSVG />}
+						notActiveChildren={<ScheduleSVGWhite />}
 					/>
 				)}
-				{role === "vp_administration" && (
-					<Links
-						href="/dashboard/evaluate"
-						label="Evaluate"
-						activeChildren={<EvaluateSVG />}
-						notActiveChildren={<EvaluateSVGWhite />}
-					/>
-				)}
-				{role === "vp_acad_affairs" && (
-					<Links
-						href="/dashboard/evaluate"
-						label="Evaluate"
-						activeChildren={<EvaluateSVG />}
-						notActiveChildren={<EvaluateSVGWhite />}
-					/>
-				)}
-				{role === "dean" && (
-					<Links
-						href="/dashboard/request"
-						label="Request"
-						activeChildren={<JobRequestSVG />}
-						notActiveChildren={<WhiteJobRequestSvg />}
-					/>
-				)}
-				{role === "dean" && (
-					<Links
-						href="/dashboard/evaluate"
-						label="Evaluate"
-						activeChildren={<EvaluateSVG />}
-						notActiveChildren={<EvaluateSVGWhite />}
-					/>
-				)}
-				{role === "department_chair" && (
-					<Links
-						href="/dashboard/evaluate"
-						label="Evaluate"
-						activeChildren={<EvaluateSVG />}
-						notActiveChildren={<EvaluateSVGWhite />}
-					/>
-				)}
+
+				{/* Logout Button */}
 				<div className="flex w-[96%] justify-start gap-4 rounded-xl py-3 pl-10 font-medium hover:bg-[#7F0000] hover:text-white">
 					<LogoutSVG />
 					<LogoutButton />
@@ -130,31 +106,18 @@ type LinksProps = {
 
 export function Links({ href, activeChildren, notActiveChildren, label }: LinksProps) {
 	const pathname = usePathname();
-	const isAdminAtUsers = pathname.startsWith("/admin/users") === href.startsWith("/admin/users");
-	const isAdminAtUnits = pathname.startsWith("/admin/units") === href.startsWith("/admin/units");
-	const isUserAtApplicant =
-		pathname.startsWith("/dashboard/applicant") === href.startsWith("/dashboard/applicant");
-	const isUserAtRequest =
-		pathname.startsWith("/dashboard/request") === href.startsWith("/dashboard/request");
-	const isUserAtApprovals =
-		pathname.startsWith("/dashboard/approvals") === href.startsWith("/dashboard/approvals");
-	const isUserAtEvaluate =
-		pathname.startsWith("/dashboard/evaluate") === href.startsWith("/dashboard/evaluate");
 
-	const isActive =
-		isAdminAtUsers &&
-		isAdminAtUnits &&
-		isUserAtApplicant &&
-		isUserAtRequest &&
-		isUserAtApprovals &&
-		isUserAtEvaluate;
+	// Determine if the current link is active
+	const isActive = pathname === href;
 
 	return (
 		<Link
 			href={href}
-			className={`${isActive ? "bg-[#7F0000] text-white" : ""} flex w-[96%] justify-start gap-4 rounded-xl py-3 pl-10 font-medium hover:bg-[#7F0000] hover:text-white`}
+			className={`${
+				isActive ? "bg-[#7F0000] text-white" : ""
+			} flex w-[96%] justify-start gap-4 rounded-xl py-3 pl-10 font-medium hover:bg-[#7F0000] hover:text-white`}
 		>
-			{!isActive ? activeChildren : notActiveChildren}
+			{isActive ? activeChildren : notActiveChildren}
 			<p>{label}</p>
 		</Link>
 	);
