@@ -8,7 +8,7 @@ import { ApplicantSelect } from "~/lib/schema";
 
 export default function SchedulePage() {
 	const [applicants, setApplicants] = useState<ApplicantSelect[]>([]);
-	const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+	const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
 	useEffect(() => {
 		const fetchApplicants = async () => {
@@ -19,18 +19,20 @@ export default function SchedulePage() {
 	}, []);
 
 	const filteredApplicants = selectedDate
-		? applicants.filter((applicant) =>
-				Object.values(applicant.stages).some((stage) => {
-					if (stage?.date) {
-						const stageDate = new Date(stage.date);
-						return (
-							stageDate.getDate() === selectedDate.getDate() &&
-							stageDate.getMonth() === selectedDate.getMonth() &&
-							stageDate.getFullYear() === selectedDate.getFullYear()
-						);
-					}
-					return false;
-				})
+		? applicants.filter(
+				(applicant) =>
+					applicant.stages &&
+					Object.values(applicant.stages).some((stage) => {
+						if (stage && "date" in stage) {
+							const stageDate = new Date(stage.date as string);
+							return (
+								stageDate.getDate() === selectedDate.getDate() &&
+								stageDate.getMonth() === selectedDate.getMonth() &&
+								stageDate.getFullYear() === selectedDate.getFullYear()
+							);
+						}
+						return false;
+					})
 			)
 		: applicants;
 
@@ -64,30 +66,32 @@ function WeekView({
 	selectedDate,
 	filteredApplicants,
 }: {
-	selectedDate: Date | null;
+	selectedDate: Date | undefined;
 	filteredApplicants: ApplicantSelect[];
 }) {
 	return (
 		<div>
 			<p className="text-gray-500 text-sm">
-				{/* {selectedDate ? format(selectedDate, "MMMM d") : "this week"} */}
+				{selectedDate ? format(selectedDate, "MMMM d") : "this week"}
 			</p>
 			<div className="grid-rows-24 mt-4 grid gap-4">
 				{Array.from({ length: 24 }).map((_, index) => {
 					const hour = index;
-					const applicantsAtHour = filteredApplicants.filter((applicant) =>
-						Object.values(applicant.stages).some((stage) => {
-							if (stage?.date) {
-								const stageDate = new Date(stage.date);
-								return (
-									stageDate.getHours() === hour &&
-									stageDate.getDate() === selectedDate?.getDate() &&
-									stageDate.getMonth() === selectedDate?.getMonth() &&
-									stageDate.getFullYear() === selectedDate?.getFullYear()
-								);
-							}
-							return false;
-						})
+					const applicantsAtHour = filteredApplicants.filter(
+						(applicant) =>
+							applicant.stages &&
+							Object.values(applicant.stages).some((stage) => {
+								if (stage && "date" in stage) {
+									const stageDate = new Date(stage.date as string);
+									return (
+										stageDate.getHours() === hour &&
+										stageDate.getDate() === selectedDate?.getDate() &&
+										stageDate.getMonth() === selectedDate?.getMonth() &&
+										stageDate.getFullYear() === selectedDate?.getFullYear()
+									);
+								}
+								return false;
+							})
 					);
 					return (
 						<div key={index} className="flex items-center justify-between border-b p-2">
@@ -120,14 +124,14 @@ function CalendarSection({
 	selectedDate,
 	onDateChange,
 }: {
-	selectedDate: Date | null;
-	onDateChange: (date: Date | null) => void;
+	selectedDate: Date | undefined;
+	onDateChange: (date: Date | undefined) => void;
 }) {
 	return (
 		<div className="rounded border bg-white p-4 shadow">
 			<Calendar
 				selected={selectedDate}
-				onSelect={onDateChange}
+				onSelect={(date) => onDateChange(date ?? undefined)}
 				mode="single"
 				className="w-full"
 			/>
@@ -139,7 +143,7 @@ function EventDetails({
 	selectedDate,
 	filteredApplicants,
 }: {
-	selectedDate: Date | null;
+	selectedDate: Date | undefined;
 	filteredApplicants: ApplicantSelect[];
 }) {
 	return (
@@ -151,9 +155,9 @@ function EventDetails({
 				</p>
 				{filteredApplicants.map((applicant, idx) => (
 					<div key={idx}>
-						{Object.entries(applicant.stages).map(([stageName, stage]) => {
-							if (stage?.date) {
-								const stageDate = new Date(stage.date);
+						{Object.entries(applicant.stages || {}).map(([stageName, stage]) => {
+							if (stage && "date" in stage) {
+								const stageDate = new Date(stage.date as string);
 								return (
 									<div
 										key={stageName}
@@ -162,9 +166,11 @@ function EventDetails({
 										<h3 className="font-bold">
 											{stageName.replace("_", " ")} - {applicant.last_name}
 										</h3>
-										<p className="text-gray-500 text-xs">{`${stageDate.getHours() % 12 === 0 ? 12 : stageDate.getHours() % 12}:00 ${
-											stageDate.getHours() < 12 ? "AM" : "PM"
-										}`}</p>
+										<p className="text-gray-500 text-xs">{`${
+											stageDate.getHours() % 12 === 0
+												? 12
+												: stageDate.getHours() % 12
+										}:00 ${stageDate.getHours() < 12 ? "AM" : "PM"}`}</p>
 										<p className="text-xs">
 											Applicant: {applicant.first_name} {applicant.last_name}
 										</p>
