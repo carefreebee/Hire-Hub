@@ -31,29 +31,29 @@ export const columns: ColumnDef<JobRequestSelect>[] = [
 			);
 		},
 	},
+	// {
+	// 	accessorKey: "job_status",
+	// 	header: ({ column }) => {
+	// 		return (
+	// 			<Button
+	// 				variant="ghost"
+	// 				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+	// 			>
+	// 				Name
+	// 				<ArrowUpDown className="ml-2 h-4 w-4" />
+	// 			</Button>
+	// 		);
+	// 	},
+	// 	cell: ({ row }) => {
+	// 		return (
+	// 			<div className="flex items-center justify-center gap-2">
+	// 				{row.getValue("job_status")}
+	// 			</div>
+	// 		);
+	// 	},
+	// },
 	{
-		accessorKey: "first_name",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Name
-					<ArrowUpDown className="ml-2 h-4 w-4" />
-				</Button>
-			);
-		},
-		cell: ({ row }) => {
-			return (
-				<div className="flex items-center justify-center gap-2">
-					{row.getValue("first_name")} {row.getValue("last_name")}
-				</div>
-			);
-		},
-	},
-	{
-		accessorKey: "last_name",
+		accessorKey: "job_status",
 		header: () => {
 			return <div className="hidden p-0"></div>;
 		},
