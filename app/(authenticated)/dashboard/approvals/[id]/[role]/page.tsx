@@ -36,7 +36,7 @@ type ConfirmationModalProps = {
 	title: string;
 };
 
-export function ConfirmationModal({
+function ConfirmationModal({
 	mainButton,
 	descriptionButtonLabel,
 	cancelButtonLabel,
