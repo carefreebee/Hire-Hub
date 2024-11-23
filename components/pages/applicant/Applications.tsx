@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import DocumentForm from "./DocumentForm";
-import ApplicantForm from "./ApplicantForm";
+import { useState } from "react";
 import { CreateApplicantForm } from "~/controller/ApplicantFormController";
+import ApplicantForm from "./ApplicantForm";
+import DocumentForm from "./DocumentForm";
 
 type ApplicationProps = {
 	params: { id: number };
@@ -98,19 +98,20 @@ export default function Application({ params }: ApplicationProps) {
 				</div>
 			</section>
 			<section className="mt-10">
-				{current === "personal" ? (
-					<div>
-						<ApplicantForm setCurrent={setCurrent} setFormData={setFormData} />
-					</div>
-				) : (
-					<div>
-						<DocumentForm
-							formData={formData}
-							setCurrent={setCurrent}
-							handleSubmit={handleSubmit}
-						/>
-					</div>
-				)}
+				<div style={{ display: current === "personal" ? "block" : "none" }}>
+					<ApplicantForm
+						setCurrent={setCurrent}
+						setFormData={setFormData}
+						formData={formData}
+					/>
+				</div>
+				<div style={{ display: current === "document" ? "block" : "none" }}>
+					<DocumentForm
+						formData={formData}
+						setCurrent={setCurrent}
+						handleSubmit={handleSubmit}
+					/>
+				</div>
 			</section>
 		</div>
 	);
