@@ -35,6 +35,7 @@ export default function SchedulePage() {
 					})
 			)
 		: applicants;
+	
 
 	return (
 		<div className="flex flex-col p-6">
@@ -69,49 +70,74 @@ function WeekView({
 	selectedDate: Date | undefined;
 	filteredApplicants: ApplicantSelect[];
 }) {
+	// Flatten stages with their date into a sortable list
+	const events = filteredApplicants
+		.flatMap((applicant) =>
+			Object.entries(applicant.stages || {}).map(([stageName, stage]) => {
+				const stageDate = stage && "date" in stage ? new Date(stage.date as string) : null;
+				if (stageDate) {
+					// Check if the event's date matches the selected date
+					const isSameDay =
+						stageDate.getDate() === selectedDate?.getDate() &&
+						stageDate.getMonth() === selectedDate?.getMonth() &&
+						stageDate.getFullYear() === selectedDate?.getFullYear();
+					if (isSameDay) {
+						// Return the event if it matches the selected date
+						return {
+							stageName,
+							stageDate,
+							applicant,
+						};
+					}
+				}
+				return null;
+			})
+		)
+		.filter((event) => event !== null); // Remove any null values
+
+	// Sort events by their stage date
+	const sortedEvents = events.sort((a, b) => a.stageDate!.getTime() - b.stageDate!.getTime());
+
 	return (
 		<div>
 			<p className="text-gray-500 text-sm">
-				{selectedDate ? format(selectedDate, "MMMM d") : "this week"}
+				{selectedDate ? format(selectedDate, "MMMM d") : "Select a date"}
 			</p>
 			<div className="grid-rows-24 mt-4 grid gap-4">
 				{Array.from({ length: 24 }).map((_, index) => {
 					const hour = index;
-					const applicantsAtHour = filteredApplicants.filter(
-						(applicant) =>
-							applicant.stages &&
-							Object.values(applicant.stages).some((stage) => {
-								if (stage && "date" in stage) {
-									const stageDate = new Date(stage.date as string);
-									return (
-										stageDate.getHours() === hour &&
-										stageDate.getDate() === selectedDate?.getDate() &&
-										stageDate.getMonth() === selectedDate?.getMonth() &&
-										stageDate.getFullYear() === selectedDate?.getFullYear()
-									);
-								}
-								return false;
-							})
-					);
+					// Filter events for this hour
+					const eventsAtHour = sortedEvents.filter((event) => {
+						const stageTime = event.stageDate.getHours();
+						return stageTime === hour;
+					});
+
 					return (
 						<div key={index} className="flex items-center justify-between border-b p-2">
 							<span className="text-gray-400 text-sm">{`${hour % 12 === 0 ? 12 : hour % 12}:00 ${
 								hour < 12 ? "AM" : "PM"
 							}`}</span>
-							{applicantsAtHour.map((applicant, idx) => (
-								<div
-									key={idx}
-									className="mb-2 w-full rounded bg-yellow-100 p-2 shadow"
-								>
-									<h3 className="font-bold">
-										{applicant.stages ? Object.keys(applicant.stages)[0] : ""} -{" "}
-										{applicant.last_name}
-									</h3>
-									<p className="text-gray-500 text-xs">{`${hour % 12 === 0 ? 12 : hour % 12}:00 - ${
-										(hour + 1) % 12 === 0 ? 12 : (hour + 1) % 12
-									}:00`}</p>
-								</div>
-							))}
+							{eventsAtHour.map((event, idx) => {
+								const endTime = new Date(
+									event.stageDate.getTime() + 60 * 60 * 1000
+								); // 1 hour duration
+
+								return (
+									<div
+										key={idx}
+										className="mb-2 w-full rounded bg-yellow-100 p-2 shadow"
+									>
+										<h3 className="font-bold">
+											{event.stageName.replace("_", " ")} -{" "}
+											{event.applicant.last_name}
+										</h3>
+										<p className="text-gray-500 text-xs">
+											{format(event.stageDate, "hh:mm a")} -{" "}
+											{format(endTime, "hh:mm a")}
+										</p>
+									</div>
+								);
+							})}
 						</div>
 					);
 				})}
@@ -146,42 +172,58 @@ function EventDetails({
 	selectedDate: Date | undefined;
 	filteredApplicants: ApplicantSelect[];
 }) {
+	// Flatten stages with their date into a sortable list
+	const events = filteredApplicants
+		.flatMap((applicant) =>
+			Object.entries(applicant.stages || {}).map(([stageName, stage]) => {
+				const stageDate = stage && "date" in stage ? new Date(stage.date as string) : null;
+				if (stageDate) {
+					// Check if the event's date matches the selected date
+					const isSameDay =
+						stageDate.getDate() === selectedDate?.getDate() &&
+						stageDate.getMonth() === selectedDate?.getMonth() &&
+						stageDate.getFullYear() === selectedDate?.getFullYear();
+					if (isSameDay) {
+						// Return the event if it matches the selected date
+						return {
+							stageName,
+							stageDate,
+							applicant,
+						};
+					}
+				}
+				return null;
+			})
+		)
+		.filter((event) => event !== null); // Remove any null values
+
+	// Sort events by their stage date
+	const sortedEvents = events.sort((a, b) => a.stageDate!.getTime() - b.stageDate!.getTime());
+
 	return (
 		<div className="max-h-96 overflow-y-auto rounded border bg-white p-4 shadow">
 			<h2 className="mb-4 text-lg font-bold">Calendar Details</h2>
-			<div>
-				<p className="text-sm">
-					{selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "Select a date"}
-				</p>
-				{filteredApplicants.map((applicant, idx) => (
-					<div key={idx}>
-						{Object.entries(applicant.stages || {}).map(([stageName, stage]) => {
-							if (stage && "date" in stage) {
-								const stageDate = new Date(stage.date as string);
-								return (
-									<div
-										key={stageName}
-										className="mb-2 w-full rounded bg-yellow-100 p-2 shadow"
-									>
-										<h3 className="font-bold">
-											{stageName.replace("_", " ")} - {applicant.last_name}
-										</h3>
-										<p className="text-gray-500 text-xs">{`${
-											stageDate.getHours() % 12 === 0
-												? 12
-												: stageDate.getHours() % 12
-										}:00 ${stageDate.getHours() < 12 ? "AM" : "PM"}`}</p>
-										<p className="text-xs">
-											Applicant: {applicant.first_name} {applicant.last_name}
-										</p>
-									</div>
-								);
-							}
-							return null;
-						})}
+			<p className="text-sm">
+				{selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "Select a date"}
+			</p>
+			{sortedEvents.map((event, idx) => {
+				if (!event.stageDate) return null; // Skip if no valid date
+				const endTime = new Date(event.stageDate.getTime() + 60 * 60 * 1000); // 1 hour duration
+
+				return (
+					<div key={idx} className="mb-2 w-full rounded bg-yellow-100 p-2 shadow">
+						<h3 className="font-bold">
+							{event.stageName.replace("_", " ")} - {event.applicant.last_name}
+						</h3>
+						<p className="text-gray-500 text-xs">
+							{format(event.stageDate, "hh:mm a")} - {format(endTime, "hh:mm a")}
+						</p>
+						<p className="text-xs">
+							Applicant: {event.applicant.first_name} {event.applicant.last_name}
+						</p>
 					</div>
-				))}
-			</div>
+				);
+			})}
 		</div>
 	);
 }
