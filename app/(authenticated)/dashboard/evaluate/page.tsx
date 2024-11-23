@@ -1,12 +1,12 @@
 import TypographyH4 from "~/components/ui/typography-h4";
+import {
+	getAllApplicantByDeptOrOffice,
+	getAllApplicantForm,
+} from "~/controller/ApplicantFormController";
 import { validateRequest } from "~/lib/auth";
+import { ApplicantSelect, RoleEnumsType } from "~/lib/schema";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import {
-	getAllApplicantForm,
-	getAllApplicantByDeptOrOffice,
-} from "~/controller/ApplicantFormController";
-import { RoleEnumsType, ApplicantSelect, jobRequest } from "~/lib/schema";
 
 export default async function RequestPage() {
 	const { user } = await validateRequest();
