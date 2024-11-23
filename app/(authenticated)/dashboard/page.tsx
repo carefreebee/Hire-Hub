@@ -1,4 +1,5 @@
 import Image from "next/image";
+import FirstPieChart from "~/components/pages/admin/dashboard/FirstPieChart";
 import { Card } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import { Chart } from "~/components/pages/authenticated/dashboard/Chart";
 import { getAllApplicantForm } from "~/controller/ApplicantFormController";
@@ -24,6 +25,12 @@ type UsersByMonthAndYear = {
 	[key: string]: {
 		[key: number]: number; // Where key is the year, and the value is an array of 12 numbers (one for each month)
 	};
+};
+
+type JobStatus = "pending" | "approved" | "denied" | "Unknown";
+
+type JobRequestStatuses = {
+	[key in JobStatus]?: number;
 };
 
 export default async function DashboardPage() {
@@ -71,6 +78,20 @@ export default async function DashboardPage() {
 
 	const newHire = results.filter((result) => result.allStagesPassed === true);
 
+	const jobRequestStatuses = jobRequests.reduce((acc: JobRequestStatuses, request) => {
+		const status: JobStatus = request.job_status || "Unknown";
+		if (!acc[status]) {
+			acc[status] = 0;
+		}
+		acc[status]++;
+		return acc;
+	}, {} as JobRequestStatuses);
+
+	const jobRequestStatusData = Object.keys(jobRequestStatuses).map((status) => ({
+		label: status,
+		value: jobRequestStatuses[status as JobStatus] ?? 0,
+	}));
+
 	return (
 		<section>
 			<header className="relative h-[94px]">
@@ -91,7 +112,16 @@ export default async function DashboardPage() {
 					/>
 					<DisplayCard svg={<NewHires />} count={newHire.length} label="New Hires" />
 				</div>
-
+				<div className="mt-8 flex gap-5">
+					<div className="w-1/2">
+						<h2 className="text-center">Job Listing Request Statuses</h2>
+						<FirstPieChart data={jobRequestStatusData} />
+					</div>
+					<div className="w-1/2">
+						<h2 className="text-center">Users by Roles</h2>
+						{/* <PieChart data={rolesData} /> */}
+					</div>
+				</div>
 				<Card>
 					<Chart chartData={chartData} />
 				</Card>
