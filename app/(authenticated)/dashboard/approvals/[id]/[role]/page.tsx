@@ -195,7 +195,7 @@ export default function ApprovalPage() {
 											<TypographySmall
 												size={"sm"}
 												variant={"outline"}
-												className="font-medium shadow-md"
+												className="h-auto text-wrap font-medium shadow-md"
 											>
 												{job?.requested_qualification}
 											</TypographySmall>

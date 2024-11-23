@@ -16,7 +16,7 @@ import CVupload from "./UploadComp/CVupload";
 interface ChildFormProps {
 	formData: FormData;
 	setCurrent: Dispatch<SetStateAction<string>>;
-	handleSubmit: () => void;
+	handleSubmit: (data: FormData) => void;
 }
 
 const DocumentForm: React.FC<ChildFormProps> = (props) => {
@@ -32,13 +32,11 @@ const DocumentForm: React.FC<ChildFormProps> = (props) => {
 				name: file.name,
 				url: file.url,
 			}));
-
 			// Check if resume was uploaded
 			if (props.formData.get("resume_name")) {
 				// If the resume was uploaded first, upload the application letter next
 				props.formData.append("letter_name", uploadedFiles[0].name);
 				props.formData.append("letter_url", uploadedFiles[0].url);
-				props.handleSubmit(); // Call the submission handler
 			} else {
 				// If the resume was uploaded, just save its data
 				props.formData.append("resume_name", uploadedFiles[0].name);
@@ -79,17 +77,56 @@ const DocumentForm: React.FC<ChildFormProps> = (props) => {
 			});
 			return;
 		}
+
 		setLoading(true);
-		await startUpload([resumeFile]);
-		await startUpload([applicationFile]);
-		setLoading(false);
-		setDialogVisible(true);
+
+		try {
+			const resumeUpload = await startUpload([resumeFile]);
+			const applicationUpload = await startUpload([applicationFile]);
+
+			if (resumeUpload && applicationUpload) {
+				const uploadedFiles = [...resumeUpload, ...applicationUpload].map((file) => ({
+					name: file.name,
+					url: file.url,
+				}));
+
+				// Append uploaded file information to formData
+				props.formData.append("resume_name", uploadedFiles[0].name);
+				props.formData.append("resume_url", uploadedFiles[0].url);
+				props.formData.append("letter_name", uploadedFiles[1].name);
+				props.formData.append("letter_url", uploadedFiles[1].url);
+
+				// Call the submission handler with formData
+				props.handleSubmit(props.formData);
+
+				toast({
+					title: "Files uploaded successfully!",
+					description: "Your files have been uploaded successfully",
+				});
+			}
+		} catch (error) {
+			if (error instanceof Error) {
+				toast({
+					title: "Upload Error",
+					description: error.message,
+				});
+			} else {
+				toast({
+					title: "Upload Error",
+					description: "An unknown error occurred.",
+				});
+			}
+		} finally {
+			setLoading(false);
+			setDialogVisible(true);
+		}
 	};
 
 	const dialogClose = () => {
 		setDialogVisible(false);
 		router.push("/");
 	};
+
 	return (
 		<>
 			<form onSubmit={handleSubmit}>

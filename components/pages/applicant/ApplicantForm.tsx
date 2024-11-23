@@ -1,12 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
-import { ConfirmationModal } from "~/components/ConfirmationModal";
-import { AlertDialogAction } from "~/components/ui/alert-dialog";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
-import { Label } from "~/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Input } from "~/components/ui/input";
 import {
 	Select,
 	SelectContent,
@@ -14,28 +10,38 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "~/components/ui/select";
-import { Input } from "~/components/ui/input";
 
 interface ChildFormProps {
 	setCurrent: Dispatch<SetStateAction<string>>;
 	setFormData: Dispatch<SetStateAction<FormData>>;
+	formData: FormData;
 }
 
-const ApplicantForm: React.FC<ChildFormProps> = (props) => {
+const ApplicantForm: React.FC<ChildFormProps> = ({ setCurrent, setFormData, formData }) => {
 	const formRef = useRef<HTMLFormElement>(null);
-	const [formData, setFormData] = useState<FormData>(new FormData());
+	const [localFormData, setLocalFormData] = useState<FormData>(formData);
+
+	useEffect(() => {
+		setLocalFormData(formData);
+	}, [formData]);
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+		const { name, value } = e.target;
+		setLocalFormData((prevData) => {
+			const newFormData = new FormData();
+			prevData.forEach((val, key) => {
+				newFormData.append(key, key === name ? value : (val as string));
+			});
+			return newFormData;
+		});
+	};
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (formRef.current) {
 			const formData = new FormData(formRef.current);
-
-			formData.forEach((value, key) => {
-				console.log(key, value);
-			});
 			setFormData(formData);
-			props.setCurrent("document");
-			props.setFormData(formData);
+			setCurrent("document");
 		}
 	};
 
