@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Card } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import { Chart } from "~/components/pages/authenticated/dashboard/Chart";
+import FirstPieChart from "~/components/pages/authenticated/dashboard/FirstPieChart";
+import SecondPieChart from "~/components/pages/authenticated/dashboard/SecondPieChart";
 import { getAllApplicantForm } from "~/controller/ApplicantFormController";
 import { getAllJobRequest } from "~/controller/JobRequestController";
 import Banner from "~/public/images/banner.png";
@@ -24,6 +26,10 @@ type UsersByMonthAndYear = {
 	[key: string]: {
 		[key: number]: number; // Where key is the year, and the value is an array of 12 numbers (one for each month)
 	};
+};
+
+type AllApplications = {
+	[key in string]: number;
 };
 
 export default async function DashboardPage() {
@@ -71,6 +77,42 @@ export default async function DashboardPage() {
 
 	const newHire = results.filter((result) => result.allStagesPassed === true);
 
+	const departmentApplications = applicants.reduce((acc, applicant) => {
+		const department = applicant.selected_department;
+		if (department) {
+			// Exclude null values
+			if (!acc[department]) {
+				acc[department] = 0;
+			}
+			acc[department]++;
+		}
+		return acc;
+	}, {} as AllApplications);
+
+	const departmentApplicationsData = Object.keys(departmentApplications).map(
+		(department: any) => ({
+			label: department,
+			value: departmentApplications[department] ?? 0, // Provide a default value of 0 if undefined
+		})
+	);
+
+	const officeApplications = applicants.reduce((acc, applicant) => {
+		const office = applicant.selected_office;
+		if (office) {
+			// Exclude null values
+			if (!acc[office]) {
+				acc[office] = 0;
+			}
+			acc[office]++;
+		}
+		return acc;
+	}, {} as AllApplications);
+
+	const officeApplicationsData = Object.keys(officeApplications).map((office: any) => ({
+		label: office,
+		value: officeApplications[office] ?? 0, // Provide a default value of 0 if undefined
+	}));
+
 	return (
 		<section>
 			<header className="relative h-[94px]">
@@ -91,7 +133,16 @@ export default async function DashboardPage() {
 					/>
 					<DisplayCard svg={<NewHires />} count={newHire.length} label="New Hires" />
 				</div>
-
+				<div className="mt-8 flex gap-5">
+					<div className="w-1/2">
+						<h2 className="text-center">Applications by Department</h2>
+						<FirstPieChart data={departmentApplicationsData} />
+					</div>
+					<div className="w-1/2">
+						<h2 className="text-center">Applications by Office</h2>
+						<SecondPieChart data={officeApplicationsData} />
+					</div>
+				</div>
 				<Card>
 					<Chart chartData={chartData} />
 				</Card>

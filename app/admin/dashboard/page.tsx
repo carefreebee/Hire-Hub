@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { AdminChart } from "~/components/pages/admin/dashboard/AdminChart";
 import { Card } from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import { getAllJobRequest } from "~/controller/JobRequestController";
 import {
 	getAllUsers,
 	getAllUsersFromDepartment,
@@ -30,11 +31,18 @@ type UsersByMonthAndYear = {
 	};
 };
 
+type JobStatus = "pending" | "approved" | "denied" | "Unknown";
+
+type JobRequestStatuses = {
+	[key in JobStatus]?: number;
+};
+
 export default async function AdminDashboardPage() {
 	const users = await getAllUsers();
 	const newUserLogin = await getUsersByUserRole();
 	const departmentUsers = await getAllUsersFromDepartment();
 	const officeUsers = await getAllUsersFromOffice();
+	const jobRequests = await getAllJobRequest();
 
 	const usersByMonthAndYear: UsersByMonthAndYear = {};
 
@@ -86,7 +94,6 @@ export default async function AdminDashboardPage() {
 					/>
 					<DisplayCard svg={<Office />} count={officeUsers.length} label="Office" />
 				</div>
-
 				<Card>
 					<AdminChart chartData={totalUsers} />
 				</Card>
