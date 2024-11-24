@@ -63,9 +63,15 @@ export default function SchedulePage() {
 					return null;
 				})
 			)
-			.filter((event) => event !== null)
+			.filter(
+				(
+					event
+				): event is { stageName: string; stageDate: Date; applicant: ApplicantSelect } =>
+					event !== null
+			)
 			.sort((a, b) => a!.stageDate!.getTime() - b!.stageDate!.getTime());
 	}, [filteredApplicants, selectedDate]);
+
 
 	return (
 		<div className="flex flex-col p-6">
