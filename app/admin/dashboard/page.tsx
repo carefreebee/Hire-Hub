@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { AdminChart } from "~/components/pages/admin/dashboard/AdminChart";
-import FirstPieChart from "~/components/pages/admin/dashboard/FirstPieChart";
 import { Card } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import { getAllJobRequest } from "~/controller/JobRequestController";
 import {
@@ -75,20 +74,6 @@ export default async function AdminDashboardPage() {
 		};
 	});
 
-	const jobRequestStatuses = jobRequests.reduce((acc: JobRequestStatuses, request) => {
-		const status: JobStatus = request.job_status || "Unknown";
-		if (!acc[status]) {
-			acc[status] = 0;
-		}
-		acc[status]++;
-		return acc;
-	}, {} as JobRequestStatuses);
-
-	const jobRequestStatusData = Object.keys(jobRequestStatuses).map((status) => ({
-		label: status,
-		value: jobRequestStatuses[status as JobStatus] ?? 0,
-	}));
-
 	return (
 		<section>
 			<header className="relative h-[94px]">
@@ -108,16 +93,6 @@ export default async function AdminDashboardPage() {
 						label="Department"
 					/>
 					<DisplayCard svg={<Office />} count={officeUsers.length} label="Office" />
-				</div>
-				<div className="mt-8 flex gap-5">
-					<div className="w-1/2">
-						<h2 className="text-center">Job Listing Request Statuses</h2>
-						<FirstPieChart data={jobRequestStatusData} />
-					</div>
-					<div className="w-1/2">
-						<h2 className="text-center">Users by Roles</h2>
-						{/* <PieChart data={rolesData} /> */}
-					</div>
 				</div>
 				<Card>
 					<AdminChart chartData={totalUsers} />

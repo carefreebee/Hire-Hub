@@ -1,6 +1,13 @@
 "use client";
 
-import { Cell, Legend, Pie, PieChart as RechartsPieChart, ResponsiveContainer } from "recharts";
+import {
+	Cell,
+	Legend,
+	Pie,
+	PieChart as RechartsPieChart,
+	ResponsiveContainer,
+	Tooltip,
+} from "recharts";
 
 const COLORS = [
 	"#0088FE",
@@ -17,9 +24,23 @@ interface PieChartProps {
 	data: { label: string; value: number }[];
 }
 
+const renderLegend = (props: any) => {
+	const { payload } = props;
+	return (
+		<ul>
+			{payload.map((entry: any, index: number) => (
+				<li key={`item-${index}`} className="flex items-center">
+					<div className="mr-2 h-3 w-3" style={{ backgroundColor: entry.color }}></div>
+					{entry.value}: {entry.payload.value}
+				</li>
+			))}
+		</ul>
+	);
+};
+
 export default function FirstPieChart({ data }: PieChartProps) {
 	return (
-		<ResponsiveContainer width="100%" height={400}>
+		<ResponsiveContainer width="100%" height={500}>
 			<RechartsPieChart>
 				<Pie
 					data={data}
@@ -34,8 +55,9 @@ export default function FirstPieChart({ data }: PieChartProps) {
 					{data.map((entry, index) => (
 						<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
 					))}
-					<Legend verticalAlign="top" height={36} />
 				</Pie>
+				<Tooltip />
+				<Legend content={renderLegend} />
 			</RechartsPieChart>
 		</ResponsiveContainer>
 	);

@@ -1,3 +1,4 @@
+import { CircleCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "~/components/ui/button";
@@ -163,11 +164,15 @@ const DocumentForm: React.FC<ChildFormProps> = (props) => {
 
 			{dialogVisible && (
 				<Dialog open={dialogVisible} onOpenChange={dialogClose}>
-					<DialogContent className="sm:max-h-[100px] sm:max-w-[425px]">
+					<DialogContent className="sm:max-h-[120px] sm:max-w-[425px]">
 						<DialogHeader>
 							<DialogTitle>
-								<div className="flex">
-									<div></div>
+								<div className="flex items-center gap-2">
+									<div>
+										<div className="bg-gray p-1">
+											<CircleCheck size={32} />
+										</div>
+									</div>
 									Sucessfully Submitted!
 								</div>
 							</DialogTitle>
