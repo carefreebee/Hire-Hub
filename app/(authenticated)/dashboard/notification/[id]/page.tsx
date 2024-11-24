@@ -2,12 +2,28 @@
 
 import { useState, useEffect } from "react";
 import { getCurrentUser } from "~/actions/actions";
+import { formatDistanceToNow } from "date-fns";
 
-// Dummy notification data
 const dummyNotifications = [
 	{
 		message: "Hi {user}, your notification message goes here",
-		time: "2024-11-24 09:00 AM",
+		time: "2024-11-24T23:19:00+15:55",
+	},
+	{
+		message: "Hi {user}, your notification message goes here",
+		time: "2024-10-24T09:00:00.000Z",
+	},
+	{
+		message: "Hi {user}, your notification message goes here",
+		time: "2024-11-23T09:00:00.000Z",
+	},
+	{
+		message: "Hi {user}, your notification message goes here",
+		time: "2024-11-24T23:19:00+15:55",
+	},
+	{
+		message: "Hi {user}, your notification message goes here",
+		time: "2024-11-23T23:19:00+15:55",
 	},
 ];
 
@@ -27,21 +43,29 @@ export default function NotificationPage() {
 		fetchCurrentUser();
 	}, []);
 
-	const notificationsToDisplay = user
-		? dummyNotifications.map((notif) => ({
-				...notif,
-				message: notif.message.replace("{user}", `${user.firstName} ${user.lastName}`),
-			}))
-		: [];
+		const notificationsToDisplay = user
+			? dummyNotifications
+					.map((notif) => ({
+						...notif,
+						message: notif.message.replace(
+							"{user}",
+							`${user.firstName} ${user.lastName}`
+						),
+						formattedTime: formatDistanceToNow(new Date(notif.time), {
+							addSuffix: true,
+						}),
+					}))
+					.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()) // Sort notifications by time (newest first)
+			: [];
 
 	return (
-		<div className="bg-slate-200/30 flex min-h-screen flex-col">
+		<div className="flex min-h-screen flex-col bg-slate-200/30">
 			<div className="ml-8 mt-6">
 				<h1 className="text-gray-800 text-3xl font-semibold">Notifications</h1>
 			</div>
 
 			<div className="max-w-7xl flex-1 overflow-y-auto px-8 py-6">
-				<div className="space-y-4">
+				<div className="space-y-2">
 					{notificationsToDisplay.length === 0 ? (
 						<div className="text-gray-500 text-center">
 							No notifications at the moment.
@@ -50,17 +74,21 @@ export default function NotificationPage() {
 						notificationsToDisplay.map((notif, index) => (
 							<div
 								key={index}
-								className="hover:bg-slate-100 hover:bg-slate-100 rounded-md border bg-white p-4 transition-all duration-200"
+								className="rounded-md border bg-white p-4 transition-all duration-200 hover:bg-slate-100"
 							>
 								<div className="flex items-center space-x-3">
-									<div className="bg-gray-400 flex h-10 w-10 items-center justify-center rounded-full text-lg text-white">
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 text-lg text-white">
 										<span className="font-bold">
 											{user ? user.firstName[0] : "U"}
 										</span>
 									</div>
 									<div className="flex-1">
 										<p className="text-sm font-semibold">{notif.message}</p>
-										<p className="text-gray-500 text-xs">{notif.time}</p>
+									</div>
+									<div className="ml-auto">
+										<p className="text-gray-500 text-xs">
+											{notif.formattedTime}
+										</p>
 									</div>
 								</div>
 							</div>
