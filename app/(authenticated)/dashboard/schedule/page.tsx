@@ -18,6 +18,7 @@ export default function SchedulePage() {
 		fetchApplicants();
 	}, []);
 
+
 	const filterApplicantsByDate = useCallback(
 		(date: Date | undefined) => {
 			if (!date) return applicants;
@@ -44,40 +45,6 @@ export default function SchedulePage() {
 		[selectedDate, filterApplicantsByDate]
 	);
 
-	return (
-		<div className="flex flex-col p-6">
-			<div className="mb-6 flex items-center justify-between">
-				<h1 className="text-2xl font-bold">Schedule</h1>
-				<p className="text-gray-500">
-					{selectedDate ? format(selectedDate, "MMMM d, yyyy") : "Select a date"}
-				</p>
-			</div>
-
-			<div className="grid grid-cols-3 gap-6">
-				<div className="col-span-2 rounded border bg-white p-4 shadow">
-					<WeekView selectedDate={selectedDate} filteredApplicants={filteredApplicants} />
-				</div>
-
-				<div className="col-span-1 flex flex-col space-y-4">
-					<CalendarSection selectedDate={selectedDate} onDateChange={setSelectedDate} />
-					<EventDetails
-						selectedDate={selectedDate}
-						filteredApplicants={filteredApplicants}
-					/>
-				</div>
-			</div>
-		</div>
-	);
-}
-
-function WeekView({
-	selectedDate,
-	filteredApplicants,
-}: {
-	selectedDate: Date | undefined;
-	filteredApplicants: ApplicantSelect[];
-}) {
-	// Memoize events for better performance
 	const events = useMemo(() => {
 		return filteredApplicants
 			.flatMap((applicant) =>
@@ -101,6 +68,37 @@ function WeekView({
 	}, [filteredApplicants, selectedDate]);
 
 	return (
+		<div className="flex flex-col p-6">
+			<div className="mb-6 flex items-center justify-between">
+				<h1 className="text-2xl font-bold">Schedule</h1>
+				<p className="text-gray-500">
+					{selectedDate ? format(selectedDate, "MMMM d, yyyy") : "Select a date"}
+				</p>
+			</div>
+
+			<div className="grid grid-cols-3 gap-6">
+				{/* Main content: Day View, Calendar, and Event Details */}
+				<div className="col-span-2 rounded border bg-white p-4 shadow">
+					<DayView selectedDate={selectedDate} events={events} />
+				</div>
+
+				<div className="col-span-1 flex flex-col space-y-4">
+					<CalendarSection selectedDate={selectedDate} onDateChange={setSelectedDate} />
+					<EventDetails selectedDate={selectedDate} events={events} />
+				</div>
+			</div>
+		</div>
+	);
+}
+
+function DayView({
+	selectedDate,
+	events,
+}: {
+	selectedDate: Date | undefined;
+	events: { stageName: string; stageDate: Date; applicant: ApplicantSelect }[];
+}) {
+	return (
 		<div>
 			<p className="text-gray-500 text-sm">
 				{selectedDate ? format(selectedDate, "MMMM d") : "Select a date"}
@@ -118,7 +116,6 @@ function WeekView({
 								hour < 12 ? "AM" : "PM"
 							}`}</span>
 							{eventsAtHour.map((event, idx) => {
-								if (!event) return null;
 								const endTime = new Date(
 									event.stageDate.getTime() + 60 * 60 * 1000
 								);
@@ -167,34 +164,11 @@ function CalendarSection({
 
 function EventDetails({
 	selectedDate,
-	filteredApplicants,
+	events,
 }: {
 	selectedDate: Date | undefined;
-	filteredApplicants: ApplicantSelect[];
+	events: { stageName: string; stageDate: Date; applicant: ApplicantSelect }[];
 }) {
-	// Memoize events for better performance
-	const events = useMemo(() => {
-		return filteredApplicants
-			.flatMap((applicant) =>
-				Object.entries(applicant.stages || {}).map(([stageName, stage]) => {
-					const stageDate =
-						stage && "date" in stage ? new Date(stage.date as string) : null;
-					if (stageDate) {
-						const isSameDay =
-							stageDate.getDate() === selectedDate?.getDate() &&
-							stageDate.getMonth() === selectedDate?.getMonth() &&
-							stageDate.getFullYear() === selectedDate?.getFullYear();
-						if (isSameDay) {
-							return { stageName, stageDate, applicant };
-						}
-					}
-					return null;
-				})
-			)
-			.filter((event) => event !== null)
-			.sort((a, b) => a!.stageDate!.getTime() - b!.stageDate!.getTime());
-	}, [filteredApplicants, selectedDate]);
-
 	return (
 		<div className="max-h-96 overflow-y-auto rounded border bg-white p-4 shadow">
 			<h2 className="mb-4 text-lg font-bold">Calendar Details</h2>
@@ -202,8 +176,8 @@ function EventDetails({
 				{selectedDate ? format(selectedDate, "EEEE, MMMM d, yyyy") : "Select a date"}
 			</p>
 			{events.map((event, idx) => {
-				if (!event || !event.stageDate) return null; // Skip if no valid date
-				const endTime = new Date(event.stageDate.getTime() + 60 * 60 * 1000); // 1 hour duration
+				if (!event || !event.stageDate) return null;
+				const endTime = new Date(event.stageDate.getTime() + 60 * 60 * 1000);
 				return (
 					<div key={idx} className="mb-2 w-full rounded bg-yellow-100 p-2 shadow">
 						<h3 className="font-bold">
