@@ -1,5 +1,6 @@
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
 	Dialog,
 	DialogContent,
@@ -13,12 +14,45 @@ import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 
 function TeachingDemoModal() {
-	const jobfit = [{ factor: "Experience" }, { factor: "Competence" }, { factor: "Contribution" }];
-	const cultureadd = [
-		{ factor: "Culture of Excellence" },
-		{ factor: "Integrity" },
-		{ factor: "Teamwork" },
-		{ factor: "Universality" },
+	const sections = [
+		{
+			title: "A. PERSONALITY",
+			items: [
+				"Grooming is commendable.",
+				"Voice modulation and proper pacing are observed.",
+				"Composure, confidence and poise are well executed.",
+				"Articulation and mastery of medium of instruction are demonstrated.",
+				"Maintains good rapport with students.",
+			],
+		},
+		{
+			title: "B. PREPARATION",
+			items: [
+				"Instructional objectives for the session are evident.",
+				"Board notes, sketches and diagrams are legible and well-organized.",
+				"Appropriateness of visual aids, handouts and other teaching devices are observed.",
+			],
+		},
+		{
+			title: "C. TEACHING PROCESS",
+			items: [
+				"Motivational skills are demonstrated.",
+				"Organizational / logical sequencing of topics is evident.",
+				"Demonstrates mastery of the subject matter.",
+				"Methodology, techniques or strategies are appropriate.",
+				"Demonstrates ability to relate subject matters to other fields.",
+			],
+		},
+		{
+			title: "D. COMMUNICATION SKILLS",
+			items: [
+				"Pauses for questions, commands or directions.",
+				"Uses language for a variety of purposes.",
+				"Initiates questions to encourage discussion.",
+				"Demonstrates appropriate sentence structure.",
+				"Demonstrates adequate vocabulary.",
+			],
+		},
 	];
 	return (
 		<Dialog>
@@ -27,72 +61,48 @@ function TeachingDemoModal() {
 			</DialogTrigger>
 			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
 				<DialogHeader className="flex items-center">
-					<DialogTitle>JOB-FIT & CULTURE-ADD INTERVIEW</DialogTitle>
-					<DialogDescription>
-						CIT-HRD-FRM-B003-V01 Job-Fit & Culture-Add Interview
-					</DialogDescription>
-					<div className="flex w-full items-center gap-64">
+					<DialogTitle>TEACHING DEMONSTRATION RATING SCALE</DialogTitle>
+					<DialogDescription></DialogDescription>
+					<div className="flex w-full flex-col items-center gap-4">
 						<div className="flex w-full flex-col items-center justify-center gap-2">
 							<div className="flex w-full items-center gap-2 text-xs">
-								<div className="w-[60%]">Applicant&apos;s Name: </div>
+								<div>Applicant&apos;s Name: </div>
 								<Input
 									name="name"
 									type="text"
 									minLength={2}
 									maxLength={100}
 									required
-									className="h-8"
-								/>
-							</div>
-							<div className="flex w-full items-center gap-2 text-xs">
-								<div className="w-[60%]">Position Desired: </div>
-								<Input
-									name="name"
-									type="text"
-									minLength={2}
-									maxLength={100}
-									required
-									className="h-8"
-								/>
-							</div>
-							<div className="flex w-full items-center gap-2 text-xs">
-								<div className="w-[60%]">Department/Office: </div>
-								<Input
-									name="dept/office"
-									type="text"
-									minLength={2}
-									maxLength={100}
-									required
-									className="h-8"
+									className="h-8 w-96"
 								/>
 							</div>
 						</div>
 
-						<div className="flex w-full flex-col gap-2">
-							<div className="flex w-full items-center justify-end gap-2 text-xs">
-								<div className="w-[40%]">Job-Fit </div>
-								<Input
-									name="dept/office"
-									type="text"
-									minLength={2}
-									maxLength={100}
-									required
-									className="h-8 w-24"
-								/>
-							</div>
-							<div className="flex w-full items-center justify-end gap-2 text-xs">
-								<div className="w-[40%]">Culture-Add </div>
-								<Input
-									name="dept/office"
-									type="text"
-									minLength={2}
-									maxLength={100}
-									required
-									className="h-8 w-24"
-								/>
-							</div>
-							<div className="flex w-full items-center justify-end gap-2 text-xs">
-								<div className="w-[40%]">Initial Interview Rating </div>
+						<div className="flex w-full gap-2">
+							<div className="flex w-full items-center gap-2 text-xs">
+								<div className="flex w-full items-center gap-2 text-xs">
+									<div>Topic: </div>
+									<Input
+										name="name"
+										type="text"
+										minLength={2}
+										maxLength={100}
+										required
+										className="h-8"
+									/>
+								</div>
+								<div className="flex w-full items-center gap-2 text-xs">
+									<div>Department/Office: </div>
+									<Input
+										name="dept/office"
+										type="text"
+										minLength={2}
+										maxLength={100}
+										required
+										className="h-8"
+									/>
+								</div>
+								<div>Date </div>
 								<Input
 									name="dept/office"
 									type="text"
@@ -109,144 +119,74 @@ function TeachingDemoModal() {
 					<div className="mb-4 flex items-center justify-center bg-gray font-bold">
 						JOB-FIT INTERVIEW
 					</div>
-					<table className="border-gray-300 mb-4 w-full table-auto border-collapse border text-left text-sm">
-						<thead className="bg-gray-100">
-							<tr>
-								<th className="border-gray-300 border px-4 py-2">Factor</th>
-								<th className="border-gray-300 border px-4 py-2">Question</th>
-								<th className="border-gray-300 border px-4 py-2">Response/s</th>
-								<th className="border-gray-300 border px-4 py-2">Rating</th>
-							</tr>
-						</thead>
-						<tbody>
-							{jobfit.map((row, index) => (
-								<tr key={index} className="border-b">
-									<td className="border-gray-300 border px-4 py-2">
-										{row.factor}
-									</td>
-									<td className="border-gray-300 flex items-center space-x-2 border px-4 py-2">
-										<select className="border-gray-300 w-[20%] rounded border p-1">
-											<option>Select</option>
-											<option>Question 1</option>
-											<option>Question 2</option>
-										</select>
-										<Input
-											type="text"
-											className="border-gray-300 h-auto w-[90%] text-wrap rounded border p-1"
-											placeholder=""
-											readOnly
-										/>
-									</td>
-									<td className="border-gray-300 border px-4 py-2">
-										<Input
-											type="text"
-											className="border-gray-300 w-[100%] rounded border p-1"
-											placeholder=""
-										/>
-									</td>
-									<td className="border-gray-300 border px-4 py-2">
-										<select className="border-gray-300 w-full rounded border p-1">
-											<option>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
-											<option>5</option>
-										</select>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-					<div className="mb-4 flex items-center justify-center bg-gray font-bold">
-						CULTURE-ADD INTERVIEW
+					<div className="flex items-center justify-between">
+						(1) Strongly Disagree: Considerable and urgent improvement needed.
+						<div>(3) Agree: Meets the expectation with minor improvement.</div>
 					</div>
-					<table className="border-gray-300 mb-4 w-full table-auto border-collapse border text-left text-sm">
-						<thead className="bg-gray-100">
-							<tr>
-								<th className="border-gray-300 border px-4 py-2">Factor</th>
-								<th className="border-gray-300 border px-4 py-2">Question</th>
-								<th className="border-gray-300 border px-4 py-2">Response/s</th>
-								<th className="border-gray-300 border px-4 py-2">Rating</th>
-							</tr>
-						</thead>
-						<tbody>
-							{cultureadd.map((row, index) => (
-								<tr key={index} className="border-b">
-									<td className="border-gray-300 border px-4 py-2">
-										{row.factor}
-									</td>
-									<td className="border-gray-300 flex items-center space-x-2 border px-4 py-2">
-										<select className="border-gray-300 w-[20%] rounded border p-1">
-											<option>Select</option>
-											<option>Question 1</option>
-											<option>Question 2</option>
-										</select>
-										<Input
-											type="text"
-											className="border-gray-300 h-auto w-[90%] text-wrap rounded border p-1"
-											placeholder=""
-											readOnly
-										/>
-									</td>
-									<td className="border-gray-300 border px-4 py-2">
-										<Input
-											type="text"
-											className="border-gray-300 w-[100%] rounded border p-1"
-											placeholder=""
-										/>
-									</td>
-									<td className="border-gray-300 border px-4 py-2">
-										<select className="border-gray-300 w-full rounded border p-1">
-											<option>1</option>
-											<option>2</option>
-											<option>3</option>
-											<option>4</option>
-											<option>5</option>
-										</select>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-					<table className="border-gray-300 mb-4 w-full table-auto border-collapse border text-left text-sm">
-						<thead className="bg-gray-100">
-							<tr>
-								<th className="border-gray-300 border px-4 py-2">
-									Consideration/s
-								</th>
-								<th className="border-gray-300 border px-4 py-2">Question/s</th>
-								<th className="border-gray-300 border px-4 py-2">Response/s</th>
-							</tr>
-						</thead>
-						<tbody>
-							<td className="border-gray-300 border px-4 py-2">
-								<Textarea placeholder="Type your message here." />
-							</td>
-							<td className="border-gray-300 flex items-center space-x-2 border px-4 py-2">
-								<Textarea placeholder="Type your message here." />
-							</td>
-							<td className="border-gray-300 border px-4 py-2">
-								<Textarea placeholder="Type your message here." />
-							</td>
-						</tbody>
-					</table>
-					<div className="flex w-[95%] items-center justify-between">
-						<div className="flex gap-2 self-start">
-							Expected Monthly Salary:
-							<Input
-								type="text"
-								className="border-gray-300 h-6 w-[15%] rounded border p-1"
-								placeholder=""
-							/>
-						</div>
+					<div className="flex items-center justify-between">
+						(2) Disagree: Major improvement is needed.
+						<div>(4) Strongly Agree: Exceeds expectation with slight improvement.</div>
+					</div>
+					<form className="space-y-8 p-4">
+						{sections.map((section, sectionIndex) => (
+							<div key={sectionIndex}>
+								<h2 className="mb-4 text-lg font-bold">{section.title}</h2>
+								{section.items.map((item, itemIndex) => (
+									<div
+										key={itemIndex}
+										className="mb-2 grid grid-cols-[auto_1fr_auto] items-center gap-x-4"
+									>
+										<span className="text-sm">{itemIndex + 1}.</span>
+										<label className="flex-1 text-sm">{item}</label>
+										<div className="flex w-56 justify-between">
+											{[1, 2, 3, 4].map((rating) => (
+												<label
+													key={rating}
+													className="flex items-center space-x-1"
+												>
+													<Checkbox
+														name={`rating-${sectionIndex}-${itemIndex}`}
+													/>
+													<span className="text-sm">{rating}</span>
+												</label>
+											))}
+										</div>
+									</div>
+								))}
+							</div>
+						))}
 						<div>
-							Recommendations:
-							<Textarea placeholder="Type your message here." className="w-[350px]" />
+							<h2 className="mb-4 text-lg font-bold">Overall Rating</h2>
+							<div className="grid grid-cols-[1fr_auto] items-center gap-x-4">
+								<label className="flex-1 text-sm">
+									Rate the overall performance:
+								</label>
+								<div className="flex w-56 justify-between">
+									{[1, 2, 3, 4].map((rating) => (
+										<label key={rating} className="flex items-center space-x-1">
+											<Checkbox name="overall-rating" />
+											<span className="text-sm">{rating}</span>
+										</label>
+									))}
+								</div>
+							</div>
 						</div>
+					</form>
+
+					<div className="mb-4 flex items-center justify-center bg-gray font-bold">
+						Comments
 					</div>
+
+					<Textarea
+						name="comments"
+						className="h-24"
+						placeholder="Enter comments here..."
+					/>
+					<Button type="submit">Submit</Button>
 					<div className="flex flex-col">
-						Evaluated by:
-						<div>Interviewer&apos;s Name: Random Name | Role</div>
+						<div>Assessor: Random Name | Role</div>
+
+						<div>Date: </div>
 					</div>
 				</div>
 			</DialogContent>
