@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "~/components/ui/button";
 import {
 	NonTeachingStaff,
 	SelectedCategoryTeachingStaff,
@@ -33,15 +34,24 @@ export default async function AssessorHeader({ id }: { id: string }) {
 		filteredStages = STAGES.filter((stage) => stage.name !== "Teaching Demo");
 	}
 
+	const evaluateRole = () =>
+		user?.role === "dean" ||
+		user?.role === "department_chair" ||
+		user?.role === "recruitment_officer" ||
+		user?.role === "hr_head" ||
+		user?.role === "vp_acad_affairs" ||
+		user?.role === "vp_administration" ||
+		user?.role === "univ_president";
+
 	const isRole = () =>
 		user?.role === "dean" ||
 		user?.role === "department_chair" ||
 		user?.role === "recruitment_officer";
 
 	return (
-		<header className="w-80%">
-			<section className="flex">
-				<div className="my-5 flex flex-1 items-center gap-2">
+		<header className="w-full">
+			<section className="flex w-full justify-between">
+				<div className="my-5 flex items-center gap-2">
 					<div>
 						<TypographySmall className="font-semibold">Department</TypographySmall>
 					</div>
@@ -55,7 +65,7 @@ export default async function AssessorHeader({ id }: { id: string }) {
 						</TypographySmall>
 					</div>
 				</div>
-				<div className="flex flex-1 items-center gap-2">
+				<div className="flex items-center gap-2">
 					<div>
 						<TypographySmall className="font-medium">Applied as:</TypographySmall>
 					</div>
@@ -70,6 +80,18 @@ export default async function AssessorHeader({ id }: { id: string }) {
 								: NonTeachingStaff}
 						</TypographySmall>
 					</div>
+				</div>
+				<div className="flex items-center gap-2">
+					{evaluateRole() && (
+						<Button>
+							<Link
+								href={`/dashboard/applicant/${id}/stages/${user?.role}/evaluate`}
+								className="px-2 py-2 text-sm font-medium"
+							>
+								Evaluate
+							</Link>
+						</Button>
+					)}
 				</div>
 			</section>
 

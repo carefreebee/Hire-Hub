@@ -1,8 +1,5 @@
-import { useState, useCallback, useEffect, Dispatch, SetStateAction } from "react";
 import { useDropzone } from "@uploadthing/react";
-import { toast } from "~/components/ui/use-toast";
-import { Button } from "~/components/ui/button";
-import { useUploadThing } from "~/util/uploadthing";
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from "react";
 
 interface ChildFormProps {
 	setResumeFile: Dispatch<SetStateAction<File | null>>;
@@ -30,7 +27,7 @@ const CVupload: React.FC<ChildFormProps> = (props) => {
 	return (
 		<div>
 			<div>
-				<h1 className="mb-5 text-black">Upload Application Letter</h1>
+				<h1 className="mb-5 text-black">Upload CV/Resume Letter</h1>
 			</div>
 
 			<div
