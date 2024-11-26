@@ -34,7 +34,7 @@ function TeachingDemoModal() {
 					<div className="flex w-full items-center gap-64">
 						<div className="flex w-full flex-col items-center justify-center gap-2">
 							<div className="flex w-full items-center gap-2 text-xs">
-								<div className="w-[60%]">Applicant's Name: </div>
+								<div className="w-[60%]">Applicant&apos;s Name: </div>
 								<Input
 									name="name"
 									type="text"
@@ -246,7 +246,7 @@ function TeachingDemoModal() {
 					</div>
 					<div className="flex flex-col">
 						Evaluated by:
-						<div>Interviewer's Name: Random Name | Role</div>
+						<div>Interviewer&apos;s Name: Random Name | Role</div>
 					</div>
 				</div>
 			</DialogContent>
