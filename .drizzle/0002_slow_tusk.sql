@@ -1,0 +1,1 @@
+ALTER TABLE "rating_forms" ALTER COLUMN "rate" SET DATA TYPE jsonb;
