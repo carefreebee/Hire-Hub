@@ -74,9 +74,9 @@ async function RatingFormDisplay({ applicantId, ratingFormId, document }: Rating
 	return (
 		<>
 			{ratingForms &&
-				ratingForms.map((ratingForm) => (
+				ratingForms.map((ratingForm, index) => (
 					<Button
-						key={ratingForm.rate}
+						key={String(ratingForm.rate || index)}
 						variant={"outline"}
 						asChild
 						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
