@@ -32,19 +32,51 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 		user?.role === "recruitment_officer";
 
 	return (
-		<header className="w-80%">
-			<section className="flex">
-				<div className="my-5 flex flex-1 items-center gap-2">
-					<div>
-						<TypographySmall className="text-center text-xl font-semibold">
-							Applicant Evaluation
+		<header className="w-[100%]">
+			<section className="my-5">
+				<div className="mb-4 text-center">
+					<TypographySmall className="text-xl font-semibold">
+						Applicant Evaluation
+					</TypographySmall>
+				</div>
+
+				<div className="flex items-center justify-between gap-4">
+					<div className="flex items-center gap-2">
+						<TypographySmall className="font-semibold">Department:</TypographySmall>
+						<TypographySmall
+							size={"sm"}
+							variant={"outline"}
+							className="font-medium shadow-md"
+						>
+							{applicant?.selected_department || applicant?.selected_office}
+						</TypographySmall>
+					</div>
+
+					<div className="flex items-center gap-2">
+						<TypographySmall className="font-semibold">Applied as:</TypographySmall>
+						<TypographySmall
+							size={"sm"}
+							variant={"outline"}
+							className="font-medium shadow-md"
+						>
+							{applicant!.positionType === SelectedCategoryTeachingStaff
+								? TeachingStaff
+								: NonTeachingStaff}
 						</TypographySmall>
 					</div>
 				</div>
 			</section>
 
 			<div>
-				<ul className="grid grid-cols-3 rounded-lg border shadow-md">
+				<ul className="grid grid-cols-6 rounded-lg border shadow-md">
+					{isRole() && (
+						<Link
+							href={`/dashboard/evaluate/${id}/${user?.role}/screening`}
+							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
+						>
+							Screening
+						</Link>
+					)}
 					{isRole() && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/initial-interview`}
@@ -61,12 +93,29 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 							Teaching Demo
 						</Link>
 					)}
+
+					{isRole() && (
+						<Link
+							href={`/dashboard/evaluate/${id}/${user?.role}/psychological-exam`}
+							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
+						>
+							Psychological Exam
+						</Link>
+					)}
 					{isRole() && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/panel-interview`}
 							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
 						>
 							Panel Interview
+						</Link>
+					)}
+					{isRole() && (
+						<Link
+							href={`/dashboard/evaluate/${id}/${user?.role}/recommendation-for-hiring`}
+							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
+						>
+							Recommendation
 						</Link>
 					)}
 				</ul>
