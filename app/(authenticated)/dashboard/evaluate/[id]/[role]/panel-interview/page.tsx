@@ -1,163 +1,145 @@
-import { Button } from "~/components/ui/button";
+import { Suspense } from "react";
 import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "~/components/ui/dialog";
+	Card,
+	CardContent,
+	CardHeader,
+	CardSubContent,
+	CardTitle,
+	CardTopLeftSubContent,
+} from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
+import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
+import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
+import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
+import {
+	DeptOrOfficeComponent,
+	DeptOrOfficeFooter,
+} from "~/components/pages/authenticated/stages/DeptOrOffice";
+import {
+	DisplayAssessedBy,
+	DisplayFooter,
+	DisplayMode,
+} from "~/components/pages/authenticated/stages/HigherUp";
+import { TypographySmall } from "~/components/ui/typography-small";
+import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";
+import { getUsersWithoutUserRoles } from "~/controller/UsersController";
+import { validateRequest } from "~/lib/auth";
+import { User } from "~/lib/schema";
+import { RatingFormWithUserData, ResumeProps } from "~/types/types";
+import { GetCurrentStage } from "~/util/get-current-stage";
+import PanelInterViewModal from "./panel-interview-modal";
 
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+const currentStageName = "Panel Interview";
 
-function PanelInterViewModal() {
-	const factors = [
-		"Appearance and mannerisms",
-		"Manner of speaking",
-		"Physical condition",
-		"Ability to grasp ideas quickly",
-		"Ability to organize ideas",
-		"Ability to get along with others",
-		"Self-confidence / initiative and self-assertion",
-		"Reasoning and judgment",
-		"Possesses a high degree of emotional stability and maturity",
-		"Experience in work applied for",
-	];
-	return (
-		<Dialog>
-			<DialogTrigger>
-				<Button>Edit Profile</Button>
-			</DialogTrigger>
-			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
-				<DialogHeader className="flex items-center">
-					<DialogTitle>TEACHING DEMONSTRATION RATING SCALE</DialogTitle>
-					<DialogDescription></DialogDescription>
-					<div className="flex w-full flex-col items-center gap-4">
-						<div className="flex w-full flex-col items-center justify-center gap-2">
-							<div className="flex w-full items-center gap-2 text-xs">
-								<div>Applicant&apos;s Name: </div>
-								<Input
-									name="name"
-									type="text"
-									minLength={2}
-									maxLength={100}
-									required
-									className="h-8 w-96"
-								/>
-							</div>
-						</div>
+export default async function PanelInterviewPage({ params }: { params: { id: string } }) {
+	const { user } = await validateRequest();
+	const isRecruitmentOffier = user?.role === "recruitment_officer";
 
-						<div className="flex w-full gap-2">
-							<div className="flex w-full items-center gap-2 text-xs">
-								<div className="flex w-[60%] items-center gap-2 text-xs">
-									<div>Position Applied: </div>
-									<Input
-										name="name"
-										type="text"
-										minLength={2}
-										maxLength={100}
-										required
-										className="h-8"
-									/>
-								</div>
-								<div className="flex w-[60%] items-center gap-2 text-xs">
-									<div>College: </div>
-									<Input
-										name="dept/office"
-										type="text"
-										minLength={2}
-										maxLength={100}
-										required
-										className="h-8"
-									/>
-								</div>
-								<div className="flex w-[60%] items-center gap-2 text-xs">
-									<div>Department </div>
-									<Input
-										name="dept/office"
-										type="text"
-										minLength={2}
-										maxLength={100}
-										required
-										className="h-8"
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</DialogHeader>
-				<div className="flex h-full w-full flex-col">
-					<form className="space-y-8 p-4">
-						<div>
-							<div className="mb-4 grid grid-cols-[2fr_3fr_1fr] items-center gap-x-4 border-b pb-2 text-sm font-bold">
-								<span>FACTORS</span>
-								<span className="text-center">RATING SCALE</span>
-								<span>COMMENTS</span>
-							</div>
-							{factors.map((factor, index) => (
-								<div
-									key={index}
-									className="mb-2 grid grid-cols-[2fr_3fr_1fr] items-center gap-x-4"
-								>
-									<span className="text-sm">
-										{index + 1}. {factor}
-									</span>
-									<RadioGroup className="flex w-full justify-between">
-										{[1, 2, 3, 4, 5].map((rating) => (
-											<Label
-												key={rating}
-												className="flex items-center space-x-1"
-											>
-												<RadioGroupItem value={rating.toString()} />
-												<span className="text-sm">{rating}</span>
-											</Label>
-										))}
-									</RadioGroup>
-									<Input placeholder="Add comment" />
-								</div>
-							))}
-						</div>
-						<div>
-							<h2 className="mb-2 text-sm font-bold">RECOMMENDATIONS</h2>
-							<div className="mb-2 flex items-center space-x-2">
-								<Label htmlFor="unfavorable" className="w-64 text-sm">
-									Unfavorable
-								</Label>
-								<Input />
-							</div>
-							<div className="mb-2 flex items-center space-x-2">
-								<Label htmlFor="comparison" className="w-64 text-sm">
-									For Comparison with others
-								</Label>
-								<Input />
-							</div>
-							<div className="mb-2 flex items-center space-x-2">
-								<Label htmlFor="effective" className="w-64 text-sm">
-									For hiring effective
-								</Label>
-								<Input />
-							</div>
-						</div>
-					</form>
+	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
+	const users = await getUsersWithoutUserRoles();
 
-					<Button type="submit">Submit</Button>
-					<div className="flex flex-col">
-						<div>Interviewer: Random Name | Role</div>
-
-						<div>Date: </div>
-					</div>
-				</div>
-			</DialogContent>
-		</Dialog>
+	// GETTING THE APPLICANT BY ID
+	// GETTING THE CURRENT STAGE OF THE APPLICANT eg. initial_interview, screening, etc.
+	const { applicant, applicantStage } = await GetCurrentStage(
+		Number(params.id),
+		"panel_interview"
 	);
-}
 
-export default function PanelInterView() {
+	const getFirstIndexAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
+	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID
+	const finalAssessor = users.find((user) => user.id === getFirstIndexAssessedBy);
+
+	const ratingForm = await getAllRaitingFormByIdInEachStages(
+		Number(params.id),
+		applicantStage?.rating_forms_id as number[]
+	);
+
+	// THESE ARE THE USER's WHO CAN ASSESS TO THE APPLICANT
+	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
+	// GETTING ALL THE RATING FORMS FILES BY ID
+
+	// Check if the user has already posted a rating for the current stage
+	const hasUserPostedRating = ratingForm.some(
+		(stage) => stage.recruitment_stage === currentStageName && stage.user_id === user?.id
+	);
+	// console.log(hasUserPostedRating); // true if the user has posted a rating, false otherwise
+
 	return (
-		<div>
-			<PanelInterViewModal />
-		</div>
+		<>
+			<Card>
+				<CardHeader>
+					<CardTitle className="flex justify-between">
+						{currentStageName && "Panel Interview"}
+						{!isRecruitmentOffier && (
+							<PanelInterViewModal/>
+						)}
+					</CardTitle>
+				</CardHeader>
+
+				{isRecruitmentOffier ? (
+					<>
+						<CardContent>
+							<CardSubContent>
+								<CardTopLeftSubContent>
+									<TypographySmall size={"md"}>
+										{currentStageName}
+									</TypographySmall>
+									<DisplayMode
+										status={applicantStage?.status as string}
+										mode={applicantStage?.mode}
+									/>
+								</CardTopLeftSubContent>
+
+								<DisplayDate date={applicantStage?.date as Date} />
+							</CardSubContent>
+							<CardSubContent>
+								<TypographySmall size={"md"}>Assessed by:</TypographySmall>
+								<Suspense fallback={<LoadingAssessors />}>
+									<DisplayAssessedBy
+										assessedById={applicantStage?.assessed_by || []}
+									/>
+								</Suspense>
+							</CardSubContent>
+						</CardContent>
+
+						<DisplayFooter
+							status={applicantStage?.status as string}
+							applicantId={Number(params.id)}
+							users={users as Partial<User>[]}
+							assessorsName={finalAssessor?.name as string | undefined}
+							assessorsRole={finalAssessor?.role as string | undefined}
+						/>
+					</>
+				) : (
+					<>
+						<DeptOrOfficeComponent
+							assessorLength={applicantStage?.assessed_by?.length}
+							assessedByUsers={assessedByUsers as boolean}
+							hasUserPostedRating={hasUserPostedRating as boolean}
+							status={applicantStage?.status as string | undefined}
+						/>
+
+						<DeptOrOfficeFooter
+							status={applicantStage?.status as string | undefined}
+							assessorsName={finalAssessor?.name as string | undefined}
+							assessorsRole={finalAssessor?.role as string | undefined}
+							assessedByUsers={assessedByUsers as boolean}
+							hasUserPostedRating={hasUserPostedRating as boolean}
+							applicantId={params.id as string}
+							userId={user?.id as string}
+							currentStageName={currentStageName}
+						/>
+					</>
+				)}
+			</Card>
+
+			<CommentsAndDocuments
+				stage="panel_interview"
+				applicantId={params.id as string}
+				evaluatorsId={user?.id as string}
+				resume={applicant?.resume as ResumeProps}
+				document={ratingForm as Partial<RatingFormWithUserData>[]}
+			/>
+		</>
 	);
 }

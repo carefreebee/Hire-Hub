@@ -10,7 +10,7 @@ type LayoutProps = {
 export default function Layout({ children, params }: LayoutProps) {
 	return (
 		<section className="mx-auto flex w-full flex-col gap-5 p-5">
-			<Previous href="/dashboard/applicant" text="View all Applicants" />
+			<Previous href="/dashboard/evaluate" text="View all Applicants" />
 			<div className="flex gap-5">
 				<Sidebar id={params.id} />
 				<section className="w-[46rem]">

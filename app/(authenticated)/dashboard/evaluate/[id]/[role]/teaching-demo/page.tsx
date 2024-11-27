@@ -1,208 +1,154 @@
-import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
+import { User } from "lucia";
+import { Suspense } from "react";
 import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "~/components/ui/dialog";
+	Card,
+	CardContent,
+	CardHeader,
+	CardSubContent,
+	CardTitle,
+	CardTopLeftSubContent,
+} from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
+import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
+import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
+import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
+import {
+	DeptOrOfficeComponent,
+	DeptOrOfficeFooter,
+} from "~/components/pages/authenticated/stages/DeptOrOffice";
+import {
+	DisplayAssessedBy,
+	DisplayFooter,
+	DisplayMode,
+} from "~/components/pages/authenticated/stages/HigherUp";
 
-import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
+import { TypographySmall } from "~/components/ui/typography-small";
+import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";
+import { getUsersWithoutUserRoles } from "~/controller/UsersController";
+import { validateRequest } from "~/lib/auth";
+import { ApplicantSelect } from "~/lib/schema";
+import { RatingFormWithUserData, ResumeProps } from "~/types/types";
+import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
+import { GetCurrentStage } from "~/util/get-current-stage";
+import TeachingDemoModal from "./teaching-demo-modal";
 
-function TeachingDemoModal() {
-	const sections = [
-		{
-			title: "A. PERSONALITY",
-			items: [
-				"Grooming is commendable.",
-				"Voice modulation and proper pacing are observed.",
-				"Composure, confidence and poise are well executed.",
-				"Articulation and mastery of medium of instruction are demonstrated.",
-				"Maintains good rapport with students.",
-			],
-		},
-		{
-			title: "B. PREPARATION",
-			items: [
-				"Instructional objectives for the session are evident.",
-				"Board notes, sketches and diagrams are legible and well-organized.",
-				"Appropriateness of visual aids, handouts and other teaching devices are observed.",
-			],
-		},
-		{
-			title: "C. TEACHING PROCESS",
-			items: [
-				"Motivational skills are demonstrated.",
-				"Organizational / logical sequencing of topics is evident.",
-				"Demonstrates mastery of the subject matter.",
-				"Methodology, techniques or strategies are appropriate.",
-				"Demonstrates ability to relate subject matters to other fields.",
-			],
-		},
-		{
-			title: "D. COMMUNICATION SKILLS",
-			items: [
-				"Pauses for questions, commands or directions.",
-				"Uses language for a variety of purposes.",
-				"Initiates questions to encourage discussion.",
-				"Demonstrates appropriate sentence structure.",
-				"Demonstrates adequate vocabulary.",
-			],
-		},
-	];
-	return (
-		<Dialog>
-			<DialogTrigger>
-				<Button>Edit Profile</Button>
-			</DialogTrigger>
-			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
-				<DialogHeader className="flex items-center">
-					<DialogTitle>TEACHING DEMONSTRATION RATING SCALE</DialogTitle>
-					<DialogDescription></DialogDescription>
-					<div className="flex w-full flex-col items-center gap-4">
-						<div className="flex w-full flex-col items-center justify-center gap-2">
-							<div className="flex w-full items-center gap-2 text-xs">
-								<div>Applicant&apos;s Name: </div>
-								<Input
-									name="name"
-									type="text"
-									minLength={2}
-									maxLength={100}
-									required
-									className="h-8 w-96"
-								/>
-							</div>
-						</div>
+const currentStageName = "Teaching Demo";
 
-						<div className="flex w-full gap-2">
-							<div className="flex w-full items-center gap-2 text-xs">
-								<div className="flex w-full items-center gap-2 text-xs">
-									<div>Topic: </div>
-									<Input
-										name="name"
-										type="text"
-										minLength={2}
-										maxLength={100}
-										required
-										className="h-8"
-									/>
-								</div>
-								<div className="flex w-full items-center gap-2 text-xs">
-									<div>Department/Office: </div>
-									<Input
-										name="dept/office"
-										type="text"
-										minLength={2}
-										maxLength={100}
-										required
-										className="h-8"
-									/>
-								</div>
-								<div>Date </div>
-								<Input
-									name="dept/office"
-									type="text"
-									minLength={2}
-									maxLength={100}
-									required
-									className="h-8 w-24"
-								/>
-							</div>
-						</div>
-					</div>
-				</DialogHeader>
-				<div className="flex h-full w-full flex-col">
-					<div className="mb-4 flex items-center justify-center bg-gray font-bold">
-						JOB-FIT INTERVIEW
-					</div>
-					<div className="flex items-center justify-between">
-						(1) Strongly Disagree: Considerable and urgent improvement needed.
-						<div>(3) Agree: Meets the expectation with minor improvement.</div>
-					</div>
-					<div className="flex items-center justify-between">
-						(2) Disagree: Major improvement is needed.
-						<div>(4) Strongly Agree: Exceeds expectation with slight improvement.</div>
-					</div>
-					<form className="space-y-8 p-4">
-						{sections.map((section, sectionIndex) => (
-							<div key={sectionIndex}>
-								<h2 className="mb-4 text-lg font-bold">{section.title}</h2>
-								{section.items.map((item, itemIndex) => (
-									<div
-										key={itemIndex}
-										className="mb-2 grid grid-cols-[auto_1fr_auto] items-center gap-x-4"
-									>
-										<span className="text-sm">{itemIndex + 1}.</span>
-										<label className="flex-1 text-sm">{item}</label>
-										<div className="flex w-56 justify-between">
-											{[1, 2, 3, 4].map((rating) => (
-												<label
-													key={rating}
-													className="flex items-center space-x-1"
-												>
-													<Checkbox
-														name={`rating-${sectionIndex}-${itemIndex}`}
-													/>
-													<span className="text-sm">{rating}</span>
-												</label>
-											))}
-										</div>
-									</div>
-								))}
-							</div>
-						))}
-						<div>
-							<h2 className="mb-4 text-lg font-bold">Overall Rating</h2>
-							<div className="grid grid-cols-[1fr_auto] items-center gap-x-4">
-								<label className="flex-1 text-sm">
-									Rate the overall performance:
-								</label>
-								<div className="flex w-56 justify-between">
-									{[1, 2, 3, 4].map((rating) => (
-										<label key={rating} className="flex items-center space-x-1">
-											<Checkbox name="overall-rating" />
-											<span className="text-sm">{rating}</span>
-										</label>
-									))}
-								</div>
-							</div>
-						</div>
-					</form>
+export default async function TeachingDemoPage({ params }: { params: { id: string } }) {
+	const { user } = await validateRequest();
+	const isRecruitmentOffier = user?.role === "recruitment_officer";
 
-					<div className="mb-4 flex items-center justify-center bg-gray font-bold">
-						Comments
-					</div>
+	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
+	const users = await getUsersWithoutUserRoles();
 
-					<Textarea
-						name="comments"
-						className="h-24"
-						placeholder="Enter comments here..."
-					/>
-					<Button type="submit">Submit</Button>
-					<div className="flex flex-col">
-						<div>Assessor: Random Name | Role</div>
+	const { applicant, applicantStage } = await GetCurrentStage(Number(params.id), "teaching_demo");
 
-						<div>Date: </div>
-					</div>
-				</div>
-			</DialogContent>
-		</Dialog>
+	const getFirstIndexAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
+	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID
+	const finalAssessor = users.find((user) => user.id === getFirstIndexAssessedBy);
+
+	const ratingForm = await getAllRaitingFormByIdInEachStages(
+		Number(params.id),
+		applicantStage?.rating_forms_id as number[]
 	);
-}
 
-export default function TeachingDemo() {
+	// CHECK IF THE BOTH USER AND APPLICANT HAS THE SAME VALUES WHETHER IT IS DEPARTMENT OR OFFICE
+	const { isUserDepartmentAllowed, isUserOfficeAllowed } = checkUserAndApplicantIfValid(
+		applicant as ApplicantSelect,
+		user as User
+	);
+	// CHECK IF THE USER IS ALLOWED TO ASSESSED THE APPLICANT WHETHER IT IS DEPARTMENT OR OFFICE
+	const checkIfUserIsAllowedToAssess = isUserDepartmentAllowed || isUserOfficeAllowed;
+	// THESE ARE THE USER's WHO CAN ASSESS TO THE APPLICANT
+	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
+	// Check if the user has already posted a rating for the current stage
+	const hasUserPostedRating = ratingForm.some(
+		(stage) => stage.recruitment_stage === currentStageName && stage.user_id === user?.id
+	);
+	// console.log(hasUserPostedRating); // true if the user has posted a rating, false otherwise
+
+	if (applicant?.office_id !== null && applicant?.selected_office !== null) {
+		return;
+	}
+
 	return (
-		<div>
-			<ScrollArea className="mt-5 flex h-[35rem] w-full justify-center rounded-sm p-10 shadow-xl">
-				<div>
-					<TeachingDemoModal />
-				</div>
-				<div></div>
-			</ScrollArea>
-		</div>
+		<>
+			<Card>
+				<CardHeader>
+					<CardTitle className="flex justify-between">
+						{currentStageName}
+						{!isRecruitmentOffier && (
+							<TeachingDemoModal />
+						)}
+					</CardTitle>
+				</CardHeader>
+
+				{isRecruitmentOffier ? (
+					<>
+						<CardContent>
+							<CardSubContent>
+								<CardTopLeftSubContent>
+									<TypographySmall size={"md"}>
+										{currentStageName}
+									</TypographySmall>
+									<DisplayMode
+										status={applicantStage?.status as string}
+										mode={applicantStage?.mode}
+									/>
+								</CardTopLeftSubContent>
+
+								<DisplayDate date={applicantStage?.date as Date} />
+							</CardSubContent>
+							<CardSubContent>
+								<TypographySmall size={"md"}>Assessed by:</TypographySmall>
+								<Suspense fallback={<LoadingAssessors />}>
+									<DisplayAssessedBy
+										assessedById={applicantStage?.assessed_by || []}
+									/>
+								</Suspense>
+							</CardSubContent>
+						</CardContent>
+
+						<DisplayFooter
+							status={applicantStage?.status as string}
+							applicantId={Number(params.id)}
+							users={users as Partial<User>[]}
+							assessorsName={finalAssessor?.name as string | undefined}
+							assessorsRole={finalAssessor?.role as string | undefined}
+						/>
+					</>
+				) : (
+					<>
+						<DeptOrOfficeComponent
+							assessorLength={applicantStage?.assessed_by?.length}
+							assessedByUsers={assessedByUsers as boolean}
+							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess as boolean}
+							hasUserPostedRating={hasUserPostedRating as boolean}
+							status={applicantStage?.status as string | undefined}
+						/>
+
+						<DeptOrOfficeFooter
+							status={applicantStage?.status as string | undefined}
+							assessorsName={finalAssessor?.name as string | undefined}
+							assessorsRole={finalAssessor?.role as string | undefined}
+							assessedByUsers={assessedByUsers as boolean}
+							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess as boolean}
+							hasUserPostedRating={hasUserPostedRating as boolean}
+							applicantId={params.id as string}
+							userId={user?.id as string}
+							currentStageName={currentStageName}
+						/>
+					</>
+				)}
+			</Card>
+
+			<CommentsAndDocuments
+				stage="teaching_demo"
+				applicantId={params.id as string}
+				evaluatorsId={user?.id as string}
+				resume={applicant?.resume as ResumeProps}
+				document={ratingForm as Partial<RatingFormWithUserData>[]}
+			/>
+		</>
 	);
 }
