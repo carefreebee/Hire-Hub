@@ -45,7 +45,12 @@ export class StagesFormService {
 	}
 
 	private validateForm(stagesForm: RatingFormsInsert, stageType: StageType) {
-		const validateData = Validator.validateStagesForm(stagesForm);
+		// Ensure `rate` is a string
+		const validStagesForm = {
+			...stagesForm,
+			rate: typeof stagesForm.rate === "string" ? stagesForm.rate : String(stagesForm.rate),
+		};
+		const validateData = Validator.validateStagesForm(validStagesForm);
 
 		if (!validateData.success) {
 			throw new Error(`Validation failed for ${stageType}`);
