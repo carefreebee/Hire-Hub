@@ -31,17 +31,23 @@ import { RatingFormWithUserData, ResumeProps } from "~/types/types";
 import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import TeachingDemoModal from "./teaching-demo-modal";
+import { getApplicantData } from "~/hooks/useApplicantStages";
 
 const currentStageName = "Teaching Demo";
 
 export default async function TeachingDemoPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
-	const isRecruitmentOffier = user?.role === "recruitment_officer";
+	const isAllowedRole = user?.role
+		? ["recruitment_officer", "dean", "department_chair"].includes(user.role)
+		: false;
 
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 	const users = await getUsersWithoutUserRoles();
 
 	const { applicant, applicantStage } = await GetCurrentStage(Number(params.id), "teaching_demo");
+
+	//get status of currentstage
+	const teachingdemostatus = applicant?.stages?.teaching_demo?.status;
 
 	const getFirstIndexAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
 	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID
@@ -76,14 +82,12 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 			<Card>
 				<CardHeader>
 					<CardTitle className="flex justify-between">
-						{currentStageName}
-						{!isRecruitmentOffier && (
-							<TeachingDemoModal />
-						)}
+						Teaching Demo
+						<TeachingDemoModal />
 					</CardTitle>
 				</CardHeader>
 
-				{isRecruitmentOffier ? (
+				{isAllowedRole && teachingdemostatus ? (
 					<>
 						<CardContent>
 							<CardSubContent>
@@ -110,11 +114,11 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 						</CardContent>
 
 						<DisplayFooter
-							status={applicantStage?.status as string}
+							status={applicantStage?.status || ""}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
-							assessorsName={finalAssessor?.name as string | undefined}
-							assessorsRole={finalAssessor?.role as string | undefined}
+							assessorsName={finalAssessor?.name || ""}
+							assessorsRole={finalAssessor?.role || ""}
 						/>
 					</>
 				) : (
@@ -124,18 +128,18 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 							assessedByUsers={assessedByUsers as boolean}
 							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess as boolean}
 							hasUserPostedRating={hasUserPostedRating as boolean}
-							status={applicantStage?.status as string | undefined}
+							status={applicantStage?.status || ""}
 						/>
 
 						<DeptOrOfficeFooter
-							status={applicantStage?.status as string | undefined}
-							assessorsName={finalAssessor?.name as string | undefined}
-							assessorsRole={finalAssessor?.role as string | undefined}
-							assessedByUsers={assessedByUsers as boolean}
-							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess as boolean}
-							hasUserPostedRating={hasUserPostedRating as boolean}
-							applicantId={params.id as string}
-							userId={user?.id as string}
+							status={applicantStage?.status || ""}
+							assessorsName={finalAssessor?.name || ""}
+							assessorsRole={finalAssessor?.role || ""}
+							assessedByUsers={assessedByUsers ?? false}
+							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess ?? false}
+							hasUserPostedRating={hasUserPostedRating ?? false}
+							applicantId={params.id}
+							userId={user?.id || ""} // Default to an empty string if `user?.id` is undefined
 							currentStageName={currentStageName}
 						/>
 					</>

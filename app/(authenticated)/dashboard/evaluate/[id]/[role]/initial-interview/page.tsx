@@ -15,16 +15,53 @@ import { validateRequest } from "~/lib/auth";
 import { ResumeProps } from "~/types/types";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import InitialInterviewModal from "./initial-interview-modal";
+import { DisplayAssessedBy, DisplayFooter, DisplayMode } from "~/components/pages/authenticated/stages/HigherUp";
+import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
+import { TypographySmall } from "~/components/ui/typography-small";
+import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
+import { getUsersWithoutUserRoles } from "~/controller/UsersController";
+import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
+import { ApplicantSelect } from "~/lib/schema";
+import { User } from "lucia";
+import { DeptOrOfficeComponent, DeptOrOfficeFooter } from "~/components/pages/authenticated/stages/DeptOrOffice";
 
 export default async function InitialInterviewPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
-	const isRecruitmentOfficer = user?.role === "recruitment_officer";
+	const isAllowedRole = user?.role
+		? ["recruitment_officer", "dean", "department_chair"].includes(user.role)
+		: false;
+
+	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
+	const users = await getUsersWithoutUserRoles();
 
 	const { applicant, applicantStage } = await GetCurrentStage(
 		Number(params.id),
 		"initial_interview"
 	);
+
+	//get status of currentstage
+	const initialInterviewStatus = applicant?.stages?.initial_interview?.status;
+
+	const getFirstIndexAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
+	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID
+	const finalAssessor = users.find((user) => user.id === getFirstIndexAssessedBy);
+
 	const ratingFormId = applicantStage?.rating_forms_id as number[];
+
+	// CHECK IF THE BOTH USER AND APPLICANT HAS THE SAME VALUES WHETHER IT IS DEPARTMENT OR OFFICE
+	const { isUserDepartmentAllowed, isUserOfficeAllowed } = checkUserAndApplicantIfValid(
+		applicant as ApplicantSelect,
+		user as User
+	);
+	// CHECK IF THE USER IS ALLOWED TO ASSESSED THE APPLICANT WHETHER IT IS DEPARTMENT OR OFFICE
+	const checkIfUserIsAllowedToAssess = isUserDepartmentAllowed || isUserOfficeAllowed;
+	// THESE ARE THE USER's WHO CAN ASSESS TO THE APPLICANT
+	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
+	// Check if the user has already posted a rating for the current stage
+
+	if (applicant?.office_id !== null && applicant?.selected_office !== null) {
+		return;
+	}
 
 	return (
 		<>
@@ -35,12 +72,60 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 						<InitialInterviewModal />
 					</CardTitle>
 				</CardHeader>
-				{!isRecruitmentOfficer && <StageStatus status={applicantStage?.status as string} />}
+				{isAllowedRole && initialInterviewStatus ? (
+					<>
+						<CardContent>
+							<CardSubContent>
+								<CardTopLeftSubContent>
+									<TypographySmall size={"md"}>Initial Interview</TypographySmall>
+									<DisplayMode
+										status={applicantStage?.status as string}
+										mode={applicantStage?.mode}
+									/>
+								</CardTopLeftSubContent>
 
-				{isRecruitmentOfficer && (
-					<Suspense fallback={<LoadingCardComponent />}>
-						<InitialInterviewComponent user={user} applicantId={Number(params.id)} />
-					</Suspense>
+								<DisplayDate date={applicantStage?.date as Date} />
+							</CardSubContent>
+							<CardSubContent>
+								<TypographySmall size={"md"}>Assessed by:</TypographySmall>
+								<Suspense fallback={<LoadingAssessors />}>
+									<DisplayAssessedBy
+										assessedById={applicantStage?.assessed_by || []}
+									/>
+								</Suspense>
+							</CardSubContent>
+						</CardContent>
+
+						<DisplayFooter
+							status={applicantStage?.status || ""}
+							applicantId={Number(params.id)}
+							users={users as Partial<User>[]}
+							assessorsName={finalAssessor?.name || ""}
+							assessorsRole={finalAssessor?.role || ""}
+						/>
+					</>
+				) : (
+					<>
+						<DeptOrOfficeComponent
+							assessorLength={applicantStage?.assessed_by?.length}
+							assessedByUsers={assessedByUsers as boolean}
+							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess as boolean}
+							hasUserPostedRating={true}
+							status={applicantStage?.status || ""}
+						/>
+
+						<DeptOrOfficeFooter
+							status={applicantStage?.status || ""}
+							assessorsName={finalAssessor?.name || ""}
+							assessorsRole={finalAssessor?.role || ""}
+							assessedByUsers={assessedByUsers ?? false}
+							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess ?? false}
+							hasUserPostedRating={true}
+							applicantId={params.id}
+							userId={user?.id || ""} // Default to an empty string if `user?.id` is undefined
+							currentStageName={"Initial Interview"}
+						/>
+					</>
 				)}
 			</Card>
 

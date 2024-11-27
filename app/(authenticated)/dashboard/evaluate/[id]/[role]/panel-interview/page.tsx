@@ -33,7 +33,9 @@ const currentStageName = "Panel Interview";
 
 export default async function PanelInterviewPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
-	const isRecruitmentOffier = user?.role === "recruitment_officer";
+	const isAllowedRole = user?.role
+		? ["recruitment_officer", "dean", "department_chair"].includes(user.role)
+		: false;
 
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 	const users = await getUsersWithoutUserRoles();
@@ -44,6 +46,9 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 		Number(params.id),
 		"panel_interview"
 	);
+
+	//get status of currentstage
+	const panelInterviewStatus = applicant?.stages?.panel_interview?.status;
 
 	const getFirstIndexAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
 	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID
@@ -69,14 +74,12 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 			<Card>
 				<CardHeader>
 					<CardTitle className="flex justify-between">
-						{currentStageName && "Panel Interview"}
-						{!isRecruitmentOffier && (
-							<PanelInterViewModal/>
-						)}
+						Panel Interview
+						<PanelInterViewModal />
 					</CardTitle>
 				</CardHeader>
 
-				{isRecruitmentOffier ? (
+				{isAllowedRole && panelInterviewStatus ? (
 					<>
 						<CardContent>
 							<CardSubContent>

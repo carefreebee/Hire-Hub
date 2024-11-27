@@ -35,7 +35,9 @@ const currentStageName = "Teaching Demo";
 
 export default async function TeachingDemoPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
-	const isRecruitmentOffier = user?.role === "recruitment_officer";
+	const isAllowedRole = user?.role
+		? ["recruitment_officer", "dean", "department_chair"].includes(user.role)
+		: false;
 
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 	const users = await getUsersWithoutUserRoles();
@@ -76,7 +78,7 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 				<CardHeader>
 					<CardTitle className="flex justify-between">
 						{currentStageName}
-						{!isRecruitmentOffier && (
+						{!isAllowedRole && (
 							<DownloadForm
 								file={"/files/teaching-demonstration-rating-scaling.docx"}
 								downloadText="Teaching Demo Interview Rating Form"
@@ -87,7 +89,7 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 					</CardTitle>
 				</CardHeader>
 
-				{isRecruitmentOffier ? (
+				{isAllowedRole ? (
 					<>
 						<CardContent>
 							<CardSubContent>
@@ -114,11 +116,11 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 						</CardContent>
 
 						<DisplayFooter
-							status={applicantStage?.status as string}
+							status={applicantStage?.status || ""}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
-							assessorsName={finalAssessor?.name as string | undefined}
-							assessorsRole={finalAssessor?.role as string | undefined}
+							assessorsName={finalAssessor?.name || "Unknown"}
+							assessorsRole={finalAssessor?.role || "No role assigned"}
 						/>
 					</>
 				) : (
@@ -128,18 +130,18 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 							assessedByUsers={assessedByUsers as boolean}
 							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess as boolean}
 							hasUserPostedRating={hasUserPostedRating as boolean}
-							status={applicantStage?.status as string | undefined}
+							status={applicantStage?.status || ""}
 						/>
 
 						<DeptOrOfficeFooter
-							status={applicantStage?.status as string | undefined}
-							assessorsName={finalAssessor?.name as string | undefined}
-							assessorsRole={finalAssessor?.role as string | undefined}
-							assessedByUsers={assessedByUsers as boolean}
-							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess as boolean}
-							hasUserPostedRating={hasUserPostedRating as boolean}
-							applicantId={params.id as string}
-							userId={user?.id as string}
+							status={applicantStage?.status || ""}
+							assessorsName={finalAssessor?.name || "Unknown"}
+							assessorsRole={finalAssessor?.role || "No role assigned"}
+							assessedByUsers={assessedByUsers ?? false}
+							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess ?? false}
+							hasUserPostedRating={hasUserPostedRating ?? false}
+							applicantId={params.id}
+							userId={user?.id || ""} // Default to an empty string if `user?.id` is undefined
 							currentStageName={currentStageName}
 						/>
 					</>
