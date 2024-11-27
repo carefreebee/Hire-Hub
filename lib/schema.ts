@@ -157,7 +157,7 @@ export const ratingForms = pgTable("rating_forms", {
 	rating_id: serial("rating_id").primaryKey(),
 	applicant_id: integer("applicant_id").references(() => applicant.id, { onDelete: "cascade" }),
 	user_id: text("user_id").references(() => users.id, { onDelete: "cascade" }),
-	rate: text("rate").notNull(),
+	rate: jsonb("rate").$type<Object>().notNull(), // if possible, use a more specific type for better type suggestions
 	recruitment_stage: text("recruitment_stage").notNull(),
 	created_at: timestamp("created_at").defaultNow(),
 });
