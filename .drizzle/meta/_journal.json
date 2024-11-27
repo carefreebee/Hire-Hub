@@ -15,6 +15,13 @@
       "when": 1731990776348,
       "tag": "0001_magical_madame_hydra",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1732699908998,
+      "tag": "0002_slow_tusk",
+      "breakpoints": true
     }
   ]
 }
