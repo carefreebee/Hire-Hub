@@ -139,4 +139,52 @@ export class RatingFormsService {
 			);
 		}
 	}
+
+	public async createRatingForm(formData: FormData) {
+		const jobFitQuestions = Array.from({ length: 60 }, (_, index) => ({
+			questionNumber: index + 1,
+			questionText: formData.get(`jobFitQuestion${index + 1}`) as string,
+			response: formData.get(`jobFitResponse${index + 1}`) as string,
+			rating: formData.get(`jobFitRating${index + 1}`) as string,
+		}));
+
+		const cultureAddQuestions = Array.from({ length: 60 }, (_, index) => ({
+			questionNumber: index + 1,
+			questionText: formData.get(`cultureAddQuestion${index + 1}`) as string,
+			response: formData.get(`cultureAddResponse${index + 1}`) as string,
+			rating: formData.get(`cultureAddRating${index + 1}`) as string,
+		}));
+
+		const ratingForm = {
+			applicant_id: parseInt(formData.get("applicantId") as string, 10),
+			user_id: formData.get("userId") as string,
+			rate: {
+				applicantName: formData.get("applicantName") as string,
+				positionDesired: formData.get("positionDesired") as string,
+				departmentOffice: formData.get("departmentOffice") as string,
+				jobFitRating: formData.get("jobFit") as string,
+				cultureAddQuestionsRating: formData.get("cultureAdd") as string,
+				initialInterviewRating: formData.get("initialInterviewRating") as string,
+				jobFit: jobFitQuestions,
+				cultureAdd: cultureAddQuestions,
+				considerations: formData.get("considerations") as string,
+				questions: formData.get("questions") as string,
+				response: formData.get("response") as string,
+				expectedMonthlySalary: formData.get("expectedMonthlySalary") as string,
+				recommendations: formData.get("recommendations") as string,
+				evaluatedBy: formData.get("evaluatedBy") as string,
+			},
+			recruitment_stage: formData.get("recruitment_stage") as string,
+			created_at: new Date(), // Explicitly set the current date and time
+		};
+
+		console.log("Rating form data:", ratingForm); // Debug log
+
+		try {
+			return await this.ratingFormsRepo.insertForm(ratingForm);
+		} catch (error) {
+			console.error("Error creating rating form:", error);
+			throw new Error("Creating rating form failed");
+		}
+	}
 }

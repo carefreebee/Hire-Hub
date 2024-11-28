@@ -1,3 +1,4 @@
+import { User } from "lucia";
 import { Suspense } from "react";
 import {
 	Card,
@@ -7,25 +8,27 @@ import {
 	CardTitle,
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
-import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
+import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
+import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
-import InitialInterviewComponent from "~/components/pages/authenticated/applicant/initial-interview/InitialInterviewComponent";
-import { StageStatus } from "~/components/pages/authenticated/stages/Messages";
+import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
+import {
+	DeptOrOfficeComponent,
+	DeptOrOfficeFooter,
+} from "~/components/pages/authenticated/stages/DeptOrOffice";
+import {
+	DisplayAssessedBy,
+	DisplayFooter,
+	DisplayMode,
+} from "~/components/pages/authenticated/stages/HigherUp";
+import { TypographySmall } from "~/components/ui/typography-small";
+import { getUsersWithoutUserRoles } from "~/controller/UsersController";
 import { validateRequest } from "~/lib/auth";
+import { ApplicantSelect } from "~/lib/schema";
 import { ResumeProps } from "~/types/types";
+import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import InitialInterviewModal from "./initial-interview-modal";
-import { DisplayAssessedBy, DisplayFooter, DisplayMode } from "~/components/pages/authenticated/stages/HigherUp";
-import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
-import { TypographySmall } from "~/components/ui/typography-small";
-import { LoadingAssessors, LoadingButtonMode } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
-import { getUsersWithoutUserRoles } from "~/controller/UsersController";
-import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
-import { ApplicantSelect } from "~/lib/schema";
-import { User } from "lucia";
-import { DeptOrOfficeComponent, DeptOrOfficeFooter } from "~/components/pages/authenticated/stages/DeptOrOffice";
-import CardContentComponent from "~/components/pages/authenticated/applicant/screening/CardContentComponent";
-import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
 
 export default async function InitialInterviewPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
@@ -61,19 +64,22 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
 	// Check if the user has already posted a rating for the current stage
 
-	
 	//ambot ngano ni, ako gicomment out kay ma hide ang initial interview if naa nay office_id ug selected_office
 	// if (applicant?.office_id !== null && applicant?.selected_office !== null) {
 	// 	return;
 	// }
-	
+
 	return (
 		<>
 			<Card>
 				<CardHeader>
 					<CardTitle className="flex justify-between">
 						Initial Interview
-						<InitialInterviewModal />
+						<InitialInterviewModal
+							applicantId={applicant?.id}
+							userId={user?.id}
+							evaluatedBy={user?.name}
+						/>
 					</CardTitle>
 				</CardHeader>
 				{isAllowedRole && initialInterviewStatus ? (

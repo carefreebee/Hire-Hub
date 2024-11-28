@@ -24,3 +24,7 @@ export async function getRatingFormsById(id: number) {
 export async function handleUpdateEvaluateApplicantStatus(formData: FormData) {
 	return await ratingFormsService.updateEvaluateApplicantStatus(formData);
 }
+
+export async function handleInsertForm(formData: FormData) {
+	return await ratingFormsService.createRatingForm(formData);
+}
