@@ -29,7 +29,7 @@ export default async function Sidebar({ id }: SideBarProps) {
 	// Manually add the Screening Stage
 	const screeningStage = {
 		name: "Screening",
-		status: applicant?.stages?.screening?.status || "not-started",
+		status: applicant?.stages?.screening?.status || "in-progress",
 		assessed_by: applicant?.stages?.screening?.assessed_by || [],
 		rating_forms_id: [], // Empty array for Screening
 	};
@@ -37,7 +37,7 @@ export default async function Sidebar({ id }: SideBarProps) {
 	// Manually add the Initial Interview Stage
 	const initialInterviewStage = {
 		name: "Initial Interview",
-		status: initialInterview || "not-started",
+		status: initialInterview || "in-progress",
 		assessed_by: [],
 		rating_forms_id: [],
 	};
