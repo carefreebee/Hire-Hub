@@ -20,10 +20,46 @@ export default async function Sidebar({ id }: SideBarProps) {
 
 	const fullName = applicant?.first_name + " " + applicant?.last_name;
 
+	// Adjust filtered stages based on conditions
 	let filteredStages = stages;
 	if (applicant?.office_id !== null && applicant?.selected_office !== null) {
 		filteredStages = stages.filter((stage) => stage.name !== "Teaching Demo");
 	}
+
+	// Manually add the Screening Stage
+	const screeningStage = {
+		name: "Screening",
+		status: applicant?.stages?.screening?.status || "not-started",
+		assessed_by: applicant?.stages?.screening?.assessed_by || [],
+		rating_forms_id: [], // Empty array for Screening
+	};
+
+	// Manually add the Initial Interview Stage
+	const initialInterviewStage = {
+		name: "Initial Interview",
+		status: initialInterview || "not-started",
+		assessed_by: [],
+		rating_forms_id: [],
+	};
+
+	// Add both stages to the filteredStages array and sort them correctly
+	filteredStages = [
+		screeningStage,
+		initialInterviewStage,
+		...filteredStages.filter(
+			(stage) => stage.name !== "Screening" && stage.name !== "Initial Interview"
+		),
+	].sort((a, b) => {
+		const order = [
+			"Screening",
+			"Initial Interview",
+			"Teaching Demo",
+			"Psychological Exam",
+			"Panel Interview",
+			"Recommendation",
+		];
+		return order.indexOf(a.name) - order.indexOf(b.name);
+	});
 
 	return (
 		<aside className="rounded-md border-2 p-5 shadow-xl">
@@ -38,9 +74,10 @@ export default async function Sidebar({ id }: SideBarProps) {
 					Application Status
 				</h2>
 				<div className="flex flex-col">
-					<div className="relative">
+					{/* Initial Interview Stage */}
+					{/* <div className="relative">
 						<div
-							className={`${initialInterview === "in-progress" ? "before:h-16" : "before:h-16"} mb-5 flex gap-3 before:absolute before:left-[7px] before:top-5 before:w-[1.5px] before:bg-[#7F0000]`}
+							className={`mb-5 flex gap-3 before:absolute before:left-[7px] before:top-5 before:w-[1.5px] ${initialInterview === "in-progress" ? "before:h-16" : "before:h-16"} before:bg-[#7F0000]`}
 						>
 							<CheckedStatus status={initialInterview as "passed" | "in-progress"} />
 							<div className="flex flex-col">
@@ -51,21 +88,16 @@ export default async function Sidebar({ id }: SideBarProps) {
 								/>
 							</div>
 						</div>
-					</div>
+					</div> */}
+
+					{/* Display All Stages */}
 					{filteredStages.map((item, index) => {
 						const inProgress = item.status === "in-progress";
-
-						const applicantTeaching = applicant?.department_id !== null;
-						const getLastLineTeaching = index !== stages.length - 1;
-
-						const applicantNonTeaching = applicant?.office_id !== null;
-						const getLastLineNonTeaching = index !== stages.length - 2;
-
 						return (
 							<Fragment key={index}>
 								<div className="relative mb-5 flex gap-3">
 									<div
-										className={`mb-5 flex ${inProgress ? "before:h-16" : "before:h-16"} ${applicantTeaching && getLastLineTeaching && "before:absolute before:left-[7px] before:top-5 before:w-[1.5px] before:bg-[#7F0000]"} ${applicantNonTeaching && getLastLineNonTeaching && "before:absolute before:left-[7px] before:top-5 before:w-[1.5px] before:bg-[#7F0000]"}`}
+										className={`mb-5 flex ${inProgress ? "before:h-16" : "before:h-16"} before:absolute before:left-[7px] before:top-5 before:w-[1.5px] before:bg-[#7F0000]`}
 									>
 										<CheckedStatus
 											status={item.status as "passed" | "in-progress"}

@@ -15,6 +15,7 @@ import {
 	UpdatePsychologicalExam,
 	UpdateRecommendationForHiring,
 	UpdateTeachingDemo,
+	UpdateInitialInterview
 } from "~/controller/ApplicantStatusController";
 import { formattedDateTime } from "~/lib/date-time";
 import { CheckPathname } from "~/util/path";
@@ -67,7 +68,9 @@ export default function AddEvaluators({ id }: ApplicantIDFooterProps) {
 		}
 
 		const formData = new FormData(formRef.current!);
-		if (lastSegment === "teaching-demo") {
+		if (lastSegment === "initial-interview") {
+			await UpdateInitialInterview(formData);
+		} else if (lastSegment === "teaching-demo") {
 			await UpdateTeachingDemo(formData);
 		} else if (lastSegment === "psychological-exam") {
 			await UpdatePsychologicalExam(formData);
@@ -75,7 +78,7 @@ export default function AddEvaluators({ id }: ApplicantIDFooterProps) {
 			await UpdatePanelInterview(formData);
 		} else if (lastSegment === "recommendation-for-hiring") {
 			await UpdateRecommendationForHiring(formData);
-		}
+		} 
 
 		toast({
 			title: "Applicant Status Updated!",

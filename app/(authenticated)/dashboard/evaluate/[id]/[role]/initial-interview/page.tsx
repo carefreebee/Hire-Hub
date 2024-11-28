@@ -18,12 +18,14 @@ import InitialInterviewModal from "./initial-interview-modal";
 import { DisplayAssessedBy, DisplayFooter, DisplayMode } from "~/components/pages/authenticated/stages/HigherUp";
 import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
 import { TypographySmall } from "~/components/ui/typography-small";
-import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
+import { LoadingAssessors, LoadingButtonMode } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import { getUsersWithoutUserRoles } from "~/controller/UsersController";
 import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
 import { ApplicantSelect } from "~/lib/schema";
 import { User } from "lucia";
 import { DeptOrOfficeComponent, DeptOrOfficeFooter } from "~/components/pages/authenticated/stages/DeptOrOffice";
+import CardContentComponent from "~/components/pages/authenticated/applicant/screening/CardContentComponent";
+import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
 
 export default async function InitialInterviewPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
@@ -59,10 +61,12 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
 	// Check if the user has already posted a rating for the current stage
 
-	if (applicant?.office_id !== null && applicant?.selected_office !== null) {
-		return;
-	}
-
+	
+	//ambot ngano ni, ako gicomment out kay ma hide ang initial interview if naa nay office_id ug selected_office
+	// if (applicant?.office_id !== null && applicant?.selected_office !== null) {
+	// 	return;
+	// }
+	
 	return (
 		<>
 			<Card>
@@ -78,14 +82,22 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 							<CardSubContent>
 								<CardTopLeftSubContent>
 									<TypographySmall size={"md"}>Initial Interview</TypographySmall>
-									<DisplayMode
-										status={applicantStage?.status as string}
-										mode={applicantStage?.mode}
-									/>
+
+									<div className="flex flex-col">
+										<DisplayMode
+											status={applicantStage?.status as string}
+											mode={applicantStage?.mode}
+										/>
+
+										<div className="mt-2">
+											<SelectPassedOrFailed />
+										</div>
+									</div>
 								</CardTopLeftSubContent>
 
 								<DisplayDate date={applicantStage?.date as Date} />
 							</CardSubContent>
+
 							<CardSubContent>
 								<TypographySmall size={"md"}>Assessed by:</TypographySmall>
 								<Suspense fallback={<LoadingAssessors />}>

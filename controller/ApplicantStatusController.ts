@@ -25,3 +25,8 @@ export async function UpdatePanelInterview(formData: FormData) {
 export async function UpdateRecommendationForHiring(formData: FormData) {
 	return await applicantStatusService.updateRecommendationForHiring(formData);
 }
+
+// New function for updating Initial Interview status
+export async function UpdateInitialInterview(formData: FormData) {
+  return await applicantStatusService.updateInitialInterview(formData); // Ensure this method exists in applicantStatusService
+}

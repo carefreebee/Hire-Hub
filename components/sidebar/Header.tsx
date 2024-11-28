@@ -27,7 +27,7 @@ export default function Header({ id, role, fullName, applicant }: HeaderProps) {
 
 			<p className="border-gray-200 my-5 border"></p>
 
-			{role === "recruitment_officer" ? (
+			{role === "recruitment_officer" || "dean" ? (
 				<div className="grid w-full grid-cols-2 items-center justify-center gap-3">
 					<Dialog>
 						<DialogTrigger asChild>

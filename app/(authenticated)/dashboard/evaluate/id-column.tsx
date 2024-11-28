@@ -14,7 +14,7 @@ import { useCurrentRole } from "~/util/zustand";
 export default function IDColumn({ id }: { id: number }) {
 	const currentRole = useCurrentRole((state) => state.currentRole);
 
-	const CHAIRLINK = `/dashboard/evaluate/${id}/${currentRole}/initial-interview`;
+	const CHAIRLINK = `/dashboard/evaluate/${id}/${currentRole}/screening`;
 	const FACULTYLINK = `/dashboard/evaluate/${id}/${currentRole}/teaching-demo`;
 	const VPLINK = `/dashboard/evaluate/${id}/${currentRole}/panel-interview`;
 

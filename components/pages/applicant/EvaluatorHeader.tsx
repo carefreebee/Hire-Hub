@@ -26,6 +26,8 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 	const { user } = await validateRequest();
 	const { applicant } = await getApplicantData(Number(id));
 
+	const isTeachingStaff = applicant?.positionType === SelectedCategoryTeachingStaff;
+
 	const isRole = () =>
 		user?.role === "dean" ||
 		user?.role === "department_chair" ||
@@ -68,7 +70,11 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 			</section>
 
 			<div>
-				<ul className="grid grid-cols-6 rounded-lg border shadow-md">
+				<ul
+					className={`grid ${
+						isTeachingStaff ? "grid-cols-6" : "grid-cols-5"
+					} rounded-lg border shadow-md`}
+				>
 					{isRole() && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/screening`}
@@ -85,7 +91,7 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 							Initial Interview
 						</Link>
 					)}
-					{isRole() && (
+					{isRole() && isTeachingStaff && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/teaching-demo`}
 							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}

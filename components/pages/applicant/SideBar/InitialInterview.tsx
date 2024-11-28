@@ -14,7 +14,7 @@ export default function DisplayInitialInterview({
 	length,
 }: DisplayInitialInterviewProps) {
 	const isInProgress = initialInterview === "in-progress";
-	const isRecruitmentOfficer = role === "recruitment_officer";
+	const isRecruitmentOfficer = role === "recruitment_officer" || "dean";
 	const shouldShowSelect = isInProgress && isRecruitmentOfficer && length > 0;
 
 	return (

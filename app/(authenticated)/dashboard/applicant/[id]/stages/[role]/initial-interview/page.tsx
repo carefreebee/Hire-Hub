@@ -53,9 +53,9 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 	// THESE ARE THE USER's WHO CAN ASSESS TO THE APPLICANT
 	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
 
-	if (applicant?.office_id !== null && applicant?.selected_office !== null) {
-		return;
-	}
+	// if (applicant?.office_id !== null && applicant?.selected_office !== null) {
+	// 	return;
+	// }
 
 	return (
 		<>

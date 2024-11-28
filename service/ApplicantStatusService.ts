@@ -69,6 +69,9 @@ export class ApplicantStatusService {
 		}
 	}
 
+	public async updateInitialInterview(formData: FormData) {
+		this.updateApplicantStatus(formData, "initial_interview");
+	}
 	public async updateTeachingDemo(formData: FormData) {
 		this.updateApplicantStatus(formData, "teaching_demo");
 	}
