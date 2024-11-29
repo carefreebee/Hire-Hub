@@ -9,6 +9,7 @@ import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect } from "~/lib/schema";
 import { StageType } from "~/types/types";
 import { TypographySmall } from "../../ui/typography-small";
+import { Button } from "~/components/ui/button";
 
 const STAGES = [
 	{ link: "initial-interview", type: "initial_interview", name: "Initial Interview" },
@@ -65,6 +66,16 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 								? TeachingStaff
 								: NonTeachingStaff}
 						</TypographySmall>
+					</div>
+					<div className="flex items-center gap-2">
+						<Button>
+							<Link
+								href={`/dashboard/evaluate/${id}/${user?.role}/evaluate`}
+								className="px-2 py-2 text-sm font-medium"
+							>
+								Evaluate
+							</Link>
+						</Button>
 					</div>
 				</div>
 			</section>
