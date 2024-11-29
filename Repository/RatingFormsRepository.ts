@@ -4,6 +4,10 @@ import { applicant, ApplicantSelect, ratingForms, users } from "~/lib/schema";
 import { StageType } from "~/types/types";
 
 export class RatingFormsRepository {
+	public async insertForm(ratingForm: any) {
+		return await db.insert(ratingForms).values(ratingForm);
+	}
+
 	public async getAllRaitingFormById(applicantId: number) {
 		const ratingForm = await db
 			.select()

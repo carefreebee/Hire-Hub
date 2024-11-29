@@ -9,7 +9,6 @@ import {
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
-import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
 import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import {
@@ -31,7 +30,6 @@ import { RatingFormWithUserData, ResumeProps } from "~/types/types";
 import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-validation";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import TeachingDemoModal from "./teaching-demo-modal";
-import { getApplicantData } from "~/hooks/useApplicantStages";
 
 const currentStageName = "Teaching Demo";
 
@@ -83,7 +81,13 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 				<CardHeader>
 					<CardTitle className="flex justify-between">
 						Teaching Demo
-						<TeachingDemoModal />
+						{user && (
+							<TeachingDemoModal
+								applicantId={applicant?.id}
+								userId={user.id}
+								evaluatedBy={user}
+							/>
+						)}
 					</CardTitle>
 				</CardHeader>
 
