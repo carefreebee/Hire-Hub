@@ -205,8 +205,6 @@ export class RatingFormsService {
 			created_at: new Date(),
 		};
 
-		console.log("Rating form data:", ratingForm); // Debug log
-
 		try {
 			return await this.ratingFormsRepo.insertForm(ratingForm);
 		} catch (error) {
@@ -254,8 +252,6 @@ export class RatingFormsService {
 			recruitment_stage: formData.get("recruitment_stage") as string,
 			created_at: new Date(),
 		};
-
-		console.log("Teaching demo form data:", teachingDemoForm); // Debug log
 
 		try {
 			return await this.ratingFormsRepo.insertForm(teachingDemoForm);

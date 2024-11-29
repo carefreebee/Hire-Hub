@@ -37,6 +37,7 @@ interface InitialInterviewModalProps {
 
 function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInterviewModalProps) {
 	const formRef = useRef<HTMLFormElement>(null);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const jobfit = [
 		{ factor: "Experience", questions: jobfitQuestions.experienceQuestions },
@@ -75,6 +76,7 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 				title: "Initial Interview Submitted!",
 				description: "The initial interview form has been successfully submitted.",
 			});
+			setIsOpen(false);
 		} catch (error) {
 			console.error("Error submitting form:", error);
 			toast({
@@ -84,7 +86,7 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 		}
 	}
 	return (
-		<Dialog>
+		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger asChild>
 				<Button type="button">Initial Interview Form</Button>
 			</DialogTrigger>

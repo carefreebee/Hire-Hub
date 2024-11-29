@@ -84,7 +84,7 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 				title: "Teaching Demo Submitted!",
 				description: "The teaching demo form has been successfully submitted.",
 			});
-			setIsOpen(false); // Close the dialog
+			setIsOpen(false);
 		} catch (error) {
 			console.error("Error submitting form:", error);
 			toast({
