@@ -21,6 +21,7 @@ import {
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
 import { handleInsertForm } from "~/controller/RatingFormsController";
+import { User } from "~/lib/schema";
 import { cultureAddQuestions } from "./cultureAddQuestions";
 import { jobfitQuestions } from "./jobfitQuestions";
 
@@ -31,7 +32,7 @@ interface SelectedQuestions {
 interface InitialInterviewModalProps {
 	applicantId: number | undefined;
 	userId: string | undefined;
-	evaluatedBy: string | null | undefined;
+	evaluatedBy: User | undefined;
 }
 
 function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInterviewModalProps) {
@@ -65,7 +66,7 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 		console.log("Form data:", Object.fromEntries(formData.entries()));
 
 		try {
-			await handleInsertForm(formData);
+			await handleInsertForm(formData, "initialInterview");
 			console.log("Form data submitted");
 			if (formRef.current) {
 				formRef.current.reset();
@@ -87,11 +88,17 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 			<DialogTrigger asChild>
 				<Button type="button">Initial Interview Form</Button>
 			</DialogTrigger>
-			<form ref={formRef} onSubmit={(e) => e.preventDefault()}>
-				<input type="hidden" name="applicantId" value={applicantId} readOnly />
-				<input type="hidden" name="userId" value={userId} readOnly />
-				<input type="hidden" name="evaluatedBy" value={evaluatedBy ?? ""} readOnly />
-				<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
+
+			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
+				<form ref={formRef} onSubmit={(e) => e.preventDefault()} className="space-y-8 p-4">
+					<input type="hidden" name="applicantId" value={applicantId} readOnly />
+					<input type="hidden" name="userId" value={userId} readOnly />
+					<input
+						type="hidden"
+						name="evaluatedBy"
+						value={evaluatedBy?.name ?? ""}
+						readOnly
+					/>
 					<DialogHeader className="flex items-center">
 						<DialogTitle>JOB-FIT & CULTURE-ADD INTERVIEW</DialogTitle>
 						<DialogDescription>
@@ -363,15 +370,20 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 						</div>
 						<div className="flex flex-col">
 							Evaluated by:
-							<div>Interviewer&apos;s Name: Random Name | Role</div>
+							<div className="flex gap-2">
+								Interviewer&apos;s Name:
+								<div className="bg-orange-300 font-bold">
+									{evaluatedBy?.name} | {evaluatedBy?.role}
+								</div>
+							</div>
 						</div>
 
 						<Button type="submit" onClick={handleSubmit}>
 							Submit
 						</Button>
 					</div>
-				</DialogContent>
-			</form>
+				</form>
+			</DialogContent>
 		</Dialog>
 	);
 }

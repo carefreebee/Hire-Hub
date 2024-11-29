@@ -75,11 +75,13 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 				<CardHeader>
 					<CardTitle className="flex justify-between">
 						Initial Interview
-						<InitialInterviewModal
-							applicantId={applicant?.id}
-							userId={user?.id}
-							evaluatedBy={user?.name}
-						/>
+						{user && (
+							<InitialInterviewModal
+								applicantId={applicant?.id}
+								userId={user.id}
+								evaluatedBy={user}
+							/>
+						)}
 					</CardTitle>
 				</CardHeader>
 				{isAllowedRole && initialInterviewStatus ? (

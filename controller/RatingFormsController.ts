@@ -25,6 +25,13 @@ export async function handleUpdateEvaluateApplicantStatus(formData: FormData) {
 	return await ratingFormsService.updateEvaluateApplicantStatus(formData);
 }
 
-export async function handleInsertForm(formData: FormData) {
-	return await ratingFormsService.createRatingForm(formData);
+export async function handleInsertForm(formData: FormData, formType: string) {
+	switch (formType) {
+		case "initialInterview":
+			return await ratingFormsService.createRatingForm(formData);
+		case "teachingDemo":
+			return await ratingFormsService.teachingDemoForm(formData);
+		default:
+			throw new Error("Unknown form type");
+	}
 }

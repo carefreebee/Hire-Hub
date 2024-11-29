@@ -214,4 +214,54 @@ export class RatingFormsService {
 			throw new Error("Creating rating form failed");
 		}
 	}
+
+	public async teachingDemoForm(formData: FormData) {
+		const sections = ["personality", "preparation", "teachingProcess", "communicationSkills"];
+
+		const rate: any = {};
+
+		sections.forEach((section, sectionIndex) => {
+			rate[section] = {};
+			let questionIndex = 0;
+			while (formData.has(`question-${sectionIndex}-${questionIndex}`)) {
+				const questionValue = formData.get(
+					`question-${sectionIndex}-${questionIndex}`
+				) as string;
+				const ratingValue = formData.get(`rating-${sectionIndex}-${questionIndex}`);
+
+				rate[section][`question${questionIndex + 1}`] = {
+					question: questionValue,
+					rating:
+						typeof ratingValue === "string"
+							? parseInt(ratingValue.split("-").pop() || "0")
+							: 0,
+				};
+				questionIndex++;
+			}
+		});
+
+		const teachingDemoForm = {
+			applicant_id: parseInt(formData.get("applicantId") as string, 10),
+			user_id: formData.get("userId") as string,
+			rate: {
+				applicantName: formData.get("applicantName") as string,
+				topic: formData.get("topic") as string,
+				departmentOffice: formData.get("departmentOffice") as string,
+				date: formData.get("date") as string,
+				comments: formData.get("comments") as string,
+				sections: rate,
+			},
+			recruitment_stage: formData.get("recruitment_stage") as string,
+			created_at: new Date(),
+		};
+
+		console.log("Teaching demo form data:", teachingDemoForm); // Debug log
+
+		try {
+			return await this.ratingFormsRepo.insertForm(teachingDemoForm);
+		} catch (error) {
+			console.error("Error creating teaching demo form:", error);
+			throw new Error("Creating teaching demo form failed");
+		}
+	}
 }
