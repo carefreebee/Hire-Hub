@@ -141,19 +141,46 @@ export class RatingFormsService {
 	}
 
 	public async createRatingForm(formData: FormData) {
-		const jobFitQuestions = Array.from({ length: 60 }, (_, index) => ({
-			questionNumber: index + 1,
-			questionText: formData.get(`jobFitQuestion${index + 1}`) as string,
-			response: formData.get(`jobFitResponse${index + 1}`) as string,
-			rating: formData.get(`jobFitRating${index + 1}`) as string,
-		}));
+		const jobFitQuestions = {
+			experience: {
+				question: formData.get("jobFitQuestion1") as string,
+				response: formData.get("jobFitResponse1") as string,
+				rating: parseInt(formData.get("jobFitRating1") as string),
+			},
+			competence: {
+				question: formData.get("jobFitQuestion2") as string,
+				response: formData.get("jobFitResponse2") as string,
+				rating: parseInt(formData.get("jobFitRating2") as string),
+			},
+			contribution: {
+				question: formData.get("jobFitQuestion3") as string,
+				response: formData.get("jobFitResponse3") as string,
+				rating: parseInt(formData.get("jobFitRating3") as string),
+			},
+		};
 
-		const cultureAddQuestions = Array.from({ length: 60 }, (_, index) => ({
-			questionNumber: index + 1,
-			questionText: formData.get(`cultureAddQuestion${index + 1}`) as string,
-			response: formData.get(`cultureAddResponse${index + 1}`) as string,
-			rating: formData.get(`cultureAddRating${index + 1}`) as string,
-		}));
+		const cultureAddQuestions = {
+			cultureOfExcellence: {
+				question: formData.get("cultureAddQuestion1") as string,
+				response: formData.get("cultureAddResponse1") as string,
+				rating: parseInt(formData.get("cultureAddRating1") as string),
+			},
+			integrity: {
+				question: formData.get("cultureAddQuestion2") as string,
+				response: formData.get("cultureAddResponse2") as string,
+				rating: parseInt(formData.get("cultureAddRating2") as string),
+			},
+			teamwork: {
+				question: formData.get("cultureAddQuestion3") as string,
+				response: formData.get("cultureAddResponse3") as string,
+				rating: parseFloat(formData.get("cultureAddRating3") as string),
+			},
+			universality: {
+				question: formData.get("cultureAddQuestion4") as string,
+				response: formData.get("cultureAddResponse4") as string,
+				rating: parseInt(formData.get("cultureAddRating4") as string),
+			},
+		};
 
 		const ratingForm = {
 			applicant_id: parseInt(formData.get("applicantId") as string, 10),
@@ -175,7 +202,7 @@ export class RatingFormsService {
 				evaluatedBy: formData.get("evaluatedBy") as string,
 			},
 			recruitment_stage: formData.get("recruitment_stage") as string,
-			created_at: new Date(), // Explicitly set the current date and time
+			created_at: new Date(),
 		};
 
 		console.log("Rating form data:", ratingForm); // Debug log

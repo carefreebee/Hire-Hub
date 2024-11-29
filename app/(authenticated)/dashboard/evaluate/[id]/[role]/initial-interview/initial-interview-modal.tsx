@@ -210,6 +210,7 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 											</Select>
 											<Input
 												type="text"
+												name={`jobFitQuestion${index + 1}`}
 												className="border-gray-300 h-auto w-[90%] text-wrap rounded border p-1"
 												value={jobFitQuestions[index] || ""}
 												readOnly
@@ -217,13 +218,14 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 										</td>
 										<td className="border-gray-300 border px-4 py-2">
 											<Input
+												name={`jobFitResponse${index + 1}`}
 												type="text"
 												className="border-gray-300 w-[100%] rounded border p-1"
 												placeholder="Your response"
 											/>
 										</td>
 										<td className="border-gray-300 border px-4 py-2">
-											<Select>
+											<Select name={`jobFitRating${index + 1}`}>
 												<SelectTrigger className="w-full">
 													<SelectValue placeholder="Select a rating" />
 												</SelectTrigger>
@@ -277,6 +279,7 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 											</Select>
 											<Input
 												type="text"
+												name={`cultureAddQuestion${index + 1}`}
 												className="border-gray-300 h-auto w-[90%] text-wrap rounded border p-1"
 												value={cultureQuestions[index] || ""}
 												readOnly
@@ -284,13 +287,14 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 										</td>
 										<td className="border-gray-300 border px-4 py-2">
 											<Input
+												name={`cultureAddResponse${index + 1}`}
 												type="text"
 												className="border-gray-300 w-[100%] rounded border p-1"
 												placeholder="Your response"
 											/>
 										</td>
 										<td className="border-gray-300 border px-4 py-2">
-											<Select>
+											<Select name={`cultureAddRating${index + 1}`}>
 												<SelectTrigger className="w-full">
 													<SelectValue placeholder="Select a rating" />
 												</SelectTrigger>
