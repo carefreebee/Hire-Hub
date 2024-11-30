@@ -8,7 +8,6 @@ import {
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
-import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
 import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import {
@@ -75,7 +74,13 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 				<CardHeader>
 					<CardTitle className="flex justify-between">
 						Panel Interview
-						<PanelInterViewModal />
+						{user && (
+							<PanelInterViewModal
+								applicantId={applicant?.id}
+								userId={user.id}
+								evaluatedBy={user}
+							/>
+						)}
 					</CardTitle>
 				</CardHeader>
 

@@ -260,4 +260,49 @@ export class RatingFormsService {
 			throw new Error("Creating teaching demo form failed");
 		}
 	}
+	public async panelInterviewForm(formData: FormData) {
+		const factors = [
+			"appearanceAndMannerisms",
+			"mannerOfSpeaking",
+			"physicalCondition",
+			"abilityToGraspIdeasQuickly",
+			"abilityToOrganizeIdeas",
+			"abilityToGetAlongWithOthers",
+			"selfConfidenceInitiativeAndSelfAssertion",
+			"reasoningAndJudgment",
+			"emotionalStabilityAndMaturity",
+			"experienceInWorkAppliedFor",
+		];
+
+		const rate: any = {};
+		factors.forEach((factor, index) => {
+			rate[factor] = {
+				rating: parseInt(formData.get(`rating-${index}`) as string),
+				comment: formData.get(`comment-${index}`) as string,
+			};
+		});
+
+		rate.recommendations = {
+			unfavorable: formData.get("unfavorable") as string,
+			comparison: formData.get("comparison") as string,
+			effective: formData.get("effective") as string,
+		};
+
+		const panelInterviewForm = {
+			applicant_id: parseInt(formData.get("applicantId") as string, 10),
+			user_id: formData.get("userId") as string,
+			rate,
+			recruitment_stage: formData.get("recruitment_stage") as string,
+			created_at: new Date(),
+		};
+
+		console.log("Panel interview form data:", panelInterviewForm); // Debug log
+
+		try {
+			return await this.ratingFormsRepo.insertForm(panelInterviewForm);
+		} catch (error) {
+			console.error("Error creating panel interview form:", error);
+			throw new Error("Creating panel interview form failed");
+		}
+	}
 }
