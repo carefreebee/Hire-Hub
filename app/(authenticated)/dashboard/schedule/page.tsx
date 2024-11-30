@@ -5,19 +5,31 @@ import { Calendar } from "~/components/ui/calendar";
 import { format } from "date-fns";
 import { getAllApplicantForm } from "~/controller/ApplicantFormController";
 import { ApplicantSelect } from "~/lib/schema";
+import { getCurrentUser } from "~/actions/actions";
 
 export default function SchedulePage() {
 	const [applicants, setApplicants] = useState<ApplicantSelect[]>([]);
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+	const [currentUserId, setCurrentUserId] = useState<string>("");
+	const [userRole, setUserRole] = useState<string>("");
 
 	useEffect(() => {
 		const fetchApplicants = async () => {
 			const applicantsData = await getAllApplicantForm();
 			setApplicants(applicantsData);
 		};
+
+		const fetchUser = async () => {
+			const user = await getCurrentUser();
+			if (user) {
+				setCurrentUserId(user.id); 
+				setUserRole(user.role);
+			}
+		};
+		fetchUser();
+
 		fetchApplicants();
 	}, []);
-
 
 	const filterApplicantsByDate = useCallback(
 		(date: Date | undefined) => {
@@ -40,10 +52,33 @@ export default function SchedulePage() {
 		[applicants]
 	);
 
-	const filteredApplicants = useMemo(
-		() => filterApplicantsByDate(selectedDate),
-		[selectedDate, filterApplicantsByDate]
+	const filterByEvaluator = useCallback(
+		(filteredApplicants: ApplicantSelect[]) => {
+			return filteredApplicants.filter((applicant) =>
+				Object.values(applicant.stages || {}).some((stage) => {
+					if (["recruitment_officer", "admin"].includes(userRole)) {
+						return true;
+					}
+
+					if (
+						stage &&
+						stage.assessed_by &&
+						Array.isArray(stage.assessed_by) &&
+						stage.assessed_by.includes(currentUserId)
+					) {
+						return true;
+					}
+					return false;
+				})
+			);
+		},
+		[currentUserId, userRole]
 	);
+
+	const filteredApplicants = useMemo(() => {
+		const applicantsByDate = filterApplicantsByDate(selectedDate);
+		return filterByEvaluator(applicantsByDate);
+	}, [selectedDate, filterApplicantsByDate, filterByEvaluator]);
 
 	const events = useMemo(() => {
 		return filteredApplicants
@@ -72,7 +107,6 @@ export default function SchedulePage() {
 			.sort((a, b) => a!.stageDate!.getTime() - b!.stageDate!.getTime());
 	}, [filteredApplicants, selectedDate]);
 
-
 	return (
 		<div className="flex flex-col p-6">
 			<div className="mb-6 flex items-center justify-between">
@@ -83,7 +117,6 @@ export default function SchedulePage() {
 			</div>
 
 			<div className="grid grid-cols-3 gap-6">
-				{/* Main content: Day View, Calendar, and Event Details */}
 				<div className="col-span-2 rounded border bg-white p-4 shadow">
 					<DayView selectedDate={selectedDate} events={events} />
 				</div>

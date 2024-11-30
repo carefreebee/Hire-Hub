@@ -1,62 +1,108 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { getAllApplicantForm } from "~/controller/ApplicantFormController";
+import { formatDistanceToNow, format } from "date-fns";
+import { ApplicantSelect } from "~/lib/schema";
 import { getCurrentUser } from "~/actions/actions";
-import { formatDistanceToNow } from "date-fns";
-
-const dummyNotifications = [
-	{
-		message: "Hi {user}, your notification message goes here",
-		time: "2024-11-24T23:19:00+15:55",
-	},
-	{
-		message: "Hi {user}, your notification message goes here",
-		time: "2024-10-24T09:00:00.000Z",
-	},
-	{
-		message: "Hi {user}, your notification message goes here",
-		time: "2024-11-23T09:00:00.000Z",
-	},
-	{
-		message: "Hi {user}, your notification message goes here",
-		time: "2024-11-24T23:19:00+15:55",
-	},
-	{
-		message: "Hi {user}, your notification message goes here",
-		time: "2024-11-23T23:19:00+15:55",
-	},
-];
 
 export default function NotificationPage() {
-	const [user, setCurrentUser] = useState<{ firstName: string; lastName: string } | null>(null);
+	const [applicants, setApplicants] = useState<ApplicantSelect[]>([]);
+	 const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+		useEffect(() => {
+			const fetchUser = async () => {
+				const user = await getCurrentUser();
+				if (user) {
+					setCurrentUserId(user.id);
+				}
+			};
+			fetchUser();
+		}, []);
+
+	const [notifications, setNotifications] = useState<
+		{
+			message: string;
+			time: string;
+			applicantName: string;
+			stageName: string;
+			stageDate: string;
+		}[]
+	>([]);
+	const [currentPage, setCurrentPage] = useState(1);
+	const notificationsPerPage = 10;
 
 	useEffect(() => {
-		async function fetchCurrentUser() {
-			const user = await getCurrentUser();
-			if (user) {
-				setCurrentUser({
-					firstName: user.firstName ?? "Firstname",
-					lastName: user.lastName ?? "Lastname",
-				});
-			}
-		}
-		fetchCurrentUser();
+		const fetchApplicants = async () => {
+			const applicantsData = await getAllApplicantForm();
+			setApplicants(applicantsData);
+		};
+		fetchApplicants();
 	}, []);
 
-		const notificationsToDisplay = user
-			? dummyNotifications
-					.map((notif) => ({
-						...notif,
-						message: notif.message.replace(
-							"{user}",
-							`${user.firstName} ${user.lastName}`
-						),
-						formattedTime: formatDistanceToNow(new Date(notif.time), {
-							addSuffix: true,
-						}),
-					}))
-					.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()) // Sort notifications by time (newest first)
-			: [];
+	useEffect(() => {
+		const generateNotifications = () => {
+			const newNotifications = applicants
+				.flatMap((applicant) => {
+					return Object.entries(applicant.stages || {}).map(([stageName, stage]) => {
+						if (
+							stage &&
+							stage.assessed_by &&
+							Array.isArray(stage.assessed_by) &&
+							stage.assessed_by.includes(currentUserId)
+						) {
+							if (stage && "date" in stage) {
+								const stageDate = new Date(stage.date as string);
+								return {
+									message: `You are assigned as an Evaluator`,
+									time: stageDate.toISOString(),
+									applicantName: `${applicant.first_name} ${applicant.last_name}`,
+									stageName: stageName.replace("_", " "),
+									stageDate: stageDate.toISOString(),
+								};
+							}
+						}
+						return null;
+					});
+				})
+				.filter(
+					(
+						notification
+					): notification is {
+						message: string;
+						time: string;
+						applicantName: string;
+						stageName: string;
+						stageDate: string;
+					} => notification !== null
+				);
+
+			setNotifications(newNotifications);
+		};
+
+		generateNotifications();
+	}, [applicants, currentUserId]);
+
+	const sortedNotifications = useMemo(() => {
+		return notifications.sort(
+			(a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+		);
+	}, [notifications]);
+
+	const totalPages = Math.ceil(sortedNotifications.length / notificationsPerPage);
+
+	const paginatedNotifications = sortedNotifications.slice(
+		(currentPage - 1) * notificationsPerPage,
+		currentPage * notificationsPerPage
+	);
+
+	const handleNext = () => {
+		if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+	};
+
+	const handlePrevious = () => {
+		if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+	};
 
 	return (
 		<div className="flex min-h-screen flex-col bg-slate-200/30">
@@ -65,37 +111,81 @@ export default function NotificationPage() {
 			</div>
 
 			<div className="max-w-7xl flex-1 overflow-y-auto px-8 py-6">
-				<div className="space-y-2">
-					{notificationsToDisplay.length === 0 ? (
-						<div className="text-gray-500 text-center">
-							No notifications at the moment.
-						</div>
-					) : (
-						notificationsToDisplay.map((notif, index) => (
+				{sortedNotifications.length === 0 ? (
+					<div className="text-gray-500 text-center">No notifications at the moment.</div>
+				) : (
+					<div className="space-y-2">
+						{paginatedNotifications.map((notification, idx) => (
 							<div
-								key={index}
+								key={idx}
 								className="rounded-md border bg-white p-4 transition-all duration-200 hover:bg-slate-100"
 							>
 								<div className="flex items-center space-x-3">
 									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 text-lg text-white">
-										<span className="font-bold">
-											{user ? user.firstName[0] : "U"}
-										</span>
+										<span className="font-bold">!</span>
 									</div>
 									<div className="flex-1">
-										<p className="text-sm font-semibold">{notif.message}</p>
-									</div>
-									<div className="ml-auto">
-										<p className="text-gray-500 text-xs">
-											{notif.formattedTime}
+										<p className="text-sm font-semibold">
+											You are assigned as an Evaluator
 										</p>
+										<div className="flex items-center justify-between">
+											<p className="text-gray-500 text-xs">
+												{notification.stageName} | Applicant:{" "}
+												{notification.applicantName} | Scheduled:{" "}
+												{new Date(notification.stageDate).toLocaleString(
+													"en-US",
+													{
+														month: "short",
+														day: "numeric",
+														year: "numeric",
+														hour: "numeric",
+														minute: "numeric",
+														hour12: true,
+													}
+												)}
+											</p>
+											<p className="text-gray-500 text-xs">
+												{formatDistanceToNow(new Date(notification.time), {
+													addSuffix: true,
+												})}
+											</p>
+										</div>
 									</div>
 								</div>
 							</div>
-						))
-					)}
+						))}
+					</div>
+				)}
+
+				<div className="mt-6 flex items-center justify-between">
+					<button
+						onClick={handlePrevious}
+						disabled={currentPage === 1}
+						className={`rounded px-4 py-2 ${
+							currentPage === 1
+								? "bg-gray-300 cursor-not-allowed"
+								: "bg-blue-500 text-white hover:bg-blue-600"
+						}`}
+					>
+						Previous
+					</button>
+					<p>
+						Page {currentPage} of {totalPages}
+					</p>
+					<button
+						onClick={handleNext}
+						disabled={currentPage === totalPages}
+						className={`rounded px-4 py-2 ${
+							currentPage === totalPages
+								? "bg-gray-300 cursor-not-allowed"
+								: "bg-blue-500 text-white hover:bg-blue-600"
+						}`}
+					>
+						Next
+					</button>
 				</div>
 			</div>
 		</div>
 	);
 }
+
