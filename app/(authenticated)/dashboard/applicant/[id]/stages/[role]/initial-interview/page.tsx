@@ -14,6 +14,7 @@ import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Car
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import InitialInterviewComponent from "~/components/pages/authenticated/applicant/initial-interview/InitialInterviewComponent";
 import { DeptOrOfficeComponent, DeptOrOfficeFooter } from "~/components/pages/authenticated/stages/DeptOrOffice";
+import { DisplayFooterView } from "~/components/pages/authenticated/stages/DisplayFooterView";
 import { DisplayAssessedBy, DisplayFooter, DisplayMode } from "~/components/pages/authenticated/stages/HigherUp";
 import { StageStatus } from "~/components/pages/authenticated/stages/Messages";
 import { TypographySmall } from "~/components/ui/typography-small";
@@ -63,12 +64,6 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 				<CardHeader>
 					<CardTitle className="flex justify-between">
 						Initial Interview
-						<DownloadForm
-							file={"/files/initial-interview-rating-form.xlsx"}
-							downloadText="Initial Interview Rating Form"
-						>
-							Download Initial Interview Rating Form
-						</DownloadForm>
 					</CardTitle>
 				</CardHeader>
 				{isAllowedRole ? (
@@ -79,10 +74,6 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 									<TypographySmall size={"md"}>
 										Initial Interview
 									</TypographySmall>
-									<DisplayMode
-										status={applicantStage?.status as string}
-										mode={applicantStage?.mode}
-									/>
 								</CardTopLeftSubContent>
 
 								<DisplayDate date={applicantStage?.date as Date} />
@@ -97,12 +88,12 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 							</CardSubContent>
 						</CardContent>
 
-						<DisplayFooter
+						<DisplayFooterView
 							status={applicantStage?.status || ""}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
-							assessorsName={finalAssessor?.name || "Unknown"}
-							assessorsRole={finalAssessor?.role || "No role assigned"}
+							assessorsName={finalAssessor?.name || ""}
+							assessorsRole={finalAssessor?.role || ""}
 						/>
 					</>
 				) : (
@@ -117,8 +108,8 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 
 						<DeptOrOfficeFooter
 							status={applicantStage?.status || ""}
-							assessorsName={finalAssessor?.name || "Unknown"}
-							assessorsRole={finalAssessor?.role || "No role assigned"}
+							assessorsName={finalAssessor?.name || ""}
+							assessorsRole={finalAssessor?.role || ""}
 							assessedByUsers={assessedByUsers ?? false}
 							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess ?? false}
 							hasUserPostedRating={true}

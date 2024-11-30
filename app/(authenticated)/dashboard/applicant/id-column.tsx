@@ -15,7 +15,7 @@ export default function IDColumn({ id }: { id: number }) {
 	const currentRole = useCurrentRole((state) => state.currentRole);
 
 	const RECRUITMENTOFFICERLINK = `/dashboard/applicant/${id}/stages/recruitment_officer/screening`;
-	const EVALUATELINK = `/dashboard/applicant/${id}/stages/${currentRole}/evaluate`;
+	const EVALUATELINK = `/dashboard/applicant/${id}/stages/recruitment_officer/screening`; // `/dashboard/applicant/${id}/stages/${currentRole}/evaluate`;
 
 	return (
 		<DropdownMenu>

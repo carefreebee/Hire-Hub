@@ -12,6 +12,7 @@ import { LoadingButtonMode, LoadingCardFooter } from "~/components/pages/authent
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import CardContentComponent from "~/components/pages/authenticated/applicant/screening/CardContentComponent";
 import CardFooterComponent from "~/components/pages/authenticated/applicant/screening/CardFooter";
+import CardFooterViewing from "~/components/pages/authenticated/applicant/screening/CardFooterViewing";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { validateRequest } from "~/lib/auth";
 import { ResumeProps } from "~/types/types";
@@ -31,17 +32,16 @@ export default async function ApplicantIdPage({ params }: { params: { id: string
 					<CardSubContent>
 						<CardTopLeftSubContent>
 							<TypographySmall size={"md"}>Screening</TypographySmall>
-
-							<Suspense fallback={<LoadingButtonMode />}>
+							{/* <Suspense fallback={<LoadingButtonMode />}>
 								<CardContentComponent applicantId={Number(params.id)} />
-							</Suspense>
+							</Suspense> */}
 						</CardTopLeftSubContent>
 						<DisplayDate date={applicantStage?.date as Date} />
 					</CardSubContent>
 				</CardContent>
 
 				<Suspense fallback={<LoadingCardFooter />}>
-					<CardFooterComponent applicantId={Number(params.id)} />
+					<CardFooterViewing applicantId={Number(params.id)} />
 				</Suspense>
 			</Card>
 

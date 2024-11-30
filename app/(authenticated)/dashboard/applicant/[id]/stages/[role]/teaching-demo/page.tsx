@@ -78,14 +78,14 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 				<CardHeader>
 					<CardTitle className="flex justify-between">
 						{currentStageName}
-						{!isAllowedRole && (
+						{/* {!isAllowedRole && (
 							<DownloadForm
 								file={"/files/teaching-demonstration-rating-scaling.docx"}
 								downloadText="Teaching Demo Interview Rating Form"
 							>
 								Download Teaching Demo Rating Form
 							</DownloadForm>
-						)}
+						)} */}
 					</CardTitle>
 				</CardHeader>
 
@@ -119,8 +119,8 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 							status={applicantStage?.status || ""}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
-							assessorsName={finalAssessor?.name || "Unknown"}
-							assessorsRole={finalAssessor?.role || "No role assigned"}
+							assessorsName={finalAssessor?.name || ""}
+							assessorsRole={finalAssessor?.role || ""}
 						/>
 					</>
 				) : (
@@ -135,8 +135,8 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 
 						<DeptOrOfficeFooter
 							status={applicantStage?.status || ""}
-							assessorsName={finalAssessor?.name || "Unknown"}
-							assessorsRole={finalAssessor?.role || "No role assigned"}
+							assessorsName={finalAssessor?.name || ""}
+							assessorsRole={finalAssessor?.role || ""}
 							assessedByUsers={assessedByUsers ?? false}
 							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess ?? false}
 							hasUserPostedRating={hasUserPostedRating ?? false}
