@@ -117,14 +117,29 @@ export class ApplicantStatusRepository {
 			.returning();
 	}
 
+	private getNextStage(currentStage: StageType): StageType {
+		const stages: StageType[] = [
+			"screening",
+			"initial_interview",
+			"teaching_demo",
+			"psychological_exam",
+			"panel_interview",
+			"recommendation_for_hiring",
+		];
+		const currentIndex = stages.indexOf(currentStage);
+		return stages[currentIndex + 1] as StageType;
+	}
+
 	public async updateApplicantStatus(
 		applicantId: number,
 		selectedMode: "online" | "in-person",
 		assessedBy: string[],
 		stageType: StageType,
-		selectedDate: Date
+		selectedDate: Date,
+		status: string
 	) {
 		const currentApplicant = await this.getCurrentApplicantById(applicantId);
+		const nextStage = this.getNextStage(stageType);
 
 		const updateStage = {
 			...currentApplicant.stages,
@@ -136,7 +151,13 @@ export class ApplicantStatusRepository {
 				mode: selectedMode,
 				assessed_by: assessedBy,
 				date: new Date(selectedDate),
+				status: status,
 			},
+			...(status === "passed" && {
+				[nextStage]: {
+					status: "in-progress",
+				},
+			}),
 		};
 
 		await db

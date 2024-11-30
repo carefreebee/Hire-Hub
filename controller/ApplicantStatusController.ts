@@ -28,5 +28,5 @@ export async function UpdateRecommendationForHiring(formData: FormData) {
 
 // New function for updating Initial Interview status
 export async function UpdateInitialInterview(formData: FormData) {
-  return await applicantStatusService.updateInitialInterview(formData); // Ensure this method exists in applicantStatusService
+	return await applicantStatusService.updateInitialInterview(formData); // Ensure this method exists in applicantStatusService
 }

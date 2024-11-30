@@ -11,15 +11,20 @@ import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { toast } from "~/components/ui/use-toast";
 import {
+	UpdateInitialInterview,
 	UpdatePanelInterview,
 	UpdatePsychologicalExam,
 	UpdateRecommendationForHiring,
 	UpdateTeachingDemo,
-	UpdateInitialInterview
 } from "~/controller/ApplicantStatusController";
 import { formattedDateTime } from "~/lib/date-time";
 import { CheckPathname } from "~/util/path";
-import { useSelectedAssessedBy, useSelectedDateAndTime, useSelectedMode } from "~/util/zustand";
+import {
+	useSelectedAssessedBy,
+	useSelectedDateAndTime,
+	useSelectedMode,
+	useSelectPassedOrFailed,
+} from "~/util/zustand";
 
 type ApplicantIDFooterProps = {
 	id: number;
@@ -27,6 +32,7 @@ type ApplicantIDFooterProps = {
 
 export default function AddEvaluators({ id }: ApplicantIDFooterProps) {
 	const assessedBy = useSelectedAssessedBy((state) => state.assessedBy);
+	const status = useSelectPassedOrFailed((state) => state.status);
 	const selectedAssessedBy = Array.isArray(assessedBy)
 		? assessedBy.map((user) => user.id).join(", ")
 		: "";
@@ -69,6 +75,7 @@ export default function AddEvaluators({ id }: ApplicantIDFooterProps) {
 
 		const formData = new FormData(formRef.current!);
 		if (lastSegment === "initial-interview") {
+			console.log(status);
 			await UpdateInitialInterview(formData);
 		} else if (lastSegment === "teaching-demo") {
 			await UpdateTeachingDemo(formData);
@@ -78,7 +85,7 @@ export default function AddEvaluators({ id }: ApplicantIDFooterProps) {
 			await UpdatePanelInterview(formData);
 		} else if (lastSegment === "recommendation-for-hiring") {
 			await UpdateRecommendationForHiring(formData);
-		} 
+		}
 
 		toast({
 			title: "Applicant Status Updated!",
@@ -125,6 +132,7 @@ export default function AddEvaluators({ id }: ApplicantIDFooterProps) {
 								value={selectedAssessedBy}
 								readOnly
 							/>
+							<input type="hidden" name="applicant_status" value={status} readOnly />
 							<ConfirmationModal
 								mainButton={<Button type="submit">Apply</Button>}
 								descriptionButtonLabel="Are you sure you want to update Applicant Status"
