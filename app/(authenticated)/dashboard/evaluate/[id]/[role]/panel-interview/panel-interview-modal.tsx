@@ -42,24 +42,6 @@ function PanelInterViewModal({ applicantId, userId, evaluatedBy }: InitialInterv
 	async function handleSubmit(): Promise<void> {
 		const formData = new FormData(formRef.current!);
 		formData.append("recruitment_stage", "Panel Interview");
-
-		const rate: any = {};
-
-		factors.forEach((factor, index) => {
-			rate[factor.replace(/ /g, "").toLowerCase()] = {
-				rating: parseInt(formData.get(`rating-${index}`) as string),
-				comment: formData.get(`comment-${index}`) as string,
-			};
-		});
-
-		rate.recommendations = {
-			unfavorable: formData.get("unfavorable") as string,
-			comparison: formData.get("comparison") as string,
-			effective: formData.get("effective") as string,
-		};
-
-		formData.append("rate", JSON.stringify(rate));
-
 		console.log("Form data:", Object.fromEntries(formData.entries()));
 
 		try {
@@ -155,65 +137,59 @@ function PanelInterViewModal({ applicantId, userId, evaluatedBy }: InitialInterv
 						</div>
 					</DialogHeader>
 					<div className="flex h-full w-full flex-col">
-						<form className="space-y-8 p-4">
-							<div>
-								<div className="mb-4 grid grid-cols-[2fr_3fr_1fr] items-center gap-x-4 border-b pb-2 text-sm font-bold">
-									<span>FACTORS</span>
-									<span className="text-center">RATING SCALE</span>
-									<span>COMMENTS</span>
-								</div>
-								{factors.map((factor, index) => (
-									<div
-										key={index}
-										className="mb-2 grid grid-cols-[2fr_3fr_1fr] items-center gap-x-4"
+						<div>
+							<div className="mb-4 grid grid-cols-[2fr_3fr_1fr] items-center gap-x-4 border-b pb-2 text-sm font-bold">
+								<span>FACTORS</span>
+								<span className="text-center">RATING SCALE</span>
+								<span>COMMENTS</span>
+							</div>
+							{factors.map((factor, index) => (
+								<div
+									key={index}
+									className="mb-2 grid grid-cols-[2fr_3fr_1fr] items-center gap-x-4"
+								>
+									<span className="text-sm">
+										{index + 1}. {factor}
+									</span>
+									<RadioGroup
+										name={`rating-${index}`}
+										className="flex w-full justify-between"
 									>
-										<span className="text-sm">
-											{index + 1}. {factor}
-										</span>
-										<RadioGroup
-											name={`rating-${index}`}
-											className="flex w-full justify-between"
-										>
-											{[1, 2, 3, 4, 5].map((rating) => (
-												<Label
-													key={rating}
-													className="flex items-center space-x-1"
-												>
-													<RadioGroupItem value={rating.toString()} />
-													<span className="text-sm">{rating}</span>
-												</Label>
-											))}
-										</RadioGroup>
-										<Input
-											name={`comment-${index}`}
-											placeholder="Add comment"
-										/>
-									</div>
-								))}
+										{[1, 2, 3, 4, 5].map((rating) => (
+											<Label
+												key={rating}
+												className="flex items-center space-x-1"
+											>
+												<RadioGroupItem value={rating.toString()} />
+												<span className="text-sm">{rating}</span>
+											</Label>
+										))}
+									</RadioGroup>
+									<Input name={`comment-${index}`} placeholder="Add comment" />
+								</div>
+							))}
+						</div>
+						<div>
+							<h2 className="mb-2 text-sm font-bold">RECOMMENDATIONS</h2>
+							<div className="mb-2 flex items-center space-x-2">
+								<Label htmlFor="unfavorable" className="w-64 text-sm">
+									Unfavorable
+								</Label>
+								<Input name="unfavorable" />
 							</div>
-							<div>
-								<h2 className="mb-2 text-sm font-bold">RECOMMENDATIONS</h2>
-								<div className="mb-2 flex items-center space-x-2">
-									<Label htmlFor="unfavorable" className="w-64 text-sm">
-										Unfavorable
-									</Label>
-									<Input name="unfavorable" />
-								</div>
-								<div className="mb-2 flex items-center space-x-2">
-									<Label htmlFor="comparison" className="w-64 text-sm">
-										For Comparison with others
-									</Label>
-									<Input name="comparison" />
-								</div>
-								<div className="mb-2 flex items-center space-x-2">
-									<Label htmlFor="effective" className="w-64 text-sm">
-										For hiring effective
-									</Label>
-									<Input name="effective" />
-								</div>
+							<div className="mb-2 flex items-center space-x-2">
+								<Label htmlFor="comparison" className="w-64 text-sm">
+									For Comparison with others
+								</Label>
+								<Input name="comparison" />
 							</div>
-						</form>
-
+							<div className="mb-2 flex items-center space-x-2">
+								<Label htmlFor="effective" className="w-64 text-sm">
+									For hiring effective
+								</Label>
+								<Input name="effective" />
+							</div>
+						</div>
 						<div className="flex flex-col">
 							<div>
 								Interviewer:{" "}

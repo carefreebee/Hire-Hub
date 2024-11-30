@@ -62,7 +62,7 @@ export class ApplicantStatusService {
 				"initial_interview"
 			);
 
-			revalidatePath(`/dashboard/applicant/${applicantUpdateStatus.applicant_id}`);
+			revalidatePath(`/dashboard/evaluate/${applicantUpdateStatus.applicant_id}`);
 		} catch (error) {
 			console.error("Update Applicant Status failed:", error);
 			throw new Error("Update Applicant Status failed");
@@ -86,6 +86,7 @@ export class ApplicantStatusService {
 
 	private async updateApplicantStatus(formData: FormData, stageType: StageType) {
 		const applicantStage = DataExtractor.extractApplicantStages(formData);
+		const status = formData.get("applicant_status") as "passed" | "failed";
 		this.validateApplicantStatus(applicantStage, stageType);
 
 		try {
@@ -94,10 +95,11 @@ export class ApplicantStatusService {
 				applicantStage.selected_mode,
 				applicantStage.assessed_by,
 				stageType,
-				new Date(applicantStage.selected_date)
+				new Date(applicantStage.selected_date),
+				status
 			);
 
-			revalidatePath(`/dashboard/applicant/${applicantStage.applicant_id}`);
+			revalidatePath(`/dashboard/evaluate/${applicantStage.applicant_id}`);
 		} catch (error) {
 			console.error("Update Applicant Status failed:", error);
 			throw new Error("Update Applicant Status failed");

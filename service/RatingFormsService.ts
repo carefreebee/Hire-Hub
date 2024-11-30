@@ -276,12 +276,11 @@ export class RatingFormsService {
 
 		const rate: any = {};
 		factors.forEach((factor, index) => {
-			rate[factor] = {
+			rate[factor.replace(/ /g, "").toLowerCase()] = {
 				rating: parseInt(formData.get(`rating-${index}`) as string),
 				comment: formData.get(`comment-${index}`) as string,
 			};
 		});
-
 		rate.recommendations = {
 			unfavorable: formData.get("unfavorable") as string,
 			comparison: formData.get("comparison") as string,
@@ -291,7 +290,13 @@ export class RatingFormsService {
 		const panelInterviewForm = {
 			applicant_id: parseInt(formData.get("applicantId") as string, 10),
 			user_id: formData.get("userId") as string,
-			rate,
+			rate: {
+				applicantName: formData.get("applicantName") as string,
+				position: formData.get("positionApplied") as string,
+				college: formData.get("college") as string,
+				department: formData.get("departmentOffice") as string,
+				sections: rate,
+			},
 			recruitment_stage: formData.get("recruitment_stage") as string,
 			created_at: new Date(),
 		};
