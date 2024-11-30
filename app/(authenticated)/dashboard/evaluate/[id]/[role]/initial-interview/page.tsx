@@ -21,6 +21,7 @@ import {
 	DisplayFooter,
 	DisplayMode,
 } from "~/components/pages/authenticated/stages/HigherUp";
+import { Button } from "~/components/ui/button";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getUsersWithoutUserRoles } from "~/controller/UsersController";
 import { validateRequest } from "~/lib/auth";
@@ -98,7 +99,19 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 										/>
 
 										<div className="mt-2">
-											<SelectPassedOrFailed />
+											{initialInterviewStatus === "in-progress" ? (
+												<SelectPassedOrFailed />
+											) : (
+												<Button
+													variant={"outline"}
+													disabled
+													className={`${initialInterviewStatus === "passed" ? "text-green-500" : "text-[#7F0000]"}`}
+												>
+													{initialInterviewStatus === "passed"
+														? "Passed"
+														: "Failed"}
+												</Button>
+											)}
 										</div>
 									</div>
 								</CardTopLeftSubContent>

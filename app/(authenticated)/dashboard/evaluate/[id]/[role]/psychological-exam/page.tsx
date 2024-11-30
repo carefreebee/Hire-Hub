@@ -10,6 +10,7 @@ import {
 import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
 import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
+import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
 import {
 	DeptOrOfficeComponent,
 	DeptOrOfficeFooter,
@@ -19,6 +20,7 @@ import {
 	DisplayFooter,
 	DisplayMode,
 } from "~/components/pages/authenticated/stages/HigherUp";
+import { Button } from "~/components/ui/button";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";
 import { getUsersWithoutUserRoles } from "~/controller/UsersController";
@@ -80,10 +82,27 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 									<TypographySmall size={"md"}>
 										{currentStageName}
 									</TypographySmall>
-									<DisplayMode
-										status={applicantStage?.status as string}
-										mode={applicantStage?.mode}
-									/>
+									<div className="flex flex-col">
+										<DisplayMode
+											status={applicantStage?.status as string}
+											mode={applicantStage?.mode}
+										/>
+										<div className="mt-2">
+											{psychologicalExamStatus === "in-progress" ? (
+												<SelectPassedOrFailed />
+											) : (
+												<Button
+													variant={"outline"}
+													disabled
+													className={`${psychologicalExamStatus === "passed" ? "text-green-500" : "text-[#7F0000]"}`}
+												>
+													{psychologicalExamStatus === "passed"
+														? "Passed"
+														: "Failed"}
+												</Button>
+											)}
+										</div>
+									</div>
 								</CardTopLeftSubContent>
 
 								<DisplayDate date={applicantStage?.date as Date} />

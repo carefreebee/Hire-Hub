@@ -21,6 +21,8 @@ import {
 	DisplayMode,
 } from "~/components/pages/authenticated/stages/HigherUp";
 
+import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
+import { Button } from "~/components/ui/button";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";
 import { getUsersWithoutUserRoles } from "~/controller/UsersController";
@@ -101,10 +103,27 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 									<TypographySmall size={"md"}>
 										{currentStageName}
 									</TypographySmall>
-									<DisplayMode
-										status={applicantStage?.status as string}
-										mode={applicantStage?.mode}
-									/>
+									<div className="flex flex-col">
+										<DisplayMode
+											status={applicantStage?.status as string}
+											mode={applicantStage?.mode}
+										/>
+										<div className="mt-2">
+											{teachingdemostatus === "in-progress" ? (
+												<SelectPassedOrFailed />
+											) : (
+												<Button
+													variant={"outline"}
+													disabled
+													className={`${teachingdemostatus === "passed" ? "text-green-500" : "text-[#7F0000]"}`}
+												>
+													{teachingdemostatus === "passed"
+														? "Passed"
+														: "Failed"}
+												</Button>
+											)}
+										</div>
+									</div>
 								</CardTopLeftSubContent>
 
 								<DisplayDate date={applicantStage?.date as Date} />
@@ -118,7 +137,6 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 								</Suspense>
 							</CardSubContent>
 						</CardContent>
-
 						<DisplayFooter
 							status={applicantStage?.status || ""}
 							applicantId={Number(params.id)}
