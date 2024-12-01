@@ -36,12 +36,12 @@ export const useFilteredEvaluate = create<FilteredEvaluate>((set) => ({
 }));
 
 type SelectPassedOrFailed = {
-	status: "passed" | "failed" | "In Progress";
-	setStatus: (value: "passed" | "failed" | "In Progress") => void;
+	status: "passed" | "failed" | "in-progress";
+	setStatus: (value: "passed" | "failed" | "in-progress") => void;
 };
 
 export const useSelectPassedOrFailed = create<SelectPassedOrFailed>((set) => ({
-	status: "In Progress",
+	status: "in-progress",
 	setStatus: (newStatus) => {
 		set({ status: newStatus });
 	},

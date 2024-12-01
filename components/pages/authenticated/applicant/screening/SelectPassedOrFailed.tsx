@@ -17,7 +17,7 @@ export default function SelectPassedOrFailed() {
 	}));
 
 	return (
-		<Select onValueChange={(value) => setStatus(value as "passed" | "failed" | "In Progress")}>
+		<Select onValueChange={(value) => setStatus(value as "passed" | "failed" | "in-progress")}>
 			<SelectTrigger className="h-auto w-32 py-1">
 				<SelectValue placeholder={status} className="mt-0" />
 			</SelectTrigger>
