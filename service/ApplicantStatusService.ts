@@ -126,7 +126,7 @@ export class ApplicantStatusService {
 				new Date(applicantRecommendationStage.selected_date)
 			);
 
-			revalidatePath(`/dashboard/applicant/${applicantRecommendationStage.applicant_id}`);
+			revalidatePath(`/dashboard/evaluate/${applicantRecommendationStage.applicant_id}`);
 		} catch (error) {
 			console.error("Update Applicant Status failed:", error);
 			throw new Error("Update Applicant Status failed");
