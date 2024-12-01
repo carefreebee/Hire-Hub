@@ -47,9 +47,7 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 	const { applicant, applicantStage } = await GetCurrentStage(Number(params.id), "teaching_demo");
 
 	// Get the status of teaching_demo stage only if initial_interview is passed
-	const teachingdemostatus =
-		applicant?.stages?.initial_interview?.status === "passed" ||
-		applicant?.stages?.teaching_demo?.status;
+	const teachingdemostatus = applicant?.stages?.teaching_demo?.status;
 
 	const getFirstIndexAssessedBy = applicantStage?.assessed_by?.[0] ?? "";
 	// GETTING THE FINAL ASSESSOR BASED ON THE USER ID

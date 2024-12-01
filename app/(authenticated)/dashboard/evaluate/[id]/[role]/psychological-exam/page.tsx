@@ -60,7 +60,7 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 	const assessedByUsers = applicantStage?.assessed_by?.includes(user?.id as string);
 
 	//get status of currentstage
-	const psychologicalExamStatus = applicant?.stages?.initial_interview?.status;
+	const psychologicalExamStatus = applicant?.stages?.psychological_exam?.status;
 
 	// Check if the user has already posted a rating for the current stage
 	const hasUserPostedRating = ratingForm.some(
