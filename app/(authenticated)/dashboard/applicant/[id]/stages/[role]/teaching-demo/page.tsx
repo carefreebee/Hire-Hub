@@ -16,6 +16,7 @@ import {
 	DeptOrOfficeComponent,
 	DeptOrOfficeFooter,
 } from "~/components/pages/authenticated/stages/DeptOrOffice";
+import { DisplayFooterView } from "~/components/pages/authenticated/stages/DisplayFooterView";
 import {
 	DisplayAssessedBy,
 	DisplayFooter,
@@ -97,10 +98,10 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 									<TypographySmall size={"md"}>
 										{currentStageName}
 									</TypographySmall>
-									<DisplayMode
+									{/* <DisplayMode
 										status={applicantStage?.status as string}
 										mode={applicantStage?.mode}
-									/>
+									/> */}
 								</CardTopLeftSubContent>
 
 								<DisplayDate date={applicantStage?.date as Date} />
@@ -115,7 +116,7 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 							</CardSubContent>
 						</CardContent>
 
-						<DisplayFooter
+						<DisplayFooterView
 							status={applicantStage?.status || ""}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
