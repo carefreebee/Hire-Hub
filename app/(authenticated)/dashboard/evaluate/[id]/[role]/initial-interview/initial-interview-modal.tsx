@@ -45,10 +45,10 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 		{ factor: "Contribution", questions: jobfitQuestions.contributionQuestions },
 	];
 	const cultureadd = [
-		{ factor: "Culture of Excellence", questions: cultureAddQuestions.cultureofExcellence },
-		{ factor: "Integrity", questions: cultureAddQuestions.integrityQuestions },
-		{ factor: "Teamwork", questions: cultureAddQuestions.teamworkQuestions },
-		{ factor: "Universality", questions: cultureAddQuestions.universalityQuestions },
+		{ factor: "Culture of Excellence", questions: cultureAddQuestions.cultureOfExcellence },
+		{ factor: "Integrity", questions: cultureAddQuestions.integrity },
+		{ factor: "Teamwork", questions: cultureAddQuestions.teamwork },
+		{ factor: "Universality", questions: cultureAddQuestions.universality },
 	];
 	const [cultureQuestions, setCultureQuestions] = useState<SelectedQuestions>({});
 	const [jobFitQuestions, setJobFitQuestions] = useState<SelectedQuestions>({});
