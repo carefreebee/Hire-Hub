@@ -248,6 +248,7 @@ export class RatingFormsService {
 				date: formData.get("date") as string,
 				comments: formData.get("comments") as string,
 				sections: rate,
+				overAll: parseInt(formData.get("rating") as string),
 			},
 			recruitment_stage: formData.get("recruitment_stage") as string,
 			created_at: new Date(),

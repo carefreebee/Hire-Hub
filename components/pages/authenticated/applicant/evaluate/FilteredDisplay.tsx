@@ -8,6 +8,8 @@ import { RatingFormWithUserData } from "~/types/types";
 import { formattedNameAndRole } from "~/util/formatted-name";
 import { useFilteredEvaluate } from "~/util/zustand";
 import InitialInterviewViewModal from "./modals/InitialViewModal";
+import PanelInterviewViewModal from "./modals/PanelInterviewViewModal";
+import TeachingDemoViewModal from "./modals/TeachDemoViewModal";
 
 type FilteredDisplayProps = {
 	rating: RatingFormWithUserData[];
@@ -16,14 +18,14 @@ type FilteredDisplayProps = {
 
 export default function FilteredDisplay({ rating, tableRowLength }: FilteredDisplayProps) {
 	const filteredEvaluate = useFilteredEvaluate((state) => state.filteredEvaluate);
-	const [selectedData, setSelectedData] = useState(null);
+	const [selectedData, setSelectedData] = useState<RatingFormWithUserData | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const filteredMergeData = rating.filter(
 		(data) => !filteredEvaluate || data.recruitment_stage === filteredEvaluate
 	);
 
-	const handleViewClick = (data: any) => {
+	const handleViewClick = (data: RatingFormWithUserData) => {
 		setSelectedData(data);
 		setIsModalOpen(true);
 	};
@@ -56,8 +58,23 @@ export default function FilteredDisplay({ rating, tableRowLength }: FilteredDisp
 				</TableRow>
 			))}
 
-			{selectedData && (
+			{selectedData?.recruitment_stage === "Initial Interview" && (
 				<InitialInterviewViewModal
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					data={selectedData}
+				/>
+			)}
+
+			{selectedData?.recruitment_stage === "Teaching Demo" && (
+				<TeachingDemoViewModal
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					data={selectedData}
+				/>
+			)}
+			{selectedData?.recruitment_stage === "Panel Interview" && (
+				<PanelInterviewViewModal
 					isOpen={isModalOpen}
 					onClose={() => setIsModalOpen(false)}
 					data={selectedData}

@@ -20,10 +20,6 @@ import {
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
 
-interface SelectedQuestions {
-	[key: number]: string;
-}
-
 interface InitialInterviewViewModalProps {
 	isOpen: boolean;
 	onClose: () => void;
@@ -245,8 +241,11 @@ function InitialInterviewViewModal({ isOpen, onClose, data }: InitialInterviewVi
 												name={`cultureAddQuestion${index + 1}`}
 												className="border-gray-300 h-auto w-[90%] text-wrap rounded border p-1"
 												value={
-													data.rate.cultureAdd[row.factor.toLowerCase()]
-														.question || ""
+													data.rate.cultureAdd[
+														row.factor === "Culture of Excellence"
+															? "cultureOfExcellence"
+															: row.factor.toLowerCase()
+													].question || ""
 												}
 												readOnly
 											/>
@@ -256,7 +255,13 @@ function InitialInterviewViewModal({ isOpen, onClose, data }: InitialInterviewVi
 												name={`cultureAddResponse${index + 1}`}
 												type="text"
 												className="border-gray-300 w-[100%] rounded border p-1"
-												value={data.rate.cultureAdd?.response || ""}
+												value={
+													data.rate.cultureAdd[
+														row.factor === "Culture of Excellence"
+															? "cultureOfExcellence"
+															: row.factor.toLowerCase()
+													].response || ""
+												}
 												readOnly
 											/>
 										</td>
@@ -264,7 +269,14 @@ function InitialInterviewViewModal({ isOpen, onClose, data }: InitialInterviewVi
 											<Select name={`cultureAddRating${index + 1}`} disabled>
 												<SelectTrigger className="w-full">
 													<SelectValue
-														placeholder={data.rate.cultureAdd?.rating}
+														placeholder={
+															data.rate.cultureAdd[
+																row.factor ===
+																"Culture of Excellence"
+																	? "cultureOfExcellence"
+																	: row.factor.toLowerCase()
+															].rating
+														}
 													/>
 												</SelectTrigger>
 												<SelectContent>
@@ -341,11 +353,10 @@ function InitialInterviewViewModal({ isOpen, onClose, data }: InitialInterviewVi
 							</div>
 						</div>
 						<div className="flex flex-col">
-							Evaluated by:
 							<div className="flex gap-2">
 								Interviewer&apos;s Name:
 								<div className="bg-orange-300 font-bold">
-									{data.rate.evaluatedBy?.name} | {data.rate.evaluatedBy?.role}
+									{data.rate.evaluatedBy} | {data.rate.evaluatedBy?.role}
 								</div>
 							</div>
 						</div>

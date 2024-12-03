@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Button } from "~/components/ui/button";
 import {
 	Dialog,
@@ -13,23 +13,19 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Textarea } from "~/components/ui/textarea";
-import { toast } from "~/components/ui/use-toast";
-import { handleInsertForm } from "~/controller/RatingFormsController";
-import { User } from "~/lib/schema";
 
-interface TeachingDemoModalProps {
-	applicantId: number | undefined;
-	userId: string | undefined;
-	evaluatedBy: User | undefined;
+interface TeachingDemoViewModalProps {
+	isOpen: boolean;
+	onClose: () => void;
+	data: any;
 }
-
-function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoModalProps) {
+function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalProps) {
 	const formRef = useRef<HTMLFormElement>(null);
-	const [isOpen, setIsOpen] = useState(false);
 
 	const sections = [
 		{
 			title: "A. PERSONALITY",
+			key: "personality",
 			items: [
 				"Grooming is commendable.",
 				"Voice modulation and proper pacing are observed.",
@@ -40,6 +36,7 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 		},
 		{
 			title: "B. PREPARATION",
+			key: "preparation",
 			items: [
 				"Instructional objectives for the session are evident.",
 				"Board notes, sketches and diagrams are legible and well-organized.",
@@ -48,6 +45,7 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 		},
 		{
 			title: "C. TEACHING PROCESS",
+			key: "teachingProcess",
 			items: [
 				"Motivational skills are demonstrated.",
 				"Organizational / logical sequencing of topics is evident.",
@@ -58,6 +56,7 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 		},
 		{
 			title: "D. COMMUNICATION SKILLS",
+			key: "communicationSkills",
 			items: [
 				"Pauses for questions, commands or directions.",
 				"Uses language for a variety of purposes.",
@@ -68,44 +67,19 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 		},
 	];
 
-	async function handleSubmit(): Promise<void> {
-		const formData = new FormData(formRef.current!);
-		formData.append("recruitment_stage", "Teaching Demo");
-		console.log("Form data:", Object.fromEntries(formData.entries()));
-
-		try {
-			await handleInsertForm(formData, "teachingDemo");
-			console.log("Form data submitted");
-			if (formRef.current) {
-				formRef.current.reset();
-			}
-			toast({
-				title: "Teaching Demo Submitted!",
-				description: "The teaching demo form has been successfully submitted.",
-			});
-			setIsOpen(false);
-		} catch (error) {
-			console.error("Error submitting form:", error);
-			toast({
-				title: "Submission Failed",
-				description: "There was an error submitting the form.",
-			});
-		}
-	}
-
 	return (
-		<Dialog open={isOpen} onOpenChange={setIsOpen}>
+		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogTrigger>
 				<Button>Teaching Demo Form</Button>
 			</DialogTrigger>
 			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
 				<form ref={formRef} onSubmit={(e) => e.preventDefault()} className="space-y-8 p-4">
-					<input type="hidden" name="applicantId" value={applicantId} />
-					<input type="hidden" name="userId" value={userId} />
+					<input type="hidden" name="applicantId" value={data.rate.applicantId} />
+					<input type="hidden" name="userId" value={data.rate.userId} />
 					<input
 						type="hidden"
 						name="evaluatedBy"
-						value={evaluatedBy?.name ?? ""}
+						value={data.rate.evaluatedBy}
 						readOnly
 					/>
 					<DialogHeader className="flex items-center">
@@ -120,6 +94,8 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 										type="text"
 										minLength={2}
 										maxLength={100}
+										value={data.rate.applicantName}
+										readOnly
 										required
 										className="h-8 w-96"
 									/>
@@ -135,6 +111,8 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 											type="text"
 											minLength={2}
 											maxLength={100}
+											value={data.rate.topic}
+											readOnly
 											required
 											className="h-8"
 										/>
@@ -146,6 +124,8 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 											type="text"
 											minLength={2}
 											maxLength={100}
+											value={data.rate.departmentOffice}
+											readOnly
 											required
 											className="h-8"
 										/>
@@ -156,6 +136,8 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 										type="text"
 										minLength={2}
 										maxLength={100}
+										value={data.rate.date}
+										readOnly
 										required
 										className="h-8 w-24"
 									/>
@@ -200,6 +182,11 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 														<RadioGroupItem
 															value={`rating-${sectionIndex}-${itemIndex}-${rating}`}
 															id={`rating-${sectionIndex}-${itemIndex}-${rating}`}
+															checked={
+																data.rate.sections?.[section.key][
+																	`question${itemIndex + 1}`
+																].rating === rating
+															}
 														/>
 														<Label
 															htmlFor={`rating-${sectionIndex}-${itemIndex}-${rating}`}
@@ -225,7 +212,7 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 								<label className="flex-1 text-sm">
 									Rate the overall performance:
 								</label>
-								<RadioGroup defaultValue="overall-rating-1" name="overAll">
+								<RadioGroup defaultValue="overall-rating-1" name="overall-rating">
 									<div className="flex w-56 justify-between">
 										{[1, 2, 3, 4].map((rating) => (
 											<div
@@ -233,8 +220,8 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 												className="flex items-center space-x-2"
 											>
 												<RadioGroupItem
-													value={rating.toString()}
-													id={rating.toString()}
+													value={`overall-rating-${rating}`}
+													id={`overall-rating-${rating}`}
 												/>
 												<Label htmlFor={`overall-rating-${rating}`}>
 													{rating}
@@ -254,19 +241,12 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 							name="comments"
 							className="h-24"
 							placeholder="Enter comments here..."
+							readOnly
+							value={data.rate.comments}
 						/>
-						<Button type="submit" onClick={handleSubmit}>
-							Submit
-						</Button>
 						<div className="flex flex-col">
-							<div className="flex">
-								Assessor:{" "}
-								<div>
-									{evaluatedBy?.name} | {evaluatedBy?.role}
-								</div>
-							</div>
-
-							<div>Date: </div>
+							<div>Date: {data.rate.date}</div>
+							<Button onClick={onClose}>Close</Button>
 						</div>
 					</div>
 				</form>
@@ -275,4 +255,4 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 	);
 }
 
-export default TeachingDemoModal;
+export default TeachingDemoViewModal;
