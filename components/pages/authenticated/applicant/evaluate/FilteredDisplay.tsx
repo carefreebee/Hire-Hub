@@ -1,11 +1,13 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
+import { Button } from "~/components/ui/button";
 import { TableCell, TableRow } from "~/components/ui/table";
 import { formatDate } from "~/lib/date-time";
 import { RatingFormWithUserData } from "~/types/types";
 import { formattedNameAndRole } from "~/util/formatted-name";
 import { useFilteredEvaluate } from "~/util/zustand";
+import InitialInterviewViewModal from "./modals/InitialViewModal";
 
 type FilteredDisplayProps = {
 	rating: RatingFormWithUserData[];
@@ -14,10 +16,17 @@ type FilteredDisplayProps = {
 
 export default function FilteredDisplay({ rating, tableRowLength }: FilteredDisplayProps) {
 	const filteredEvaluate = useFilteredEvaluate((state) => state.filteredEvaluate);
+	const [selectedData, setSelectedData] = useState(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const filteredMergeData = rating.filter(
 		(data) => !filteredEvaluate || data.recruitment_stage === filteredEvaluate
 	);
+
+	const handleViewClick = (data: any) => {
+		setSelectedData(data);
+		setIsModalOpen(true);
+	};
 
 	if (filteredMergeData.length === 0) {
 		return (
@@ -39,13 +48,21 @@ export default function FilteredDisplay({ rating, tableRowLength }: FilteredDisp
 					<TableCell className="h-12">{formattedNameAndRole(data.role, "_")}</TableCell>
 					<TableCell className="h-12">{formatDate(data.created_at as Date)}</TableCell>
 					<TableCell className="h-12">
-						<Link href={data.rate} target="blank" className="text-[#0F91D2]">
+						<Button onClick={() => handleViewClick(data)} className="text-[#0F91D2]">
 							View
-						</Link>
+						</Button>
 					</TableCell>
 					<td></td>
 				</TableRow>
 			))}
+
+			{selectedData && (
+				<InitialInterviewViewModal
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					data={selectedData}
+				/>
+			)}
 		</>
 	);
 }

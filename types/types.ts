@@ -113,7 +113,7 @@ export type RatingFormWithUserData = {
 	rating_id: number;
 	applicant_id: number | null;
 	user_id: string | null;
-	rate: string;
+	rate: object;
 	recruitment_stage: string;
 	created_at: Date | null;
 	name: string;

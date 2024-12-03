@@ -1,5 +1,5 @@
 export const cultureAddQuestions = {
-	cultureofExcellence: [
+	cultureOfExcellence: [
 		"How do you see your personal values and work ethic aligning with the company culture, and how do you plan to embody these values in your work?",
 		"Can you describe a time when you took initiative to create a positive impact on your team or the company, and what motivated you to take that action?",
 		"What is your approach to utilizing data and metrics to make informed decisions in your work, and can you describe a specific example of how you have successfully used data to improve a process or outcome?",
@@ -61,7 +61,7 @@ export const cultureAddQuestions = {
 		"Can you share an example of a time when you proactively sought out opportunities to improve the quality or accuracy of your work and made changes to achieve that goal?",
 		"How do you balance the need for diligence and attention to detail with the need for flexibility and adaptability in a fast-paced work environment?",
 	],
-	integrityQuestions: [
+	integrity: [
 		"At our university, we prioritize integrity and ethical principles in the workplace. How do you define integrity, and can you give some examples of how you uphold ethical principles in your work?",
 		"In your experience, can you describe a challenging ethical dilemma you faced in your previous job? How did you approach the situation, and what actions did you take to resolve it?",
 		"In the workplace, conflicts of interest may arise where personal and professional interests conflict. How do you handle such situations, and what steps do you take to ensure that you remain impartial?",
@@ -123,7 +123,7 @@ export const cultureAddQuestions = {
 		"Can you tell us about a time when you made a mistake at work and had to take corrective action? How did you handle the situation, and what did you learn from it?",
 		"How do you take ownership of your work responsibilities, and how do you demonstrate initiative and proactivity in completing your tasks to the best of your abilities?",
 	],
-	teamworkQuestions: [
+	teamwork: [
 		"Can you describe a situation where you had to collaborate with others outside of your team or department to achieve a goal? How did you ensure effective communication and coordination to accomplish the task?",
 		"How do you approach giving feedback to a supervisor or someone in a higher position of authority? Can you describe a situation where you had to provide constructive feedback to a superior, and how you handled the conversation?",
 		"Can you describe a time when you had to work with someone who had a different cultural background or perspective from your own? How did you ensure cultural sensitivity and effective communication in the work relationship?",
@@ -185,7 +185,7 @@ export const cultureAddQuestions = {
 		"How do you ensure that you are keeping all team members informed and engaged in the progress of a project, particularly when working remotely or in a distributed team?",
 		"Can you describe a time when you had to make sacrifices or adjustments to your personal life in order to meet your commitments to your team or colleagues?",
 	],
-	universalityQuestions: [
+	universality: [
 		"Can you share an experience where you actively promoted diversity and inclusivity in the workplace or in your personal life?",
 		"How do you ensure that your work considers the needs and perspectives of all stakeholders, including those who may be marginalized or underrepresented? Can you provide an example?",
 		"Can you describe a time when you had to make a decision that was in the best interest of the greater good, even if it meant personal sacrifice?",
