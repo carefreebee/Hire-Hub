@@ -7,7 +7,6 @@ import {
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
@@ -21,6 +20,7 @@ interface TeachingDemoViewModalProps {
 }
 function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalProps) {
 	const formRef = useRef<HTMLFormElement>(null);
+	console.log(data);
 
 	const sections = [
 		{
@@ -69,9 +69,6 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogTrigger>
-				<Button>Teaching Demo Form</Button>
-			</DialogTrigger>
 			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
 				<form ref={formRef} onSubmit={(e) => e.preventDefault()} className="space-y-8 p-4">
 					<input type="hidden" name="applicantId" value={data.rate.applicantId} />
@@ -212,7 +209,7 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 								<label className="flex-1 text-sm">
 									Rate the overall performance:
 								</label>
-								<RadioGroup defaultValue="overall-rating-1" name="overall-rating">
+								<RadioGroup defaultValue="overall-rating-1" name="overAll">
 									<div className="flex w-56 justify-between">
 										{[1, 2, 3, 4].map((rating) => (
 											<div
@@ -222,6 +219,9 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 												<RadioGroupItem
 													value={`overall-rating-${rating}`}
 													id={`overall-rating-${rating}`}
+													checked={
+														data.rate.overAll === rating.toString()
+													}
 												/>
 												<Label htmlFor={`overall-rating-${rating}`}>
 													{rating}

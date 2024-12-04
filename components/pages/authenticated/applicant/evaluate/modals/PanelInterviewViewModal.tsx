@@ -7,7 +7,6 @@ import {
 	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogTrigger,
 } from "~/components/ui/dialog";
 
 import { Input } from "~/components/ui/input";
@@ -43,9 +42,6 @@ function PanelInterViewModal({ isOpen, onClose, data }: PanelInterviewViewModalP
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogTrigger>
-				<Button>Panel Interview Form</Button>
-			</DialogTrigger>
 			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
 				<form ref={formRef} onSubmit={(e) => e.preventDefault()} className="space-y-8 p-4">
 					<DialogHeader className="flex items-center">

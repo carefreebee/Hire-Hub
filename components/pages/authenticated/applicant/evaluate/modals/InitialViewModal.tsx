@@ -241,11 +241,11 @@ function InitialInterviewViewModal({ isOpen, onClose, data }: InitialInterviewVi
 												name={`cultureAddQuestion${index + 1}`}
 												className="border-gray-300 h-auto w-[90%] text-wrap rounded border p-1"
 												value={
-													data.rate.cultureAdd[
+													data.rate.cultureAdd?.[
 														row.factor === "Culture of Excellence"
 															? "cultureOfExcellence"
 															: row.factor.toLowerCase()
-													].question || ""
+													]?.question || ""
 												}
 												readOnly
 											/>
@@ -256,11 +256,11 @@ function InitialInterviewViewModal({ isOpen, onClose, data }: InitialInterviewVi
 												type="text"
 												className="border-gray-300 w-[100%] rounded border p-1"
 												value={
-													data.rate.cultureAdd[
+													data.rate.cultureAdd?.[
 														row.factor === "Culture of Excellence"
 															? "cultureOfExcellence"
 															: row.factor.toLowerCase()
-													].response || ""
+													]?.response || ""
 												}
 												readOnly
 											/>
@@ -270,12 +270,12 @@ function InitialInterviewViewModal({ isOpen, onClose, data }: InitialInterviewVi
 												<SelectTrigger className="w-full">
 													<SelectValue
 														placeholder={
-															data.rate.cultureAdd[
+															data.rate.cultureAdd?.[
 																row.factor ===
 																"Culture of Excellence"
 																	? "cultureOfExcellence"
 																	: row.factor.toLowerCase()
-															].rating
+															]?.rating
 														}
 													/>
 												</SelectTrigger>

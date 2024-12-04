@@ -9,7 +9,7 @@ import { formattedNameAndRole } from "~/util/formatted-name";
 import { useFilteredEvaluate } from "~/util/zustand";
 import InitialInterviewViewModal from "./modals/InitialViewModal";
 import PanelInterviewViewModal from "./modals/PanelInterviewViewModal";
-import TeachingDemoViewModal from "./modals/TeachDemoViewModal";
+import TeachingDemoViewModal from "./modals/TeachingDemoViewModal";
 
 type FilteredDisplayProps = {
 	rating: RatingFormWithUserData[];

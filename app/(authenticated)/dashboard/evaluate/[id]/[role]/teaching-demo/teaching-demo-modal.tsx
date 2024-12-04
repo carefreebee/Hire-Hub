@@ -234,7 +234,7 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 											>
 												<RadioGroupItem
 													value={rating.toString()}
-													id={rating.toString()}
+													id={`overall-rating-${rating}`}
 												/>
 												<Label htmlFor={`overall-rating-${rating}`}>
 													{rating}
