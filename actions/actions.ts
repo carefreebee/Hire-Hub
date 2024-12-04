@@ -5,16 +5,10 @@ import { redirect } from "next/navigation";
 import { lucia, validateRequest } from "~/lib/auth";
 import { User } from "~/lib/schema";
 
-interface ActionResult {
-	error: string | null;
-}
-
-export async function logout(): Promise<ActionResult> {
+export async function logout(): Promise<void> {
 	const { session } = await validateRequest();
 	if (!session) {
-		return {
-			error: "Unauthorized",
-		};
+		return;
 	}
 
 	await lucia.invalidateSession(session.id);
