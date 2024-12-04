@@ -1,9 +1,5 @@
-import Link from "next/link";
 import { Suspense } from "react";
-import { Button } from "~/components/ui/button";
-import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";
 import { RatingFormWithUserData, ResumeProps, StageType } from "~/types/types";
-import { formattedNameAndRole } from "~/util/formatted-name";
 import { Card, CardContent, CardHeader, CardTitle } from "../Card/CardComponent";
 import { LoadingComment } from "../Card/SkeletonCard";
 import CommentComponent from "./Comments/CommentComponent";
@@ -47,60 +43,60 @@ export default function CommentsAndDocuments({
 	);
 }
 
-function ApplicantDocumentDisplay({ url, name }: { url: string; name: string }) {
-	return (
-		<Button
-			variant={"outline"}
-			asChild
-			className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
-		>
-			<Link href={url} target="_blank">
-				{/* {RemoveExtension(name)} */}
-				{name}
-			</Link>
-		</Button>
-	);
-}
+// function ApplicantDocumentDisplay({ url, name }: { url: string; name: string }) {
+// 	return (
+// 		<Button
+// 			variant={"outline"}
+// 			asChild
+// 			className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
+// 		>
+// 			<Link href={url} target="_blank">
+// 				{/* {RemoveExtension(name)} */}
+// 				{name}
+// 			</Link>
+// 		</Button>
+// 	);
+// }
 
-type RatingFormDisplayProps = {
-	applicantId: string;
-	ratingFormId: number[];
-	document: Partial<RatingFormWithUserData>[];
-};
+// type RatingFormDisplayProps = {
+// 	applicantId: string;
+// 	ratingFormId: number[];
+// 	document: Partial<RatingFormWithUserData>[];
+// };
 
-async function RatingFormDisplay({ applicantId, ratingFormId, document }: RatingFormDisplayProps) {
-	const ratingForms = await getAllRaitingFormByIdInEachStages(Number(applicantId), ratingFormId);
+// async function RatingFormDisplay({ applicantId, ratingFormId, document }: RatingFormDisplayProps) {
+// 	const ratingForms = await getAllRaitingFormByIdInEachStages(Number(applicantId), ratingFormId);
 
-	return (
-		<>
-			{ratingForms &&
-				ratingForms.map((ratingForm, index) => (
-					<Button
-						key={String(ratingForm.rate || index)}
-						variant={"outline"}
-						asChild
-						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
-					>
-						<Link href={ratingForm?.rate as string} target="_blank">
-							{ratingForm.recruitment_stage}{" "}
-							{formattedNameAndRole(ratingForm?.role as string, "_")}
-						</Link>
-					</Button>
-				))}
+// 	return (
+// 		<>
+// 			{ratingForms &&
+// 				ratingForms.map((ratingForm, index) => (
+// 					<Button
+// 						key={String(ratingForm.rate || index)}
+// 						variant={"outline"}
+// 						asChild
+// 						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
+// 					>
+// 						<Link href={ratingForm?.rate as string} target="_blank">
+// 							{ratingForm.recruitment_stage}{" "}
+// 							{formattedNameAndRole(ratingForm?.role as string, "_")}
+// 						</Link>
+// 					</Button>
+// 				))}
 
-			{document &&
-				document.map((doc) => (
-					<Button
-						key={doc.rate}
-						variant={"outline"}
-						asChild
-						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
-					>
-						<Link href={doc?.rate as string} target="_blank">
-							{doc.recruitment_stage} {formattedNameAndRole(doc?.role as string, "_")}
-						</Link>
-					</Button>
-				))}
-		</>
-	);
-}
+// 			{document &&
+// 				document.map((doc) => (
+// 					<Button
+// 						key={doc.rate}
+// 						variant={"outline"}
+// 						asChild
+// 						className="border-[#407BFF] text-[#407BFF] hover:text-[#407BFF]"
+// 					>
+// 						<Link href={doc?.rate as object} target="_blank">
+// 							{doc.recruitment_stage} {formattedNameAndRole(doc?.role as string, "_")}
+// 						</Link>
+// 					</Button>
+// 				))}
+// 		</>
+// 	);
+// }
