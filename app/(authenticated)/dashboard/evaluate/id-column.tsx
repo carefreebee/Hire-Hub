@@ -16,10 +16,15 @@ export default function IDColumn({ id }: { id: number }) {
 
 	const CHAIRLINK = `/dashboard/evaluate/${id}/${currentRole}/screening`;
 	const FACULTYLINK = `/dashboard/evaluate/${id}/${currentRole}/teaching-demo`;
+	const GUIDANCELINK = `/dashboard/evaluate/${id}/${currentRole}/psychological-exam`;
 	const VPLINK = `/dashboard/evaluate/${id}/${currentRole}/panel-interview`;
 
 	const isDeanOrChair = () => {
 		return currentRole === "dean" || currentRole === "department_chair" ? true : false;
+	};
+
+	const isGuidance = () => {
+		return currentRole === "guidance_center_staff" ? true : false;
 	};
 
 	const isFaculty = () => {
@@ -46,11 +51,13 @@ export default function IDColumn({ id }: { id: number }) {
 						href={
 							isDeanOrChair()
 								? CHAIRLINK
-								: isFaculty()
-									? FACULTYLINK
-									: isVP()
-										? VPLINK
-										: "/dashboard/evaluate"
+								: isGuidance()
+									? GUIDANCELINK
+									: isFaculty()
+										? FACULTYLINK
+										: isVP()
+											? VPLINK
+											: "/dashboard/evaluate"
 						}
 					>
 						Evaluate
