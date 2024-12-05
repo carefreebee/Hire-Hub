@@ -74,7 +74,12 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 		<>
 			<Card>
 				<CardHeader>
-					<CardTitle className="flex justify-between">Pyschological Exam</CardTitle>
+					<div className="flex w-full items-center justify-between">
+						<CardTitle className="flex justify-between">Pyschological Exam</CardTitle>
+						<a href={`/applicationform/${applicant?.id}/${user?.id}`} target="_blank">
+							<Button>Generate Application Form</Button>
+						</a>
+					</div>
 				</CardHeader>
 				{isAllowedRole && psychologicalExamStatus ? (
 					<>
@@ -108,12 +113,6 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 								</CardTopLeftSubContent>
 
 								<DisplayDate date={applicantStage?.date as Date} />
-								<a
-									href={`/applicationform/${applicant?.id}/${user?.id}`}
-									target="_blank"
-								>
-									<Button>Generate Application Form</Button>
-								</a>
 							</CardSubContent>
 							<CardSubContent>
 								<TypographySmall size={"md"}>Assessed by:</TypographySmall>
