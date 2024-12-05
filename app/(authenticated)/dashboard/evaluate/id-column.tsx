@@ -21,6 +21,7 @@ export default function IDColumn({ id }: { id: number }) {
 	const FACULTYLINK = `/dashboard/evaluate/${id}/${currentRole}/teaching-demo`;
 	const GUIDANCELINK = `/dashboard/evaluate/${id}/${currentRole}/psychological-exam`;
 	const VPLINK = `/dashboard/evaluate/${id}/${currentRole}/panel-interview`;
+	const PLINK = `/dashboard/evaluate/${id}/${currentRole}/recommendation-for-hiring`;
 
 	const isDeanOrChair = () => currentRole === "dean" || currentRole === "department_chair";
 
@@ -29,6 +30,8 @@ export default function IDColumn({ id }: { id: number }) {
 	const isFaculty = () => currentRole === "faculty";
 
 	const isVP = () => currentRole === "vp_acad_affairs" || currentRole === "vp_administration";
+
+	const isP = () => currentRole === "univ_president";
 
 	const handleEvaluateClick = () => {
 		setLoading(true);
@@ -63,6 +66,8 @@ export default function IDColumn({ id }: { id: number }) {
 												? FACULTYLINK
 												: isVP()
 													? VPLINK
+													: isP()
+														? PLINK
 													: "/dashboard/evaluate"
 								}
 								onClick={handleEvaluateClick}

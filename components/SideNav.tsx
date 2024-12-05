@@ -87,7 +87,8 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 					"dean",
 					"department_chair",
 					"faculty",
-					"guidance_center_staff"
+					"guidance_center_staff",
+					"univ_president",
 				].includes(role) && (
 					<Links
 						href="/dashboard/evaluate"
