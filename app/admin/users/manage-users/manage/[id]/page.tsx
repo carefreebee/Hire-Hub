@@ -6,7 +6,7 @@ import { Label } from "~/components/ui/label";
 import { getDeptAndOffice, getUserByID } from "~/controller/UsersController";
 
 function UserIDContainer({ children }: { children: React.ReactNode }) {
-	return <div className="grid w-full items-center gap-1.5">{children}</div>;
+	return <div className="grid w-full items-center gap-6">{children}</div>;
 }
 
 type UserIDChildrenProps = {
@@ -16,12 +16,10 @@ type UserIDChildrenProps = {
 
 function UserIDChildren({ label, value }: UserIDChildrenProps) {
 	return (
-		<>
-			<div className="flex items-center gap-10">
-				<Label className="w-44">{label}</Label>
-				<Input type="text" value={value} readOnly className="shadow-md" />
-			</div>
-		</>
+		<div className="flex items-center gap-10">
+			<Label className="w-44">{label}</Label>
+			<Input type="text" value={value} readOnly className="shadow-md" />
+		</div>
 	);
 }
 
@@ -30,30 +28,44 @@ export default async function UserIDPage({ params }: { params: { id: string } })
 	const { department, office } = await getDeptAndOffice();
 
 	return (
-		<section className="p-10">
-			<section className="mb-32 flex flex-col gap-20 bg-white">
-				<p className="border-b px-10 py-3 text-sm font-semibold">User ID {user?.id}</p>
-				<div className="flex justify-between px-10">
-					<div className="flex flex-col text-[#6F767E]">
-						<UserIDContainer>
-							<UserIDChildren label="First Name" value={user?.firstName as string} />
-							<UserIDChildren label="Last Name" value={user?.lastName as string} />
-							<UserIDChildren label="E-mail Address" value={user?.email as string} />
-						</UserIDContainer>
+		<div className="flex min-h-screen flex-col">
+			{/* Main Content */}
+			<main className="bg-gray-100 flex-grow p-10">
+				<section className="rounded-lg bg-white p-8 shadow">
+					<h2 className="text-gray-700 mb-8 border-b pb-4 text-lg font-semibold">
+						User ID: {user?.id}
+					</h2>
+					<div className="grid grid-cols-1 gap-10 md:grid-cols-2">
+						{/* Left Section */}
+						<div className="flex flex-col gap-6">
+							<UserIDContainer>
+								<UserIDChildren
+									label="First Name"
+									value={user?.firstName || "N/A"}
+								/>
+								<UserIDChildren label="Last Name" value={user?.lastName || "N/A"} />
+								<UserIDChildren
+									label="E-mail Address"
+									value={user?.email || "N/A"}
+								/>
+							</UserIDContainer>
 
-						<Link
-							href={"/admin/users/manage-users"}
-							className="mb-10 mt-20 flex items-center text-sm font-medium"
-						>
-							<ArrowLeft />
-							Go Back
-						</Link>
+							<Link
+								href="/admin/users/manage-users"
+								className="mt-10 flex items-center text-sm font-medium text-[#7F0000] hover:underline"
+							>
+								<ArrowLeft />
+								<span className="ml-2">Go Back</span>
+							</Link>
+						</div>
+
+						{/* Right Section */}
+						<div className="bg-gray-50 rounded-lg p-6 ">
+							<UpdateInput id={params.id} department={department} office={office} />
+						</div>
 					</div>
-					<div className="flex flex-col gap-10 text-[#6F767E]">
-						<UpdateInput id={params.id} department={department} office={office} />
-					</div>
-				</div>
-			</section>
-		</section>
+				</section>
+			</main>
+		</div>
 	);
 }

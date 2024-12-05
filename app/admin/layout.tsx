@@ -31,20 +31,20 @@ export default async function layout({ children }: { children: React.ReactNode }
 					<Links
 						href="/admin/dashboard"
 						label="Dashboard"
-						activeChildren={<DashboardSVG />}
-						notActiveChildren={<WhiteDashboardSvg />}
+						activeChildren={<WhiteDashboardSvg />}
+						notActiveChildren={<DashboardSVG />}
 					/>
 					<Links
 						href="/admin/users/manage-users"
 						label="Users"
-						activeChildren={<ApplicantSVG />}
-						notActiveChildren={<WhiteApplicantSvg />}
+						activeChildren={<WhiteApplicantSvg />}
+						notActiveChildren={<ApplicantSVG />}
 					/>
 					<Links
 						href="/admin/units/department"
 						label="Units"
-						activeChildren={<JobRequestSVG />}
-						notActiveChildren={<WhiteJobRequestSvg />}
+						activeChildren={<WhiteJobRequestSvg />}
+						notActiveChildren={<JobRequestSVG />}
 					/>
 					<div className="flex w-[96%] justify-start gap-4 rounded-xl py-3 pl-10 font-medium hover:bg-[#7F0000] hover:text-white">
 						<LogoutSVG />
