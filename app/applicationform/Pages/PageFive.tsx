@@ -3,10 +3,10 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
 interface PageOneProps {
-	step: number;
+	visible: boolean;
 }
 
-export default function PageFive({ step }: PageOneProps) {
+export default function PageFive({ visible }: PageOneProps) {
 	const [workExp, setWorkExp] = useState([{ id: 1 }]);
 
 	const addWorkExp = () => {
@@ -15,7 +15,7 @@ export default function PageFive({ step }: PageOneProps) {
 	return (
 		<div
 			className={
-				step === 5
+				visible
 					? "flex w-full flex-col gap-4 p-8"
 					: "pointer-events-none absolute -z-50 h-0 w-0 opacity-0"
 			}

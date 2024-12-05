@@ -3,10 +3,10 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
 interface PageOneProps {
-	step: number;
+	visible: boolean;
 }
 
-export default function PageFour({ step }: PageOneProps) {
+export default function PageFour({ visible }: PageOneProps) {
 	const [organizations, setOrganizations] = useState([{ id: 1 }]);
 
 	const addOrganization = () => {
@@ -15,7 +15,7 @@ export default function PageFour({ step }: PageOneProps) {
 	return (
 		<div
 			className={
-				step === 4
+				visible
 					? "flex w-full flex-col gap-4 p-8"
 					: "pointer-events-none absolute -z-50 h-0 w-0 opacity-0"
 			}

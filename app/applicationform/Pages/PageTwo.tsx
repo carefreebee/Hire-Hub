@@ -1,14 +1,14 @@
 import { Input } from "~/components/ui/input";
 
 interface PageOneProps {
-	step: number;
+	visible: boolean;
 }
 
-export default function PageTwo({ step }: PageOneProps) {
+export default function PageTwo({ visible }: PageOneProps) {
 	return (
 		<div
 			className={
-				step === 2
+				visible
 					? "flex w-full flex-col gap-4 p-8"
 					: "pointer-events-none absolute -z-50 h-0 w-0 opacity-0"
 			}
@@ -17,7 +17,7 @@ export default function PageTwo({ step }: PageOneProps) {
 				Elementary
 				<div className="flex w-full items-center justify-center gap-2">
 					<Input placeholder="Name" name="elementaryName" />
-					<Input placeholder="Address" name="elemntaryAddress" />
+					<Input placeholder="Address" name="elementaryAddress" />
 				</div>
 				<div className="flex w-full items-center justify-center gap-2">
 					<Input

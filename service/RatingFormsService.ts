@@ -315,11 +315,7 @@ export class RatingFormsService {
 	public async applicationInterviewForm(formData: FormData) {
 		const rate: any = {
 			position: formData.get("positionApplied") as string,
-			department: formData.get("departmentOffice") as string,
-			questions: formData.get("questions") as string,
-			answers: formData.get("answers") as string,
-			comments: formData.get("comments") as string,
-			overallRating: formData.get("overallRating") as string,
+			department: formData.get("collegeDept") as string,
 			firstName: formData.get("firstName") as string,
 			lastName: formData.get("lastName") as string,
 			middleName: formData.get("middleName") as string,
@@ -473,7 +469,7 @@ export class RatingFormsService {
 		const applicationInterviewForm = {
 			applicant_id: parseInt(formData.get("applicantId") as string, 10),
 			user_id: formData.get("userId") as string,
-			rate,
+			rate: rate,
 			recruitment_stage: formData.get("recruitment_stage") as string,
 			created_at: new Date(),
 		};

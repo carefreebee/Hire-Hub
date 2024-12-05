@@ -1,14 +1,14 @@
 import { Input } from "~/components/ui/input";
 
 interface PageOneProps {
-	step: number;
+	visible: boolean;
 }
 
-export default function PageThree({ step }: PageOneProps) {
+export default function PageThree({ visible }: PageOneProps) {
 	return (
 		<div
 			className={
-				step === 3
+				visible
 					? "flex w-full flex-col gap-4 p-8"
 					: "pointer-events-none absolute -z-50 h-0 w-0 opacity-0"
 			}

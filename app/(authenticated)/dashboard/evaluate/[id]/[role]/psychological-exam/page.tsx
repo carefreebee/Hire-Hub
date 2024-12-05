@@ -34,7 +34,9 @@ const currentStageName = "Psychological Exam";
 export default async function PsychologicalExamPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
 	const isAllowedRole = user?.role
-		? ["recruitment_officer", "dean", "department_chair", "guidance_center_office"].includes(user.role)
+		? ["recruitment_officer", "dean", "department_chair", "guidance_center_office"].includes(
+				user.role
+			)
 		: false;
 
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
@@ -106,6 +108,12 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 								</CardTopLeftSubContent>
 
 								<DisplayDate date={applicantStage?.date as Date} />
+								<a
+									href={`/applicationform/${applicant?.id}/${user?.id}`}
+									target="_blank"
+								>
+									<Button>Generate Application Form</Button>
+								</a>
 							</CardSubContent>
 							<CardSubContent>
 								<TypographySmall size={"md"}>Assessed by:</TypographySmall>

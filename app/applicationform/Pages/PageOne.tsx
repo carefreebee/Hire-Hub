@@ -3,10 +3,10 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 
 interface PageOneProps {
-	step: number;
+	visible: boolean;
 }
 
-export default function PageOne({ step }: PageOneProps) {
+export default function PageOne({ visible }: PageOneProps) {
 	const [siblings, setSiblings] = useState([{ id: 1 }]);
 
 	const addSibling = () => {
@@ -15,7 +15,7 @@ export default function PageOne({ step }: PageOneProps) {
 	return (
 		<div
 			className={
-				step === 1
+				visible
 					? "flex w-full flex-col gap-4 p-8"
 					: "pointer-events-none absolute -z-50 h-0 w-0 opacity-0"
 			}
@@ -43,7 +43,7 @@ export default function PageOne({ step }: PageOneProps) {
 				<Input placeholder="Religion" name="religion" />
 			</div>
 			<div className="flex w-full items-center justify-center gap-2">
-				<Input placeholder="Citzenship" name="citzenship" />
+				<Input placeholder="Citizenship" name="citizenship" />
 				<Input placeholder="Civil Status" name="civilStatus" />
 				<Input placeholder="Height" name="height" />
 				<Input placeholder="Weight (in Kgs.)" name="weight" />

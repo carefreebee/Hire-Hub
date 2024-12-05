@@ -4,10 +4,10 @@ import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 
 interface PageOneProps {
-	step: number;
+	visible: boolean;
 }
 
-export default function PageSeven({ step }: PageOneProps) {
+export default function PageSeven({ visible }: PageOneProps) {
 	const [exams, setExams] = useState([{ id: 1 }]);
 	const addExam = () => {
 		setExams([...exams, { id: exams.length + 1 }]);
@@ -15,7 +15,7 @@ export default function PageSeven({ step }: PageOneProps) {
 	return (
 		<div
 			className={
-				step === 7
+				visible
 					? "flex w-full flex-col gap-4 p-8"
 					: "pointer-events-none absolute -z-50 h-0 w-0 opacity-0"
 			}
