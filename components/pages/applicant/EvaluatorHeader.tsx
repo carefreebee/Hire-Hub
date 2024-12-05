@@ -39,7 +39,7 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 		user?.role === "univ_president";
 
 	return (
-		<header className="w-[100%]">
+		<header className="w-full">
 			<section className="my-5">
 				<div className="mb-4 text-center">
 					<TypographySmall className="text-xl font-semibold">
@@ -88,55 +88,78 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 				<ul
 					className={`grid ${
 						isTeachingStaff ? "grid-cols-6" : "grid-cols-5"
-					} rounded-lg border shadow-md`}
+					} rounded-sm border shadow-md`}
 				>
 					{isRole() && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/screening`}
-							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
+							className={`rounded-md px-2 py-5 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
+								applicant?.stages?.screening?.status === "passed"
+									? "bg-green-500 text-white"
+									: ""
+							}`}
 						>
-							Screening
+							<p className="text-[12.5px]">Screening</p>
 						</Link>
 					)}
 					{isRole() && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/initial-interview`}
-							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
+							className={`rounded-md px-2 py-5 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
+								applicant?.stages?.initial_interview?.status === "passed"
+									? "bg-green-500 text-white"
+									: ""
+							}`}
 						>
-							Initial Interview
+							<p className="text-[12.5px]">Initial Interview</p>
 						</Link>
 					)}
 					{isRole() && isTeachingStaff && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/teaching-demo`}
-							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
+							className={`rounded-md px-2 py-5 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
+								applicant?.stages?.teaching_demo?.status === "passed"
+									? "bg-green-500 text-white"
+									: ""
+							}`}
 						>
-							Teaching Demo
+							<p className="text-[12.5px]">Teaching Demo</p>
 						</Link>
 					)}
-
 					{isRole() && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/psychological-exam`}
-							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
+							className={`rounded-md px-2 py-3 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
+								applicant?.stages?.psychological_exam?.status === "passed"
+									? "bg-green-500 text-white"
+									: ""
+							}`}
 						>
-							Psychological Exam
+							<p className="text-[12.5px]">Psychological Exam</p>
 						</Link>
 					)}
 					{isRole() && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/panel-interview`}
-							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
+							className={`rounded-md px-2 py-5 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
+								applicant?.stages?.panel_interview?.status === "passed"
+									? "bg-green-500 text-white"
+									: ""
+							}`}
 						>
-							Panel Interview
+							<p className="text-[12.5px]">Panel Interview</p>
 						</Link>
 					)}
 					{isRole() && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/recommendation-for-hiring`}
-							className={`rounded-lg px-2 py-2 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
+							className={`rounded-md px-2 py-5 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
+								applicant?.stages?.recommendation_for_hiring?.status === "passed"
+									? "bg-green-500 text-white"
+									: ""
+							}`}
 						>
-							Recommendation
+							<p className="text-[12.5px]">Recommendation</p>
 						</Link>
 					)}
 				</ul>

@@ -53,14 +53,14 @@ export default function JobRequestForm({
 
 	return (
 		<form ref={formRef} onSubmit={(e) => e.preventDefault()}>
-			<div className="mx-auto flex w-[59rem] flex-col justify-center gap-8 rounded-xl bg-white p-8 py-5 shadow-md">
+			<div className="mx-auto flex w-full max-w-4xl flex-col justify-center gap-8 rounded-xl bg-white p-8 py-5 shadow-md">
 				<h4 className="mt-10 scroll-m-20 text-center text-xl font-bold tracking-tight text-[#7F0000]">
 					Personnel Request Form
 				</h4>
-				<div className="grid grid-cols-2 gap-5">
+				<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 					<div>
 						<LabelTag label="Requested Position" />
-						<Input type="text" name="requested_position" className="border-2" />
+						<Input type="text" name="requested_position" className="w-full border-2" />
 					</div>
 					<div>
 						<LabelTag label="Qualification Standards: Educational Background" />
@@ -68,10 +68,10 @@ export default function JobRequestForm({
 							placeholder="List minimum educational background..."
 							type="text"
 							name="minimum_qualifications"
-							className="border-2"
+							className="w-full border-2"
 						/>
 					</div>
-					<div className="w-[20rem]">
+					<div>
 						<SelectTag
 							name="requested_category"
 							label="Category"
@@ -91,10 +91,9 @@ export default function JobRequestForm({
 							placeholder="List minimum years of experience..."
 							type="text"
 							name="minimum_experience"
-							className="border-2"
+							className="w-full border-2"
 						/>
 					</div>
-
 					<div>
 						{selectedDepartment !== null && (
 							<>
@@ -104,7 +103,7 @@ export default function JobRequestForm({
 									name="requested_department"
 									value={selectedDepartment}
 									readOnly
-									className="border-2"
+									className="w-full border-2"
 								/>
 								<Input type="hidden" name="department_id" value={departmentId} />
 							</>
@@ -117,34 +116,38 @@ export default function JobRequestForm({
 									name="requested_office"
 									value={selectedOffice}
 									readOnly
-									className="border-2"
+									className="w-full border-2"
 								/>
 								<Input type="hidden" name="office_id" value={officeId} />
 							</>
 						)}
 					</div>
-
-					<SelectTag name="requested_type" label="Type" placeholder="Select a type...">
-						<SelectGroup>
-							<SelectItem value="full_time">Full Time</SelectItem>
-							<SelectItem value="part_time">Part Time</SelectItem>
-						</SelectGroup>
-					</SelectTag>
+					<div>
+						<SelectTag
+							name="requested_type"
+							label="Type"
+							placeholder="Select a type..."
+						>
+							<SelectGroup>
+								<SelectItem value="full_time">Full Time</SelectItem>
+								<SelectItem value="part_time">Part Time</SelectItem>
+							</SelectGroup>
+						</SelectTag>
+					</div>
 					<div>
 						<LabelTag label="Description" />
 						<Textarea
 							name="requested_description"
 							placeholder="Add Job Description."
-							className="border-2"
+							className="w-full border-2"
 						/>
 					</div>
-
 					<div>
 						<LabelTag label="Qualification" />
 						<Textarea
 							name="requested_qualification"
 							placeholder="Add Job Qualification."
-							className="border-2"
+							className="w-full border-2"
 						/>
 					</div>
 				</div>
@@ -177,7 +180,7 @@ function LabelTag({ label }: { label: string }) {
 
 function SelectTag({ label, name, placeholder, children }: SelectTagProps) {
 	return (
-		<div className="mx-auto flex h-[66px] w-[564px] flex-col gap-3">
+		<div>
 			<Label className="font-semibold text-[#666666]">{label}</Label>
 			<Select name={name} required>
 				<SelectTrigger className="w-full border-2">
