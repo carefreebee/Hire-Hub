@@ -7,6 +7,8 @@ import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect, RoleEnumsType } from "~/lib/schema";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
+import { Spinner } from "~/components/ui/spinner";
+import { Suspense } from "react";
 
 export default async function ApplicantPage() {
 	const { user } = await validateRequest();
@@ -35,7 +37,18 @@ export default async function ApplicantPage() {
 		<section className="bg-slate-200/30 px-10 py-10">
 			<TypographyH4 text="Applicant List" />
 			<div className="container mx-auto px-10">
-				<DataTable columns={columns} data={applicant} />
+				<Suspense
+					fallback={
+						<div className="relative flex h-screen items-center justify-center">
+							<div className="absolute top-1/3 -translate-y-1/4 transform">
+								<Spinner size="lg" className="bg-red-500 dark:bg-red-700" />
+								<span>Loading...</span>
+							</div>
+						</div>
+					}
+				>
+					<DataTable columns={columns} data={applicant} />
+				</Suspense>
 			</div>
 		</section>
 	);

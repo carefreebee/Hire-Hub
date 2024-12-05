@@ -2,24 +2,14 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { getAllApplicantForm } from "~/controller/ApplicantFormController";
-import { formatDistanceToNow, format } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 import { ApplicantSelect } from "~/lib/schema";
 import { getCurrentUser } from "~/actions/actions";
+import { Spinner } from "~/components/ui/spinner";
 
 export default function NotificationPage() {
 	const [applicants, setApplicants] = useState<ApplicantSelect[]>([]);
-	 const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-
-		useEffect(() => {
-			const fetchUser = async () => {
-				const user = await getCurrentUser();
-				if (user) {
-					setCurrentUserId(user.id);
-				}
-			};
-			fetchUser();
-		}, []);
-
+	const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 	const [notifications, setNotifications] = useState<
 		{
 			message: string;
@@ -32,10 +22,24 @@ export default function NotificationPage() {
 	const [currentPage, setCurrentPage] = useState(1);
 	const notificationsPerPage = 10;
 
+	// Loading state
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchUser = async () => {
+			const user = await getCurrentUser();
+			if (user) {
+				setCurrentUserId(user.id);
+			}
+		};
+		fetchUser();
+	}, []);
+
 	useEffect(() => {
 		const fetchApplicants = async () => {
 			const applicantsData = await getAllApplicantForm();
 			setApplicants(applicantsData);
+			setLoading(false);
 		};
 		fetchApplicants();
 	}, []);
@@ -111,7 +115,12 @@ export default function NotificationPage() {
 			</div>
 
 			<div className="max-w-7xl flex-1 overflow-y-auto px-8 py-6">
-				{sortedNotifications.length === 0 ? (
+				{loading ? (
+					<div className="flex h-64 items-center justify-center">
+						<Spinner size="lg" className="bg-red-500 dark:bg-red-700" />
+						<span>Loading...</span>
+					</div>
+				) : sortedNotifications.length === 0 ? (
 					<div className="text-gray-500 text-center">No notifications at the moment.</div>
 				) : (
 					<div className="space-y-2">
@@ -188,4 +197,3 @@ export default function NotificationPage() {
 		</div>
 	);
 }
-

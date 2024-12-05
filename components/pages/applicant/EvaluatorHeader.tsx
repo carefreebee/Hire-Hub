@@ -32,7 +32,11 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 	const isRole = () =>
 		user?.role === "dean" ||
 		user?.role === "department_chair" ||
-		user?.role === "recruitment_officer";
+		user?.role === "recruitment_officer" ||
+		user?.role === "faculty" ||
+		user?.role === "guidance_center_staff" ||
+		user?.role === "hr_head" ||
+		user?.role === "univ_president";
 
 	return (
 		<header className="w-[100%]">

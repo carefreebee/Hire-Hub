@@ -6,28 +6,41 @@ import { format } from "date-fns";
 import { getAllApplicantForm } from "~/controller/ApplicantFormController";
 import { ApplicantSelect } from "~/lib/schema";
 import { getCurrentUser } from "~/actions/actions";
+import { Spinner } from "~/components/ui/spinner";
 
 export default function SchedulePage() {
 	const [applicants, setApplicants] = useState<ApplicantSelect[]>([]);
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 	const [currentUserId, setCurrentUserId] = useState<string>("");
 	const [userRole, setUserRole] = useState<string>("");
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		const fetchApplicants = async () => {
-			const applicantsData = await getAllApplicantForm();
-			setApplicants(applicantsData);
+			setIsLoading(true);
+			try {
+				const applicantsData = await getAllApplicantForm();
+				setApplicants(applicantsData);
+			} catch (error) {
+				console.error("Error fetching applicants:", error);
+			} finally {
+				setIsLoading(false);
+			}
 		};
 
 		const fetchUser = async () => {
-			const user = await getCurrentUser();
-			if (user) {
-				setCurrentUserId(user.id); 
-				setUserRole(user.role);
+			try {
+				const user = await getCurrentUser();
+				if (user) {
+					setCurrentUserId(user.id);
+					setUserRole(user.role);
+				}
+			} catch (error) {
+				console.error("Error fetching user:", error);
 			}
 		};
-		fetchUser();
 
+		fetchUser();
 		fetchApplicants();
 	}, []);
 
@@ -106,6 +119,15 @@ export default function SchedulePage() {
 			)
 			.sort((a, b) => a!.stageDate!.getTime() - b!.stageDate!.getTime());
 	}, [filteredApplicants, selectedDate]);
+
+	if (isLoading) {
+		return (
+			<div className="flex h-screen flex-col items-center justify-center">
+				<Spinner size="lg" className="bg-red-500 dark:bg-red-700" />
+				<span>Loading...</span>
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex flex-col p-6">

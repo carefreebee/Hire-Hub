@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RoleEnumsType } from "~/lib/schema";
@@ -17,21 +18,45 @@ import EvaluateSVG from "./ui/evalute-icon";
 import EvaluateSVGWhite from "./ui/evalute-icon-white";
 import ApprovalsSVGWhite from "./ui/approvals-icon-white";
 import ApprovalsSVG from "./ui/approvals-icon";
+import { Progress } from "~/components/ui/progress";
 
 export default function SideNav({ role }: { role: RoleEnumsType }) {
+	const [loading, setLoading] = useState<boolean>(false);
+	const [progress, setProgress] = useState<number>(0);
+
+	const handleLinkClick = () => {
+		setLoading(true);
+		setProgress(13);
+		setTimeout(() => {
+			setProgress(66);
+		}, 500);
+		setTimeout(() => {
+			setProgress(100);
+			setLoading(false);
+		}, 1500);
+	};
+
 	return (
 		<nav className="flex w-[239px] flex-col items-center bg-gradient-to-t from-[#7F0000]/30 from-10% via-white">
 			<p className="flex h-[74px] w-full items-center justify-center bg-[#7F0000] text-xl font-semibold text-white">
 				HireHub
 			</p>
+
+			{loading && (
+				<div className="w-full bg-[#7F0000]">
+					<Progress value={progress} className="h-1" />
+				</div>
+			)}
+
 			<ul className="mt-5 flex w-full flex-col items-center justify-center gap-8 text-sm font-semibold">
 				{/* Recruitment Officer Specific */}
 				{role === "recruitment_officer" && (
 					<Links
 						href="/dashboard"
 						label="Dashboard"
-						activeChildren={<DashboardSVG />}
+						activeChildren={<hiteDashboardSvg />}
 						notActiveChildren={<WhiteDashboardSvg />}
+						onClick={handleLinkClick} // Add onClick handler
 					/>
 				)}
 
@@ -39,8 +64,9 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 				<Links
 					href="/dashboard/applicant"
 					label="Applicant"
-					activeChildren={<ApplicantSVG />}
+					activeChildren={<WhiteApplicantSvg />}
 					notActiveChildren={<WhiteApplicantSvg />}
+					onClick={handleLinkClick} // Add onClick handler
 				/>
 
 				{/* Role-Specific Links */}
@@ -48,8 +74,9 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 					<Links
 						href="/dashboard/request"
 						label="Request"
-						activeChildren={<JobRequestSVG />}
+						activeChildren={<WhiteJobRequestSvg />}
 						notActiveChildren={<WhiteJobRequestSvg />}
+						onClick={handleLinkClick} // Add onClick handler
 					/>
 				)}
 
@@ -59,12 +86,14 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 					"vp_acad_affairs",
 					"dean",
 					"department_chair",
+					"faculty",
 				].includes(role) && (
 					<Links
 						href="/dashboard/evaluate"
 						label="Evaluate"
-						activeChildren={<EvaluateSVG />}
+						activeChildren={<EvaluateSVGWhite />}
 						notActiveChildren={<EvaluateSVGWhite />}
+						onClick={handleLinkClick} // Add onClick handler
 					/>
 				)}
 
@@ -72,8 +101,9 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 					<Links
 						href="/dashboard/approvals"
 						label="Approvals"
-						activeChildren={<ApprovalsSVG />}
+						activeChildren={<ApprovalsSVGWhite />}
 						notActiveChildren={<ApprovalsSVGWhite />}
+						onClick={handleLinkClick} // Add onClick handler
 					/>
 				)}
 
@@ -82,8 +112,9 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 					<Links
 						href="/dashboard/schedule"
 						label="Schedule"
-						activeChildren={<ScheduleSVG />}
+						activeChildren={<ScheduleSVGWhite />}
 						notActiveChildren={<ScheduleSVGWhite />}
+						onClick={handleLinkClick} // Add onClick handler
 					/>
 				)}
 
@@ -102,9 +133,10 @@ type LinksProps = {
 	activeChildren: React.ReactNode;
 	notActiveChildren: React.ReactNode;
 	label?: string;
+	onClick?: () => void;
 };
 
-export function Links({ href, activeChildren, notActiveChildren, label }: LinksProps) {
+export function Links({ href, activeChildren, notActiveChildren, label, onClick }: LinksProps) {
 	const pathname = usePathname();
 
 	// Determine if the current link is active
@@ -113,6 +145,7 @@ export function Links({ href, activeChildren, notActiveChildren, label }: LinksP
 	return (
 		<Link
 			href={href}
+			onClick={onClick} 
 			className={`${
 				isActive ? "bg-[#7F0000] text-white" : ""
 			} flex w-[96%] justify-start gap-4 rounded-xl py-3 pl-10 font-medium hover:bg-[#7F0000] hover:text-white`}

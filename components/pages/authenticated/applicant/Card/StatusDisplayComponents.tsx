@@ -37,18 +37,27 @@ export function AssessorInfo({ finalAssessorName, finalAssessorRole }: AssessorI
 	const assessorInformation = finalAssessorName && finalAssessorRole;
 
 	return (
-		<div className="flex items-center gap-2">
-			<p className="text-sm">Assessed By:</p>
-			<p className="rounded-sm bg-[#F9F3E5] px-4 py-1 text-sm">
-				{assessorInformation ? (
-					<>
-						{formattedNameAndRole(finalAssessorName, "_")} |{" "}
-						{formattedNameAndRole(finalAssessorRole as string, "_")}
-					</>
-				) : (
-					<>Waiting...</>
-				)}
-			</p>
+		<div className="flex flex-col items-start gap-2">
+			<div className="text-gray-500 bg-gray-50 text-xs">
+				<span className="italic">
+					<span className="font-semibold">Note:</span> The first selected evaluator is the
+					decision maker.
+				</span>
+			</div>
+
+			<div className="flex items-center gap-2">
+				<p className="text-sm font-semibold">Assessed By:</p>
+				<p className="rounded-sm bg-[#F9F3E5] px-4 py-1 text-sm">
+					{assessorInformation ? (
+						<>
+							{formattedNameAndRole(finalAssessorName, "_")} |{" "}
+							{formattedNameAndRole(finalAssessorRole as string, "_")}
+						</>
+					) : (
+						<>Waiting...</>
+					)}
+				</p>
+			</div>
 		</div>
 	);
 }
