@@ -15,7 +15,11 @@ import PageThree from "../../Pages/PageThree";
 import PageTwo from "../../Pages/PageTwo";
 import PictureUpload from "../../Pages/PictureUpload";
 
-export default function ApplicationForm() {
+interface ApplicationFormProps {
+	data: any;
+}
+
+export default function ApplicationForm({ data }: ApplicationFormProps) {
 	const [step, setStep] = useState<number>(1);
 	const [applicant, setApplicant] = useState<any>(null);
 	const params = useParams<{ applicantId: string; userId: string }>();

@@ -7,6 +7,7 @@ import { formatDate } from "~/lib/date-time";
 import { RatingFormWithUserData } from "~/types/types";
 import { formattedNameAndRole } from "~/util/formatted-name";
 import { useFilteredEvaluate } from "~/util/zustand";
+import ApplicationFormModal from "./modals/ApplicationFormModal";
 import InitialInterviewViewModal from "./modals/InitialViewModal";
 import PanelInterviewViewModal from "./modals/PanelInterviewViewModal";
 import TeachingDemoViewModal from "./modals/TeachingDemoViewModal";
@@ -57,6 +58,14 @@ export default function FilteredDisplay({ rating, tableRowLength }: FilteredDisp
 					<td></td>
 				</TableRow>
 			))}
+
+			{selectedData?.recruitment_stage === "Application for Employment" && (
+				<ApplicationFormModal
+					data={selectedData}
+					isOpen={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+				/>
+			)}
 
 			{selectedData?.recruitment_stage === "Initial Interview" && (
 				<InitialInterviewViewModal
