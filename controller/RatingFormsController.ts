@@ -33,6 +33,8 @@ export async function handleInsertForm(formData: FormData, formType: string) {
 			return await ratingFormsService.teachingDemoForm(formData);
 		case "panelInterview":
 			return await ratingFormsService.panelInterviewForm(formData);
+		case "applicationInterviewForm":
+			return await ratingFormsService.applicationInterviewForm(formData);
 		default:
 			throw new Error("Unknown form type");
 	}
