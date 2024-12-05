@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "~/components/ui/button";
 import {
 	NonTeachingStaff,
 	SelectedCategoryTeachingStaff,
@@ -8,8 +9,7 @@ import { getApplicantData } from "~/hooks/useApplicantStages";
 import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect } from "~/lib/schema";
 import { StageType } from "~/types/types";
-import { TypographySmall } from "../../ui/typography-small";
-import { Button } from "~/components/ui/button";
+import { TypographySmall } from "~/components/ui/typography-small";
 
 const STAGES = [
 	{ link: "initial-interview", type: "initial_interview", name: "Initial Interview" },
@@ -27,29 +27,35 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 	const { user } = await validateRequest();
 	const { applicant } = await getApplicantData(Number(id));
 
-	const isTeachingStaff = applicant?.positionType === SelectedCategoryTeachingStaff;
+	const screeningStatus = getStageStatus(applicant as ApplicantSelect, "screening");
+
+	let filteredStages = STAGES;
+	if (applicant?.office_id !== null && applicant?.selected_office !== null) {
+		filteredStages = STAGES.filter((stage) => stage.name !== "Teaching Demo");
+	}
+
+	const evaluateRole = () =>
+		user?.role === "dean" ||
+		user?.role === "department_chair" ||
+		user?.role === "recruitment_officer" ||
+		user?.role === "hr_head" ||
+		user?.role === "vp_acad_affairs" ||
+		user?.role === "vp_administration" ||
+		user?.role === "univ_president";
 
 	const isRole = () =>
 		user?.role === "dean" ||
 		user?.role === "department_chair" ||
-		user?.role === "recruitment_officer" ||
-		user?.role === "faculty" ||
-		user?.role === "guidance_center_staff" ||
-		user?.role === "hr_head" ||
-		user?.role === "univ_president";
+		user?.role === "recruitment_officer";
 
 	return (
 		<header className="w-full">
-			<section className="my-5">
-				<div className="mb-4 text-center">
-					<TypographySmall className="text-xl font-semibold">
-						Applicant Evaluation
-					</TypographySmall>
-				</div>
-
-				<div className="flex items-center justify-between gap-4">
-					<div className="flex items-center gap-2">
-						<TypographySmall className="font-semibold">Department:</TypographySmall>
+			<section className="flex w-full justify-between">
+				<div className="my-5 flex items-center gap-2">
+					<div>
+						<TypographySmall className="font-semibold">Department</TypographySmall>
+					</div>
+					<div>
 						<TypographySmall
 							size={"sm"}
 							variant={"outline"}
@@ -58,9 +64,12 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 							{applicant?.selected_department || applicant?.selected_office}
 						</TypographySmall>
 					</div>
-
-					<div className="flex items-center gap-2">
-						<TypographySmall className="font-semibold">Applied as:</TypographySmall>
+				</div>
+				<div className="flex items-center gap-2">
+					<div>
+						<TypographySmall className="font-medium">Applied as:</TypographySmall>
+					</div>
+					<div>
 						<TypographySmall
 							size={"sm"}
 							variant={"outline"}
@@ -71,7 +80,9 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 								: NonTeachingStaff}
 						</TypographySmall>
 					</div>
-					<div className="flex items-center gap-2">
+				</div>
+				<div className="flex items-center gap-2">
+					{evaluateRole() && (
 						<Button>
 							<Link
 								href={`/dashboard/evaluate/${id}/${user?.role}/evaluate`}
@@ -80,88 +91,31 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 								Evaluate
 							</Link>
 						</Button>
-					</div>
+					)}
 				</div>
 			</section>
 
 			<div>
-				<ul
-					className={`grid ${
-						isTeachingStaff ? "grid-cols-6" : "grid-cols-5"
-					} rounded-sm border shadow-md`}
-				>
+				<ul className="flex w-full justify-between rounded-lg border shadow-md">
 					{isRole() && (
 						<Link
 							href={`/dashboard/evaluate/${id}/${user?.role}/screening`}
-							className={`rounded-md px-2 py-5 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
-								applicant?.stages?.screening?.status === "passed"
-									? "bg-green-500 text-white"
-									: ""
-							}`}
+							className={`${screeningStatus} px-2 py-2 text-sm font-medium`}
 						>
-							<p className="text-[12.5px]">Screening</p>
+							Screening
 						</Link>
 					)}
-					{isRole() && (
-						<Link
-							href={`/dashboard/evaluate/${id}/${user?.role}/initial-interview`}
-							className={`rounded-md px-2 py-5 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
-								applicant?.stages?.initial_interview?.status === "passed"
-									? "bg-green-500 text-white"
-									: ""
-							}`}
-						>
-							<p className="text-[12.5px]">Initial Interview</p>
-						</Link>
-					)}
-					{isRole() && isTeachingStaff && (
-						<Link
-							href={`/dashboard/evaluate/${id}/${user?.role}/teaching-demo`}
-							className={`rounded-md px-2 py-5 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
-								applicant?.stages?.teaching_demo?.status === "passed"
-									? "bg-green-500 text-white"
-									: ""
-							}`}
-						>
-							<p className="text-[12.5px]">Teaching Demo</p>
-						</Link>
-					)}
-					{isRole() && (
-						<Link
-							href={`/dashboard/evaluate/${id}/${user?.role}/psychological-exam`}
-							className={`rounded-md px-2 py-3 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
-								applicant?.stages?.psychological_exam?.status === "passed"
-									? "bg-green-500 text-white"
-									: ""
-							}`}
-						>
-							<p className="text-[12.5px]">Psychological Exam</p>
-						</Link>
-					)}
-					{isRole() && (
-						<Link
-							href={`/dashboard/evaluate/${id}/${user?.role}/panel-interview`}
-							className={`rounded-md px-2 py-5 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
-								applicant?.stages?.panel_interview?.status === "passed"
-									? "bg-green-500 text-white"
-									: ""
-							}`}
-						>
-							<p className="text-[12.5px]">Panel Interview</p>
-						</Link>
-					)}
-					{isRole() && (
-						<Link
-							href={`/dashboard/evaluate/${id}/${user?.role}/recommendation-for-hiring`}
-							className={`rounded-md px-2 py-5 text-center text-sm font-medium text-black hover:bg-[#333333] hover:text-white ${
-								applicant?.stages?.recommendation_for_hiring?.status === "passed"
-									? "bg-green-500 text-white"
-									: ""
-							}`}
-						>
-							<p className="text-[12.5px]">Recommendation</p>
-						</Link>
-					)}
+					{filteredStages.map((stage) => (
+						<Stages
+							key={stage.link}
+							id={Number(id)}
+							role={user?.role as string}
+							stageLink={stage.link}
+							stageType={stage.type as StageType}
+							applicant={applicant as ApplicantSelect}
+							name={stage.name}
+						/>
+					))}
 				</ul>
 			</div>
 		</header>
@@ -178,12 +132,27 @@ type StagesProps = {
 };
 
 function Stages({ id, role, stageLink, stageType, applicant, name }: StagesProps) {
+	const statusClass = getStageStatus(applicant, stageType);
 	return (
 		<Link
-			href={`/dashboard/applicant/${id}/stages/${role}/${stageLink}`}
-			className={`flex px-2 py-2 text-sm font-medium text-black hover:bg-[#333333] hover:text-white`}
+			href={`/dashboard/evaluate/${id}/${role}/${stageLink}`}
+			className={`${statusClass} flex px-2 py-2 text-sm font-medium`}
 		>
 			{name}
 		</Link>
 	);
+}
+
+function getStageStatus(applicant: ApplicantSelect, stageType: StageType) {
+	const stageStatus = applicant?.stages?.[stageType]?.status;
+	switch (stageStatus) {
+		case "in-progress":
+			return "rounded-lg bg-[#FFCB78]";
+		case "passed":
+			return "text-green-500";
+		case "failed":
+			return "rounded-lg bg-[#7F0000]";
+		default:
+			return "text-slate-400";
+	}
 }
