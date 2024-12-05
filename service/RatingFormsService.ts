@@ -314,6 +314,7 @@ export class RatingFormsService {
 
 	public async applicationInterviewForm(formData: FormData) {
 		const rate: any = {
+			picture: formData.get("picture") as string,
 			position: formData.get("positionApplied") as string,
 			department: formData.get("collegeDept") as string,
 			firstName: formData.get("firstName") as string,

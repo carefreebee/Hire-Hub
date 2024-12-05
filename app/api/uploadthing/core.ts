@@ -28,6 +28,7 @@ export const ourFileRouter = {
 	// 		// !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
 	// 		return { uploadedBy: metadata.userId };
 	// 	}),
+	profilePicture: f(["image"]).onUploadComplete((data) => console.log("file", data)),
 	applicantUpload: f({
 		pdf: { maxFileCount: 2 },
 		"application/msword": { maxFileCount: 2 },

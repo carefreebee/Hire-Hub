@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -13,6 +13,7 @@ import PageSeven from "../../Pages/PageSeven";
 import PageSix from "../../Pages/PageSix";
 import PageThree from "../../Pages/PageThree";
 import PageTwo from "../../Pages/PageTwo";
+import PictureUpload from "../../Pages/PictureUpload";
 
 export default function ApplicationForm() {
 	const [step, setStep] = useState<number>(1);
@@ -20,8 +21,8 @@ export default function ApplicationForm() {
 	const params = useParams<{ applicantId: string; userId: string }>();
 	const [applicantStage, setApplicantStage] = useState<any>(null);
 	const formRef = useRef<HTMLFormElement>(null);
-	const [isOpen, setIsOpen] = useState(false);
-
+	const [pictureUrl, setPictureUrlOther] = useState<string | null>(null);
+	const router = useRouter();
 	async function fetchApplicantStage() {
 		const { applicant, applicantStage } = await GetCurrentStage(
 			Number(params.applicantId),
@@ -34,11 +35,13 @@ export default function ApplicationForm() {
 	async function handleSubmit(): Promise<void> {
 		const formData = new FormData(formRef.current!);
 		formData.append("recruitment_stage", "Application for Employment");
+		formData.append("picture", pictureUrl!);
 		console.log("Form data:", Object.fromEntries(formData.entries()));
 
 		try {
 			await handleInsertForm(formData, "applicationInterviewForm");
 			console.log("Form data submitted");
+			router.push("/");
 			if (formRef.current) {
 				formRef.current.reset();
 			}
@@ -46,7 +49,6 @@ export default function ApplicationForm() {
 				title: "Application for Employment Form Submitted!",
 				description: "The Application for Employment Form has been successfully submitted.",
 			});
-			setIsOpen(false);
 		} catch (error) {
 			console.error("Error submitting form:", error);
 			toast({
@@ -77,7 +79,12 @@ export default function ApplicationForm() {
 						College / Department:
 						<Input className="h-7" name="collegeDept" />
 					</div>
-					<div className="flex h-32 w-32 border-2 text-sm">{/*image here */}</div>
+					<div className="mb-14 flex h-32 w-32 border-2 text-sm">
+						<PictureUpload
+							setPictureUrlOther={setPictureUrlOther}
+							formData={new FormData()}
+						/>
+					</div>
 				</div>
 				<PageOne visible={step === 1} />
 				<PageTwo visible={step === 2} />
