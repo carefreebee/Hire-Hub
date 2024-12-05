@@ -55,7 +55,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 						href="/dashboard"
 						label="Dashboard"
 						activeChildren={<WhiteDashboardSvg />}
-						notActiveChildren={<WhiteDashboardSvg />}
+						notActiveChildren={<DashboardSVG />}
 						onClick={handleLinkClick} // Add onClick handler
 					/>
 				)}
@@ -65,7 +65,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 					href="/dashboard/applicant"
 					label="Applicant"
 					activeChildren={<WhiteApplicantSvg />}
-					notActiveChildren={<WhiteApplicantSvg />}
+					notActiveChildren={<ApplicantSVG />}
 					onClick={handleLinkClick} // Add onClick handler
 				/>
 
@@ -75,7 +75,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 						href="/dashboard/request"
 						label="Request"
 						activeChildren={<WhiteJobRequestSvg />}
-						notActiveChildren={<WhiteJobRequestSvg />}
+						notActiveChildren={<JobRequestSVG />}
 						onClick={handleLinkClick} // Add onClick handler
 					/>
 				)}
@@ -93,7 +93,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 						href="/dashboard/evaluate"
 						label="Evaluate"
 						activeChildren={<EvaluateSVGWhite />}
-						notActiveChildren={<EvaluateSVGWhite />}
+						notActiveChildren={<EvaluateSVG />}
 						onClick={handleLinkClick} // Add onClick handler
 					/>
 				)}
@@ -103,7 +103,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 						href="/dashboard/approvals"
 						label="Approvals"
 						activeChildren={<ApprovalsSVGWhite />}
-						notActiveChildren={<ApprovalsSVGWhite />}
+						notActiveChildren={<ApprovalsSVG />}
 						onClick={handleLinkClick} // Add onClick handler
 					/>
 				)}
@@ -114,7 +114,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 						href="/dashboard/schedule"
 						label="Schedule"
 						activeChildren={<ScheduleSVGWhite />}
-						notActiveChildren={<ScheduleSVGWhite />}
+						notActiveChildren={<ScheduleSVG />}
 						onClick={handleLinkClick} // Add onClick handler
 					/>
 				)}
