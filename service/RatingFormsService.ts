@@ -311,4 +311,178 @@ export class RatingFormsService {
 			throw new Error("Creating panel interview form failed");
 		}
 	}
+
+	public async applicationInterviewForm(formData: FormData) {
+		const rate: any = {
+			position: formData.get("positionApplied") as string,
+			department: formData.get("departmentOffice") as string,
+			questions: formData.get("questions") as string,
+			answers: formData.get("answers") as string,
+			comments: formData.get("comments") as string,
+			overallRating: formData.get("overallRating") as string,
+			firstName: formData.get("firstName") as string,
+			lastName: formData.get("lastName") as string,
+			middleName: formData.get("middleName") as string,
+			sex: formData.get("sex") as string,
+			nickname: formData.get("nickname") as string,
+			permanentAddress: formData.get("permanentAddress") as string,
+			contactNumber: formData.get("contactNumber") as string,
+			presentAddress: formData.get("presentAddress") as string,
+			dateOfBirth: formData.get("dateOfBirth") as string,
+			placeOfBirth: formData.get("placeOfBirth") as string,
+			age: formData.get("age") as string,
+			religion: formData.get("religion") as string,
+			citizenship: formData.get("citizenship") as string,
+			civilStatus: formData.get("civilStatus") as string,
+			height: formData.get("height") as string,
+			weight: formData.get("weight") as string,
+			spouseName: formData.get("spouseName") as string,
+			occupation: formData.get("occupation") as string,
+			numOfChildren: formData.get("numOfChildren") as string,
+			numOfDependent: formData.get("numOfDependent") as string,
+			numOfOther: formData.get("numOfOther") as string,
+			fatherName: formData.get("fatherName") as string,
+			fatherOccupation: formData.get("fatherOccupation") as string,
+			motherName: formData.get("motherName") as string,
+			motherOccupation: formData.get("motherOccupation") as string,
+			siblings: [],
+			languages: formData.get("languages") as string,
+			skillsAndTalent: formData.get("skillsAndTalent") as string,
+			hobbies: formData.get("hobbies") as string,
+			presentHealth: formData.get("presentHealth") as string,
+			illnesses: formData.get("illnesses") as string,
+			specifyIllness: formData.get("specifyIllness") as string,
+			physicalDefects: formData.get("physicalDefects") as string,
+			distinguish: formData.get("distinguish") as string,
+			education: {
+				elementary: {
+					name: formData.get("elementaryName") as string,
+					address: formData.get("elementaryAddress") as string,
+					datesAttended: formData.get("datesAttendedElementary") as string,
+					yearCourseCompleted: formData.get("yearCourseElementary") as string,
+				},
+				secondary: {
+					name: formData.get("secondaryName") as string,
+					address: formData.get("secondaryAddress") as string,
+					datesAttended: formData.get("datesAttendedSecondary") as string,
+					yearCourseCompleted: formData.get("yearCourseSecondary") as string,
+				},
+				college: {
+					name: formData.get("collegeName") as string,
+					address: formData.get("collegeAddress") as string,
+					datesAttended: formData.get("datesAttendedCollege") as string,
+					yearCourseCompleted: formData.get("yearCourseCollege") as string,
+				},
+				graduate: {
+					name: formData.get("graduateName") as string,
+					address: formData.get("graduateAddress") as string,
+					datesAttended: formData.get("datesAttendedGraduate") as string,
+					yearCourseCompleted: formData.get("yearCourseGraduate") as string,
+				},
+				postGraduate: {
+					name: formData.get("postGradName") as string,
+					address: formData.get("postGradAddress") as string,
+					datesAttended: formData.get("datesAttendedPostGrad") as string,
+					yearCourseCompleted: formData.get("yearCoursePostGrad") as string,
+				},
+				others: {
+					name: formData.get("othersName") as string,
+					address: formData.get("othersAddress") as string,
+					datesAttended: formData.get("datesAttendedOthers") as string,
+					yearCourseCompleted: formData.get("yearCourseOthers") as string,
+				},
+			},
+			organizations: [],
+			workExperience: [],
+			references: [],
+			generalInfo: {
+				appliedBefore: formData.get("genInfoYesOrNo") as string,
+				when: formData.get("genInfoWhen") as string,
+				collegeDepartment: formData.get("genInfoCollege") as string,
+				exams: [],
+				achievements: formData.get("genInfoAchievements") as string,
+				emergencyContact: {
+					name: formData.get("genInfoEmergencyName") as string,
+					relation: formData.get("genInfoRelation") as string,
+					address: formData.get("genInfoAddress") as string,
+					contactNumber: formData.get("genInfoContact") as string,
+				},
+				reasons: formData.get("genInfoReasons") as string,
+			},
+		};
+
+		let siblingIndex = 1;
+		while (formData.has(`siblingName${siblingIndex}`)) {
+			rate.siblings.push({
+				name: formData.get(`siblingName${siblingIndex}`) as string,
+				occupation: formData.get(`siblingOccupation${siblingIndex}`) as string,
+			});
+			siblingIndex++;
+		}
+
+		let orgIndex = 1;
+		while (formData.has(`nameOfOrg${orgIndex}`)) {
+			rate.organizations.push({
+				name: formData.get(`nameOfOrg${orgIndex}`) as string,
+				position: formData.get(`positionHeld${orgIndex}`) as string,
+				dates: formData.get(`inclusiveDates${orgIndex}`) as string,
+			});
+			orgIndex++;
+		}
+
+		let workExpIndex = 1;
+		while (formData.has(`nameOfEmployer${workExpIndex}`)) {
+			rate.workExperience.push({
+				employer: formData.get(`nameOfEmployer${workExpIndex}`) as string,
+				designation: formData.get(`designation${workExpIndex}`) as string,
+				dateOfEmployment: formData.get(`dateOfEmployment${workExpIndex}`) as string,
+				salary: formData.get(`salary${workExpIndex}`) as string,
+				reasonForLeaving: formData.get(`reasonForLeaving${workExpIndex}`) as string,
+			});
+			workExpIndex++;
+		}
+		rate.references.push({
+			name: formData.get("referenceNameOne") as string,
+			companyName: formData.get("referenceCompanyNameOne") as string,
+			address: formData.get("referenceAddressOne") as string,
+			contactNumber: formData.get("referenceContactNumOne") as string,
+		});
+		rate.references.push({
+			name: formData.get("referenceNameTwo") as string,
+			companyName: formData.get("referenceCompanyNameTwo") as string,
+			address: formData.get("referenceAddressTwo") as string,
+			contactNumber: formData.get("referenceContactNumTwo") as string,
+		});
+		rate.references.push({
+			name: formData.get("referenceNameThree") as string,
+			companyName: formData.get("referenceCompanyNameThree") as string,
+			address: formData.get("referenceAddressThree") as string,
+			contactNumber: formData.get("referenceContactNumThree") as string,
+		});
+
+		let examIndex = 1;
+		while (formData.has(`genInfoExam${examIndex}`)) {
+			rate.generalInfo.exams.push({
+				exam: formData.get(`genInfoExam${examIndex}`) as string,
+				date: formData.get(`genInfoDate${examIndex}`) as string,
+				rating: formData.get(`genInfoRating${examIndex}`) as string,
+			});
+			examIndex++;
+		}
+
+		const applicationInterviewForm = {
+			applicant_id: parseInt(formData.get("applicantId") as string, 10),
+			user_id: formData.get("userId") as string,
+			rate,
+			recruitment_stage: formData.get("recruitment_stage") as string,
+			created_at: new Date(),
+		};
+
+		try {
+			return await this.ratingFormsRepo.insertForm(applicationInterviewForm);
+		} catch (error) {
+			console.error("Error creating application interview form:", error);
+			throw new Error("Creating application interview form failed");
+		}
+	}
 }
