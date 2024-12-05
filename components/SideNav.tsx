@@ -54,7 +54,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 					<Links
 						href="/dashboard"
 						label="Dashboard"
-						activeChildren={<hiteDashboardSvg />}
+						activeChildren={<WhiteDashboardSvg />}
 						notActiveChildren={<WhiteDashboardSvg />}
 						onClick={handleLinkClick} // Add onClick handler
 					/>
