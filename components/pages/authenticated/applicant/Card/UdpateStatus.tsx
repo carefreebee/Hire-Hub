@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useRef } from "react";
 import { ConfirmationModal } from "~/components/ConfirmationModal";
 import { AlertDialogAction } from "~/components/ui/alert-dialog";
@@ -7,6 +8,7 @@ import { Button } from "~/components/ui/button";
 import UpdateSvg from "~/components/ui/update-svg";
 import { toast } from "~/components/ui/use-toast";
 import { UpdateScreening } from "~/controller/ApplicantStatusController";
+import { CheckPathname } from "~/util/path";
 import { useSelectPassedOrFailed } from "~/util/zustand";
 
 type ApplicantIDFooterProps = {
@@ -17,10 +19,26 @@ export default function UpdateStatus({ id, assessorId }: ApplicantIDFooterProps)
 	const status = useSelectPassedOrFailed((state) => state.status);
 	const formRef = useRef<HTMLFormElement>(null);
 
+	const pathname = usePathname();
+	const lastSegment = CheckPathname(pathname);
+
 	async function handleSubmit() {
 		const formData = new FormData(formRef.current!);
 		try {
-			await UpdateScreening(formData);
+			if (lastSegment === "screening") {
+				await UpdateScreening(formData, "screening");
+			} else if (lastSegment === "initial-interview") {
+				console.log(status);
+				await UpdateScreening(formData, "initial_interview");
+			} else if (lastSegment === "teaching-demo") {
+				await UpdateScreening(formData, "teaching_demo");
+			} else if (lastSegment === "psychological-exam") {
+				await UpdateScreening(formData, "psychological_exam");
+			} else if (lastSegment === "panel-interview") {
+				await UpdateScreening(formData, "panel_interview");
+			} else if (lastSegment === "recommendation-for-hiring") {
+				await UpdateScreening(formData, "recommendation_for_hiring");
+			}
 			toast({
 				title: "Status Updated!",
 				description: "The status has been updated successfully",

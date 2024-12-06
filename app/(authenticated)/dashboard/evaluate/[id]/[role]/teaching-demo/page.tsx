@@ -136,6 +136,7 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 							</CardSubContent>
 						</CardContent>
 						<DisplayFooter
+							userId={user?.id as string}
 							status={applicantStage?.status || ""}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}

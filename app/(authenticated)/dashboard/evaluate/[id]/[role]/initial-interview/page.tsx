@@ -133,6 +133,7 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 							status={applicantStage?.status || ""}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
+							userId={user?.id}
 							assessorsName={finalAssessor?.name || ""}
 							assessorsRole={finalAssessor?.role || ""}
 						/>

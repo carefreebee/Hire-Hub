@@ -1,13 +1,14 @@
 "use server";
 
 import { applicantStatusService } from "~/Dependencies/dependencies";
+import { StageType } from "~/types/types";
 
 export async function UpdateScreeningAndInitialInterviewDate(formData: FormData) {
 	return await applicantStatusService.updateDate(formData);
 }
 
-export async function UpdateScreening(formData: FormData) {
-	return await applicantStatusService.updateScreeningStatus(formData);
+export async function UpdateScreening(formData: FormData, stageType: StageType) {
+	return await applicantStatusService.updateStatus(formData, stageType);
 }
 
 export async function UpdateTeachingDemo(formData: FormData) {

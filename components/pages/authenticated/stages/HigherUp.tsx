@@ -8,6 +8,7 @@ import AssessedBy from "../applicant/Card/AssessedBy";
 import { CardFooter } from "../applicant/Card/CardComponent";
 import CheckboxAssessedBy from "../applicant/Card/CheckboxAssessedBy";
 import { AssessorInfo } from "../applicant/Card/StatusDisplayComponents";
+import UpdateStatus from "../applicant/Card/UdpateStatus";
 import SelectMode from "../applicant/initial-interview/SelectMode";
 
 type DisplayModeProps = {
@@ -51,6 +52,7 @@ type DisplayFooterProps = {
 	users: Partial<User>[];
 	assessorsName: string | undefined;
 	assessorsRole: string | undefined;
+	userId: string | undefined;
 };
 
 export function DisplayFooter({
@@ -59,6 +61,7 @@ export function DisplayFooter({
 	users,
 	assessorsName,
 	assessorsRole,
+	userId,
 }: DisplayFooterProps) {
 	const inProgress = status === "in-progress";
 
@@ -70,6 +73,10 @@ export function DisplayFooter({
 					<div className="flex-1">
 						<CheckboxAssessedBy assessed_by={users} />
 					</div>
+					<UpdateStatus
+						id={applicantId as number}
+						assessorId={userId as string} // Send the current user's ID as the assessor
+					/>
 				</CardFooter>
 			) : (
 				<CardFooter className="p-5">

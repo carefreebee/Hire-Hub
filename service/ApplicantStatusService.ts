@@ -39,8 +39,22 @@ export class ApplicantStatusService {
 			throw new Error("Update Applicant Status failed");
 		}
 	}
+	public async updateInitialInterviewStatus(formData: FormData) {
+		this.updateStatus(formData, "initial_interview");
+	}
+	public async updateTeachingDemoStatus(formData: FormData) {
+		this.updateStatus(formData, "teaching_demo");
+	}
 
-	public async updateScreeningStatus(formData: FormData) {
+	public async updatePsychologicalExamStatus(formData: FormData) {
+		this.updateStatus(formData, "psychological_exam");
+	}
+
+	public async updatePanelInterviewStatus(formData: FormData) {
+		this.updateStatus(formData, "panel_interview");
+	}
+
+	public async updateStatus(formData: FormData, stageType: StageType) {
 		const applicantUpdateStatus = {
 			applicant_id: Number(formData.get("applicant_id")),
 			assessed_by_id: formData.get("assessed_by_id") as string,
@@ -59,7 +73,7 @@ export class ApplicantStatusService {
 				currentApplicant?.id as number,
 				applicantUpdateStatus.assessed_by_id,
 				applicantUpdateStatus.status,
-				"initial_interview"
+				stageType
 			);
 
 			revalidatePath(`/dashboard/evaluate/${applicantUpdateStatus.applicant_id}`);
@@ -86,7 +100,6 @@ export class ApplicantStatusService {
 
 	private async updateApplicantStatus(formData: FormData, stageType: StageType) {
 		const applicantStage = DataExtractor.extractApplicantStages(formData);
-		const status = formData.get("applicant_status") as "passed" | "failed";
 		this.validateApplicantStatus(applicantStage, stageType);
 
 		try {
@@ -95,8 +108,7 @@ export class ApplicantStatusService {
 				applicantStage.selected_mode,
 				applicantStage.assessed_by,
 				stageType,
-				new Date(applicantStage.selected_date),
-				status
+				new Date(applicantStage.selected_date)
 			);
 
 			revalidatePath(`/dashboard/evaluate/${applicantStage.applicant_id}`);

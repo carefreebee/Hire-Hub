@@ -61,7 +61,7 @@ export class ApplicantStatusRepository {
 		stageType: StageType
 	) {
 		const currentApplicant = await this.getCurrentApplicantById(applicantId);
-
+		const nextStage = this.getNextStage(stageType);
 		const updateStage = {
 			...currentApplicant.stages,
 			screening: {
@@ -69,9 +69,13 @@ export class ApplicantStatusRepository {
 				assessed_by: [updateAssessedBy],
 				status: applicantUpdateStatus,
 			},
+			[stageType]: {
+				...currentApplicant.stages?.[stageType],
+				assessed_by: [updateAssessedBy],
+				status: applicantUpdateStatus,
+			},
 			...(applicantUpdateStatus === "passed" && {
-				[stageType]: {
-					...currentApplicant.stages?.[stageType],
+				[nextStage]: {
 					status: "in-progress",
 				},
 			}),
@@ -135,11 +139,9 @@ export class ApplicantStatusRepository {
 		selectedMode: "online" | "in-person",
 		assessedBy: string[],
 		stageType: StageType,
-		selectedDate: Date,
-		status: string
+		selectedDate: Date
 	) {
 		const currentApplicant = await this.getCurrentApplicantById(applicantId);
-		const nextStage = this.getNextStage(stageType);
 
 		const updateStage = {
 			...currentApplicant.stages,
@@ -151,13 +153,7 @@ export class ApplicantStatusRepository {
 				mode: selectedMode,
 				assessed_by: assessedBy,
 				date: new Date(selectedDate),
-				status: status,
 			},
-			...(status === "passed" && {
-				[nextStage]: {
-					status: "in-progress",
-				},
-			}),
 		};
 
 		await db
