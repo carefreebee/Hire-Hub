@@ -41,7 +41,8 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 		user?.role === "hr_head" ||
 		user?.role === "vp_acad_affairs" ||
 		user?.role === "vp_administration" ||
-		user?.role === "univ_president";
+		user?.role === "univ_president" ||
+		user?.role === "guidance_center_staff";
 
 	const isRole = () =>
 		user?.role === "dean" ||
