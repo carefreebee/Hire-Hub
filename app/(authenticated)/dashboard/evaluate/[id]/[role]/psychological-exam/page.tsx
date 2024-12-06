@@ -76,9 +76,6 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 				<CardHeader>
 					<div className="flex w-full items-center justify-between">
 						<CardTitle className="flex justify-between">Pyschological Exam</CardTitle>
-						<a href={`/applicationform/${applicant?.id}/${user?.id}`} target="_blank">
-							<Button>Generate Application Form</Button>
-						</a>
 					</div>
 				</CardHeader>
 				{isAllowedRole && psychologicalExamStatus ? (

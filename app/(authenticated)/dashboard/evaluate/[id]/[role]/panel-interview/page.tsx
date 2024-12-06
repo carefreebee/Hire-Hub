@@ -76,13 +76,21 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 				<CardHeader>
 					<CardTitle className="flex justify-between">
 						Panel Interview
-						{user && (
-							<PanelInterViewModal
-								applicantId={applicant?.id}
-								userId={user.id}
-								evaluatedBy={user}
-							/>
-						)}
+						<div className="jusitify-center flex items-center gap-2">
+							{user && (
+								<PanelInterViewModal
+									applicantId={applicant?.id}
+									userId={user.id}
+									evaluatedBy={user}
+								/>
+							)}
+							<a
+								href={`/applicationform/${applicant?.id}/${user?.id}`}
+								target="_blank"
+							>
+								<Button>Generate Application Form</Button>
+							</a>
+						</div>
 					</CardTitle>
 				</CardHeader>
 
