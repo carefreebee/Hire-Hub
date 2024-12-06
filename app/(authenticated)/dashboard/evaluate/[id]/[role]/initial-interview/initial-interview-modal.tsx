@@ -9,7 +9,7 @@ import {
 	DialogTrigger,
 } from "~/components/ui/dialog";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "~/components/ui/input";
 import {
 	Select,
@@ -38,6 +38,41 @@ interface InitialInterviewModalProps {
 function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInterviewModalProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
+	const [jobFitRatings, setJobFitRatings] = useState<number[]>([]);
+	const [jobFitAverage, setJobFitAverage] = useState<number | null>(null);
+	const [cultureAddRatings, setCultureAddRatings] = useState<number[]>([]);
+	const [cultureAddAverage, setCultureAddAverage] = useState<number | null>(null);
+	const [initialInterviewRating, setInitialInterviewRating] = useState<number | null>(null);
+
+	useEffect(() => {
+		if (cultureAddRatings.length > 0) {
+			const cultureAddAvg =
+				cultureAddRatings.reduce((acc, rating) => acc + rating, 0) /
+				cultureAddRatings.length;
+			setCultureAddAverage(cultureAddAvg);
+		} else {
+			setCultureAddAverage(null);
+		}
+	}, [cultureAddRatings]);
+
+	useEffect(() => {
+		if (jobFitRatings.length > 0) {
+			const jobFitAvg =
+				jobFitRatings.reduce((acc, rating) => acc + rating, 0) / jobFitRatings.length;
+			setJobFitAverage(jobFitAvg);
+		} else {
+			setJobFitAverage(null);
+		}
+	}, [jobFitRatings]);
+
+	useEffect(() => {
+		if (jobFitAverage !== null && cultureAddAverage !== null) {
+			const combinedAverage = (jobFitAverage + cultureAddAverage) / 2;
+			setInitialInterviewRating(combinedAverage);
+		} else {
+			setInitialInterviewRating(null);
+		}
+	}, [jobFitAverage, cultureAddAverage]);
 
 	const jobfit = [
 		{ factor: "Experience", questions: jobfitQuestions.experienceQuestions },
@@ -54,11 +89,29 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 	const [jobFitQuestions, setJobFitQuestions] = useState<SelectedQuestions>({});
 
 	const handleSelectChange = (index: number, value: string) => {
+		const rating = parseInt(value, 10);
+		setJobFitRatings((prev) => {
+			const newRatings = [...prev];
+			newRatings[index] = rating;
+			return newRatings;
+		});
+	};
+
+	const handleSelectChangeQuestions = (index: number, value: string) => {
 		setJobFitQuestions((prev) => ({ ...prev, [index]: value }));
 	};
 
-	const handleSelectChangeCulture = (index: number, value: string) => {
+	const handleSelectChangeCultureQuestions = (index: number, value: string) => {
 		setCultureQuestions((prev) => ({ ...prev, [index]: value }));
+	};
+
+	const handleSelectChangeCulture = (index: number, value: string) => {
+		const rating = parseInt(value, 10);
+		setCultureAddRatings((prev) => {
+			const newRatings = [...prev];
+			newRatings[index] = rating;
+			return newRatings;
+		});
 	};
 
 	async function handleSubmit(): Promise<void> {
@@ -154,6 +207,10 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 										maxLength={100}
 										required
 										className="h-8 w-24"
+										value={
+											jobFitAverage !== null ? jobFitAverage.toFixed(2) : ""
+										}
+										readOnly
 									/>
 								</div>
 								<div className="flex w-full items-center justify-end gap-2 text-xs">
@@ -165,6 +222,12 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 										maxLength={100}
 										required
 										className="h-8 w-24"
+										value={
+											cultureAddAverage !== null
+												? cultureAddAverage.toFixed(2)
+												: ""
+										}
+										readOnly
 									/>
 								</div>
 								<div className="flex w-full items-center justify-end gap-2 text-xs">
@@ -176,6 +239,12 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 										maxLength={100}
 										required
 										className="h-8 w-24"
+										value={
+											initialInterviewRating !== null
+												? initialInterviewRating.toFixed(2)
+												: ""
+										}
+										readOnly
 									/>
 								</div>
 							</div>
@@ -203,7 +272,7 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 										<td className="border-gray-300 flex items-center space-x-2 border px-4 py-2">
 											<Select
 												onValueChange={(value) =>
-													handleSelectChange(index, value)
+													handleSelectChangeQuestions(index, value)
 												}
 											>
 												<SelectTrigger className="w-[200px]">
@@ -234,7 +303,12 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 											/>
 										</td>
 										<td className="border-gray-300 border px-4 py-2">
-											<Select name={`jobFitRating${index + 1}`}>
+											<Select
+												name={`jobFitRating${index + 1}`}
+												onValueChange={(value) =>
+													handleSelectChange(index, value)
+												}
+											>
 												<SelectTrigger className="w-full">
 													<SelectValue placeholder="Select a rating" />
 												</SelectTrigger>
@@ -272,7 +346,7 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 										<td className="border-gray-300 flex items-center space-x-2 border px-4 py-2">
 											<Select
 												onValueChange={(value) =>
-													handleSelectChangeCulture(index, value)
+													handleSelectChangeCultureQuestions(index, value)
 												}
 											>
 												<SelectTrigger className="w-[200px]">
@@ -303,7 +377,12 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 											/>
 										</td>
 										<td className="border-gray-300 border px-4 py-2">
-											<Select name={`cultureAddRating${index + 1}`}>
+											<Select
+												name={`cultureAddRating${index + 1}`}
+												onValueChange={(value) =>
+													handleSelectChangeCulture(index, value)
+												}
+											>
 												<SelectTrigger className="w-full">
 													<SelectValue placeholder="Select a rating" />
 												</SelectTrigger>
