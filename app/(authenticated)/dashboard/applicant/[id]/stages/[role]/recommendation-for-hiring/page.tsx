@@ -15,7 +15,8 @@ import {
 	Waiting,
 } from "~/components/pages/authenticated/applicant/Card/StatusDisplayComponents";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
-import { DisplayAssessedBy, DisplayFooter } from "~/components/pages/authenticated/stages/HigherUp";
+import { DisplayFooterView } from "~/components/pages/authenticated/stages/DisplayFooterView";
+import { DisplayAssessedBy } from "~/components/pages/authenticated/stages/HigherUp";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";
 import { getUsersWithoutUserRoles } from "~/controller/UsersController";
@@ -78,7 +79,7 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 								</Suspense>
 							</CardSubContent>
 						</CardContent>
-						<DisplayFooter
+						<DisplayFooterView
 							status={applicantStage?.status as string}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
