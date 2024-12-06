@@ -110,7 +110,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 				)}
 
 				{/* Schedule Tab for Specific Roles */}
-				{["dean", "recruitment_officer", "hr_head", "department_chair", "guidance_center_staff", "vp_administration", "vp_acad_affairs"].includes(role) && (
+				{["dean", "recruitment_officer", "hr_head", "department_chair", "guidance_center_staff", "vp_administration", "vp_acad_affairs", "univ_president"].includes(role) && (
 					<Links
 						href="/dashboard/schedule"
 						label="Schedule"
