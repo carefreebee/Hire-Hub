@@ -9,7 +9,6 @@ import {
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
-import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
 import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import {
@@ -17,11 +16,7 @@ import {
 	DeptOrOfficeFooter,
 } from "~/components/pages/authenticated/stages/DeptOrOffice";
 import { DisplayFooterView } from "~/components/pages/authenticated/stages/DisplayFooterView";
-import {
-	DisplayAssessedBy,
-	DisplayFooter,
-	DisplayMode,
-} from "~/components/pages/authenticated/stages/HigherUp";
+import { DisplayAssessedBy } from "~/components/pages/authenticated/stages/HigherUp";
 
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";

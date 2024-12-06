@@ -15,11 +15,8 @@ import {
 	DeptOrOfficeComponent,
 	DeptOrOfficeFooter,
 } from "~/components/pages/authenticated/stages/DeptOrOffice";
-import {
-	DisplayAssessedBy,
-	DisplayFooter,
-	DisplayMode,
-} from "~/components/pages/authenticated/stages/HigherUp";
+import { DisplayFooterView } from "~/components/pages/authenticated/stages/DisplayFooterView";
+import { DisplayAssessedBy, DisplayMode } from "~/components/pages/authenticated/stages/HigherUp";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";
 import { getUsersWithoutUserRoles } from "~/controller/UsersController";
@@ -106,7 +103,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 							</CardSubContent>
 						</CardContent>
 
-						<DisplayFooter
+						<DisplayFooterView
 							status={applicantStage?.status as string}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
