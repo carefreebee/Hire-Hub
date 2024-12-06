@@ -1,9 +1,9 @@
-import moment from "moment";
+import { format } from "date-fns";
 
-export function formatDate(date: Date) {
-	return moment(date).format("DD-MM-YYYY");
+export function formatDate(date: Date): string {
+	return format(date, "dd-MM-yyyy");
 }
 
-export function formattedDateTime(dateTime: Date) {
-	return moment(dateTime).format("YYYY-MM-DD HH:mm A");
+export function formattedDateTime(dateTime: Date): string {
+	return format(dateTime, "yyyy-MM-dd hh:mm a");
 }
