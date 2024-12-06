@@ -37,7 +37,7 @@ export default async function Sidebar({ id }: SideBarProps) {
 	// Manually add the Initial Interview Stage
 	const initialInterviewStage = {
 		name: "Initial Interview",
-		status: initialInterview || "in-progress",
+		status: initialInterview || undefined,
 		assessed_by: [],
 		rating_forms_id: [],
 	};
