@@ -1,24 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Progress } from "~/components/ui/progress";
 import { RoleEnumsType } from "~/lib/schema";
 import LogoutButton from "./LogoutButton";
 import ApplicantSVG from "./ui/applicant-svg";
+import ApprovalsSVG from "./ui/approvals-icon";
+import ApprovalsSVGWhite from "./ui/approvals-icon-white";
 import DashboardSVG from "./ui/dashboard-svg";
+import EvaluateSVG from "./ui/evalute-icon";
+import EvaluateSVGWhite from "./ui/evalute-icon-white";
 import JobRequestSVG from "./ui/job-request-svg";
 import LogoutSVG from "./ui/logout-svg";
+import ScheduleSVG from "./ui/schedule";
+import ScheduleSVGWhite from "./ui/schedule-white";
 import WhiteApplicantSvg from "./ui/white-applicant-svg";
 import WhiteDashboardSvg from "./ui/white-dashboard-svg";
 import WhiteJobRequestSvg from "./ui/white-job-request-svg";
-import ScheduleSVG from "./ui/schedule";
-import ScheduleSVGWhite from "./ui/schedule-white";
-import EvaluateSVG from "./ui/evalute-icon";
-import EvaluateSVGWhite from "./ui/evalute-icon-white";
-import ApprovalsSVGWhite from "./ui/approvals-icon-white";
-import ApprovalsSVG from "./ui/approvals-icon";
-import { Progress } from "~/components/ui/progress";
 
 export default function SideNav({ role }: { role: RoleEnumsType }) {
 	const [loading, setLoading] = useState<boolean>(false);
@@ -88,6 +88,7 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 					"department_chair",
 					"faculty",
 					"guidance_center_staff",
+					"recruitment_officer",
 					"univ_president",
 				].includes(role) && (
 					<Links
@@ -110,7 +111,16 @@ export default function SideNav({ role }: { role: RoleEnumsType }) {
 				)}
 
 				{/* Schedule Tab for Specific Roles */}
-				{["dean", "recruitment_officer", "hr_head", "department_chair", "guidance_center_staff", "vp_administration", "vp_acad_affairs", "univ_president"].includes(role) && (
+				{[
+					"dean",
+					"recruitment_officer",
+					"hr_head",
+					"department_chair",
+					"guidance_center_staff",
+					"vp_administration",
+					"vp_acad_affairs",
+					"univ_president",
+				].includes(role) && (
 					<Links
 						href="/dashboard/schedule"
 						label="Schedule"
@@ -147,7 +157,7 @@ export function Links({ href, activeChildren, notActiveChildren, label, onClick 
 	return (
 		<Link
 			href={href}
-			onClick={onClick} 
+			onClick={onClick}
 			className={`${
 				isActive ? "bg-[#7F0000] text-white" : ""
 			} flex w-[96%] justify-start gap-4 rounded-xl py-3 pl-10 font-medium hover:bg-[#7F0000] hover:text-white`}

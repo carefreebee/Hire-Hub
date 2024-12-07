@@ -75,7 +75,12 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 			<Card>
 				<CardHeader>
 					<CardTitle className="flex justify-between">
-						Initial Interview
+						<div className="flex flex-col gap-4">
+							Initial Interview
+							<div className="font-mono text-[12px] italic">
+								Add evaluators, set the date and click apply to save changes.
+							</div>
+						</div>
 						{user && (
 							<InitialInterviewModal
 								applicantId={applicant?.id}

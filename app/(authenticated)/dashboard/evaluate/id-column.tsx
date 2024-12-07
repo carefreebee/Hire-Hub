@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -10,8 +10,8 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { useCurrentRole } from "~/util/zustand";
 import { Spinner } from "~/components/ui/spinner";
+import { useCurrentRole } from "~/util/zustand";
 
 export default function IDColumn({ id }: { id: number }) {
 	const [loading, setLoading] = useState(false);
@@ -25,7 +25,8 @@ export default function IDColumn({ id }: { id: number }) {
 
 	const isDeanOrChair = () => currentRole === "dean" || currentRole === "department_chair";
 
-	const isGuidance = () => currentRole === "guidance_center_staff";
+	const isGuidance = () =>
+		currentRole === "guidance_center_staff" || currentRole === "recruitment_officer";
 
 	const isFaculty = () => currentRole === "faculty";
 
@@ -56,24 +57,24 @@ export default function IDColumn({ id }: { id: number }) {
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="center" className="rounded-xl">
 					<DropdownMenuItem>
-							<Link
-								href={
-									isDeanOrChair()
-										? CHAIRLINK
-										: isGuidance()
-											? GUIDANCELINK
-											: isFaculty()
-												? FACULTYLINK
-												: isVP()
-													? VPLINK
-													: isP()
-														? PLINK
+						<Link
+							href={
+								isDeanOrChair()
+									? CHAIRLINK
+									: isGuidance()
+										? GUIDANCELINK
+										: isFaculty()
+											? FACULTYLINK
+											: isVP()
+												? VPLINK
+												: isP()
+													? PLINK
 													: "/dashboard/evaluate"
-								}
-								onClick={handleEvaluateClick}
-							>
-								Evaluate
-							</Link>
+							}
+							onClick={handleEvaluateClick}
+						>
+							Evaluate
+						</Link>
 					</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>

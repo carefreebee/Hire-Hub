@@ -34,9 +34,7 @@ const currentStageName = "Psychological Exam";
 export default async function PsychologicalExamPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
 	const isAllowedRole = user?.role
-		? ["recruitment_officer", "dean", "department_chair", "guidance_center_office"].includes(
-				user.role
-			)
+		? ["recruitment_officer", "guidance_center_staff"].includes(user.role)
 		: false;
 
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR

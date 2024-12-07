@@ -69,10 +69,10 @@ export function DisplayFooter({
 		<>
 			{inProgress ? (
 				<CardFooter>
-					<AddEvaluators id={applicantId as number} />
 					<div className="flex-1">
 						<CheckboxAssessedBy assessed_by={users} />
 					</div>
+					<AddEvaluators id={applicantId as number} />
 					<UpdateStatus
 						id={applicantId as number}
 						assessorId={userId as string} // Send the current user's ID as the assessor

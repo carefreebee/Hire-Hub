@@ -38,6 +38,8 @@ export const ourFileRouter = {
 	RatingUpload: f([
 		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 		"application/msword",
+		"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+		"application/pdf",
 	]).onUploadComplete(async ({ metadata, file }) => {
 		const userId = (metadata as any).userId;
 		console.log("Upload complete for userId:", userId);
