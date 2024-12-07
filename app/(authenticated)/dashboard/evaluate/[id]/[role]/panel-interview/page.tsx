@@ -75,7 +75,12 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 			<Card>
 				<CardHeader>
 					<CardTitle className="flex justify-between">
-						Panel Interview
+						<div className="flex flex-col gap-4">
+							Panel Interview
+							<div className="font-mono text-[12px] italic">
+								Add evaluators, set the date and click apply to save changes.
+							</div>
+						</div>
 						<div className="jusitify-center flex items-center gap-2">
 							{user && (
 								<PanelInterViewModal

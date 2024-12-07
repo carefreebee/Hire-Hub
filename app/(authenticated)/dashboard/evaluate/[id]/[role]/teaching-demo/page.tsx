@@ -82,7 +82,12 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 			<Card>
 				<CardHeader>
 					<CardTitle className="flex justify-between">
-						Teaching Demo
+						<div className="flex flex-col gap-4">
+							Teaching Demo
+							<div className="font-mono text-[12px] italic">
+								Add evaluators, set the date and click apply to save changes.
+							</div>
+						</div>
 						{user && (
 							<TeachingDemoModal
 								applicantId={applicant?.id}

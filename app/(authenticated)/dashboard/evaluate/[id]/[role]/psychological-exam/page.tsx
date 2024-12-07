@@ -73,7 +73,14 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 			<Card>
 				<CardHeader>
 					<div className="flex w-full items-center justify-between">
-						<CardTitle className="flex justify-between">Pyschological Exam</CardTitle>
+						<CardTitle className="flex justify-between">
+							<div className="flex flex-col gap-4">
+								Psychological Exam{" "}
+								<div className="font-mono text-[12px] italic">
+									Add evaluators, set the date and click apply to save changes.
+								</div>
+							</div>
+						</CardTitle>
 					</div>
 				</CardHeader>
 				{isAllowedRole && psychologicalExamStatus ? (

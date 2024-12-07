@@ -91,6 +91,8 @@ export default function AddEvaluators({ id }: ApplicantIDFooterProps) {
 			title: "Applicant Status Updated!",
 			description: "Applicant status has been updated successfully.",
 		});
+
+		window.location.reload();
 	}
 
 	return (

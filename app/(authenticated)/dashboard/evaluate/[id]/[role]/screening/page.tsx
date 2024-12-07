@@ -28,7 +28,14 @@ export default async function ApplicantIdPage({ params }: { params: { id: string
 		<>
 			<Card>
 				<CardHeader>
-					<CardTitle>Screening</CardTitle>
+					<CardTitle>
+						<div className="flex flex-col gap-4">
+							Screening
+							<div className="font-mono text-[12px] italic">
+								Add a schedule and use the update button to update its status.
+							</div>
+						</div>
+					</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<CardSubContent>
