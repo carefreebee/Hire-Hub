@@ -12,7 +12,10 @@ import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Car
 import UpdateStatus from "~/components/pages/authenticated/applicant/Card/UdpateStatus";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
-import { DeptOrOfficeFooter } from "~/components/pages/authenticated/stages/DeptOrOffice";
+import {
+	DeptOrOfficeComponent,
+	DeptOrOfficeFooter,
+} from "~/components/pages/authenticated/stages/DeptOrOffice";
 import {
 	DisplayAssessedBy,
 	DisplayFooter,
@@ -32,9 +35,7 @@ const currentStageName = "Panel Interview";
 
 export default async function PanelInterviewPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
-	const isAllowedRole = user?.role
-		? ["recruitment_officer", "dean", "department_chair"].includes(user.role)
-		: false;
+	const isAllowedRole = user?.role ? ["recruitment_officer"].includes(user.role) : false;
 
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 	const users = await getUsersWithoutUserRoles();
@@ -147,19 +148,21 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 				) : (
 					<>
 						<div className="flex gap-3 p-3">
-							{user && (
-								<PanelInterViewModal
-									applicantId={applicant?.id}
-									userId={user.id}
-									evaluatedBy={user}
-								/>
+							{user && assessedByUsers && (
+								<>
+									<PanelInterViewModal
+										applicantId={applicant?.id}
+										userId={user.id}
+										evaluatedBy={user}
+									/>
+									<a
+										href={`/applicationform/${applicant?.id}/${user?.id}`}
+										target="_blank"
+									>
+										<Button>Generate Application Form</Button>
+									</a>
+								</>
 							)}
-							<a
-								href={`/applicationform/${applicant?.id}/${user?.id}`}
-								target="_blank"
-							>
-								<Button>Generate Application Form</Button>
-							</a>
 						</div>
 						{assessedByUsers && (
 							<>
@@ -200,6 +203,13 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 								</div>
 							</>
 						)}
+
+						<DeptOrOfficeComponent
+							assessorLength={applicantStage?.assessed_by?.length}
+							assessedByUsers={assessedByUsers as boolean}
+							hasUserPostedRating={hasUserPostedRating as boolean}
+							status={applicantStage?.status as string | undefined}
+						/>
 
 						<DeptOrOfficeFooter
 							status={applicantStage?.status as string | undefined}
