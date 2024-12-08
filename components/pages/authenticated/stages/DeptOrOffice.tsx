@@ -16,6 +16,7 @@ type DeptOrOfficeProps = {
 	hasUserPostedRating: HasUserPostedRating;
 	checkIfUserIsAllowedToAssess?: CheckIfUserIsAllowedToAssess;
 	status: string | undefined;
+	stageName: string | undefined;
 };
 
 export function DeptOrOfficeComponent({
@@ -24,6 +25,7 @@ export function DeptOrOfficeComponent({
 	hasUserPostedRating,
 	checkIfUserIsAllowedToAssess,
 	status,
+	stageName,
 }: DeptOrOfficeProps) {
 	const inProgress = status === "in-progress";
 	const showAssessmentForm =
@@ -40,7 +42,7 @@ export function DeptOrOfficeComponent({
 						Waiting for Recruitment Officer to set the assessor.
 					</TypographySmall>
 				</CardContent>
-			) : showAssessmentForm ? (
+			) : showAssessmentForm && stageName === "Psychological Exam" ? (
 				<CardContent className="mt-0 flex h-auto flex-col p-5">
 					<InformationSVG />
 					<UploadRatingForm />
