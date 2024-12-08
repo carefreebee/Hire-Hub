@@ -92,22 +92,35 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 										{currentStageName}
 									</TypographySmall>
 									<div className="flex flex-col">
-										<DisplayMode
-											status={applicantStage?.status as string}
-											mode={applicantStage?.mode}
-										/>
+										{user?.role === "guidance_center_staff" ? (
+											<DisplayMode
+												status={applicantStage?.status as string}
+												mode={applicantStage?.mode}
+											/>
+										) : (
+											<div></div>
+										)}
 										<div className="mt-2">
-											{psychologicalExamStatus === "in-progress" ? (
+											{psychologicalExamStatus === "in-progress" &&
+											user?.role === "guidance_center_staff" ? (
 												<SelectPassedOrFailed />
 											) : (
 												<Button
 													variant={"outline"}
 													disabled
-													className={`${psychologicalExamStatus === "passed" ? "text-green-500" : "text-[#7F0000]"}`}
+													className={`${
+														psychologicalExamStatus === "passed"
+															? "text-green-500"
+															: psychologicalExamStatus === "failed"
+																? "text-[#7F0000]"
+																: ""
+													}`}
 												>
 													{psychologicalExamStatus === "passed"
 														? "Passed"
-														: "Failed"}
+														: psychologicalExamStatus === "failed"
+															? "Failed"
+															: "In Progress"}
 												</Button>
 											)}
 										</div>
