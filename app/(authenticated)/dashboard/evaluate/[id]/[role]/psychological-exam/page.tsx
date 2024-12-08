@@ -155,41 +155,46 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 							hasUserPostedRating={hasUserPostedRating as boolean}
 							status={applicantStage?.status as string | undefined}
 						/>
-						<div className="flex items-center justify-between p-2">
-							<DisplayMode
-								status={applicantStage?.status as string}
-								mode={applicantStage?.mode}
-							/>
-							{psychologicalExamStatus === "in-progress" ? (
-								<SelectPassedOrFailed />
-							) : (
-								<Button
-									variant={"outline"}
-									disabled
-									className={`${
-										psychologicalExamStatus === "passed"
-											? "text-green-500"
-											: psychologicalExamStatus === "failed"
-												? "text-[#7F0000]"
-												: ""
-									}`}
-								>
-									{psychologicalExamStatus === "passed"
-										? "Passed"
-										: psychologicalExamStatus === "failed"
-											? "Failed"
-											: "In Progress"}
-								</Button>
-							)}
-							<UpdateStatus
-								id={applicant?.id as number}
-								assessorId={user?.id as string} // Send the current user's ID as the assessor
-							/>
-						</div>
-						<div className="ml-4 text-[12px]">
-							Scheduled Date and Time:{" "}
-							<DisplayDate date={applicantStage?.date as Date} />
-						</div>
+						{assessedByUsers && (
+							<>
+								<div className="flex items-center justify-between p-2">
+									<DisplayMode
+										status={applicantStage?.status as string}
+										mode={applicantStage?.mode}
+									/>
+									{psychologicalExamStatus === "in-progress" ? (
+										<SelectPassedOrFailed />
+									) : (
+										<Button
+											variant={"outline"}
+											disabled
+											className={`${
+												psychologicalExamStatus === "passed"
+													? "text-green-500"
+													: psychologicalExamStatus === "failed"
+														? "text-[#7F0000]"
+														: ""
+											}`}
+										>
+											{psychologicalExamStatus === "passed"
+												? "Passed"
+												: psychologicalExamStatus === "failed"
+													? "Failed"
+													: "In Progress"}
+										</Button>
+									)}
+									<UpdateStatus
+										id={applicant?.id as number}
+										assessorId={user?.id as string} // Send the current user's ID as the assessor
+									/>
+								</div>
+								<div className="ml-4 text-[12px]">
+									Scheduled Date and Time:{" "}
+									<DisplayDate date={applicantStage?.date as Date} />
+								</div>
+							</>
+						)}
+
 						<DisplayFooter
 							status={applicantStage?.status as string}
 							applicantId={Number(params.id)}

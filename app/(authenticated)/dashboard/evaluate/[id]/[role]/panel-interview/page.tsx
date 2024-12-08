@@ -161,41 +161,46 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 								<Button>Generate Application Form</Button>
 							</a>
 						</div>
-						<div className="flex items-center justify-between p-2">
-							<DisplayMode
-								status={applicantStage?.status as string}
-								mode={applicantStage?.mode}
-							/>
-							{panelInterviewStatus === "in-progress" ? (
-								<SelectPassedOrFailed />
-							) : (
-								<Button
-									variant={"outline"}
-									disabled
-									className={`${
-										panelInterviewStatus === "passed"
-											? "text-green-500"
-											: panelInterviewStatus === "failed"
-												? "text-[#7F0000]"
-												: ""
-									}`}
-								>
-									{panelInterviewStatus === "passed"
-										? "Passed"
-										: panelInterviewStatus === "failed"
-											? "Failed"
-											: "In Progress"}
-								</Button>
-							)}
-							<UpdateStatus
-								id={applicant?.id as number}
-								assessorId={user?.id as string} // Send the current user's ID as the assessor
-							/>
-						</div>
-						<div className="ml-4 text-[12px]">
-							Scheduled Date and Time:{" "}
-							<DisplayDate date={applicantStage?.date as Date} />
-						</div>
+						{assessedByUsers && (
+							<>
+								<div className="flex items-center justify-between p-2">
+									<DisplayMode
+										status={applicantStage?.status as string}
+										mode={applicantStage?.mode}
+									/>
+									{panelInterviewStatus === "in-progress" ? (
+										<SelectPassedOrFailed />
+									) : (
+										<Button
+											variant={"outline"}
+											disabled
+											className={`${
+												panelInterviewStatus === "passed"
+													? "text-green-500"
+													: panelInterviewStatus === "failed"
+														? "text-[#7F0000]"
+														: ""
+											}`}
+										>
+											{panelInterviewStatus === "passed"
+												? "Passed"
+												: panelInterviewStatus === "failed"
+													? "Failed"
+													: "In Progress"}
+										</Button>
+									)}
+									<UpdateStatus
+										id={applicant?.id as number}
+										assessorId={user?.id as string} // Send the current user's ID as the assessor
+									/>
+								</div>
+								<div className="ml-4 text-[12px]">
+									Scheduled Date and Time:{" "}
+									<DisplayDate date={applicantStage?.date as Date} />
+								</div>
+							</>
+						)}
+
 						<DeptOrOfficeFooter
 							status={applicantStage?.status as string | undefined}
 							assessorsName={finalAssessor?.name as string | undefined}
