@@ -211,14 +211,14 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 							userId={user?.id as string}
 							currentStageName={currentStageName}
 						/>
-						<DisplayFooter
+						{/* <DisplayFooter
 							userId={user?.id as string}
 							status={applicantStage?.status as string}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
 							assessorsName={finalAssessor?.name as string | undefined}
 							assessorsRole={finalAssessor?.role as string | undefined}
-						/>
+						/> */}
 					</>
 				)}
 			</Card>
