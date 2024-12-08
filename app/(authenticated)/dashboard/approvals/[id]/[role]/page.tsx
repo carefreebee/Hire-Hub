@@ -183,7 +183,7 @@ export default function ApprovalPage() {
 											<TypographySmall
 												size={"sm"}
 												variant={"outline"}
-												className="font-medium shadow-md"
+												className="h-auto text-wrap font-medium shadow-md"
 											>
 												{job?.requested_description}
 											</TypographySmall>
@@ -207,7 +207,7 @@ export default function ApprovalPage() {
 												variant={"outline"}
 												className="font-medium shadow-md"
 											>
-												DSADSADSADA
+												.
 											</TypographySmall>
 										</div>
 										<div className="flex flex-col">
@@ -217,7 +217,7 @@ export default function ApprovalPage() {
 												variant={"outline"}
 												className="font-medium shadow-md"
 											>
-												DSADSADSADA
+												.
 											</TypographySmall>
 										</div>
 										<div className="flex flex-col">
@@ -227,7 +227,7 @@ export default function ApprovalPage() {
 												variant={"outline"}
 												className="font-medium shadow-md"
 											>
-												DSADSADSADA
+												.
 											</TypographySmall>
 										</div>
 									</div>
