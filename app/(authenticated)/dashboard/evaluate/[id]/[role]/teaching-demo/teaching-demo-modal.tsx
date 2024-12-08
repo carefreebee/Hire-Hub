@@ -187,10 +187,7 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 									>
 										<span className="text-sm">{itemIndex + 1}.</span>
 										<label className="flex-1 text-sm">{item}</label>
-										<RadioGroup
-											defaultValue={`rating-${sectionIndex}-${itemIndex}-1`}
-											name={`rating-${sectionIndex}-${itemIndex}`}
-										>
+										<RadioGroup name={`rating-${sectionIndex}-${itemIndex}`}>
 											<div className="flex w-56 justify-between">
 												{[1, 2, 3, 4].map((rating) => (
 													<div
@@ -225,7 +222,7 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 								<label className="flex-1 text-sm">
 									Rate the overall performance:
 								</label>
-								<RadioGroup defaultValue="overall-rating-1" name="overAll">
+								<RadioGroup name="overAll">
 									<div className="flex w-56 justify-between">
 										{[1, 2, 3, 4].map((rating) => (
 											<div

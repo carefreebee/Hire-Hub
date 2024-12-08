@@ -91,6 +91,10 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 					<>
 						{inProgress && !applicantStage.assessed_by?.length ? (
 							<Waiting />
+						) : applicantStage?.status === "passed" ? (
+							<CardContent className="mt-0 items-center justify-center font-semibold text-slate-500">
+								Congrats, you have passed!
+							</CardContent>
 						) : user?.role === "univ_president" ? (
 							<CardContent className="mt-0 items-center justify-center font-semibold text-slate-500">
 								Please proceed to the evaluate tab.
