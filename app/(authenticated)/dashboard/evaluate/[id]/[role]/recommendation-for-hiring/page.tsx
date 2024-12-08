@@ -93,7 +93,7 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 							<Waiting />
 						) : applicantStage?.status === "passed" ? (
 							<CardContent className="mt-0 items-center justify-center font-semibold text-slate-500">
-								Congrats, you have passed!
+								Applicant has completed the recruitment process.
 							</CardContent>
 						) : user?.role === "univ_president" ? (
 							<CardContent className="mt-0 items-center justify-center font-semibold text-slate-500">

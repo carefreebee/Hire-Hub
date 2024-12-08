@@ -40,7 +40,7 @@ export default function SubmitEvaluateButton({ id }: { id: string }) {
 			<ConfirmationModal
 				mainButton={
 					<Button variant={"outline"} className="text-[#0F91D2] hover:text-[#0F91D2]">
-						Udpate Status
+						Update Status
 					</Button>
 				}
 				descriptionButtonLabel="Are you sure you want to submit the form?"

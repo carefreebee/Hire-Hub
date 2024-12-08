@@ -51,9 +51,23 @@ export default function FilteredDisplay({ rating, tableRowLength }: FilteredDisp
 					<TableCell className="h-12">{formattedNameAndRole(data.role, "_")}</TableCell>
 					<TableCell className="h-12">{formatDate(data.created_at as Date)}</TableCell>
 					<TableCell className="h-12">
-						<Button onClick={() => handleViewClick(data)} className="text-[#0F91D2]">
-							View
-						</Button>
+						{data.recruitment_stage === "Psychological Exam" ? (
+							<a
+								href={data.rate.toString()} // Replace with the actual property containing the download URL
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-[#0F91D2] underline"
+							>
+								Download
+							</a>
+						) : (
+							<Button
+								onClick={() => handleViewClick(data)}
+								className="text-[#0F91D2]"
+							>
+								View
+							</Button>
+						)}
 					</TableCell>
 					<td></td>
 				</TableRow>
