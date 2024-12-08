@@ -23,7 +23,8 @@ export default function IDColumn({ id }: { id: number }) {
 	const VPLINK = `/dashboard/evaluate/${id}/${currentRole}/panel-interview`;
 	const PLINK = `/dashboard/evaluate/${id}/${currentRole}/recommendation-for-hiring`;
 
-	const isDeanOrChair = () => currentRole === "dean" || currentRole === "department_chair";
+	const isDeanOrChair = () =>
+		currentRole === "dean" || currentRole === "department_chair" || currentRole === "hr_head";
 
 	const isGuidance = () =>
 		currentRole === "guidance_center_staff" || currentRole === "recruitment_officer";
