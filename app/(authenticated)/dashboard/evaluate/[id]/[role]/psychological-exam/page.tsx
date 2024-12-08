@@ -195,14 +195,14 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 							</>
 						)}
 
-						<DisplayFooter
+						{/* <DisplayFooter
 							status={applicantStage?.status as string}
 							applicantId={Number(params.id)}
 							users={users as Partial<User>[]}
 							userId={user?.id as string}
 							assessorsName={finalAssessor?.name as string | undefined}
 							assessorsRole={finalAssessor?.role as string | undefined}
-						/>
+						/> */}
 						<DeptOrOfficeFooter
 							status={applicantStage?.status as string | undefined}
 							assessorsName={finalAssessor?.name as string | undefined}
