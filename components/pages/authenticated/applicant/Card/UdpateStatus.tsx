@@ -60,7 +60,7 @@ export default function UpdateStatus({ id, assessorId }: ApplicantIDFooterProps)
 			<ConfirmationModal
 				mainButton={
 					<Button type="submit" variant={"ghost"} className="text-[#0F91D2]">
-						<UpdateSvg /> <span className="ml-2">Update</span>
+						<UpdateSvg /> <span className="ml-2">Update Status</span>
 					</Button>
 				}
 				descriptionButtonLabel="Are you sure you want to update Applicant Status"
