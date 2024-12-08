@@ -148,7 +148,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 				) : (
 					<>
 						<div className="flex gap-3 p-3">
-							{user && assessedByUsers && (
+							{user && assessedByUsers && user?.role === "vp_acad_affairs" && (
 								<>
 									<PanelInterViewModal
 										applicantId={applicant?.id}
@@ -164,7 +164,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 								</>
 							)}
 						</div>
-						{assessedByUsers && (
+						{assessedByUsers && user?.role === "vp_acad_affairs" && (
 							<>
 								<div className="flex items-center justify-between p-2">
 									<DisplayMode
@@ -209,6 +209,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 							assessedByUsers={assessedByUsers as boolean}
 							hasUserPostedRating={hasUserPostedRating as boolean}
 							status={applicantStage?.status as string | undefined}
+							stageName={currentStageName}
 						/>
 
 						<DeptOrOfficeFooter

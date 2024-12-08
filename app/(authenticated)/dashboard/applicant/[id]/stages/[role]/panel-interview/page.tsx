@@ -118,6 +118,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 							assessedByUsers={assessedByUsers as boolean}
 							hasUserPostedRating={hasUserPostedRating as boolean}
 							status={applicantStage?.status as string | undefined}
+							stageName={currentStageName}
 						/>
 
 						<DeptOrOfficeFooter

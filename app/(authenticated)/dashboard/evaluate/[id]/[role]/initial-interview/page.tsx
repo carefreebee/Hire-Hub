@@ -31,6 +31,8 @@ import { checkUserAndApplicantIfValid } from "~/util/check-user-and-applicant-va
 import { GetCurrentStage } from "~/util/get-current-stage";
 import InitialInterviewModal from "./initial-interview-modal";
 
+const currentStageName = "Initial Interview";
+
 export default async function InitialInterviewPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
 	const isAllowedRole = user?.role
@@ -150,6 +152,7 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 							assessedByUsers={assessedByUsers as boolean}
 							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess as boolean}
 							hasUserPostedRating={true}
+							stageName={currentStageName}
 							status={applicantStage?.status || ""}
 						/>
 
