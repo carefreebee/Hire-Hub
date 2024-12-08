@@ -105,6 +105,7 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 							assessedByUsers={assessedByUsers as boolean}
 							hasUserPostedRating={hasUserPostedRating as boolean}
 							status={applicantStage?.status as string | undefined}
+							stageName={currentStageName}
 						/>
 
 						<DeptOrOfficeFooter

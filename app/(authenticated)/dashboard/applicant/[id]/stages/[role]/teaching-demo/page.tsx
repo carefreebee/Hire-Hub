@@ -127,6 +127,7 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess as boolean}
 							hasUserPostedRating={hasUserPostedRating as boolean}
 							status={applicantStage?.status || ""}
+							stageName={currentStageName}
 						/>
 
 						<DeptOrOfficeFooter

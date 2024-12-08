@@ -9,14 +9,14 @@ import {
 	CardTopLeftSubContent,
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
-import DownloadForm from "~/components/pages/authenticated/applicant/Card/DownloadForm";
 import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
-import InitialInterviewComponent from "~/components/pages/authenticated/applicant/initial-interview/InitialInterviewComponent";
-import { DeptOrOfficeComponent, DeptOrOfficeFooter } from "~/components/pages/authenticated/stages/DeptOrOffice";
+import {
+	DeptOrOfficeComponent,
+	DeptOrOfficeFooter,
+} from "~/components/pages/authenticated/stages/DeptOrOffice";
 import { DisplayFooterView } from "~/components/pages/authenticated/stages/DisplayFooterView";
-import { DisplayAssessedBy, DisplayFooter, DisplayMode } from "~/components/pages/authenticated/stages/HigherUp";
-import { StageStatus } from "~/components/pages/authenticated/stages/Messages";
+import { DisplayAssessedBy } from "~/components/pages/authenticated/stages/HigherUp";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getUsersWithoutUserRoles } from "~/controller/UsersController";
 import { validateRequest } from "~/lib/auth";
@@ -62,18 +62,14 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 		<>
 			<Card>
 				<CardHeader>
-					<CardTitle className="flex justify-between">
-						Initial Interview
-					</CardTitle>
+					<CardTitle className="flex justify-between">Initial Interview</CardTitle>
 				</CardHeader>
 				{isAllowedRole ? (
 					<>
 						<CardContent>
 							<CardSubContent>
 								<CardTopLeftSubContent>
-									<TypographySmall size={"md"}>
-										Initial Interview
-									</TypographySmall>
+									<TypographySmall size={"md"}>Initial Interview</TypographySmall>
 								</CardTopLeftSubContent>
 
 								<DisplayDate date={applicantStage?.date as Date} />
@@ -104,6 +100,7 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 							checkIfUserIsAllowedToAssess={checkIfUserIsAllowedToAssess as boolean}
 							hasUserPostedRating={true}
 							status={applicantStage?.status || ""}
+							stageName="Initial Interview"
 						/>
 
 						<DeptOrOfficeFooter
