@@ -9,12 +9,10 @@ import {
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
 import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
+import UpdateStatus from "~/components/pages/authenticated/applicant/Card/UdpateStatus";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
-import {
-	DeptOrOfficeComponent,
-	DeptOrOfficeFooter,
-} from "~/components/pages/authenticated/stages/DeptOrOffice";
+import { DeptOrOfficeFooter } from "~/components/pages/authenticated/stages/DeptOrOffice";
 import {
 	DisplayAssessedBy,
 	DisplayFooter,
@@ -81,21 +79,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 								Add evaluators, set the date and click apply to save changes.
 							</div>
 						</div>
-						<div className="jusitify-center flex items-center gap-2">
-							{user && (
-								<PanelInterViewModal
-									applicantId={applicant?.id}
-									userId={user.id}
-									evaluatedBy={user}
-								/>
-							)}
-							<a
-								href={`/applicationform/${applicant?.id}/${user?.id}`}
-								target="_blank"
-							>
-								<Button>Generate Application Form</Button>
-							</a>
-						</div>
+						<div className="jusitify-center flex items-center gap-2"></div>
 					</CardTitle>
 				</CardHeader>
 
@@ -113,17 +97,26 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 											mode={applicantStage?.mode}
 										/>
 										<div className="mt-2">
-											{panelInterviewStatus === "in-progress" ? (
+											{panelInterviewStatus === "in-progress" &&
+											user?.role === "vp_acad_affairs" ? (
 												<SelectPassedOrFailed />
 											) : (
 												<Button
 													variant={"outline"}
 													disabled
-													className={`${panelInterviewStatus === "passed" ? "text-green-500" : "text-[#7F0000]"}`}
+													className={`${
+														panelInterviewStatus === "passed"
+															? "text-green-500"
+															: panelInterviewStatus === "failed"
+																? "text-[#7F0000]"
+																: ""
+													}`}
 												>
 													{panelInterviewStatus === "passed"
 														? "Passed"
-														: "Failed"}
+														: panelInterviewStatus === "failed"
+															? "Failed"
+															: "In Progress"}
 												</Button>
 											)}
 										</div>
@@ -153,13 +146,56 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 					</>
 				) : (
 					<>
-						<DeptOrOfficeComponent
-							assessorLength={applicantStage?.assessed_by?.length}
-							assessedByUsers={assessedByUsers as boolean}
-							hasUserPostedRating={hasUserPostedRating as boolean}
-							status={applicantStage?.status as string | undefined}
-						/>
-
+						<div className="flex gap-3 p-3">
+							{user && (
+								<PanelInterViewModal
+									applicantId={applicant?.id}
+									userId={user.id}
+									evaluatedBy={user}
+								/>
+							)}
+							<a
+								href={`/applicationform/${applicant?.id}/${user?.id}`}
+								target="_blank"
+							>
+								<Button>Generate Application Form</Button>
+							</a>
+						</div>
+						<div className="flex items-center justify-between p-2">
+							<DisplayMode
+								status={applicantStage?.status as string}
+								mode={applicantStage?.mode}
+							/>
+							{panelInterviewStatus === "in-progress" ? (
+								<SelectPassedOrFailed />
+							) : (
+								<Button
+									variant={"outline"}
+									disabled
+									className={`${
+										panelInterviewStatus === "passed"
+											? "text-green-500"
+											: panelInterviewStatus === "failed"
+												? "text-[#7F0000]"
+												: ""
+									}`}
+								>
+									{panelInterviewStatus === "passed"
+										? "Passed"
+										: panelInterviewStatus === "failed"
+											? "Failed"
+											: "In Progress"}
+								</Button>
+							)}
+							<UpdateStatus
+								id={applicant?.id as number}
+								assessorId={user?.id as string} // Send the current user's ID as the assessor
+							/>
+						</div>
+						<div className="ml-4 text-[12px]">
+							Scheduled Date and Time:{" "}
+							<DisplayDate date={applicantStage?.date as Date} />
+						</div>
 						<DeptOrOfficeFooter
 							status={applicantStage?.status as string | undefined}
 							assessorsName={finalAssessor?.name as string | undefined}
@@ -169,6 +205,14 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 							applicantId={params.id as string}
 							userId={user?.id as string}
 							currentStageName={currentStageName}
+						/>
+						<DisplayFooter
+							userId={user?.id as string}
+							status={applicantStage?.status as string}
+							applicantId={Number(params.id)}
+							users={users as Partial<User>[]}
+							assessorsName={finalAssessor?.name as string | undefined}
+							assessorsRole={finalAssessor?.role as string | undefined}
 						/>
 					</>
 				)}

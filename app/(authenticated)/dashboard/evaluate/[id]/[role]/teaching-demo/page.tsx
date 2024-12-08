@@ -88,7 +88,7 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 								Add evaluators, set the date and click apply to save changes.
 							</div>
 						</div>
-						{user && (
+						{user && assessedByUsers && (
 							<TeachingDemoModal
 								applicantId={applicant?.id}
 								userId={user.id}

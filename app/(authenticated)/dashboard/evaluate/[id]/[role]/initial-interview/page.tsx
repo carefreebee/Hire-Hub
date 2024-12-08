@@ -81,7 +81,7 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 								Add evaluators, set the date and click apply to save changes.
 							</div>
 						</div>
-						{user && (
+						{user && assessedByUsers && (
 							<InitialInterviewModal
 								applicantId={applicant?.id}
 								userId={user.id}

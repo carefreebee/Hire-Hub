@@ -9,6 +9,7 @@ import {
 } from "~/components/pages/authenticated/applicant/Card/CardComponent";
 import DisplayDate from "~/components/pages/authenticated/applicant/Card/DisplayDate";
 import { LoadingAssessors } from "~/components/pages/authenticated/applicant/Card/SkeletonCard";
+import UpdateStatus from "~/components/pages/authenticated/applicant/Card/UdpateStatus";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
 import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
 import {
@@ -33,9 +34,7 @@ const currentStageName = "Psychological Exam";
 
 export default async function PsychologicalExamPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
-	const isAllowedRole = user?.role
-		? ["recruitment_officer", "guidance_center_staff"].includes(user.role)
-		: false;
+	const isAllowedRole = user?.role ? ["recruitment_officer"].includes(user.role) : false;
 
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 	const users = await getUsersWithoutUserRoles();
@@ -156,7 +155,41 @@ export default async function PsychologicalExamPage({ params }: { params: { id: 
 							hasUserPostedRating={hasUserPostedRating as boolean}
 							status={applicantStage?.status as string | undefined}
 						/>
-
+						<div className="flex items-center justify-between p-2">
+							<DisplayMode
+								status={applicantStage?.status as string}
+								mode={applicantStage?.mode}
+							/>
+							{psychologicalExamStatus === "in-progress" ? (
+								<SelectPassedOrFailed />
+							) : (
+								<Button
+									variant={"outline"}
+									disabled
+									className={`${
+										psychologicalExamStatus === "passed"
+											? "text-green-500"
+											: psychologicalExamStatus === "failed"
+												? "text-[#7F0000]"
+												: ""
+									}`}
+								>
+									{psychologicalExamStatus === "passed"
+										? "Passed"
+										: psychologicalExamStatus === "failed"
+											? "Failed"
+											: "In Progress"}
+								</Button>
+							)}
+							<UpdateStatus
+								id={applicant?.id as number}
+								assessorId={user?.id as string} // Send the current user's ID as the assessor
+							/>
+						</div>
+						<div className="ml-4 text-[12px]">
+							Scheduled Date and Time:{" "}
+							<DisplayDate date={applicantStage?.date as Date} />
+						</div>
 						<DeptOrOfficeFooter
 							status={applicantStage?.status as string | undefined}
 							assessorsName={finalAssessor?.name as string | undefined}
