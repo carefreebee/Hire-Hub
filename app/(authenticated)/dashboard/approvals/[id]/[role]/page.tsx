@@ -168,6 +168,18 @@ export default function ApprovalPage() {
 												{job?.requested_department ?? "N/A"}
 											</TypographySmall>
 										</div>
+									</div>
+									<div className="flex h-full w-[50%] flex-col justify-center gap-8">
+										<div className="flex flex-col">
+											Qualification Standards: Educational Background
+											<TypographySmall
+												size={"sm"}
+												variant={"outline"}
+												className="h-auto text-wrap font-medium shadow-md"
+											>
+												{job?.requested_qualification}
+											</TypographySmall>
+										</div>
 										<div className="flex flex-col">
 											Type
 											<TypographySmall
@@ -186,48 +198,6 @@ export default function ApprovalPage() {
 												className="h-auto text-wrap font-medium shadow-md"
 											>
 												{job?.requested_description}
-											</TypographySmall>
-										</div>
-									</div>
-									<div className="flex h-full w-[50%] flex-col justify-center gap-8">
-										<div className="flex flex-col">
-											Qualification Standards: Educational Background
-											<TypographySmall
-												size={"sm"}
-												variant={"outline"}
-												className="h-auto text-wrap font-medium shadow-md"
-											>
-												{job?.requested_qualification}
-											</TypographySmall>
-										</div>
-										<div className="flex flex-col">
-											Qualification Standards: Experience
-											<TypographySmall
-												size={"sm"}
-												variant={"outline"}
-												className="font-medium shadow-md"
-											>
-												.
-											</TypographySmall>
-										</div>
-										<div className="flex flex-col">
-											Qualification Standards: Knowledge, Skills & Abilities
-											<TypographySmall
-												size={"sm"}
-												variant={"outline"}
-												className="font-medium shadow-md"
-											>
-												.
-											</TypographySmall>
-										</div>
-										<div className="flex flex-col">
-											Major Duties and Responsibility
-											<TypographySmall
-												size={"sm"}
-												variant={"outline"}
-												className="font-medium shadow-md"
-											>
-												.
 											</TypographySmall>
 										</div>
 									</div>
