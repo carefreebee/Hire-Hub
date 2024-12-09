@@ -165,7 +165,7 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 					</DialogHeader>
 					<div className="flex h-full w-full flex-col">
 						<div className="mb-4 flex items-center justify-center bg-gray font-bold">
-							JOB-FIT INTERVIEW
+							TEACHING DEMO RATING SCALE
 						</div>
 						<div className="flex items-center justify-between">
 							(1) Strongly Disagree: Considerable and urgent improvement needed.

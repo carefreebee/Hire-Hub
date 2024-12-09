@@ -20,7 +20,7 @@ export default function SelectMode() {
 		<>
 			<Select onValueChange={(value) => setMode(value as "online" | "in-person")}>
 				<SelectTrigger className="h-auto w-32 py-1">
-					<SelectValue placeholder={mode} />
+					<SelectValue placeholder="Select Mode" />
 				</SelectTrigger>
 				<SelectContent>
 					<SelectGroup className="">

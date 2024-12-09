@@ -18,8 +18,8 @@ export default function SelectPassedOrFailed() {
 
 	return (
 		<Select onValueChange={(value) => setStatus(value as "passed" | "failed" | "in-progress")}>
-			<SelectTrigger className="h-auto w-32 py-1">
-				<SelectValue placeholder={status} className="mt-0" />
+			<SelectTrigger className="h-auto w-40 py-1">
+				<SelectValue placeholder="Update Status" className="mt-0" />
 			</SelectTrigger>
 			<SelectContent>
 				<SelectGroup>

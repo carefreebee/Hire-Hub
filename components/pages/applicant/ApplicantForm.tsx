@@ -166,6 +166,9 @@ const ApplicantForm: React.FC<ChildFormProps> = ({ setCurrent, setFormData, form
 							<SelectItem value="doctorate">Doctorate</SelectItem>
 							<SelectItem value="masteral">Masteral</SelectItem>
 							<SelectItem value="bachelors">Bachelor&apos;s</SelectItem>
+							<SelectItem value="highschool">High School Graduate</SelectItem>
+							<SelectItem value="elementary">Elementary Graduate</SelectItem>
+							<SelectItem value="others">Others</SelectItem>
 						</SelectContent>
 					</Select>
 					<Input
