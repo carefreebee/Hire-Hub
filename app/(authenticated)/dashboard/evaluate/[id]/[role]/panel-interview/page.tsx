@@ -36,6 +36,11 @@ const currentStageName = "Panel Interview";
 export default async function PanelInterviewPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
 	const isAllowedRole = user?.role ? ["recruitment_officer"].includes(user.role) : false;
+	const isAllowedForPanelInterviewModal = user?.role
+		? ["vp_acad_affairs", "hr_head", "dean"].includes(user.role)
+		: false;
+
+	//const isAllowedForGenerateForm = user?.role === "recruitment_officer";
 
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 	const users = await getUsersWithoutUserRoles();
@@ -73,14 +78,30 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 		<>
 			<Card>
 				<CardHeader>
-					<CardTitle className="flex justify-between">
+					<CardTitle className="flex items-start justify-between">
 						<div className="flex flex-col gap-4">
 							Panel Interview
 							<div className="font-mono text-[12px] italic">
 								Add evaluators, set the date and click apply to save changes.
 							</div>
 						</div>
-						<div className="jusitify-center flex items-center gap-2"></div>
+						<div className="flex items-center gap-2">
+							{isAllowedForPanelInterviewModal && user && (
+								<PanelInterViewModal
+									applicantId={applicant?.id}
+									userId={user.id}
+									evaluatedBy={user}
+								/>
+							)}
+							{isAllowedRole && panelInterviewStatus && (
+								<a
+									href={`/applicationform/${applicant?.id}/${user?.id}`}
+									target="_blank"
+								>
+									<Button>Generate Application Form</Button>
+								</a>
+							)}
+						</div>
 					</CardTitle>
 				</CardHeader>
 
@@ -147,23 +168,6 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 					</>
 				) : (
 					<>
-						<div className="flex gap-3 p-3">
-							{user && assessedByUsers && user?.role === "vp_acad_affairs" && (
-								<>
-									<PanelInterViewModal
-										applicantId={applicant?.id}
-										userId={user.id}
-										evaluatedBy={user}
-									/>
-									<a
-										href={`/applicationform/${applicant?.id}/${user?.id}`}
-										target="_blank"
-									>
-										<Button>Generate Application Form</Button>
-									</a>
-								</>
-							)}
-						</div>
 						{assessedByUsers && user?.role === "vp_acad_affairs" && (
 							<>
 								<div className="flex items-center justify-between p-2">
