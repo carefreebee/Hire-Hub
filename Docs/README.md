@@ -81,28 +81,6 @@
 The recruitment and selection process is as follows.
 ![Screenshot 2024-12-20 211400](https://github.com/user-attachments/assets/58f0db37-8a66-48b8-ad07-86af004cb57f)
 
-
-- **Initial Interview**:
-  Conducted by the department head or immediate supervisor.
-  - Requirements: Resume, CV, Application Letter
-  - Output: Initial Interview Rating Form
-
-- **Teaching Demo** (if applicable):
-  A 15-minute teaching demo assessed by the College Dean, Department Chair, and at least one faculty member.
-  - Output: Teaching Demo Rating Form
-
-- **Psychological Examination**:
-  Conducted by the Guidance Center Office.
-  - Duration: 2-4 hours (varies by position)
-  - Output: Psychological Report
-
-- **Panel Interview**:
-  Panel evaluates all submitted documents and assessments.
-  - Output: Panel Interview Rating Form
-
-- **Recommendation for Hiring**:
-  Approved by relevant leadership roles (e.g., Dean, VP for Academic Affairs, University President).
-
 ---
 
 ## User Instructions
