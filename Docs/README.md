@@ -89,9 +89,6 @@ The recruitment and selection process is as follows.
 1. **Login/Register**:
     - Access the login page at `http://localhost:3000/login`.
 
-2. **Browsing Jobs**:
-    - Unregistered users can explore job postings on the landing page (`http://localhost:3000`).
-
-3. **Applying for Jobs**:
-    - Users can apply for jobs directly through the platform after creating an account.
+2. **Browsing Jobs and Applying for jobs**:
+    - Unregistered users can explore and apply for job postings on the landing page (`http://localhost:3000`).
 
