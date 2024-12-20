@@ -46,12 +46,12 @@
 
 5. **Run Database Migrations**:
     ```bash
-    npm run db:migrate
+    npm run db migrate
     ```
 6. **Access Drizzle Studio (Database Management)**:
 	To view and manage your database, run:
 	```bash
-	npm run db:studio
+	npm run db studio
 	```
 7. **Start the Development Server**:
     ```bash
