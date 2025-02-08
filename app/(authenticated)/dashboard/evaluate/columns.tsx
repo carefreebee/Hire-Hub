@@ -143,7 +143,6 @@ export const columns: ColumnDef<ApplicantSelect>[] = [
 			const value = obj[last as keyof ApplicantStages]?.status as string;
 			const status =
 				value == "in-progress" ? "Pending" : value[0].toUpperCase() + value?.slice(1);
-			//color change base on status
 			const color =
 				value == "in-progress"
 					? "text-yellow-500"
