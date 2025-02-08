@@ -90,7 +90,7 @@ export default async function TeachingDemoPage({ params }: { params: { id: strin
 						</div>
 						{user && assessedByUsers && (
 							<TeachingDemoModal
-								applicantId={applicant?.id}
+								applicant={applicant}
 								userId={user.id}
 								evaluatedBy={user}
 							/>

@@ -88,7 +88,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 						<div className="flex items-center gap-2">
 							{isAllowedForPanelInterviewModal && user && (
 								<PanelInterViewModal
-									applicantId={applicant?.id}
+									applicant={applicant}
 									userId={user.id}
 									evaluatedBy={user}
 								/>

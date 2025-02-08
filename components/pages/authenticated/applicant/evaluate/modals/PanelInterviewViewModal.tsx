@@ -40,6 +40,8 @@ function PanelInterViewModal({ isOpen, onClose, data }: PanelInterviewViewModalP
 		return factor.toLowerCase().replace(/[^a-z]/g, "");
 	};
 
+	
+
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
@@ -48,18 +50,30 @@ function PanelInterViewModal({ isOpen, onClose, data }: PanelInterviewViewModalP
 						<DialogTitle>PANEL INTERVIEW RATING SCALE</DialogTitle>
 						<DialogDescription></DialogDescription>
 						<div className="flex w-full flex-col items-center gap-4">
-							<div className="flex w-full flex-col items-center justify-center gap-2">
+							<div className="flex w-full items-center justify-center gap-2">
 								<div className="flex w-full items-center gap-2 text-xs">
 									<div>Applicant&apos;s Name: </div>
 									<Input
+										value={data.rate.applicantName}
 										name="applicantName"
 										type="text"
 										minLength={2}
 										maxLength={100}
-										required
-										value={data.rate.applicantName}
+										className="h-8"
+										disabled
+									/>
+								</div>
+								<div className="flex w-[50%] items-center gap-2 text-xs">
+									<div>Factors: </div>
+									<Input
 										readOnly
-										className="h-8 w-96"
+										value={0}
+										name="factors"
+										type="text"
+										minLength={2}
+										maxLength={100}
+										disabled
+										className="h-8"
 									/>
 								</div>
 							</div>
@@ -69,39 +83,36 @@ function PanelInterViewModal({ isOpen, onClose, data }: PanelInterviewViewModalP
 									<div className="flex w-[60%] items-center gap-2 text-xs">
 										<div>Position Applied: </div>
 										<Input
+											value={data.rate.position}
 											name="positionApplied"
 											type="text"
 											minLength={2}
 											maxLength={100}
-											required
-											value={data.rate.position}
-											readOnly
+											disabled
 											className="h-8"
 										/>
 									</div>
 									<div className="flex w-[60%] items-center gap-2 text-xs">
 										<div>College: </div>
 										<Input
+											value={data.rate.college}
 											name="college"
 											type="text"
 											minLength={2}
 											maxLength={100}
-											required
-											value={data.rate.college}
-											readOnly
+											disabled
 											className="h-8"
 										/>
 									</div>
 									<div className="flex w-[60%] items-center gap-2 text-xs">
 										<div>Department </div>
 										<Input
+											value={data.rate.department}
 											name="departmentOffice"
 											type="text"
-											value={data.rate.department}
-											readOnly
 											minLength={2}
 											maxLength={100}
-											required
+											disabled
 											className="h-8"
 										/>
 									</div>

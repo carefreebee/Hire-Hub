@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { ApplicantSelect } from "~/lib/schema";
 
 interface PageOneProps {
 	visible: boolean;
+	applicant: ApplicantSelect;
 }
 
-export default function PageOne({ visible }: PageOneProps) {
+export default function PageOne({ visible, applicant }: PageOneProps) {
 	const [siblings, setSiblings] = useState([{ id: 1 }]);
 
 	const addSibling = () => {
@@ -21,30 +23,61 @@ export default function PageOne({ visible }: PageOneProps) {
 			}
 		>
 			<div className="flex w-full items-center justify-center gap-2">
-				<Input placeholder="First Name" name="firstName" />
-				<Input placeholder="Last Name" name="lastName" />
+				<Input
+					readOnly
+					value={applicant?.first_name || ""}
+					placeholder="First Name"
+					name="firstName"
+				/>
+				<Input
+					readOnly
+					value={applicant?.last_name || ""}
+					placeholder="Last Name"
+					name="lastName"
+				/>
 				<Input placeholder="Middle Name" name="middleName" />
 			</div>
 			<div className="flex w-full items-center justify-center gap-2">
-				<Input placeholder="Sex" name="sex" />
+				<Input readOnly value={applicant?.gender} placeholder="Sex" name="sex" />
 				<Input placeholder="Nickname" name="nickname" />
 			</div>
 			<div className="flex w-full items-center justify-center gap-2">
-				<Input placeholder="Permanent Address" name="permanentAddress" />
-				<Input placeholder="Contact No." name="contactNumber" className="w-[30%]" />
+				<Input
+					readOnly
+					value={applicant?.address}
+					placeholder="Permanent Address"
+					name="permanentAddress"
+				/>
+				<Input
+					readOnly
+					value={applicant?.contact_number || ""}
+					placeholder="Contact No."
+					name="contactNumber"
+					className="w-[30%]"
+				/>
 			</div>
 			<div className="flex w-full items-center justify-center gap-2">
 				<Input placeholder="Present Address" name="presentAddress" />
 			</div>
 			<div className="flex w-full items-center justify-center gap-2">
-				<Input placeholder="Date of Birth" name="dateOfBirth" />
+				<Input
+					readOnly
+					value={applicant?.birthdate}
+					placeholder="Date of Birth"
+					name="dateOfBirth"
+				/>
 				<Input placeholder="Place of Birth" name="placeOfBirth" />
 				<Input placeholder="Age" name="age" />
 				<Input placeholder="Religion" name="religion" />
 			</div>
 			<div className="flex w-full items-center justify-center gap-2">
 				<Input placeholder="Citizenship" name="citizenship" />
-				<Input placeholder="Civil Status" name="civilStatus" />
+				<Input
+					readOnly
+					value={applicant?.civil_stats}
+					placeholder="Civil Status"
+					name="civilStatus"
+				/>
 				<Input placeholder="Height" name="height" />
 				<Input placeholder="Weight (in Kgs.)" name="weight" />
 			</div>
@@ -84,7 +117,11 @@ export default function PageOne({ visible }: PageOneProps) {
 				<Input placeholder="Languages and Spoken Understood" name="languages" />
 			</div>
 			<div className="flex w-full items-center justify-center gap-2">
-				<Input placeholder="Special Skills and Talents" name="skillsAndTalent" />
+				<Input
+					value={applicant?.skills || ""}
+					placeholder="Special Skills and Talents"
+					name="skillsAndTalent"
+				/>
 			</div>
 			<div className="flex w-full items-center justify-center gap-2">
 				<Input
