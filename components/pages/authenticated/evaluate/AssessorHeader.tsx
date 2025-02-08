@@ -88,7 +88,7 @@ export default async function AssessorHeader({ id }: { id: string }) {
 								href={`/dashboard/applicant/${id}/stages/${user?.role}/evaluate`}
 								className="px-2 py-2 text-sm font-medium"
 							>
-								Evaluate
+								Results
 							</Link>
 						</Button>
 					)}
