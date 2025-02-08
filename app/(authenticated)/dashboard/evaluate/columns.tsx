@@ -155,6 +155,7 @@ export const columns: ColumnDef<ApplicantSelect>[] = [
 		},
 	},
 	{
+		//update on forms
 		id: "actions",
 		accessorKey: "Action",
 		header: () => {
