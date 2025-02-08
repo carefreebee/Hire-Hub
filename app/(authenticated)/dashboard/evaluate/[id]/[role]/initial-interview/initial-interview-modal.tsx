@@ -21,7 +21,7 @@ import {
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
 import { handleInsertForm } from "~/controller/RatingFormsController";
-import { User } from "~/lib/schema";
+import { ApplicantSelect, User } from "~/lib/schema";
 import { cultureAddQuestions } from "./cultureAddQuestions";
 import { jobfitQuestions } from "./jobfitQuestions";
 
@@ -30,12 +30,12 @@ interface SelectedQuestions {
 }
 
 interface InitialInterviewModalProps {
-	applicantId: number | undefined;
+	applicant: ApplicantSelect | undefined;
 	userId: string | undefined;
 	evaluatedBy: User | undefined;
 }
 
-function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInterviewModalProps) {
+function InitialInterviewModal({ applicant, userId, evaluatedBy }: InitialInterviewModalProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [jobFitRatings, setJobFitRatings] = useState<number[]>([]);
@@ -146,7 +146,7 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 
 			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
 				<form ref={formRef} onSubmit={(e) => e.preventDefault()} className="space-y-8 p-4">
-					<input type="hidden" name="applicantId" value={applicantId} readOnly />
+					<input type="hidden" name="applicantId" value={applicant?.id} readOnly />
 					<input type="hidden" name="userId" value={userId} readOnly />
 					<input
 						type="hidden"
@@ -165,6 +165,8 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 								<div className="flex w-full items-center gap-2 text-xs">
 									<div className="w-[60%]">Applicant&apos;s Name: </div>
 									<Input
+										readOnly
+										value={`${applicant?.first_name} ${applicant?.last_name}`}
 										name="applicantName"
 										type="text"
 										minLength={2}
@@ -176,6 +178,8 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 								<div className="flex w-full items-center gap-2 text-xs">
 									<div className="w-[60%]">Position Desired: </div>
 									<Input
+										readOnly
+										value={applicant?.position_applied}
 										name="positionDesired"
 										type="text"
 										minLength={2}
@@ -187,6 +191,8 @@ function InitialInterviewModal({ applicantId, userId, evaluatedBy }: InitialInte
 								<div className="flex w-full items-center gap-2 text-xs">
 									<div className="w-[60%]">Department/Office: </div>
 									<Input
+										readOnly
+										value={applicant?.selected_department || ""}
 										name="departmentOffice"
 										type="text"
 										minLength={2}

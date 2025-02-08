@@ -1,14 +1,26 @@
 import { CardFooter } from "~/components/pages/authenticated/applicant/Card/CardComponent";
+import { getUserByID } from "~/controller/UsersController"; // Assuming you have a utility to get a user by their ID
 import { validateRequest } from "~/lib/auth";
 import { GetCurrentStage } from "~/util/get-current-stage";
 import { AssessorInfo } from "../Card/StatusDisplayComponents";
 import UpdateDate from "../Card/UdpateDate";
 import UpdateStatus from "../Card/UdpateStatus";
-import { getUserByID } from "~/controller/UsersController"; // Assuming you have a utility to get a user by their ID
 
 interface Assessor {
 	name: string;
-	role: "user" | "admin" | "hr_head" | "recruitment_officer" | "requester_staff" | "department_chair" | "dean" | "faculty" | "guidance_center_staff" | "vp_acad_affairs" | "vp_administration" | "univ_president";
+	role:
+		| "user"
+		| "admin"
+		| "hr_head"
+		| "recruitment_officer"
+		| "requester_staff"
+		| "department_chair"
+		| "dean"
+		| "faculty"
+		| "guidance_center_staff"
+		| "vp_acad_affairs"
+		| "vp_administration"
+		| "univ_president";
 }
 
 // interface Assessor {
@@ -45,7 +57,9 @@ export default async function CardFooterComponent({ applicantId }: { applicantId
 		<>
 			{/* Show Update Date if the applicant stage doesn't have a date and the user is a Recruitment Officer */}
 			{!applicantStage?.date &&
-			(user?.role === "dean" || user?.role === "department_chair") ? (
+			(user?.role === "dean" ||
+				user?.role === "department_chair" ||
+				user?.role === "recruitment_officer") ? (
 				<CardFooter>
 					<UpdateDate id={applicant?.id as number} date={applicantStage?.date as Date} />
 				</CardFooter>

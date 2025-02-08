@@ -85,7 +85,7 @@ export default async function InitialInterviewPage({ params }: { params: { id: s
 						</div>
 						{user && assessedByUsers && (
 							<InitialInterviewModal
-								applicantId={applicant?.id}
+								applicant={applicant}
 								userId={user.id}
 								evaluatedBy={user}
 							/>

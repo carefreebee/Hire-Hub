@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
 	Dialog,
@@ -15,15 +15,15 @@ import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { toast } from "~/components/ui/use-toast";
 import { handleInsertForm } from "~/controller/RatingFormsController";
-import { User } from "~/lib/schema";
+import { ApplicantSelect, User } from "~/lib/schema";
 
 interface InitialInterviewModalProps {
-	applicantId: number | undefined;
+	applicant: ApplicantSelect | undefined;
 	userId: string | undefined;
 	evaluatedBy: User | undefined;
 }
 
-function PanelInterViewModal({ applicantId, userId, evaluatedBy }: InitialInterviewModalProps) {
+function PanelInterViewModal({ applicant, userId, evaluatedBy }: InitialInterviewModalProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const factors = [
@@ -64,6 +64,16 @@ function PanelInterViewModal({ applicantId, userId, evaluatedBy }: InitialInterv
 		}
 	}
 
+	useEffect(() => {
+		setFactorAverage([]);
+	}, [isOpen]);
+	const [factorAverage, setFactorAverage] = useState<number[]>([]);
+	const handleRadioGroupValueChange = (value: number, index: number) => {
+		const updatedFactorAverage = [...factorAverage];
+		updatedFactorAverage[index - 1] = value;
+		setFactorAverage(updatedFactorAverage);
+	};
+
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger>
@@ -71,7 +81,7 @@ function PanelInterViewModal({ applicantId, userId, evaluatedBy }: InitialInterv
 			</DialogTrigger>
 			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
 				<form ref={formRef} onSubmit={(e) => e.preventDefault()} className="space-y-8 p-4">
-					<input type="hidden" name="applicantId" value={applicantId} />
+					<input type="hidden" name="applicantId" value={applicant?.id} />
 					<input type="hidden" name="userId" value={userId} />
 					<input
 						type="hidden"
@@ -83,16 +93,33 @@ function PanelInterViewModal({ applicantId, userId, evaluatedBy }: InitialInterv
 						<DialogTitle>PANEL INTERVIEW RATING SCALE</DialogTitle>
 						<DialogDescription></DialogDescription>
 						<div className="flex w-full flex-col items-center gap-4">
-							<div className="flex w-full flex-col items-center justify-center gap-2">
+							<div className="flex w-full items-center justify-center gap-2">
 								<div className="flex w-full items-center gap-2 text-xs">
 									<div>Applicant&apos;s Name: </div>
 									<Input
+										value={`${applicant?.first_name} ${applicant?.last_name}`}
 										name="applicantName"
 										type="text"
 										minLength={2}
 										maxLength={100}
 										required
-										className="h-8 w-96"
+										className="h-8"
+									/>
+								</div>
+								<div className="flex w-[50%] items-center gap-2 text-xs">
+									<div>Factors: </div>
+									<Input
+										readOnly
+										value={(
+											factorAverage.reduce((acc, value) => acc + value, 0) /
+											factors.length
+										).toFixed(2)}
+										name="factors"
+										type="text"
+										minLength={2}
+										maxLength={100}
+										required
+										className="h-8"
 									/>
 								</div>
 							</div>
@@ -102,6 +129,7 @@ function PanelInterViewModal({ applicantId, userId, evaluatedBy }: InitialInterv
 									<div className="flex w-[60%] items-center gap-2 text-xs">
 										<div>Position Applied: </div>
 										<Input
+											value={applicant?.position_applied}
 											name="positionApplied"
 											type="text"
 											minLength={2}
@@ -113,6 +141,7 @@ function PanelInterViewModal({ applicantId, userId, evaluatedBy }: InitialInterv
 									<div className="flex w-[60%] items-center gap-2 text-xs">
 										<div>College: </div>
 										<Input
+											value={applicant?.selected_department || ""}
 											name="college"
 											type="text"
 											minLength={2}
@@ -152,6 +181,12 @@ function PanelInterViewModal({ applicantId, userId, evaluatedBy }: InitialInterv
 										{index + 1}. {factor}
 									</span>
 									<RadioGroup
+										onValueChange={(value) =>
+											handleRadioGroupValueChange(
+												parseInt(value, 10),
+												index + 1
+											)
+										}
 										name={`rating-${index}`}
 										className="flex w-full justify-between"
 									>

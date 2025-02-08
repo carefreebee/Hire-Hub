@@ -6,6 +6,7 @@ import { Button } from "~/components/ui/button";
 
 import { formatDate } from "~/lib/date-time";
 import { ApplicantSelect } from "~/lib/schema";
+import { ApplicantStages } from "~/types/types";
 import IDColumn from "./id-column";
 
 export const columns: ColumnDef<ApplicantSelect>[] = [
@@ -127,6 +128,30 @@ export const columns: ColumnDef<ApplicantSelect>[] = [
 		cell: ({ row }) => {
 			const date: Date = row.getValue("applied_date");
 			return <div className="flex items-center justify-center gap-2">{formatDate(date)}</div>;
+		},
+	},
+	{
+		accessorKey: "stages",
+		header: ({ column }) => {
+			return <Button variant="ghost">Status</Button>;
+		},
+		cell: ({ row }) => {
+			const obj = row.getValue("stages") as ApplicantStages;
+			const last = Object.keys(obj).filter((key) => key != "undefined")[
+				Object.keys(obj).length - 1
+			];
+			const value = obj[last as keyof ApplicantStages]?.status as string;
+			const status =
+				value == "in-progress" ? "Pending" : value[0].toUpperCase() + value?.slice(1);
+			const color =
+				value == "in-progress"
+					? "text-yellow-500"
+					: value == "failed"
+						? "text-red-700"
+						: "text-emerald-600";
+			return (
+				<div className={`flex items-center justify-center gap-2 ${color}`}>{status}</div>
+			);
 		},
 	},
 	{

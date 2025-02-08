@@ -14,7 +14,9 @@ import {
 	AssessorInfo,
 	Waiting,
 } from "~/components/pages/authenticated/applicant/Card/StatusDisplayComponents";
+import UpdateStatus from "~/components/pages/authenticated/applicant/Card/UdpateStatus";
 import CommentsAndDocuments from "~/components/pages/authenticated/applicant/CardFooter/CommentsAndDocuments";
+import SelectPassedOrFailed from "~/components/pages/authenticated/applicant/screening/SelectPassedOrFailed";
 import { DisplayAssessedBy, DisplayFooter } from "~/components/pages/authenticated/stages/HigherUp";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { getAllRaitingFormByIdInEachStages } from "~/controller/RatingFormsController";
@@ -28,8 +30,8 @@ const currentStageName = "Recommendation for Hiring";
 
 export default async function RecommendationForHiringPage({ params }: { params: { id: string } }) {
 	const { user } = await validateRequest();
-	const isRecruitmentOffier = user?.role === "recruitment_officer";
-
+	const isRecruitmentOffier = user?.role === "recruitment_officer" || user?.role === "hr_head";
+	const isHR = user?.role === "hr_head";
 	// USAGE FOR THE + ADD EVALUATOR AND GETTING THE FINAL ASSESSOR
 	const users = await getUsersWithoutUserRoles();
 
@@ -65,6 +67,12 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 									<TypographySmall size={"md"}>
 										{currentStageName}
 									</TypographySmall>
+									{isHR && (
+										<div className="flex flex-col justify-start text-sm">
+											Status:
+											<SelectPassedOrFailed />
+										</div>
+									)}
 								</CardTopLeftSubContent>
 
 								<DisplayDate date={applicantStage?.date as Date} />
@@ -78,14 +86,23 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 								</Suspense>
 							</CardSubContent>
 						</CardContent>
-						<DisplayFooter
-							userId={user?.id as string}
-							status={applicantStage?.status as string}
-							applicantId={Number(params.id)}
-							users={users as Partial<User>[]}
-							assessorsName={finalAssessor?.name as string | undefined}
-							assessorsRole={finalAssessor?.role as string | undefined}
-						/>
+						{isHR ? (
+							<UpdateStatus
+								id={applicant?.id as number}
+								assessorId={user?.id as string} // Send the current user's ID as the assessor
+							/>
+						) : (
+							<DisplayFooter
+								userId={user?.id as string}
+								status={applicantStage?.status as string}
+								applicantId={Number(params.id)}
+								users={(users as Partial<User>[]).filter(
+									(u) => u.role === "hr_head"
+								)}
+								assessorsName={finalAssessor?.name as string | undefined}
+								assessorsRole={finalAssessor?.role as string | undefined}
+							/>
+						)}
 					</>
 				) : (
 					<>
@@ -95,7 +112,7 @@ export default async function RecommendationForHiringPage({ params }: { params: 
 							<CardContent className="mt-0 items-center justify-center font-semibold text-slate-500">
 								Applicant has completed the recruitment process.
 							</CardContent>
-						) : user?.role === "univ_president" ? (
+						) : user?.role === "hr_head" ? (
 							<CardContent className="mt-0 items-center justify-center font-semibold text-slate-500">
 								Please proceed to the evaluate tab.
 							</CardContent>

@@ -73,11 +73,21 @@ export default function ApplicationForm() {
 				<div className="flex w-full items-center justify-around">
 					<div className="flex text-sm">
 						Position Applied:
-						<Input className="h-7" name="positionApplied" />
+						<Input
+							disabled
+							value={applicant?.position_applied}
+							className="h-7"
+							name="positionApplied"
+						/>
 					</div>
 					<div className="flex text-sm">
 						College / Department:
-						<Input className="h-7" name="collegeDept" />
+						<Input
+							disabled
+							value={applicant?.selected_department}
+							className="h-7"
+							name="collegeDept"
+						/>
 					</div>
 					<div className="mb-14 flex h-32 w-32 border-2 text-sm">
 						<PictureUpload
@@ -86,7 +96,7 @@ export default function ApplicationForm() {
 						/>
 					</div>
 				</div>
-				<PageOne visible={step === 1} />
+				<PageOne visible={step === 1} applicant={applicant}/>
 				<PageTwo visible={step === 2} />
 				<PageThree visible={step === 3} />
 				<PageFour visible={step === 4} />

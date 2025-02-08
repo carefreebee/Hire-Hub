@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
+import { TypographySmall } from "~/components/ui/typography-small";
 import {
 	NonTeachingStaff,
 	SelectedCategoryTeachingStaff,
@@ -9,7 +10,6 @@ import { getApplicantData } from "~/hooks/useApplicantStages";
 import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect } from "~/lib/schema";
 import { StageType } from "~/types/types";
-import { TypographySmall } from "~/components/ui/typography-small";
 
 const STAGES = [
 	{ link: "initial-interview", type: "initial_interview", name: "Initial Interview" },
@@ -89,7 +89,7 @@ export default async function EvaluatorHeader({ id }: { id: string }) {
 								href={`/dashboard/evaluate/${id}/${user?.role}/evaluate`}
 								className="px-2 py-2 text-sm font-medium"
 							>
-								Evaluate
+								Results
 							</Link>
 						</Button>
 					)}

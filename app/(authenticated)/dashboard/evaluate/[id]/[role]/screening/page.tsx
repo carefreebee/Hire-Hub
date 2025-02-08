@@ -42,9 +42,11 @@ export default async function ApplicantIdPage({ params }: { params: { id: string
 						<CardTopLeftSubContent>
 							<TypographySmall size={"md"}>Screening</TypographySmall>
 
-							<Suspense fallback={<LoadingButtonMode />}>
-								<CardContentComponent applicantId={Number(params.id)} />
-							</Suspense>
+							{user?.role !== "recruitment_officer" && (
+								<Suspense fallback={<LoadingButtonMode />}>
+									<CardContentComponent applicantId={Number(params.id)} />
+								</Suspense>
+							)}
 						</CardTopLeftSubContent>
 						<DisplayDate date={applicantStage?.date as Date} />
 					</CardSubContent>

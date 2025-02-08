@@ -79,65 +79,112 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 						value={data.rate.evaluatedBy}
 						readOnly
 					/>
+
 					<DialogHeader className="flex items-center">
 						<DialogTitle>TEACHING DEMONSTRATION RATING SCALE</DialogTitle>
 						<DialogDescription></DialogDescription>
-						<div className="flex w-full flex-col items-center gap-4">
-							<div className="flex w-full flex-col items-center justify-center gap-2">
+						<div className="flex w-full items-center justify-between gap-4">
+							<div className="flex w-[60%] flex-col items-center justify-center gap-2">
 								<div className="flex w-full items-center gap-2 text-xs">
 									<div>Applicant&apos;s Name: </div>
 									<Input
 										name="applicantName"
+										value={data.rate.applicantName}
 										type="text"
 										minLength={2}
 										maxLength={100}
-										value={data.rate.applicantName}
-										readOnly
 										required
 										className="h-8 w-96"
+									/>
+								</div>
+								<div className="flex w-full items-center gap-2 text-xs">
+									<div>Topic: </div>
+									<Input
+										value={data.rate.topic}
+										name="topic"
+										type="text"
+										minLength={2}
+										maxLength={100}
+										required
+										className="h-8"
+									/>
+								</div>
+								<div className="flex w-full items-center gap-2 text-xs">
+									<div>Department/Office: </div>
+									<Input
+										value={data.rate.departmentOffice}
+										name="departmentOffice"
+										type="text"
+										minLength={2}
+										maxLength={100}
+										required
+										className="h-8"
+									/>
+								</div>
+								<div className="flex w-full items-center gap-2 text-xs">
+									Date:
+									<Input
+										value={data.rate.date}
+										name="date"
+										type="text"
+										minLength={2}
+										maxLength={100}
+										required
+										className="h-8"
 									/>
 								</div>
 							</div>
 
 							<div className="flex w-full gap-2">
-								<div className="flex w-full items-center gap-2 text-xs">
+								<div className="flex w-full flex-col items-center gap-2 text-xs">
 									<div className="flex w-full items-center gap-2 text-xs">
-										<div>Topic: </div>
+										<div>Personality: </div>
 										<Input
-											name="topic"
+											name="personality"
 											type="text"
 											minLength={2}
 											maxLength={100}
-											value={data.rate.topic}
-											readOnly
+											value={0}
 											required
 											className="h-8"
 										/>
 									</div>
 									<div className="flex w-full items-center gap-2 text-xs">
-										<div>Department/Office: </div>
+										<div>Preparation: </div>
 										<Input
-											name="departmentOffice"
+											name="preparation"
 											type="text"
 											minLength={2}
 											maxLength={100}
-											value={data.rate.departmentOffice}
-											readOnly
+											value={0}
 											required
 											className="h-8"
 										/>
 									</div>
-									<div>Date </div>
-									<Input
-										name="date"
-										type="text"
-										minLength={2}
-										maxLength={100}
-										value={data.rate.date}
-										readOnly
-										required
-										className="h-8 w-24"
-									/>
+									<div className="flex w-full items-center gap-2 text-xs">
+										<div>Teaching Process: </div>
+										<Input
+											name="teachingProcess"
+											type="text"
+											minLength={2}
+											maxLength={100}
+											value={0}
+											required
+											className="h-8"
+										/>
+									</div>
+									<div className="flex w-full items-center gap-2">
+										<div>Communication Skills: </div>
+										<Input
+											name="communicationSkills"
+											type="text"
+											minLength={2}
+											maxLength={100}
+											value={0}
+											required
+											className="h-8"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>

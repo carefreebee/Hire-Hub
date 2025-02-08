@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
 	Dialog,
@@ -15,15 +15,15 @@ import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
 import { handleInsertForm } from "~/controller/RatingFormsController";
-import { User } from "~/lib/schema";
+import { ApplicantSelect, User } from "~/lib/schema";
 
 interface TeachingDemoModalProps {
-	applicantId: number | undefined;
+	applicant: ApplicantSelect | undefined;
 	userId: string | undefined;
 	evaluatedBy: User | undefined;
 }
 
-function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoModalProps) {
+function TeachingDemoModal({ applicant, userId, evaluatedBy }: TeachingDemoModalProps) {
 	const formRef = useRef<HTMLFormElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
 
@@ -93,6 +93,54 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 		}
 	}
 
+	type FormDataAverageProps = {
+		personality: number[];
+		preparation: number[];
+		communicationSkills: number[];
+		teachingProcess: number[];
+	};
+	useEffect(() => {
+		setFormDataAverage({
+			personality: [],
+			preparation: [],
+			communicationSkills: [],
+			teachingProcess: [],
+		});
+	}, [isOpen]);
+	const [formDataAverage, setFormDataAverage] = useState<FormDataAverageProps>({
+		personality: [],
+		preparation: [],
+		communicationSkills: [],
+		teachingProcess: [],
+	});
+
+	const handleRadioGroupValueChange = (
+		value: number,
+		sectionTitle: string,
+		itemIndex: number
+	) => {
+		const updatedData = { ...formDataAverage };
+
+		switch (sectionTitle[0]) {
+			case "A": // Update personality array
+				updatedData.personality[itemIndex - 1] = value;
+				break;
+			case "B": // Update preparation array
+				updatedData.preparation[itemIndex - 1] = value;
+				break;
+			case "C": // Update communication skills array
+				updatedData.teachingProcess[itemIndex - 1] = value;
+				break;
+			case "D": // Update teaching process array
+				updatedData.communicationSkills[itemIndex - 1] = value;
+				break;
+			default:
+				console.error("Invalid sectionTitle:", sectionTitle);
+		}
+
+		setFormDataAverage(updatedData);
+	};
+
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
 			<DialogTrigger>
@@ -100,7 +148,7 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 			</DialogTrigger>
 			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
 				<form ref={formRef} onSubmit={(e) => e.preventDefault()} className="space-y-8 p-4">
-					<input type="hidden" name="applicantId" value={applicantId} />
+					<input type="hidden" name="applicantId" value={applicant?.id} />
 					<input type="hidden" name="userId" value={userId} />
 					<input
 						type="hidden"
@@ -111,12 +159,13 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 					<DialogHeader className="flex items-center">
 						<DialogTitle>TEACHING DEMONSTRATION RATING SCALE</DialogTitle>
 						<DialogDescription></DialogDescription>
-						<div className="flex w-full flex-col items-center gap-4">
-							<div className="flex w-full flex-col items-center justify-center gap-2">
+						<div className="flex w-full items-center justify-between gap-4">
+							<div className="flex w-[60%] flex-col items-center justify-center gap-2">
 								<div className="flex w-full items-center gap-2 text-xs">
 									<div>Applicant&apos;s Name: </div>
 									<Input
 										name="applicantName"
+										value={`${applicant?.first_name} ${applicant?.last_name}`}
 										type="text"
 										minLength={2}
 										maxLength={100}
@@ -124,41 +173,112 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 										className="h-8 w-96"
 									/>
 								</div>
-							</div>
-
-							<div className="flex w-full gap-2">
 								<div className="flex w-full items-center gap-2 text-xs">
-									<div className="flex w-full items-center gap-2 text-xs">
-										<div>Topic: </div>
-										<Input
-											name="topic"
-											type="text"
-											minLength={2}
-											maxLength={100}
-											required
-											className="h-8"
-										/>
-									</div>
-									<div className="flex w-full items-center gap-2 text-xs">
-										<div>Department/Office: </div>
-										<Input
-											name="departmentOffice"
-											type="text"
-											minLength={2}
-											maxLength={100}
-											required
-											className="h-8"
-										/>
-									</div>
-									<div>Date </div>
+									<div>Topic: </div>
+									<Input
+										name="topic"
+										type="text"
+										minLength={2}
+										maxLength={100}
+										required
+										className="h-8"
+									/>
+								</div>
+								<div className="flex w-full items-center gap-2 text-xs">
+									<div>Department/Office: </div>
+									<Input
+										value={applicant?.selected_department || ""}
+										name="departmentOffice"
+										type="text"
+										minLength={2}
+										maxLength={100}
+										required
+										className="h-8"
+									/>
+								</div>
+								<div className="flex w-full items-center gap-2 text-xs">
+									Date:
 									<Input
 										name="date"
 										type="text"
 										minLength={2}
 										maxLength={100}
 										required
-										className="h-8 w-24"
+										className="h-8"
 									/>
+								</div>
+							</div>
+
+							<div className="flex w-full gap-2">
+								<div className="flex w-full flex-col items-center gap-2 text-xs">
+									<div className="flex w-full items-center gap-2 text-xs">
+										<div>Personality: </div>
+										<Input
+											name="personality"
+											type="text"
+											minLength={2}
+											maxLength={100}
+											value={(
+												formDataAverage.personality.reduce(
+													(acc, value) => acc + value,
+													0
+												) / sections[0].items.length
+											).toFixed(2)}
+											required
+											className="h-8"
+										/>
+									</div>
+									<div className="flex w-full items-center gap-2 text-xs">
+										<div>Preparation: </div>
+										<Input
+											name="preparation"
+											type="text"
+											minLength={2}
+											maxLength={100}
+											value={(
+												formDataAverage.preparation.reduce(
+													(acc, value) => acc + value,
+													0
+												) / sections[1].items.length
+											).toFixed(2)}
+											required
+											className="h-8"
+										/>
+									</div>
+									<div className="flex w-full items-center gap-2 text-xs">
+										<div>Teaching Process: </div>
+										<Input
+											name="teachingProcess"
+											type="text"
+											minLength={2}
+											maxLength={100}
+											value={(
+												formDataAverage.teachingProcess.reduce(
+													(acc, value) => acc + value,
+													0
+												) / sections[2].items.length
+											).toFixed(2)}
+											required
+											className="h-8"
+										/>
+									</div>
+									<div className="flex w-full items-center gap-2">
+										<div>Communication Skills: </div>
+										<Input
+											name="communicationSkills"
+											type="text"
+											minLength={2}
+											maxLength={100}
+											value={(
+												formDataAverage.communicationSkills.reduce(
+													(acc, value) => acc + value,
+													0
+												) / sections[3].items.length
+											).toFixed(2)}
+											required
+											className="h-8"
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -187,7 +307,16 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 									>
 										<span className="text-sm">{itemIndex + 1}.</span>
 										<label className="flex-1 text-sm">{item}</label>
-										<RadioGroup name={`rating-${sectionIndex}-${itemIndex}`}>
+										<RadioGroup
+											onValueChange={(value) =>
+												handleRadioGroupValueChange(
+													parseInt(value, 10),
+													section.title,
+													itemIndex + 1
+												)
+											}
+											name={`rating-${sectionIndex}-${itemIndex}`}
+										>
 											<div className="flex w-56 justify-between">
 												{[1, 2, 3, 4].map((rating) => (
 													<div
@@ -195,7 +324,8 @@ function TeachingDemoModal({ applicantId, userId, evaluatedBy }: TeachingDemoMod
 														className="flex items-center space-x-2"
 													>
 														<RadioGroupItem
-															value={`rating-${sectionIndex}-${itemIndex}-${rating}`}
+															// value={`rating-${sectionIndex}-${itemIndex}-${rating}`}
+															value={rating.toString()}
 															id={`rating-${sectionIndex}-${itemIndex}-${rating}`}
 														/>
 														<Label
