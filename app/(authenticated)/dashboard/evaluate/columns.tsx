@@ -137,9 +137,8 @@ export const columns: ColumnDef<ApplicantSelect>[] = [
 		},
 		cell: ({ row }) => {
 			const obj = row.getValue("stages") as ApplicantStages;
-			const last = Object.keys(obj).filter((key) => key != "undefined")[
-				Object.keys(obj).length - 1
-			];
+			const noNull = Object.keys(obj).filter((key) => key !== "undefined");
+			const last = noNull[Object.keys(noNull).length - 1];
 			const value = obj[last as keyof ApplicantStages]?.status as string;
 			const status =
 				value == "in-progress" ? "Pending" : value[0].toUpperCase() + value?.slice(1);

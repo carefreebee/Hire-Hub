@@ -2,9 +2,9 @@ import InformationSVG from "~/components/ui/information";
 import { TypographySmall } from "~/components/ui/typography-small";
 import { CardContent, CardFooter } from "../applicant/Card/CardComponent";
 import { AssessorInfo } from "../applicant/Card/StatusDisplayComponents";
-import SubmitStagesForm from "../applicant/Card/SubmitStagesForm";
 import UploadRatingForm from "../applicant/Card/UploadRatingForm";
 import { StageStatus, UploadSuccess } from "./Messages";
+import SubmitStagesForm from "../applicant/Card/SubmitStagesForm";
 
 type AssessedByUser = boolean;
 type CheckIfUserIsAllowedToAssess = boolean;
@@ -84,7 +84,7 @@ export function DeptOrOfficeFooter({
 		assessedByUsers &&
 		(!checkIfUserIsAllowedToAssess || checkIfUserIsAllowedToAssess) &&
 		!hasUserPostedRating;
-
+	const showSubmitForm = currentStageName === "Psychological Exam";
 	return (
 		<>
 			{inProgress && (
@@ -95,7 +95,7 @@ export function DeptOrOfficeFooter({
 						finalAssessorRole={assessorsRole}
 					/>
 					{/* BELOW IS WHERE THE FORM IS LOCATED SO THAT THE APPLICANT STATUS WILL BE UPDATED */}
-					{showSubmitButton && (
+					{showSubmitForm && showSubmitButton && (
 						<SubmitStagesForm
 							id={applicantId}
 							evaluatorsId={userId as string}
