@@ -7,6 +7,7 @@ import { getAllApplicantForm } from "~/controller/ApplicantFormController";
 import { getJobReqByDeptOrOffice } from "~/controller/JobRequestController";
 import { validateRequest } from "~/lib/auth";
 import Banner from "~/public/images/banner.png";
+import { ApplicantStages } from "~/types/types";
 
 const monthNames = [
 	"January",
@@ -83,8 +84,13 @@ export default async function DashboardPage() {
 	const noNullApplicants = applicants.map((applicant) =>
 		[...Object.keys(applicant?.stages as Object).filter((key) => key !== "undefined")].pop()
 	);
+
 	const passedApplicants = applicants
-		.map((applicant, index) => applicant?.stages[noNullApplicants[index]].status == "passed")
+		.map(
+			(applicant, index) =>
+				applicant?.stages?.[noNullApplicants[index] as keyof ApplicantStages]?.status ==
+				"passed"
+		)
 		.filter(Boolean);
 
 	const departmentApplications = applicants.reduce((acc, applicant) => {
