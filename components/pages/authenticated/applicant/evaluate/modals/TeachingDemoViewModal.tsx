@@ -95,6 +95,7 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 										maxLength={100}
 										required
 										className="h-8 w-96"
+										readOnly
 									/>
 								</div>
 								<div className="flex w-full items-center gap-2 text-xs">
@@ -107,6 +108,7 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 										maxLength={100}
 										required
 										className="h-8"
+										readOnly
 									/>
 								</div>
 								<div className="flex w-full items-center gap-2 text-xs">
@@ -119,6 +121,7 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 										maxLength={100}
 										required
 										className="h-8"
+										readOnly
 									/>
 								</div>
 								<div className="flex w-full items-center gap-2 text-xs">
@@ -131,6 +134,7 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 										maxLength={100}
 										required
 										className="h-8"
+										readOnly
 									/>
 								</div>
 							</div>
@@ -144,9 +148,10 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 											type="text"
 											minLength={2}
 											maxLength={100}
-											value={0}
+											value={data.rate.personality || 0}
 											required
 											className="h-8"
+											readOnly
 										/>
 									</div>
 									<div className="flex w-full items-center gap-2 text-xs">
@@ -156,9 +161,10 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 											type="text"
 											minLength={2}
 											maxLength={100}
-											value={0}
+											value={data.rate.preparation || 0}
 											required
 											className="h-8"
+											readOnly
 										/>
 									</div>
 									<div className="flex w-full items-center gap-2 text-xs">
@@ -168,9 +174,10 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 											type="text"
 											minLength={2}
 											maxLength={100}
-											value={0}
+											value={data.rate.teachingProcess || 0}
 											required
 											className="h-8"
+											readOnly
 										/>
 									</div>
 									<div className="flex w-full items-center gap-2">
@@ -180,9 +187,10 @@ function TeachingDemoViewModal({ isOpen, onClose, data }: TeachingDemoViewModalP
 											type="text"
 											minLength={2}
 											maxLength={100}
-											value={0}
+											value={data.rate.communicationSkills || 0}
 											required
 											className="h-8"
+											readOnly
 										/>
 									</div>
 								</div>

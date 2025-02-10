@@ -40,8 +40,6 @@ function PanelInterViewModal({ isOpen, onClose, data }: PanelInterviewViewModalP
 		return factor.toLowerCase().replace(/[^a-z]/g, "");
 	};
 
-	
-
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">
@@ -60,19 +58,18 @@ function PanelInterViewModal({ isOpen, onClose, data }: PanelInterviewViewModalP
 										minLength={2}
 										maxLength={100}
 										className="h-8"
-										disabled
+										readOnly
 									/>
 								</div>
 								<div className="flex w-[50%] items-center gap-2 text-xs">
 									<div>Factors: </div>
 									<Input
 										readOnly
-										value={0}
+										value={data.rate.factors || 0}
 										name="factors"
 										type="text"
 										minLength={2}
 										maxLength={100}
-										disabled
 										className="h-8"
 									/>
 								</div>
@@ -88,7 +85,7 @@ function PanelInterViewModal({ isOpen, onClose, data }: PanelInterviewViewModalP
 											type="text"
 											minLength={2}
 											maxLength={100}
-											disabled
+											readOnly
 											className="h-8"
 										/>
 									</div>
@@ -100,7 +97,7 @@ function PanelInterViewModal({ isOpen, onClose, data }: PanelInterviewViewModalP
 											type="text"
 											minLength={2}
 											maxLength={100}
-											disabled
+											readOnly
 											className="h-8"
 										/>
 									</div>
@@ -112,7 +109,7 @@ function PanelInterViewModal({ isOpen, onClose, data }: PanelInterviewViewModalP
 											type="text"
 											minLength={2}
 											maxLength={100}
-											disabled
+											readOnly
 											className="h-8"
 										/>
 									</div>
