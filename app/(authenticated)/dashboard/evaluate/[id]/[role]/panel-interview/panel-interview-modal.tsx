@@ -104,6 +104,7 @@ function PanelInterViewModal({ applicant, userId, evaluatedBy }: InitialIntervie
 										maxLength={100}
 										required
 										className="h-8"
+										readOnly
 									/>
 								</div>
 								<div className="flex w-[50%] items-center gap-2 text-xs">
@@ -136,6 +137,7 @@ function PanelInterViewModal({ applicant, userId, evaluatedBy }: InitialIntervie
 											maxLength={100}
 											required
 											className="h-8"
+											readOnly
 										/>
 									</div>
 									<div className="flex w-[60%] items-center gap-2 text-xs">
@@ -148,6 +150,7 @@ function PanelInterViewModal({ applicant, userId, evaluatedBy }: InitialIntervie
 											maxLength={100}
 											required
 											className="h-8"
+											readOnly
 										/>
 									</div>
 									<div className="flex w-[60%] items-center gap-2 text-xs">

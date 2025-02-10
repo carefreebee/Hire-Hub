@@ -37,7 +37,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 	const { user } = await validateRequest();
 	const isAllowedRole = user?.role ? ["recruitment_officer"].includes(user.role) : false;
 	const isAllowedForPanelInterviewModal = user?.role
-		? ["vp_acad_affairs", "hr_head", "dean"].includes(user.role)
+		? ["vp_acad_affairs", "vp_administration", "hr_head", "dean"].includes(user.role)
 		: false;
 
 	//const isAllowedForGenerateForm = user?.role === "recruitment_officer";
@@ -105,7 +105,7 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 					</CardTitle>
 				</CardHeader>
 
-				{isAllowedRole && panelInterviewStatus ? (
+				{(isAllowedRole || isAllowedForPanelInterviewModal) && panelInterviewStatus ? (
 					<>
 						<CardContent>
 							<CardSubContent>
@@ -120,7 +120,8 @@ export default async function PanelInterviewPage({ params }: { params: { id: str
 										/>
 										<div className="mt-2">
 											{panelInterviewStatus === "in-progress" &&
-											user?.role === "vp_acad_affairs" ? (
+											(user?.role === "vp_acad_affairs" ||
+												user?.role === "vp_administration") ? (
 												<SelectPassedOrFailed />
 											) : (
 												<Button
