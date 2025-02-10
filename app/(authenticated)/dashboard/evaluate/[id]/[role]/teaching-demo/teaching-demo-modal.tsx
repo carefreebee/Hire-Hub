@@ -171,6 +171,7 @@ function TeachingDemoModal({ applicant, userId, evaluatedBy }: TeachingDemoModal
 										maxLength={100}
 										required
 										className="h-8 w-96"
+										readOnly
 									/>
 								</div>
 								<div className="flex w-full items-center gap-2 text-xs">
@@ -187,13 +188,14 @@ function TeachingDemoModal({ applicant, userId, evaluatedBy }: TeachingDemoModal
 								<div className="flex w-full items-center gap-2 text-xs">
 									<div>Department/Office: </div>
 									<Input
-										value={applicant?.selected_department || ""}
+										// value={applicant?.selected_department || ""}
 										name="departmentOffice"
 										type="text"
 										minLength={2}
 										maxLength={100}
 										required
 										className="h-8"
+										// readOnly
 									/>
 								</div>
 								<div className="flex w-full items-center gap-2 text-xs">
@@ -226,6 +228,7 @@ function TeachingDemoModal({ applicant, userId, evaluatedBy }: TeachingDemoModal
 											).toFixed(2)}
 											required
 											className="h-8"
+											readOnly
 										/>
 									</div>
 									<div className="flex w-full items-center gap-2 text-xs">
@@ -243,6 +246,7 @@ function TeachingDemoModal({ applicant, userId, evaluatedBy }: TeachingDemoModal
 											).toFixed(2)}
 											required
 											className="h-8"
+											readOnly
 										/>
 									</div>
 									<div className="flex w-full items-center gap-2 text-xs">
@@ -260,6 +264,7 @@ function TeachingDemoModal({ applicant, userId, evaluatedBy }: TeachingDemoModal
 											).toFixed(2)}
 											required
 											className="h-8"
+											readOnly
 										/>
 									</div>
 									<div className="flex w-full items-center gap-2">
@@ -277,6 +282,7 @@ function TeachingDemoModal({ applicant, userId, evaluatedBy }: TeachingDemoModal
 											).toFixed(2)}
 											required
 											className="h-8"
+											readOnly
 										/>
 									</div>
 								</div>
