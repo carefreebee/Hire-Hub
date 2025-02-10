@@ -4,8 +4,7 @@ import { Chart } from "~/components/pages/authenticated/dashboard/Chart";
 import FirstPieChart from "~/components/pages/authenticated/dashboard/FirstPieChart";
 import SecondPieChart from "~/components/pages/authenticated/dashboard/SecondPieChart";
 import { getAllApplicantForm } from "~/controller/ApplicantFormController";
-import { getJobReqByDeptOrOffice } from "~/controller/JobRequestController";
-import { validateRequest } from "~/lib/auth";
+import { getAllJobRequest } from "~/controller/JobRequestController";
 import Banner from "~/public/images/banner.png";
 
 const monthNames = [
@@ -34,10 +33,8 @@ type AllApplications = {
 };
 
 export default async function DashboardPage() {
-	const { user } = await validateRequest();
 	const applicants = await getAllApplicantForm();
-	// const jobRequests = await getAllJobRequest();
-	const jobRequests = await getJobReqByDeptOrOffice(user?.department_id!, user?.office_id!);
+	const jobRequests = await getAllJobRequest();
 
 	const applicantsByMonthAndYear: UsersByMonthAndYear = {};
 
@@ -78,14 +75,7 @@ export default async function DashboardPage() {
 		allStagesPassed: areAllStagesPassed(applicant.stages),
 	}));
 
-	// const newHire = results.filter((result) => result.allStagesPassed === true);
-
-	const noNullApplicants = applicants.map((applicant) =>
-		[...Object.keys(applicant?.stages as Object).filter((key) => key !== "undefined")].pop()
-	);
-	const passedApplicants = applicants
-		.map((applicant, index) => applicant?.stages[noNullApplicants[index]].status == "passed")
-		.filter(Boolean);
+	const newHire = results.filter((result) => result.allStagesPassed === true);
 
 	const departmentApplications = applicants.reduce((acc, applicant) => {
 		const department = applicant.selected_department;
@@ -135,21 +125,13 @@ export default async function DashboardPage() {
 						count={applicants.length}
 						label="Applicants"
 					/>
-					<DisplayCard
-						svg={<VacantPositions />}
-						count={jobRequests.length}
-						label="Vacant Positions"
-					/>
+					<DisplayCard svg={<VacantPositions />} count={0} label="Vacant Positions" />
 					<DisplayCard
 						svg={<JobRequests />}
 						count={jobRequests.length}
 						label="Job Requests"
 					/>
-					<DisplayCard
-						svg={<NewHires />}
-						count={passedApplicants.length}
-						label="New Hires"
-					/>
+					<DisplayCard svg={<NewHires />} count={newHire.length} label="New Hires" />
 				</div>
 				<div className="mt-8 flex gap-5">
 					<div className="w-1/2">
