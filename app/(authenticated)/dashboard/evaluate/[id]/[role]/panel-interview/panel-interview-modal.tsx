@@ -76,7 +76,7 @@ function PanelInterViewModal({ applicant, userId, evaluatedBy }: InitialIntervie
 
 	return (
 		<Dialog open={isOpen} onOpenChange={setIsOpen}>
-			<DialogTrigger>
+			<DialogTrigger asChild>
 				<Button>Panel Interview Form</Button>
 			</DialogTrigger>
 			<DialogContent className="flex h-[95%] min-w-[60%] flex-col overflow-auto">

@@ -24,6 +24,74 @@ const monthNames = [
 	"December",
 ];
 
+const offices = [
+	"Executive Office",
+	"Center for Communications, Creatives, and Marketing",
+	"Office of the Management Information System",
+	"Center for e-Learning, and Technology Education",
+	"Human Resource Department",
+	"Quality Assurance Office for Administration",
+	"Student Success Office",
+	"Finance and Accounting Office",
+	"Office of the Property Custodian",
+	"Athletics Office",
+	"Office of the Community Extension Services",
+	"Central Visayas Food Innovation Center",
+	"Enrollment Technical Office / Information Systems Development",
+	"Guidance Center",
+	"Instructional Materials and Publications Office",
+	"Innovation and Technology Support Office",
+	"Medical & Dental Clinic",
+	"Makerspace",
+	"Multimedia Solutions and Documentation Office",
+	"Networking and Linkages Office",
+	"Research and Development Coordinating Office",
+	"Alumni Affairs Office",
+	"Technology Support Group",
+	"Wildcat Innovation Labs",
+	"Network of External University Support Services (NEXUSS)",
+];
+
+const colleges = [
+	"Office of the Vice President for Academic Affairs",
+	"College of Management, Business, and Accountancy",
+	"Office of the Expanded Tertiary Education Equivalency and Accreditation Program",
+	"Department of Business Administration",
+	"College of Engineering and Architecture",
+	"Department of Mining Engineering",
+	"College of Nursing and Allied Health Sciences",
+	"College of Criminal Justice",
+	"Department of Criminology",
+	"Safety & Security Department",
+	"College of Computer Studies",
+	"Department of Computer Science",
+	"College of Arts, Sciences, and Education",
+	"Department of Languages, Literature, and Communication",
+	"College of Engineering and Architecture",
+	"Department of Mechanical Engineering",
+	"Office of Admissions and Scholarships",
+	"University Registrar's Office",
+	"Learning Resource and Activity Center",
+	"Department of Architecture",
+	"High School Department",
+	"Elementary Department",
+	"Office of the Vice President for Academics",
+	"Department of Civil Engineering",
+	"Department of Electrical Engineering",
+	"Department of Chemical Engineering",
+	"Department of Industrial Engineering",
+	"Department of Electronics Engineering",
+	"Department of Computer Engineering",
+	"Department of Information Technology",
+	"Department of Accountancy",
+	"Department of Hospitality and Tourism Management",
+	"Department of Humanities and Behavioral Sciences",
+	"Department of Engineering Mathematics, Physics and Chemistry",
+	"Department of Physical Education",
+	"Department of Pharmacy",
+	"Senior High School Department",
+];
+
 type UsersByMonthAndYear = {
 	[key: string]: {
 		[key: number]: number; // Where key is the year, and the value is an array of 12 numbers (one for each month)
@@ -41,7 +109,6 @@ export default async function DashboardPage() {
 	const jobRequests = await getJobReqByDeptOrOffice(user?.department_id!, user?.office_id!);
 
 	const applicantsByMonthAndYear: UsersByMonthAndYear = {};
-
 	// Populate the applicantsByMonthAndYear object
 	applicants.forEach((applicant) => {
 		if (applicant.applied_date) {
@@ -112,6 +179,15 @@ export default async function DashboardPage() {
 		})
 	);
 
+	colleges.forEach((college) =>
+		Object.keys(departmentApplications).includes(college)
+			? true
+			: departmentApplicationsData.push({
+					label: college,
+					value: 0,
+				})
+	);
+
 	const officeApplications = applicants.reduce((acc, applicant) => {
 		const office = applicant.selected_office;
 		if (office) {
@@ -128,6 +204,15 @@ export default async function DashboardPage() {
 		label: office,
 		value: officeApplications[office] ?? 0, // Provide a default value of 0 if undefined
 	}));
+
+	offices.forEach((office) =>
+		Object.keys(officeApplications).includes(office)
+			? true
+			: officeApplicationsData.push({
+					label: office,
+					value: 0,
+				})
+	);
 
 	return (
 		<section>
@@ -157,13 +242,12 @@ export default async function DashboardPage() {
 						label="New Hires"
 					/>
 				</div>
-				<div className="mt-8 flex gap-5">
-					<div className="w-1/2">
-						<h2 className="text-center">Applications by Department</h2>
+				<div className="mt-8 flex h-fit gap-5">
+					<div className="flex h-fit w-1/2 flex-col rounded-lg border-2 bg-white py-5 shadow-lg">
 						<FirstPieChart data={departmentApplicationsData} />
 					</div>
-					<div className="w-1/2">
-						<h2 className="text-center">Applications by Office</h2>
+					{/* <div className="w-1/2"> */}
+					<div className="flex h-fit w-1/2 flex-col rounded-lg border-2 bg-white py-5 shadow-lg">
 						<SecondPieChart data={officeApplicationsData} />
 					</div>
 				</div>
