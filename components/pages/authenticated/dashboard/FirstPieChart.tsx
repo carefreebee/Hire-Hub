@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Cell, Pie, PieChart as RechartsPieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import { Button } from "~/components/ui/button";
@@ -12,68 +12,80 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 
-const COLORS = [
+export const COLORS = [
 	"#0088FE",
 	"#00C49F",
 	"#FFBB28",
 	"#FF8042",
 	"#FF6384",
-	"#36A2EB",
+	"#4db4f9",
 	"#FFCE56",
 	"#4BC0C0",
 ];
 
-export const COLORSEXT = [
-	"#FF5733",
-	"#33FF57",
-	"#5733FF",
-	"#FF33F6",
-	"#F6FF33",
-	"#33F6FF", // Bold Colors
-	"#C70039",
-	"#900C3F",
-	"#581845",
-	"#FFC300",
-	"#FF5733",
-	"#C70039", // Warm tones
-	"#8E44AD",
-	"#3498DB",
-	"#1ABC9C",
-	"#16A085",
-	"#F39C12",
-	"#E74C3C", // Classic tones
-	"#7D3C98",
-	"#E67E22",
-	"#F1C40F",
-	"#27AE60",
-	"#2C3E50",
-	"#D35400", // Vivid colors
-	"#2980B9",
-	"#8E44AD",
-	"#FF6F61",
-	"#E74C3C",
-	"#F39C12",
-	"#2ECC71", // Contrasting Colors
-	"#DFFF00",
-	"#FFBF00",
-	"#FF7F50",
-	"#DB7093",
-	"#F5DEB3",
-	"#6A5ACD", // Soft Tones
-	"#A52A2A",
-	"#5F9EA0",
-	"#FFD700",
-	"#800080",
-	"#FF6347",
-	"#FF1493", // Bold and Pastel mix
-	"#90EE90",
-	"#BA55D3",
-	"#FF4500",
-	"#C71585",
-	"#20B2AA",
-	"#FFD700", // Bright and contrasting tones
+const monthNames = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
 ];
 
+const colleges = [
+	"Office of the Vice President for Academic Affairs",
+	"College of Management, Business, and Accountancy",
+	"Office of the Expanded Tertiary Education Equivalency and Accreditation Program",
+	"Department of Business Administration",
+	"College of Engineering and Architecture",
+	"Department of Mining Engineering",
+	"College of Nursing and Allied Health Sciences",
+	"College of Criminal Justice",
+	"Department of Criminology",
+	"Safety & Security Department",
+	"College of Computer Studies",
+	"Department of Computer Science",
+	"College of Arts, Sciences, and Education",
+	"Department of Languages, Literature, and Communication",
+	"College of Engineering and Architecture",
+	"Department of Mechanical Engineering",
+	"Office of Admissions and Scholarships",
+	"University Registrar's Office",
+	"Learning Resource and Activity Center",
+	"Department of Architecture",
+	"High School Department",
+	"Elementary Department",
+	"Office of the Vice President for Academics",
+	"Department of Civil Engineering",
+	"Department of Electrical Engineering",
+	"Department of Chemical Engineering",
+	"Department of Industrial Engineering",
+	"Department of Electronics Engineering",
+	"Department of Computer Engineering",
+	"Department of Information Technology",
+	"Department of Accountancy",
+	"Department of Hospitality and Tourism Management",
+	"Department of Humanities and Behavioral Sciences",
+	"Department of Engineering Mathematics, Physics and Chemistry",
+	"Department of Physical Education",
+	"Department of Pharmacy",
+	"Senior High School Department",
+];
+
+const stages = [
+	"screening",
+	"initial_interview",
+	"teaching_demo",
+	"psychological_exam",
+	"panel_interview",
+	"recommendation_for_hiring",
+];
 interface PieChartProps {
 	data: { label: string; value: number }[];
 }
@@ -92,20 +104,63 @@ const renderLegend = (props: any) => {
 	);
 };
 
-export default function FirstPieChart({ data }: PieChartProps) {
-	const dataLabel = data.map((d) => d.label);
-	const total = data.reduce((a, b) => a + b.value, 0) || 0;
-	const payload = data.map((d, i) => ({
-		value: d.label,
-		color: COLORSEXT[i % COLORSEXT.length],
+export default function FirstPieChart({ data, alldata }: any) {
+	const dataAlll = useMemo(
+		() =>
+			Object.entries(alldata)
+				.map(([stage, data]) => ({
+					label: stage,
+					value: (data as any).total,
+				}))
+				.filter((item) => item.value !== 0),
+		[alldata]
+	);
+	const totalAlll = useMemo(
+		() => dataAlll.reduce((a: any, b: any) => a + b.value, 0) || 0,
+		[dataAlll]
+	);
+
+	const [dataAll, setDataAll] = useState(dataAlll);
+	const [totalAll, setTotalAll] = useState(totalAlll);
+
+	console.log(data, alldata);
+	const payload = Object.entries(alldata).map(([stage, data], i) => ({
+		value: stage
+			.split("_")
+			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(" "),
+		color: COLORS[i % COLORS.length],
 	}));
+
 	const [expanded, setExpanded] = useState(false);
 
-	// Toggle the expansion/collapse
 	const toggleLegend = () => {
 		setExpanded(!expanded);
 	};
-	const [selectedCollege, setSelectedCollege] = useState(0);
+	const [selectedCollege, setSelectedCollege] = useState("All");
+
+	useEffect(() => {
+		if (selectedCollege === "All") {
+			setDataAll(dataAlll);
+			setTotalAll(totalAlll);
+		} else {
+			if (!data[selectedCollege]) {
+				setDataAll([]);
+				setTotalAll(0);
+				return;
+			}
+
+			setDataAll(
+				Object.entries(data[selectedCollege].stages)
+					.map(([stage, data]) => ({
+						label: stage,
+						value: data,
+					}))
+					.filter((item) => item.value !== 0)
+			);
+			setTotalAll(data[selectedCollege].total);
+		}
+	}, [selectedCollege, data, dataAlll, totalAlll]);
 	return (
 		<>
 			<div className="relative flex items-center justify-between px-10 pr-14">
@@ -117,11 +172,11 @@ export default function FirstPieChart({ data }: PieChartProps) {
 							variant={"ghost"}
 							className="flex items-center gap-2 text-slate-500"
 						>
-							Choose Department <ArrowDown size={15} />
+							Filter by Department <ArrowDown size={15} />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent className="ml-[30%] flex max-h-56 w-fit flex-col gap-1 overflow-y-auto p-5 text-xs">
-						{["All", ...dataLabel].map((college, index: number) => (
+						{["All", ...colleges].map((college, index: number) => (
 							<DropdownMenuItem
 								key={index}
 								className="my-0 flex w-fit flex-wrap break-words rounded-full p-0"
@@ -129,9 +184,9 @@ export default function FirstPieChart({ data }: PieChartProps) {
 								<Button
 									variant={"ghost"}
 									onClick={() => {
-										setSelectedCollege(index);
+										setSelectedCollege(college);
 									}}
-									className={`${selectedCollege == index ? "bg-red-800 text-white hover:bg-red-800" : " "} my-0 flex w-fit flex-wrap break-words rounded-full p-3`}
+									className={`${selectedCollege === college ? "bg-red-800 text-white hover:bg-red-800" : " "} my-0 flex w-fit flex-wrap break-words rounded-full p-3`}
 								>
 									{college}
 								</Button>
@@ -150,29 +205,29 @@ export default function FirstPieChart({ data }: PieChartProps) {
 					<div
 						className={`${expanded ? "" : "max-h-68 flex flex-col gap-1 overflow-y-auto"}`}
 					>
-						{payload.slice(0, expanded ? payload.length : 4).map((entry, index) => (
+						{payload.map((entry: any, index: number) => (
 							<div
 								key={`item-${index}`}
-								className="mb-1 flex w-60 items-center space-x-2 rounded bg-slate-100 p-2"
+								className="mb-1 flex w-fit items-center space-x-2 rounded bg-slate-100 p-2"
 							>
 								<div
 									className="h-4 w-4 rounded"
 									style={{ backgroundColor: entry.color }}
 								></div>
-								<span className="text-gray-800 w-56 flex-wrap text-xs">
+								<span className="text-gray-800 w-fit flex-wrap text-xs">
 									{entry.value}
 								</span>
 							</div>
 						))}
-						<button className="mb-2 text-sm text-blue-500" onClick={toggleLegend}>
+						{/* <button className="mb-2 text-sm text-blue-500" onClick={toggleLegend}>
 							{expanded ? "Show Less" : "Show More"}
-						</button>
+						</button> */}
 					</div>
 				</div>
 				<ResponsiveContainer width="50%" height={300}>
 					<RechartsPieChart>
 						<Pie
-							data={data}
+							data={dataAll}
 							dataKey="value"
 							nameKey="label"
 							cx="50%"
@@ -182,11 +237,8 @@ export default function FirstPieChart({ data }: PieChartProps) {
 							fill="#8884d8"
 							paddingAngle={5}
 						>
-							{data.map((entry, index) => (
-								<Cell
-									key={`cell-${index}`}
-									fill={COLORSEXT[index % COLORS.length]}
-								/>
+							{dataAll?.map((entry, index) => (
+								<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
 							))}
 						</Pie>
 						<Tooltip />
@@ -200,7 +252,7 @@ export default function FirstPieChart({ data }: PieChartProps) {
 							fill="#333"
 						>
 							<tspan x="50%" dy="-20">
-								{selectedCollege - 1 === 0 ? total : data[selectedCollege].value}
+								{totalAll}
 							</tspan>
 							<tspan x="50%" dy="30">
 								applicants

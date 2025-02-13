@@ -24,72 +24,13 @@ const monthNames = [
 	"December",
 ];
 
-const offices = [
-	"Executive Office",
-	"Center for Communications, Creatives, and Marketing",
-	"Office of the Management Information System",
-	"Center for e-Learning, and Technology Education",
-	"Human Resource Department",
-	"Quality Assurance Office for Administration",
-	"Student Success Office",
-	"Finance and Accounting Office",
-	"Office of the Property Custodian",
-	"Athletics Office",
-	"Office of the Community Extension Services",
-	"Central Visayas Food Innovation Center",
-	"Enrollment Technical Office / Information Systems Development",
-	"Guidance Center",
-	"Instructional Materials and Publications Office",
-	"Innovation and Technology Support Office",
-	"Medical & Dental Clinic",
-	"Makerspace",
-	"Multimedia Solutions and Documentation Office",
-	"Networking and Linkages Office",
-	"Research and Development Coordinating Office",
-	"Alumni Affairs Office",
-	"Technology Support Group",
-	"Wildcat Innovation Labs",
-	"Network of External University Support Services (NEXUSS)",
-];
-
-const colleges = [
-	"Office of the Vice President for Academic Affairs",
-	"College of Management, Business, and Accountancy",
-	"Office of the Expanded Tertiary Education Equivalency and Accreditation Program",
-	"Department of Business Administration",
-	"College of Engineering and Architecture",
-	"Department of Mining Engineering",
-	"College of Nursing and Allied Health Sciences",
-	"College of Criminal Justice",
-	"Department of Criminology",
-	"Safety & Security Department",
-	"College of Computer Studies",
-	"Department of Computer Science",
-	"College of Arts, Sciences, and Education",
-	"Department of Languages, Literature, and Communication",
-	"College of Engineering and Architecture",
-	"Department of Mechanical Engineering",
-	"Office of Admissions and Scholarships",
-	"University Registrar's Office",
-	"Learning Resource and Activity Center",
-	"Department of Architecture",
-	"High School Department",
-	"Elementary Department",
-	"Office of the Vice President for Academics",
-	"Department of Civil Engineering",
-	"Department of Electrical Engineering",
-	"Department of Chemical Engineering",
-	"Department of Industrial Engineering",
-	"Department of Electronics Engineering",
-	"Department of Computer Engineering",
-	"Department of Information Technology",
-	"Department of Accountancy",
-	"Department of Hospitality and Tourism Management",
-	"Department of Humanities and Behavioral Sciences",
-	"Department of Engineering Mathematics, Physics and Chemistry",
-	"Department of Physical Education",
-	"Department of Pharmacy",
-	"Senior High School Department",
+const stages = [
+	"screening",
+	"initial_interview",
+	"teaching_demo",
+	"psychological_exam",
+	"panel_interview",
+	"recommendation_for_hiring",
 ];
 
 type UsersByMonthAndYear = {
@@ -160,58 +101,144 @@ export default async function DashboardPage() {
 		)
 		.filter(Boolean);
 
-	const departmentApplications = applicants.reduce((acc, applicant) => {
-		const department = applicant.selected_department;
-		if (department) {
-			// Exclude null values
+	// const departmentApplications = applicants.reduce((acc, applicant) => {
+	// 	const department = applicant.selected_department;
+	// 	if (department) {
+	// 		// Exclude null values
+	// 		if (!acc[department]) {
+	// 			acc[department] = 0;
+	// 		}
+	// 		acc[department]++;
+	// 	}
+	// 	return acc;
+	// }, {} as AllApplications);
+
+	// const departmentApplicationsData = Object.keys(departmentApplications).map(
+	// 	(department: any) => ({
+	// 		label: department,
+	// 		value: departmentApplications[department] ?? 0, // Provide a default value of 0 if undefined
+	// 	})
+	// );
+
+	const groupedByStages = [...stages].reduce(
+		(acc, stage) => {
+			acc[stage] = { total: 0, departments: {} };
+			return acc;
+		},
+		{} as Record<string, { total: number; departments: Record<string, number> }>
+	);
+
+	[...applicants].forEach((applicant) => {
+		if (!applicant.stages) return;
+
+		Object.entries(applicant.stages).forEach(([stage, details]) => {
+			if (details.status !== "in-progress" || stage === "undefined") return;
+
+			if (!groupedByStages[stage]) {
+				groupedByStages[stage] = { total: 0, departments: {} };
+			}
+
+			const department = applicant.selected_department || "Unknown";
+			if (!(groupedByStages[stage].departments as Record<string, number>)[department]) {
+				groupedByStages[stage].departments[department] = 0;
+			}
+
+			groupedByStages[stage].departments[department]++;
+			groupedByStages[stage].total++;
+		});
+	});
+
+	const groupedByDepartment = [...applicants].reduce(
+		(acc, applicant) => {
+			const department = applicant.selected_department || "Unknown";
+
 			if (!acc[department]) {
-				acc[department] = 0;
+				acc[department] = {
+					total: 0,
+					stages: stages.reduce(
+						(stagesAcc, stage) => {
+							stagesAcc[stage] = 0;
+							return stagesAcc;
+						},
+						{} as Record<string, number>
+					),
+				};
 			}
-			acc[department]++;
-		}
-		return acc;
-	}, {} as AllApplications);
 
-	const departmentApplicationsData = Object.keys(departmentApplications).map(
-		(department: any) => ({
-			label: department,
-			value: departmentApplications[department] ?? 0, // Provide a default value of 0 if undefined
-		})
+			Object.entries(applicant.stages as {}).forEach(([stage, details]) => {
+				if ((details as any).status === "in-progress" && stage !== "undefined") {
+					acc[department].stages[stage]++;
+					acc[department].total++;
+				}
+			});
+
+			return acc;
+		},
+		{} as Record<string, { total: number; stages: Record<string, number> }>
 	);
 
-	colleges.forEach((college) =>
-		Object.keys(departmentApplications).includes(college)
-			? true
-			: departmentApplicationsData.push({
-					label: college,
-					value: 0,
-				})
-	);
+	// colleges.forEach((college) =>
+	// 	Object.keys(departmentApplications).includes(college)
+	// 		? true
+	// 		: departmentApplicationsData.push({
+	// 				label: college,
+	// 				value: 0,
+	// 			})
+	// );
 
-	const officeApplications = applicants.reduce((acc, applicant) => {
-		const office = applicant.selected_office;
-		if (office) {
-			// Exclude null values
-			if (!acc[office]) {
-				acc[office] = 0;
+	// const officeApplications = applicants.reduce((acc, applicant) => {
+	// 	const office = applicant.selected_office;
+	// 	if (office) {
+	// 		// Exclude null values
+	// 		if (!acc[office]) {
+	// 			acc[office] = 0;
+	// 		}
+	// 		acc[office]++;
+	// 	}
+	// 	return acc;
+	// }, {} as AllApplications);
+
+	// const officeApplicationsData = Object.keys(officeApplications).map((office: any) => ({
+	// 	label: office,
+	// 	value: officeApplications[office] ?? 0, // Provide a default value of 0 if undefined
+	// }));
+
+	// offices.forEach((office) =>
+	// 	Object.keys(officeApplications).includes(office)
+	// 		? true
+	// 		: officeApplicationsData.push({
+	// 				label: office,
+	// 				value: 0,
+	// 			})
+	// );
+
+	const groupedByOffice = [...applicants].reduce(
+		(acc, applicant) => {
+			const department = applicant.selected_office || "Unknown";
+
+			if (!acc[department]) {
+				acc[department] = {
+					total: 0,
+					stages: stages.reduce(
+						(stagesAcc, stage) => {
+							stagesAcc[stage] = 0;
+							return stagesAcc;
+						},
+						{} as Record<string, number>
+					),
+				};
 			}
-			acc[office]++;
-		}
-		return acc;
-	}, {} as AllApplications);
 
-	const officeApplicationsData = Object.keys(officeApplications).map((office: any) => ({
-		label: office,
-		value: officeApplications[office] ?? 0, // Provide a default value of 0 if undefined
-	}));
+			Object.entries(applicant.stages as {}).forEach(([stage, details]) => {
+				if ((details as any).status === "in-progress" && stage !== "undefined") {
+					acc[department].stages[stage]++;
+					acc[department].total++;
+				}
+			});
 
-	offices.forEach((office) =>
-		Object.keys(officeApplications).includes(office)
-			? true
-			: officeApplicationsData.push({
-					label: office,
-					value: 0,
-				})
+			return acc;
+		},
+		{} as Record<string, { total: number; stages: Record<string, number> }>
 	);
 
 	return (
@@ -229,7 +256,7 @@ export default async function DashboardPage() {
 					<DisplayCard
 						svg={<VacantPositions />}
 						count={jobRequests.length}
-						label="Vacant Positions"
+						label="Ongoing (Pending)"
 					/>
 					<DisplayCard
 						svg={<JobRequests />}
@@ -244,11 +271,11 @@ export default async function DashboardPage() {
 				</div>
 				<div className="mt-8 flex h-fit gap-5">
 					<div className="flex h-fit w-1/2 flex-col rounded-lg border-2 bg-white py-5 shadow-lg">
-						<FirstPieChart data={departmentApplicationsData} />
+						<FirstPieChart data={groupedByDepartment} alldata={groupedByStages} />
 					</div>
 					{/* <div className="w-1/2"> */}
 					<div className="flex h-fit w-1/2 flex-col rounded-lg border-2 bg-white py-5 shadow-lg">
-						<SecondPieChart data={officeApplicationsData} />
+						<SecondPieChart data={groupedByOffice} alldata={groupedByStages} />
 					</div>
 				</div>
 				<Card>
