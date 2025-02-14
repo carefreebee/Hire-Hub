@@ -120,7 +120,7 @@ export default async function DashboardPage() {
 	// 	})
 	// );
 
-	const groupedByStages = [...stages].reduce(
+	const deptGroupedByStages = [...stages].reduce(
 		(acc, stage) => {
 			acc[stage] = { total: 0, departments: {} };
 			return acc;
@@ -134,17 +134,18 @@ export default async function DashboardPage() {
 		Object.entries(applicant.stages).forEach(([stage, details]) => {
 			if (details.status !== "in-progress" || stage === "undefined") return;
 
-			if (!groupedByStages[stage]) {
-				groupedByStages[stage] = { total: 0, departments: {} };
+			if (!deptGroupedByStages[stage]) {
+				deptGroupedByStages[stage] = { total: 0, departments: {} };
 			}
 
-			const department = applicant.selected_department || "Unknown";
-			if (!(groupedByStages[stage].departments as Record<string, number>)[department]) {
-				groupedByStages[stage].departments[department] = 0;
+			const department = applicant.selected_department || null;
+			if (!department) return;
+			if (!(deptGroupedByStages[stage].departments as Record<string, number>)[department]) {
+				deptGroupedByStages[stage].departments[department] = 0;
 			}
 
-			groupedByStages[stage].departments[department]++;
-			groupedByStages[stage].total++;
+			deptGroupedByStages[stage].departments[department]++;
+			deptGroupedByStages[stage].total++;
 		});
 	});
 
@@ -212,6 +213,35 @@ export default async function DashboardPage() {
 	// 			})
 	// );
 
+	const offGroupedByStages = [...stages].reduce(
+		(acc, stage) => {
+			acc[stage] = { total: 0, departments: {} };
+			return acc;
+		},
+		{} as Record<string, { total: number; departments: Record<string, number> }>
+	);
+
+	[...applicants].forEach((applicant) => {
+		if (!applicant.stages) return;
+
+		Object.entries(applicant.stages).forEach(([stage, details]) => {
+			if (details.status !== "in-progress" || stage === "undefined") return;
+
+			if (!offGroupedByStages[stage]) {
+				offGroupedByStages[stage] = { total: 0, departments: {} };
+			}
+
+			const department = applicant.selected_office || null;
+			if (!department) return;
+			if (!(offGroupedByStages[stage].departments as Record<string, number>)[department]) {
+				offGroupedByStages[stage].departments[department] = 0;
+			}
+
+			offGroupedByStages[stage].departments[department]++;
+			offGroupedByStages[stage].total++;
+		});
+	});
+
 	const groupedByOffice = [...applicants].reduce(
 		(acc, applicant) => {
 			const department = applicant.selected_office || "Unknown";
@@ -271,11 +301,11 @@ export default async function DashboardPage() {
 				</div>
 				<div className="mt-8 flex h-fit gap-5">
 					<div className="flex h-fit w-1/2 flex-col rounded-lg border-2 bg-white py-5 shadow-lg">
-						<FirstPieChart data={groupedByDepartment} alldata={groupedByStages} />
+						<FirstPieChart data={groupedByDepartment} alldata={deptGroupedByStages} />
 					</div>
 					{/* <div className="w-1/2"> */}
 					<div className="flex h-fit w-1/2 flex-col rounded-lg border-2 bg-white py-5 shadow-lg">
-						<SecondPieChart data={groupedByOffice} alldata={groupedByStages} />
+						<SecondPieChart data={groupedByOffice} alldata={offGroupedByStages} />
 					</div>
 				</div>
 				<Card>
