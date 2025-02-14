@@ -156,7 +156,7 @@ export default function FirstPieChart({ data, alldata }: any) {
 						))}
 					</div>
 				</div>
-				<ResponsiveContainer width="50%" height={300}>
+				<ResponsiveContainer width={300} height={300}>
 					<RechartsPieChart>
 						<Pie
 							data={dataAll}
