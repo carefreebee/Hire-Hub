@@ -1,4 +1,5 @@
-import Link from "next/link";
+"use client";
+import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
 import { DropdownMenuLabel } from "~/components/ui/dropdown-menu";
 import { ApplicantFormType } from "~/types/types";
@@ -13,6 +14,7 @@ type HeaderProps = {
 };
 
 export default function Header({ id, role, fullName, applicant }: HeaderProps) {
+	const router = useRouter();
 	return (
 		<header className="flex flex-col gap-3">
 			<div className="flex items-center gap-5">
@@ -43,8 +45,12 @@ export default function Header({ id, role, fullName, applicant }: HeaderProps) {
 						</DialogContent>
 					</Dialog>
 
-					<Button variant={"outline"} className="text-[#0F91D2] hover:text-blue-700">
-						<Link href={`mailto:${applicant?.email}`}>Send Email</Link>
+					<Button
+						variant={"outline"}
+						onClick={() => (window.location.href = `mailto:${applicant?.email}`)}
+						className=" text-[#0F91D2] hover:text-blue-700"
+					>
+						Send Email
 					</Button>
 				</div>
 			) : (
