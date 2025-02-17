@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { Spinner } from "~/components/ui/spinner";
 import TypographyH4 from "~/components/ui/typography-h4";
 import {
 	getAllApplicantByDeptOrOffice,
@@ -5,10 +7,7 @@ import {
 } from "~/controller/ApplicantFormController";
 import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect, RoleEnumsType } from "~/lib/schema";
-import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { Spinner } from "~/components/ui/spinner";
-import { Suspense } from "react";
 
 export default async function ApplicantPage() {
 	const { user } = await validateRequest();
@@ -47,7 +46,8 @@ export default async function ApplicantPage() {
 						</div>
 					}
 				>
-					<DataTable columns={columns} data={applicant} />
+					{/* <DataTable columns={columns} data={applicant} /> */}
+					<DataTable data={applicant} />
 				</Suspense>
 			</div>
 		</section>
