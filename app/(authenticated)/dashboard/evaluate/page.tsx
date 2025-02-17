@@ -5,7 +5,7 @@ import {
 } from "~/controller/ApplicantFormController";
 import { validateRequest } from "~/lib/auth";
 import { ApplicantSelect, RoleEnumsType } from "~/lib/schema";
-import { columns } from "./columns";
+
 import { DataTable } from "./data-table";
 
 export default async function RequestPage() {
@@ -35,7 +35,8 @@ export default async function RequestPage() {
 		<section className="bg-slate-200/30 px-10 py-10">
 			<TypographyH4 text="Evaluate Applicant" />
 			<div className="container mx-auto px-10">
-				<DataTable columns={columns} data={applicant} />
+				{/* <DataTable columns={columns} data={applicant} /> */}
+				<DataTable data={applicant} />
 			</div>
 		</section>
 	);

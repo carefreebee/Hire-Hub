@@ -156,7 +156,7 @@ export default async function Home() {
 					effectively. We look forward to hearing from you!
 				</p>
 				<div className="flex flex-row items-center sm:gap-x-1.5 sm:py-1 md:gap-x-1.5 xl:gap-x-3 2xl:gap-x-4">
-					<a href="mailto:francegieb.mier@cit.edu">
+					<a href="mailto:intingkimberly20@gmail.com">
 						<img
 							src="/images/icons/email.png"
 							alt="Email us"
