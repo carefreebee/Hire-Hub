@@ -101,6 +101,14 @@ export default async function DashboardPage() {
 		)
 		.filter(Boolean);
 
+	const pendingApplicants = applicants
+		.map(
+			(applicant, index) =>
+				applicant?.stages?.[noNullApplicants[index] as keyof ApplicantStages]?.status ==
+				"in-progress"
+		)
+		.filter(Boolean);
+
 	// const departmentApplications = applicants.reduce((acc, applicant) => {
 	// 	const department = applicant.selected_department;
 	// 	if (department) {
@@ -285,7 +293,7 @@ export default async function DashboardPage() {
 					/>
 					<DisplayCard
 						svg={<VacantPositions />}
-						count={jobRequests.length}
+						count={pendingApplicants.length}
 						label="Ongoing (Pending)"
 					/>
 					<DisplayCard
